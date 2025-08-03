@@ -9,6 +9,25 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+# Konfigurasi domain
+[context.production]
+  domain = "hukum-id.pages.dev"
+
+# Redirect untuk www subdomain
+[[redirects]]
+  from = "https://www.hukum-id.pages.dev/*"
+  to = "https://hukum-id.pages.dev/:splat"
+  status = 301
+  force = true
+
+# Redirect untuk HTTP ke HTTPS
+[[redirects]]
+  from = "http://hukum-id.pages.dev/*"
+  to = "https://hukum-id.pages.dev/:splat"
+  status = 301
+  force = true
+
+# Headers untuk keamanan
 [[headers]]
   for = "/*"
   [headers.values]

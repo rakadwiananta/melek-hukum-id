@@ -25,17 +25,17 @@ export const viewport: Viewport = {
 function getMetadataBase(): URL {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
   
-  // If no environment variable is set, use a default URL
+  // If no environment variable is set, use Netlify subdomain
   if (!siteUrl) {
-    return new URL('https://melekhukum.id')
+    return new URL('https://melek-hukum-id.netlify.app')
   }
   
   // Validate the URL
   try {
     return new URL(siteUrl)
   } catch (error) {
-    console.warn('Invalid NEXT_PUBLIC_SITE_URL:', siteUrl, 'Using default URL')
-    return new URL('https://melekhukum.id')
+    console.warn('Invalid NEXT_PUBLIC_SITE_URL:', siteUrl, 'Using Netlify subdomain')
+    return new URL('https://melek-hukum-id.netlify.app')
   }
 }
 
