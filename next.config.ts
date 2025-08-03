@@ -8,9 +8,8 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // Pastikan output static untuk Netlify
-  output: 'export',
-  distDir: 'out',
+  // Konfigurasi untuk Netlify dengan API routes
+  serverExternalPackages: ['@supabase/supabase-js'],
 };
 
 export default nextConfig;
