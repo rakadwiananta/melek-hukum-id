@@ -21,6 +21,11 @@ export default function Header() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
+              <img 
+                src="/timbangkan.jpg" 
+                alt="Melek Hukum ID" 
+                className="h-8 w-auto mr-2"
+              />
               <span className="text-xl font-bold text-gray-900">Melek Hukum ID</span>
             </Link>
           </div>
