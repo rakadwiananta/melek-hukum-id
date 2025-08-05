@@ -3,11 +3,7 @@
 import Script from 'next/script'
 
 export function GoogleAnalytics() {
-  const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
-
-  if (!GA_MEASUREMENT_ID) {
-    return null
-  }
+  const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-D5EH0QKDSF'
 
   return (
     <>
@@ -21,9 +17,7 @@ export function GoogleAnalytics() {
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', '${GA_MEASUREMENT_ID}', {
-            page_path: typeof window !== 'undefined' ? window.location.pathname : '',
-          });
+          gtag('config', '${GA_MEASUREMENT_ID}');
         `}
       </Script>
     </>

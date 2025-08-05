@@ -32,7 +32,7 @@ export default function ArticleSchema({ article }: ArticleSchemaProps) {
       name: 'Melek Hukum ID',
       logo: {
         '@type': 'ImageObject',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/logo.svg`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/timbangkan.jpg`,
       },
     },
     mainEntityOfPage: {
