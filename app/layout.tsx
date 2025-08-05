@@ -13,6 +13,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Melek Hukum ID',
   description: 'Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia',
+  other: {
+    'google-adsense-account': 'ca-pub-9240032692197811'
+  }
 }
 
 export default function RootLayout({
@@ -24,6 +27,7 @@ export default function RootLayout({
     <html lang="id" className={inter.variable}>
       <head>
         <GoogleAnalytics />
+        <meta name="google-adsense-account" content="ca-pub-9240032692197811" />
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9240032692197811"
