@@ -2,6 +2,8 @@
 
 Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia. Pelajari hukum dengan mudah, praktis, dan gratis.
 
+> **Auto Deploy Test**: Perubahan ini untuk menguji auto deploy Netlify
+
 ## 🎯 Tentang Project
 
 Melek Hukum ID adalah platform edukasi hukum yang bertujuan untuk:
