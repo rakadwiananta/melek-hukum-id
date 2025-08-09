@@ -339,7 +339,21 @@ const MobileFilterModal = ({
   showStats,
   onStatsToggle,
   categories 
-}: any) => {
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  selectedCategory: string;
+  onCategoryChange: (category: string) => void;
+  sortBy: string;
+  onSortChange: (sort: string) => void;
+  showStats: boolean;
+  onStatsToggle: (show: boolean) => void;
+  categories: Array<{
+    id: string;
+    name: string;
+    count?: number;
+  }>;
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -375,7 +389,11 @@ const MobileFilterModal = ({
             onChange={(e) => onCategoryChange(e.target.value)}
             className="w-full p-3 border border-gray-300 rounded-lg text-sm"
           >
-            {categories.map((category: any) => (
+            {categories.map((category: {
+              id: string;
+              name: string;
+              count?: number;
+            }) => (
               <option key={category.id} value={category.id}>
                 {category.name} {category.id !== 'all' && `(${category.count})`}
               </option>
@@ -490,7 +508,7 @@ const IstilahTataNegaraComponent: React.FC = () => {
                 >
                   {categories.map(category => (
                     <option key={category.id} value={category.id}>
-                      {category.name} {category.id !== 'all' && `(${(category as any).count})`}
+                      {category.name} {category.id !== 'all' && 'count' in category && `(${category.count})`}
                     </option>
                   ))}
                 </select>

@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import Link from 'next/link'
 import { motion, useMotionValue, useTransform } from 'framer-motion'
 import { 
@@ -265,15 +266,14 @@ const Card3D = ({ category, index }: { category: typeof categories[0], index: nu
           
           {/* Content Container */}
           <div className="relative z-10 p-4 sm:p-6 h-full flex flex-col">
-            {/* Icon with 3D effect */}
-            <motion.div 
-              className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${category.color} text-white mb-4 shadow-lg`}
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              style={{
-                transform: "translateZ(30px)"
-              }}
+            {/* Colored Header Bar with Icon + Title (ensures text is visible) */}
+            <motion.div
+              className={`flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-gradient-to-br ${category.color} text-white mb-4 shadow-lg`}
+              whileHover={{ scale: 1.02 }}
+              style={{ transform: "translateZ(30px)" }}
             >
-              <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+              <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+              <span className="text-sm sm:text-base font-semibold leading-none">{category.title}</span>
             </motion.div>
             
             {/* Title */}

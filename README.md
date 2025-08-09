@@ -1,76 +1,26 @@
 # Melek Hukum ID
 
-Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia. Pelajari hukum dengan mudah, praktis, dan gratis.
+Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia.
 
-> **Auto Deploy Test**: Perubahan ini untuk menguji auto deploy Netlify
-
-## 🎯 Tentang Project
-
-Melek Hukum ID adalah platform edukasi hukum yang bertujuan untuk:
-- **Mengedukasi masyarakat** tentang hukum Indonesia
-- **Memberikan solusi praktis** untuk masalah hukum sehari-hari
-- **Mengajarkan anti-korupsi** dan cara melapor korupsi
-- **Menyediakan kamus hukum** yang mudah dipahami
-- **Membuat regulasi** yang mudah diakses
-
-## 🚀 Fitur Utama
-
-### 📚 Kamus Hukum
-- Penjelasan istilah hukum dalam bahasa yang mudah dipahami
-- Kategori hukum yang terorganisir
-- Pencarian cepat dan akurat
-
-### 💡 Solusi Hukum
-- Template dokumen hukum
-- Panduan langkah demi langkah
-- Solusi untuk masalah hukum umum
-
-### 📋 Regulasi
-- Database peraturan perundang-undangan
-- Penjelasan regulasi terkini
-- Update regulasi terbaru
-
-### 🛡️ Anti Korupsi
-- Edukasi tentang korupsi
-- Cara melapor korupsi
-- Kuis pengetahuan anti-korupsi
-
-### 🛠️ Tools Interaktif
-- **Kalkulator Denda**: Menghitung denda berdasarkan pelanggaran
-- **Kuis Korupsi**: Test pengetahuan anti-korupsi
-- **Template Dokumen**: Dokumen hukum siap pakai
-
-## 🛠️ Teknologi yang Digunakan
-
-- **Framework**: Next.js 15.4.5 (App Router)
-- **Language**: TypeScript 5
-- **Styling**: Tailwind CSS 3.4.17
-- **Database**: Supabase 2.53.0
-- **Analytics**: Google Analytics
-- **Ads**: Google AdSense
-- **Animations**: Framer Motion 12.23.12
-- **Performance**: Core Web Vitals monitoring
-- **UI Components**: Lucide React 0.535.0
-- **Utilities**: clsx, tailwind-merge, zod
-
-## 📁 Struktur Project
+## 🏗️ Struktur Project
 
 ```
 melek-hukum-id/
 ├── app/
-│   ├── (main)/
-│   │   ├── layout.tsx          # Layout utama
-│   │   ├── page.tsx            # Halaman beranda
+│   ├── (main)/           # Main pages
 │   │   ├── kamus-hukum/        # Kamus hukum
 │   │   ├── solusi/             # Solusi hukum
 │   │   ├── regulasi/           # Regulasi
 │   │   ├── anti-korupsi/       # Anti korupsi
 │   │   ├── artikel/            # Artikel hukum
+│   │   ├── payment-success/    # Payment success page
+│   │   ├── payment-error/      # Payment error page
 │   │   └── tools/              # Tools interaktif
 │   │       ├── kalkulator-denda/
 │   │       └── kuis-korupsi/
 │   ├── api/                    # API routes
 │   │   ├── newsletter/
+│   │   ├── payments/           # Midtrans payment APIs
 │   │   └── search/
 │   ├── components/
 │   │   ├── ui/                 # UI components
@@ -96,18 +46,22 @@ melek-hukum-id/
 cp env.example .env.local
 ```
 
-2. Edit file `.env.local` dan isi dengan kredensial Supabase Anda:
+2. Edit file `.env.local` dan isi dengan kredensial yang diperlukan:
 ```env
+# Supabase
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url_here
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
-```
 
-3. Dapatkan kredensial dari dashboard Supabase:
-   - Buka project Supabase Anda
-   - Pergi ke Settings > API
-   - Copy URL dan anon key
-   - Untuk service role key, gunakan untuk operasi server-side
+# Midtrans Configuration
+MIDTRANS_IS_PRODUCTION=false
+MIDTRANS_SERVER_KEY=your_midtrans_server_key
+NEXT_PUBLIC_MIDTRANS_CLIENT_KEY=your_midtrans_client_key
+MIDTRANS_ALLOWED_PAYMENT_TYPES=qris,gopay,bank_transfer
+MIDTRANS_DEFAULT_PAYMENT_TYPE=qris
+MIDTRANS_FINISH_URL=https://yourdomain.com/payment-success
+MIDTRANS_ERROR_URL=https://yourdomain.com/payment-error
+```
 
 ## 🚀 Getting Started
 
@@ -130,16 +84,8 @@ npm install
 
 3. **Setup environment variables**
 ```bash
-cp .env.example .env.local
-```
-
-Isi file `.env.local` dengan:
-```env
-NEXT_PUBLIC_SITE_URL=https://melekhukum.id
-NEXT_PUBLIC_GA_ID=your-google-analytics-id
-NEXT_PUBLIC_ADSENSE_CLIENT_ID=your-adsense-client-id
-NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+cp env.example .env.local
+# Edit .env.local dengan kredensial Anda
 ```
 
 4. **Run development server**
@@ -147,82 +93,114 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 npm run dev
 ```
 
-5. **Open browser**
-Buka [http://localhost:3000](http://localhost:3000) untuk melihat hasilnya.
+## 🔧 Konfigurasi Midtrans
 
-## 📜 Scripts
+### Setup Payment Channels
 
-```bash
-# Development
-npm run dev          # Start development server dengan Turbopack
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-```
+1. **Aktifkan channel di Midtrans Dashboard:**
+   - Login ke [Midtrans Dashboard](https://dashboard.midtrans.com)
+   - Pilih environment (Sandbox/Production)
+   - Masuk ke **Settings** → **Payment** → **Payment Channels**
+   - Aktifkan channel yang diinginkan: QRIS, GoPay, Bank Transfer
 
-## 🎨 Komponen Utama
+2. **Konfigurasi URL Redirect:**
+   - Di **Settings** → **Snap Preferences** → **Payment Channels**
+   - Set **Finish Redirect URL** ke: `https://yourdomain.com/payment-success`
+   - Set **Error Payment URL** ke: `https://yourdomain.com/payment-error`
+   - **PENTING:** Jangan gunakan IP address atau localhost
 
-### Layout Components
-- `Header` - Navigation header dengan mobile menu
-- `Footer` - Footer dengan links dan social media
-- `MobileNav` - Mobile navigation
-- `DesktopNav` - Desktop navigation
-- `SpectacularNav` - Navigation dengan efek spectacular
+3. **Environment Variables:**
+   ```env
+   # Payment channels yang diizinkan
+   MIDTRANS_ALLOWED_PAYMENT_TYPES=qris,gopay,bank_transfer
+   
+   # Default payment type
+   MIDTRANS_DEFAULT_PAYMENT_TYPE=qris
+   
+   # URL redirect (wajib domain valid, bukan IP/localhost)
+   MIDTRANS_FINISH_URL=https://yourdomain.com/payment-success
+   MIDTRANS_ERROR_URL=https://yourdomain.com/payment-error
+   ```
 
-### UI Components
-- `PageHeader` - Header halaman dengan breadcrumb
-- `CategoryNav` - Navigation kategori
-- `ArticleGrid` - Grid artikel
-- `SearchBar` - Pencarian
-- `Toaster` - Toast notifications
-- `NewsletterForm` - Form newsletter
-- `SpectacularCard` - Card dengan efek spectacular
-- `SpectacularLoader` - Loading dengan efek spectacular
+### Testing Payment
 
-### Home Components
-- `HeroSection` - Hero section beranda
-- `FeaturedArticles` - Artikel unggulan
-- `CategoryGrid` - Grid kategori
-- `Newsletter` - Newsletter section
-- `SpectacularHero` - Hero dengan efek spectacular
+1. **Test QRIS:**
+   ```bash
+   curl -X POST http://localhost:3000/api/payments/charge \
+     -H "Content-Type: application/json" \
+     -d '{
+       "payment_type": "qris",
+       "gross_amount": 15000,
+       "customer_details": {"first_name": "Test"},
+       "items": [{"id": "SKU1", "price": 15000, "quantity": 1, "name": "Test Product"}]
+     }'
+   ```
 
-### Tools Components
-- `QuizQuestion` - Komponen pertanyaan kuis
-- `QuizResult` - Hasil kuis
+2. **Test GoPay:**
+   ```bash
+   curl -X POST http://localhost:3000/api/payments/charge \
+     -H "Content-Type: application/json" \
+     -d '{
+       "payment_type": "gopay",
+       "gross_amount": 15000,
+       "customer_details": {"first_name": "Test"},
+       "items": [{"id": "SKU1", "price": 15000, "quantity": 1, "name": "Test Product"}]
+     }'
+   ```
 
-### Article Components
-- `ArticleContent` - Konten artikel
-- `ShareModal` - Modal berbagi artikel
+3. **Test Bank Transfer:**
+   ```bash
+   curl -X POST http://localhost:3000/api/payments/charge \
+     -H "Content-Type: application/json" \
+     -d '{
+       "payment_type": "bank_transfer",
+       "bank": "bca",
+       "gross_amount": 15000,
+       "customer_details": {"first_name": "Test"},
+       "items": [{"id": "SKU1", "price": 15000, "quantity": 1, "name": "Test Product"}]
+     }'
+   ```
 
-### Solusi Components
-- `SolutionCards` - Card solusi hukum
-- `TemplateSection` - Section template dokumen
+## 🐛 Troubleshooting
 
-### Kamus Components
-- `TermsList` - Daftar istilah hukum
+### Error 402: Payment channel is not activated
 
-## 🔧 Konfigurasi
+**Penyebab:** Channel pembayaran belum diaktifkan di Midtrans Dashboard.
 
-### Tailwind CSS 3.4.17
-Project menggunakan Tailwind CSS dengan konfigurasi custom untuk:
-- Color scheme yang konsisten (primary: red, secondary: blue)
-- Typography yang optimal dengan @tailwindcss/typography
-- Responsive design dengan breakpoints custom
-- Custom animations (float, gradient, morph, glow)
-- Background patterns
+**Solusi:**
+1. Aktifkan channel di **Settings** → **Payment** → **Payment Channels**
+2. Pastikan environment (Sandbox/Production) sesuai dengan kunci yang digunakan
+3. Update `MIDTRANS_ALLOWED_PAYMENT_TYPES` di environment variables
 
-### TypeScript
-- Strict mode enabled
-- Path mapping untuk import yang mudah (`@/*`)
-- Type definitions untuk semua komponen
-- Module resolution: bundler
+### Error: Success payment URL cannot accept IP address
 
-### Performance
-- Core Web Vitals monitoring
-- Image optimization
-- Code splitting
-- Lazy loading
-- Turbopack untuk development yang lebih cepat
+**Penyebab:** URL redirect menggunakan IP address atau localhost.
+
+**Solusi:**
+1. Gunakan domain yang valid (bukan IP/localhost)
+2. Set environment variables:
+   ```env
+   MIDTRANS_FINISH_URL=https://yourdomain.com/payment-success
+   MIDTRANS_ERROR_URL=https://yourdomain.com/payment-error
+   ```
+3. Update URL di Midtrans Dashboard
+
+### Error: payment_fee_configs should not be an empty array
+
+**Penyebab:** Konfigurasi fee tidak lengkap.
+
+**Solusi:**
+- Error ini sudah ditangani di kode terbaru
+- Pastikan menggunakan versi terbaru dari `app/api/payments/charge/route.ts`
+
+### Error: Signature tidak valid
+
+**Penyebab:** Verifikasi signature gagal.
+
+**Solusi:**
+1. Pastikan `MIDTRANS_SERVER_KEY` benar dan sesuai environment
+2. Cek apakah payload diteruskan apa adanya
+3. Verifikasi `order_id`, `status_code`, `gross_amount` konsisten
 
 ## 📊 Analytics & SEO
 
@@ -270,21 +248,3 @@ npm run start
 ## 📄 License
 
 Project ini dilisensikan di bawah MIT License - lihat file [LICENSE](LICENSE) untuk detail.
-
-## 📞 Contact
-
-- **Website**: [melekhukum.id](https://melekhukum.id)
-- **Email**: info@melekhukum.id
-- **Twitter**: [@melekhukumid](https://twitter.com/melekhukumid)
-
-## 🙏 Acknowledgments
-
-- Next.js team untuk framework yang luar biasa
-- Tailwind CSS untuk styling yang efisien
-- Supabase untuk backend yang powerful
-- Google untuk analytics dan ads
-- Komunitas open source Indonesia
-
----
-
-**Made with ❤️ for Indonesia**

@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/app/lib/utils'
@@ -14,7 +15,7 @@ interface AdUnitProps {
 
 declare global {
   interface Window {
-    adsbygoogle: any[]
+    adsbygoogle: unknown[]
   }
 }
 

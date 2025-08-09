@@ -33,7 +33,7 @@ export default function PerformanceMonitor() {
       const clsObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries()
         entries.forEach((entry: PerformanceEntry) => {
-          const clsEntry = entry as any
+          const clsEntry = entry as PerformanceEntry & { hadRecentInput: boolean; value: number }
           if (!clsEntry.hadRecentInput) {
             clsValue += clsEntry.value
             console.log('CLS:', clsValue)

@@ -106,7 +106,13 @@ const Shield3D = ({ className = "" }: { className?: string }) => {
 }
 
 // Animated Statistics Component
-const AnimatedStat = ({ label, value, icon: Icon, color, delay = 0 }: any) => {
+const AnimatedStat = ({ label, value, icon: Icon, color, delay = 0 }: {
+  label: string;
+  value: string | number;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  delay?: number;
+}) => {
   const [isVisible, setIsVisible] = useState(false)
   
   return (

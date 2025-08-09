@@ -299,7 +299,19 @@ const MobileFilterModal = ({
   sortBy,
   onSortChange,
   categories 
-}: any) => {
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  selectedCategory: string;
+  onCategoryChange: (category: string) => void;
+  sortBy: string;
+  onSortChange: (sort: "term" | "category" | "trending") => void;
+  categories: Array<{
+    id: string;
+    name: string;
+    count?: number;
+  }>;
+}) => {
   if (!isOpen) return null
 
   return (
@@ -339,7 +351,7 @@ const MobileFilterModal = ({
               }}
               className="w-full p-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
             >
-              {categories.map((category: any) => (
+              {categories.map((category: { id: string; name: string; count?: number }) => (
                 <option key={category.id} value={category.id}>
                   {category.name} {category.id !== 'all' && `(${category.count})`}
                 </option>
@@ -361,7 +373,7 @@ const MobileFilterModal = ({
                 <button
                   key={option.value}
                   onClick={() => {
-                    onSortChange(option.value)
+                    onSortChange(option.value as "term" | "category" | "trending")
                     onClose()
                   }}
                   className={`p-3 rounded-xl text-left transition-all ${
@@ -514,7 +526,7 @@ const TermCard = ({ term, index }: TermCardProps) => {
                       Contoh:
                     </h4>
                     <div className="bg-orange-50 p-3 md:p-4 rounded-lg border-l-4 border-orange-400">
-                      <p className="text-sm text-orange-800 italic">"{term.example}"</p>
+                      <p className="text-sm text-orange-800 italic">&quot;{term.example}&quot;</p>
                     </div>
                   </motion.div>
                 )}
@@ -600,7 +612,7 @@ export default function IstilahAntiKorupsiComponent({
   const [showMobileFilter, setShowMobileFilter] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   
-  const itemsPerPage = isMobile ? 10 : 20
+  const itemsPerPage = useMemo(() => isMobile ? 10 : 20, [isMobile])
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -637,7 +649,7 @@ export default function IstilahAntiKorupsiComponent({
     }
 
     // Sort terms
-    let sorted = [...filtered]
+    const sorted = [...filtered]
     switch (sortBy) {
       case 'term':
         sorted.sort((a, b) => a.term.localeCompare(b.term))
@@ -777,7 +789,7 @@ export default function IstilahAntiKorupsiComponent({
 
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
+                  onChange={(e) => setSortBy(e.target.value as "term" | "category" | "trending")}
                   className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                 >
                   <option value="term">Urutkan: A-Z</option>

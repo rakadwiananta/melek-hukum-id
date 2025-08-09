@@ -43,7 +43,7 @@ export default function ArticleFilter({
     setActiveFiltersCount(count)
   }, [filters])
 
-  const updateFilter = (key: keyof FilterState, value: any) => {
+  const updateFilter = (key: keyof FilterState, value: string | null) => {
     const newFilters = { ...filters, [key]: value }
     setFilters(newFilters)
     onFilterChange(newFilters)

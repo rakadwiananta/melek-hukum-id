@@ -2,8 +2,8 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { supabase } from '@/app/lib/supabase'
 import ArticleSchema from '@/app/components/seo/ArticleSchema'
-import ArticleContent from '@/app/components/article/ArticleContent'
-import ReadingProgress from '@/app/components/article/ReadingProgress'
+import ArticleContent from '@/app/components/article/display/ArticleContent'
+import ReadingProgress from '@/app/components/article/meta/ReadingProgress'
 
 export async function generateMetadata({ 
   params 

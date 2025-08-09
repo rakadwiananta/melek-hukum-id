@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Link from 'next/link'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { 
   Shield, 
@@ -601,9 +602,9 @@ export default function KategoriAntiKorupsi({ searchQuery }: KategoriAntiKorupsi
               <p className="text-sm text-gray-600 mb-3">
                 Laporan tahunan dan statistik pemberantasan korupsi.
               </p>
-              <a href="/artikel/laporan-kpk" className="text-blue-600 text-sm font-medium hover:underline">
+              <Link href="/artikel/laporan-kpk" className="text-blue-600 text-sm font-medium hover:underline">
                 Baca Laporan →
-              </a>
+              </Link>
             </div>
 
             <div className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-all">

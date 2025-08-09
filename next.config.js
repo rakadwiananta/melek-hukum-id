@@ -7,6 +7,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // R3F: transpile three for Next.js per docs
+  transpilePackages: ['three'],
   // Konfigurasi untuk Netlify dengan API routes
   serverExternalPackages: ['@supabase/supabase-js'],
   // Konfigurasi untuk domain

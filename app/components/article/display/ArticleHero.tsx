@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { supabase, mockArticles } from '@/app/lib/supabase'
-import FeaturedArticle from '@/app/components/article/FeaturedArticle'
-import LatestArticles from '@/app/components/article/LatestArticles'
+import FeaturedArticle from '@/app/components/article/display/FeaturedArticle'
+import LatestArticles from '@/app/components/article/display/LatestArticles'
 
 interface ArticleHeroProps {
   showLatest?: boolean

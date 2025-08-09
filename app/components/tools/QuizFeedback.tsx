@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, Send, Heart, Trophy, Shield, Award, Sparkles, MessageSquare, ThumbsUp, Users, TrendingUp } from 'lucide-react'
@@ -475,7 +476,7 @@ export default function QuizFeedback({ score, className = '' }: QuizFeedbackProp
               </div>
               
               <p className="text-sm md:text-base text-gray-700 mb-2">
-                "{testimonial.comment}"
+                &ldquo;{testimonial.comment}&rdquo;
               </p>
               
               <div className="flex items-center justify-between">

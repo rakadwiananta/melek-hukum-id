@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { TrendingUp, Users, CircleDollarSign, AlertTriangle, BarChart3, Award, FileText, Building, Scale, PieChart, Activity, Globe, Target, Zap } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
@@ -121,7 +122,12 @@ const sektorRawan = [
 ]
 
 // Enhanced 3D Card Component
-const Card3D = ({ children, className = "", delay = 0, index = 0 }: any) => {
+const Card3D = ({ children, className = "", delay = 0, index = 0 }: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  index?: number;
+}) => {
   const [isHovered, setIsHovered] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isMobile, setIsMobile] = useState(false)
@@ -174,7 +180,12 @@ const Card3D = ({ children, className = "", delay = 0, index = 0 }: any) => {
 }
 
 // Animated Counter Component
-const AnimatedCounter = ({ value, suffix = "", prefix = "", duration = 2 }: any) => {
+const AnimatedCounter = ({ value, suffix = "", prefix = "", duration = 2 }: {
+  value: string | number;
+  suffix?: string;
+  prefix?: string;
+  duration?: number;
+}) => {
   const [count, setCount] = useState(0)
   const numericValue = parseFloat(value.toString().replace(/[^0-9.]/g, ''))
   

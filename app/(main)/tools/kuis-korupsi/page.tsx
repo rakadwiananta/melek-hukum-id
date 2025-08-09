@@ -315,10 +315,34 @@ const Wayang3D = ({ className = "" }: { className?: string }) => {
 }
 
 interface LevelCard3DProps {
-  level: any
-  index: number
-  onSelect: (level: any) => void
-  isSelected: boolean
+  level: {
+    name: string;
+    description: string;
+    icon: React.ReactNode;
+    bgColor: string;
+    borderColor: string;
+    textColor: string;
+    locked: boolean;
+    features: Array<{
+      icon: React.ComponentType;
+      text: string;
+    }>;
+  };
+  index: number;
+  onSelect: (level: {
+    name: string;
+    description: string;
+    icon: React.ReactNode;
+    bgColor: string;
+    borderColor: string;
+    textColor: string;
+    locked: boolean;
+    features: Array<{
+      icon: React.ComponentType;
+      text: string;
+    }>;
+  }) => void;
+  isSelected: boolean;
 }
 
 // 3D Level Card Component
@@ -406,7 +430,10 @@ const LevelCard3D = ({ level, index, onSelect, isSelected }: LevelCard3DProps) =
 
           {/* Features */}
           <div className="space-y-3">
-            {level.features.map((feature: any, idx: number) => {
+            {level.features.map((feature: {
+              icon: React.ComponentType<{ className?: string }>;
+              text: string;
+            }, idx: number) => {
               const Icon = feature.icon
               return (
                 <motion.div
@@ -439,11 +466,31 @@ const LevelCard3D = ({ level, index, onSelect, isSelected }: LevelCard3DProps) =
 
 // 3D Topic Card Component
 interface TopicCard3DProps {
-  topic: any
-  index: number
-  isSelected: boolean
-  onSelect: (topic: any) => void
-  disabled: boolean
+  topic: {
+    id: string;
+    title: string;
+    questions: number;
+    level: string;
+    levelColor: string;
+    icon: React.ComponentType<{ className?: string }>;
+    iconBg: string;
+    iconColor: string;
+    category: string;
+  };
+  index: number;
+  isSelected: boolean;
+  onSelect: (topic: {
+    id: string;
+    title: string;
+    questions: number;
+    level: string;
+    levelColor: string;
+    icon: React.ComponentType<{ className?: string }>;
+    iconBg: string;
+    iconColor: string;
+    category: string;
+  }) => void;
+  disabled: boolean;
 }
 
 const TopicCard3D = ({ topic, index, isSelected, onSelect, disabled }: TopicCard3DProps) => {
@@ -546,14 +593,14 @@ export default function KuisKorupsiPage() {
   
   // New states for level and topic selection
   const [selectedLevel, setSelectedLevel] = useState<any>(null)
-  const [selectedTopic, setSelectedTopic] = useState<any>(null)
+  const [selectedTopic, setSelectedTopic] = useState<{ id: string; title: string; questions: number; level: string; levelColor: string; icon: React.ComponentType<{ className?: string }>; iconBg: string; iconColor: string; category: string } | null>(null)
   const [showLevelSelection, setShowLevelSelection] = useState(true)
   const [showTopicSelection, setShowTopicSelection] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   
   // State for filtered questions
   const [filteredQuestions, setFilteredQuestions] = useState<QuizQuestionType[]>([])
-  const [quizStatistics, setQuizStatistics] = useState<any>(null)
+  const [quizStatistics, setQuizStatistics] = useState<{ totalQuestions: number; categories: number; difficulties: number; statsByCategory: { category: string; count: number; percentage: number; }[]; statsByDifficulty: { difficulty: "Mudah" | "Sedang" | "Sulit"; count: number; percentage: number; }[]; } | null>(null)
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -578,13 +625,13 @@ export default function KuisKorupsiPage() {
     }
   }, [isQuizActive, quizStartTime])
 
-  const handleLevelSelect = (level: any) => {
+  const handleLevelSelect = (level: { name: string; description: string; icon: React.ReactNode; bgColor: string; borderColor: string; textColor: string; locked: boolean; features: Array<{ icon: React.ComponentType<{ className?: string }>; text: string; }> }) => {
     setSelectedLevel(level)
     setShowLevelSelection(false)
     setShowTopicSelection(true)
   }
 
-  const handleTopicSelect = (topic: any) => {
+  const handleTopicSelect = (topic: { id: string; title: string; questions: number; level: string; levelColor: string; icon: React.ComponentType<{ className?: string }>; iconBg: string; iconColor: string; category: string }) => {
     setSelectedTopic(topic)
   }
 

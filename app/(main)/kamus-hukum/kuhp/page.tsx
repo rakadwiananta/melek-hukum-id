@@ -246,7 +246,7 @@ const PatternBackground = ({ variant = 'grid' }: { variant?: string }) => {
 // Crime Card Component
 const CrimeCard = ({ crime, index }: { crime: typeof kuhpData.majorCrimes[0], index: number }) => {
   const Icon = crime.icon
-  const colorMap: any = {
+  const colorMap: Record<string, string> = {
     red: 'from-red-500 to-red-600',
     orange: 'from-orange-500 to-orange-600',
     yellow: 'from-yellow-500 to-yellow-600',
