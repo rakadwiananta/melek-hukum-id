@@ -4,6 +4,8 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { GoogleAnalytics } from '@/app/components/analytics/GoogleAnalytics'
 import Script from 'next/script'
+import { Toaster } from '@/app/components/ui/Toaster'
+import { ToastProvider } from '@/app/components/ui/use-toast'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -51,7 +53,10 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} antialiased`}>
-        {children}
+        <ToastProvider>
+          {children}
+          <Toaster />
+        </ToastProvider>
       </body>
     </html>
   )
