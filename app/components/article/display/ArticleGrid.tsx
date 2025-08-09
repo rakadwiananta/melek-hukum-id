@@ -128,7 +128,7 @@ export default function ArticleGrid({
   }
 
   // Ganti hardcode switch(3) menjadi variabel
-  let gridCount: number = 3
+  const gridCount: number = 3
   const getGridCols = () => {
     if (gridCount === 1) return 'grid-cols-1'
     if (gridCount === 2) return 'grid-cols-1 md:grid-cols-2'

@@ -284,7 +284,7 @@ export default function TermsList({ category, searchQuery }: TermsListProps) {
           {/* Sort Options */}
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
+            onChange={(e) => setSortBy(e.target.value as 'alphabetical' | 'popular' | 'recent')}
             className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
           >
             <option value="alphabetical">A-Z</option>

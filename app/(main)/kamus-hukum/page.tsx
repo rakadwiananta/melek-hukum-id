@@ -469,7 +469,14 @@ const CategoryCard3D = ({ category, index }: { category: typeof categories[0], i
 }
 
 // Statistics Card Component with Animation
-const StatCard = ({ icon, value, label, suffix, delay, color }: any) => (
+const StatCard = ({ icon, value, label, suffix, delay, color }: {
+  icon: React.ReactNode;
+  value: string | number;
+  label: string;
+  suffix?: string;
+  delay: number;
+  color: string;
+}) => (
   <motion.div
     initial={{ opacity: 0, y: 20, scale: 0.9 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}

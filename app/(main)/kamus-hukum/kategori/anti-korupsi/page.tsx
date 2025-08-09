@@ -350,7 +350,16 @@ const Card3D = ({ children, className = "", delay = 0, index = 0 }: {
 }
 
 // Enhanced Statistics Card with real data
-const StatCard = ({ icon, value, label, suffix = "", delay, color, trend, subtitle }: any) => (
+const StatCard = ({ icon, value, label, suffix = "", delay, color, trend, subtitle }: {
+  icon: React.ReactNode;
+  value: string | number;
+  label: string;
+  suffix?: string;
+  delay: number;
+  color: string;
+  trend?: 'up' | 'down';
+  subtitle?: string;
+}) => (
   <motion.div
     initial={{ opacity: 0, y: 20, scale: 0.9 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}

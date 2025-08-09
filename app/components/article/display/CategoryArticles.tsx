@@ -109,7 +109,7 @@ export default function CategoryArticles({
   if (articles.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Tidak ada artikel dalam kategori "{category}".</p>
+        <p className="text-gray-500">Tidak ada artikel dalam kategori &ldquo;{category}&rdquo;.</p>
       </div>
     )
   }

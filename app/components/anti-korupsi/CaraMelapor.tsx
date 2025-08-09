@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Phone, Mail, Globe, Shield, FileText, Users, Clock, CheckCircle, MapPin, Smartphone, Lock, Eye, MessageSquare, Headphones, FileCheck, AlertTriangle, Star, TrendingUp, Award } from 'lucide-react'
 import { useState, useEffect } from 'react'
@@ -157,7 +158,12 @@ const hakPelapor = [
 ]
 
 // 3D Card Component with Nusantara Elements
-const Card3D = ({ children, className = "", delay = 0, featured = false }: any) => {
+const Card3D = ({ children, className = "", delay = 0, featured = false }: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  featured?: boolean;
+}) => {
   const [isHovered, setIsHovered] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isMobile, setIsMobile] = useState(false)
@@ -737,9 +743,9 @@ export default function CaraMelapor() {
                   <div>
                     <h4 className="font-bold text-gray-900 mb-1">Success Story:</h4>
                     <p className="text-sm text-gray-700">
-                      "Seorang PNS melaporkan korupsi di instansinya. Dengan perlindungan LPSK, 
+                      &ldquo;Seorang PNS melaporkan korupsi di instansinya. Dengan perlindungan LPSK, 
                       kasusnya berhasil dibongkar. Kerugian negara Rp 45 miliar diselamatkan, 
-                      pelapor mendapat reward Rp 900 juta." - Case Study KPK 2023
+                      pelapor mendapat reward Rp 900 juta.&rdquo; - Case Study KPK 2023
                     </p>
                   </div>
                 </div>

@@ -544,7 +544,7 @@ export default function IstilahPidanaComponent({
           <motion.select
             whileHover={{ scale: 1.02 }}
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
+            onChange={(e) => setSortBy(e.target.value as "term" | "category" | "trending")}
             className="px-4 py-2 bg-white border-2 border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 text-sm sm:text-base shadow-sm hover:shadow-md transition-all"
           >
             <option value="term">Urutkan A-Z</option>
@@ -810,7 +810,7 @@ export default function IstilahPidanaComponent({
                                 <div className="relative overflow-hidden rounded-lg">
                                   <AnimatedBatikPattern className="text-amber-100" animate={false} />
                                   <p className="relative z-10 text-gray-700 bg-gradient-to-r from-amber-50 to-red-50 p-3 sm:p-4 italic">
-                                    "{term.example}"
+                                    &quot;{term.example}&quot;
                                   </p>
                                 </div>
                               </motion.div>

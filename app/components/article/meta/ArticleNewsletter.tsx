@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useState } from 'react'
 import { Mail, CheckCircle } from 'lucide-react'
 import { toast } from '@/app/components/ui/use-toast'

@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { BookOpen, AlertCircle, CircleDollarSign, Handshake, FileText, Gavel, TrendingUp, Shield, Info, ChevronDown, Users } from 'lucide-react'
 import { useState, useEffect } from 'react'
@@ -109,7 +110,11 @@ const dampakKorupsi = [
 ]
 
 // 3D Card Component
-const Card3D = ({ children, className = "", delay = 0 }: any) => {
+const Card3D = ({ children, className = "", delay = 0 }: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) => {
   const [isHovered, setIsHovered] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isMobile, setIsMobile] = useState(false)
@@ -162,7 +167,21 @@ const Card3D = ({ children, className = "", delay = 0 }: any) => {
 }
 
 // Expandable Info Card
-const ExpandableKorupsiCard = ({ jenis, index }: { jenis: any; index: number }) => {
+const ExpandableKorupsiCard = ({ jenis, index }: { 
+  jenis: {
+    icon: React.ComponentType<{ className?: string }>;
+    title: string;
+    definition: string;
+    legalBasis: string;
+    maxPenalty: string;
+    contoh: string[];
+    realCase: string;
+    color: string;
+    bgColor: string;
+    borderColor: string;
+  }; 
+  index: number; 
+}) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
@@ -573,7 +592,7 @@ export default function EdukasiKorupsi() {
                   whileHover={{ scale: 1.02 }}
                 >
                   <p className="text-sm font-semibold text-blue-800">
-                    "Korupsi adalah musuh bersama yang harus kita lawan untuk Indonesia yang lebih baik!"
+                    &ldquo;Korupsi adalah musuh bersama yang harus kita lawan untuk Indonesia yang lebih baik!&rdquo;
                   </p>
                 </motion.div>
               </div>

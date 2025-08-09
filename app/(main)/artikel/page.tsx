@@ -1,11 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import ArticleList from '@/app/components/article/ArticleList'
-import ArticleFilter, { FilterState } from '@/app/components/article/CategoryFilter'
-import PopularArticles from '@/app/components/article/PopularArticles'
-import ArticleStats from '@/app/components/article/ArticleStats'
-import ArticleNewsletter from '@/app/components/article/ArticleNewsletter'
+import ArticleList from '@/app/components/article/display/ArticleList'
+import ArticleFilter, { FilterState } from '@/app/components/article/meta/CategoryFilter'
+import PopularArticles from '@/app/components/article/display/PopularArticles'
+import ArticleStats from '@/app/components/article/meta/ArticleStats'
+import ArticleNewsletter from '@/app/components/article/meta/ArticleNewsletter'
 import { Search, Filter } from 'lucide-react'
 
 export default function ArtikelPage() {

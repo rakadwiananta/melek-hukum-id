@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase, mockArticles } from '@/app/lib/supabase'
-import ArticleCard from '@/app/components/article/ArticleCard'
+import ArticleCard from '@/app/components/article/display/ArticleCard'
 import { TrendingUp } from 'lucide-react'
 
 interface PopularArticlesProps {

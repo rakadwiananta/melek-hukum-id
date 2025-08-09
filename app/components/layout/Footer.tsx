@@ -41,6 +41,71 @@ const footerLinks = [
   },
 ]
 
+// Sitemap data structure - mengarah ke konten yang sudah ada di halaman utama
+const sitemapData = [
+  {
+    title: 'Halaman Utama',
+    links: [
+      { label: 'Beranda', href: '/' },
+    ],
+  },
+  {
+    title: 'Kamus Hukum',
+    links: [
+      { label: 'Kamus Hukum', href: '/kamus-hukum' },
+      { label: 'Kategori Anti-Korupsi', href: '/kamus-hukum/kategori/anti-korupsi' },
+      { label: 'Kategori Pidana', href: '/kamus-hukum/kategori/pidana' },
+      { label: 'Kategori Tata Negara', href: '/kamus-hukum/kategori/tata-negara' },
+      { label: 'KUHPerdata', href: '/kamus-hukum/kuhp' },
+      { label: 'Hak Tersangka', href: '/kamus-hukum/hak-tersangka' },
+    ],
+  },
+  {
+    title: 'Solusi Hukum',
+    links: [
+      { label: 'Solusi Praktis', href: '/solusi' },
+      { label: 'FAQ Hukum', href: '/solusi#faq' },
+      { label: 'Template Dokumen', href: '/solusi#templates' },
+      { label: 'Statistik Hukum', href: '/solusi#statistics' },
+      { label: 'Panduan Praktis', href: '/solusi#popular' },
+    ],
+  },
+  {
+    title: 'Regulasi & Peraturan',
+    links: [
+      { label: 'Database Regulasi', href: '/regulasi' },
+      { label: 'Statistik Peraturan', href: '/regulasi#statistics' },
+      { label: 'Kategori Regulasi', href: '/regulasi#categories' },
+      { label: 'Peraturan Terbaru', href: '/regulasi#latest' },
+    ],
+  },
+  {
+    title: 'Anti-Korupsi',
+    links: [
+      { label: 'Anti-Korupsi', href: '/anti-korupsi' },
+      { label: 'Edukasi Korupsi', href: '/anti-korupsi#edukasi' },
+      { label: 'Cara Melapor', href: '/anti-korupsi#cara-melapor' },
+      { label: 'Statistik Korupsi', href: '/anti-korupsi#statistik' },
+      { label: 'Kuis Anti-Korupsi', href: '/anti-korupsi#kuis' },
+    ],
+  },
+  {
+    title: 'Tools & Kalkulator',
+    links: [
+      { label: 'Kalkulator Denda', href: '/tools/kalkulator-denda' },
+      { label: 'Kuis Korupsi', href: '/tools/kuis-korupsi' },
+    ],
+  },
+  {
+    title: 'Artikel & Berita',
+    links: [
+      { label: 'Artikel Hukum', href: '/artikel' },
+      { label: 'Berita Terkini', href: '/artikel#berita' },
+      { label: 'Analisis Hukum', href: '/artikel#analisis' },
+    ],
+  },
+]
+
 export default function Footer() {
   return (
     <footer className="bg-gray-50 border-t no-print">
@@ -56,6 +121,42 @@ export default function Footer() {
             </p>
           </div>
           <NewsletterForm />
+        </div>
+      </div>
+
+      {/* Sitemap Section */}
+      <div className="bg-white border-b">
+        <div className="px-4 mx-auto max-w-7xl py-12">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              Peta Situs Lengkap
+            </h3>
+            <p className="text-gray-600">
+              Temukan semua halaman dan layanan kami dengan mudah
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            {sitemapData.map((section) => (
+              <div key={section.title} className="space-y-3">
+                <h4 className="font-semibold text-gray-900 text-sm">
+                  {section.title}
+                </h4>
+                <ul className="space-y-2">
+                  {section.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="text-xs text-gray-600 hover:text-primary transition-colors block"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

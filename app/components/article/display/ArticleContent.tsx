@@ -3,12 +3,12 @@
 import { useState, useEffect } from 'react'
 import { supabase, mockArticles } from '@/app/lib/supabase'
 import { toast } from '@/app/components/ui/use-toast'
-import ArticleHeader from '@/app/components/article/ArticleHeader'
-import ArticleBody from '@/app/components/article/ArticleBody'
-import ArticleFooter from '@/app/components/article/ArticleFooter'
-import RelatedArticles from '@/app/components/article/RelatedArticles'
-import TableOfContents from '@/app/components/article/TableOfContents'
-import ShareModal from '@/app/components/article/ShareModal'
+import ArticleHeader from '@/app/components/article/display/ArticleHeader'
+import ArticleBody from '@/app/components/article/display/ArticleBody'
+import ArticleFooter from '@/app/components/article/meta/ArticleFooter'
+import RelatedArticles from '@/app/components/article/display/RelatedArticles'
+import TableOfContents from '@/app/components/article/meta/TableOfContents'
+import ShareModal from '@/app/components/article/meta/ShareModal'
 import { motion } from 'framer-motion'
 import { BarChart3, TrendingUp, Users, AlertTriangle } from 'lucide-react'
 
@@ -64,7 +64,16 @@ export default function ArticleContent({ article }: ArticleContentProps) {
   const [isSaved, setIsSaved] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
   const [likeCount, setLikeCount] = useState(article.like_count)
-  const [relatedArticles, setRelatedArticles] = useState<any[]>([])
+  const [relatedArticles, setRelatedArticles] = useState<Array<{
+    id: string;
+    title: string;
+    slug: string;
+    excerpt: string;
+    featured_image?: string;
+    published_at: string;
+    view_count: number;
+    category?: string;
+  }>>([])
   const [showStatistics, setShowStatistics] = useState(false)
 
   // Check if article is law-related

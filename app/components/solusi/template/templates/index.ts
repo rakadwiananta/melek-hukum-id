@@ -1,0 +1,74 @@
+// Export all template data
+export {
+  SURAT_PERJANJIAN_SEWA_RUMAH_TEMPLATE,
+  SURAT_PERJANJIAN_SEWA_RUMAH_CONTENT,
+  SURAT_PERJANJIAN_SEWA_RUMAH_GUIDE,
+  SURAT_PERJANJIAN_SEWA_RUMAH_REFERENCES
+} from './surat-perjanjian-sewa-rumah'
+
+export {
+  SURAT_PERJANJIAN_JUAL_BELI_TEMPLATE,
+  SURAT_PERJANJIAN_JUAL_BELI_CONTENT,
+  SURAT_PERJANJIAN_JUAL_BELI_GUIDE,
+  SURAT_PERJANJIAN_JUAL_BELI_REFERENCES
+} from './surat-perjanjian-jual-beli'
+
+export {
+  SURAT_PERJANJIAN_KERJA_PKWTT_TEMPLATE,
+  SURAT_PERJANJIAN_KERJA_PKWTT_CONTENT,
+  SURAT_PERJANJIAN_KERJA_PKWTT_GUIDE,
+  SURAT_PERJANJIAN_KERJA_PKWTT_REFERENCES
+} from './surat-perjanjian-kerja-pkwtt'
+
+export {
+  SURAT_PERNYATAAN_KEHILANGAN_TEMPLATE,
+  SURAT_PERNYATAAN_KEHILANGAN_CONTENT,
+  SURAT_PERNYATAAN_KEHILANGAN_GUIDE,
+  SURAT_PERNYATAAN_KEHILANGAN_REFERENCES
+} from './surat-pernyataan-kehilangan'
+
+export {
+  SURAT_KUASA_HUKUM_TEMPLATE,
+  SURAT_KUASA_HUKUM_CONTENT,
+  SURAT_KUASA_HUKUM_GUIDE,
+  SURAT_KUASA_HUKUM_REFERENCES
+} from './surat-kuasa-hukum'
+
+// Template registry for easy access
+export const TEMPLATE_REGISTRY = {
+  'surat-perjanjian-sewa-rumah': {
+    template: 'SURAT_PERJANJIAN_SEWA_RUMAH_TEMPLATE',
+    content: 'SURAT_PERJANJIAN_SEWA_RUMAH_CONTENT',
+    guide: 'SURAT_PERJANJIAN_SEWA_RUMAH_GUIDE',
+    references: 'SURAT_PERJANJIAN_SEWA_RUMAH_REFERENCES'
+  },
+  'surat-perjanjian-jual-beli': {
+    template: 'SURAT_PERJANJIAN_JUAL_BELI_TEMPLATE',
+    content: 'SURAT_PERJANJIAN_JUAL_BELI_CONTENT',
+    guide: 'SURAT_PERJANJIAN_JUAL_BELI_GUIDE',
+    references: 'SURAT_PERJANJIAN_JUAL_BELI_REFERENCES'
+  },
+  'surat-perjanjian-kerja-pkwtt': {
+    template: 'SURAT_PERJANJIAN_KERJA_PKWTT_TEMPLATE',
+    content: 'SURAT_PERJANJIAN_KERJA_PKWTT_CONTENT',
+    guide: 'SURAT_PERJANJIAN_KERJA_PKWTT_GUIDE',
+    references: 'SURAT_PERJANJIAN_KERJA_PKWTT_REFERENCES'
+  },
+  'surat-pernyataan-kehilangan': {
+    template: 'SURAT_PERNYATAAN_KEHILANGAN_TEMPLATE',
+    content: 'SURAT_PERNYATAAN_KEHILANGAN_CONTENT',
+    guide: 'SURAT_PERNYATAAN_KEHILANGAN_GUIDE',
+    references: 'SURAT_PERNYATAAN_KEHILANGAN_REFERENCES'
+  },
+  'surat-kuasa-hukum': {
+    template: 'SURAT_KUASA_HUKUM_TEMPLATE',
+    content: 'SURAT_KUASA_HUKUM_CONTENT',
+    guide: 'SURAT_KUASA_HUKUM_GUIDE',
+    references: 'SURAT_KUASA_HUKUM_REFERENCES'
+  }
+} as const
+
+// Helper function to get template data
+export const getTemplateData = (templateId: string) => {
+  return TEMPLATE_REGISTRY[templateId as keyof typeof TEMPLATE_REGISTRY]
+} 

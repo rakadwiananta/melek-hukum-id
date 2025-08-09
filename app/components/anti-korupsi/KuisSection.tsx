@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { Brain, Trophy, Target, ArrowRight, Star, Lock, CheckCircle, XCircle, Timer, Award, Zap, BookOpen, Users, TrendingUp, Sparkles, Gift, ChevronRight, Globe, Smartphone, BarChart3 } from 'lucide-react'
 import Link from 'next/link'
@@ -180,7 +181,12 @@ const topScorers = [
 ]
 
 // 3D Card Component
-const Card3D = ({ children, className = "", delay = 0, featured = false }: any) => {
+const Card3D = ({ children, className = "", delay = 0, featured = false }: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  featured?: boolean;
+}) => {
   const [isHovered, setIsHovered] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isMobile, setIsMobile] = useState(false)

@@ -640,25 +640,13 @@ export default function KategoriTataNegara() {
               <h2 className="text-2xl font-bold mb-6 text-gray-800">Lembaga Kunci</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {tatanegaraData.keyInstitutions.map((inst, index) => {
-                  const [isMobile, setIsMobile] = useState(false)
-                  
-                  // Detect mobile device
-                  useEffect(() => {
-                    const checkMobile = () => {
-                      setIsMobile(window.innerWidth < 768)
-                    }
-                    checkMobile()
-                    window.addEventListener('resize', checkMobile)
-                    return () => window.removeEventListener('resize', checkMobile)
-                  }, [])
-
                   return (
                     <motion.div
                       key={inst.abbr}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: index * 0.1 }}
-                      whileHover={!isMobile ? { y: -5 } : {}}
+                      whileHover={{ y: -5 }}
                       className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all"
                     >
                       <div className="flex items-center justify-between mb-4">
