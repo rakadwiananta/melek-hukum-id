@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Play, Pause, Eye, Heart, Clock, Calendar } from 'lucide-react'
 import { formatDate } from '@/app/lib/utils'
+import { supabase } from '@/app/lib/supabase'
 
 interface CarouselArticle {
   id: string
@@ -21,75 +22,6 @@ interface CarouselArticle {
   likes: number
 }
 
-// Mock data - replace with actual API call
-const mockCarouselArticles: CarouselArticle[] = [
-  {
-    id: '1',
-    title: 'Cara Melaporkan Dugaan Korupsi ke KPK dengan Aman dan Efektif',
-    slug: 'cara-melaporkan-dugaan-korupsi-kpk',
-    excerpt: 'Panduan lengkap melaporkan dugaan korupsi ke KPK dengan aman dan efektif. Pelajari prosedur, dokumen yang diperlukan, dan perlindungan saksi.',
-    category: 'Anti-Korupsi',
-    featuredImage: '/images/articles/kpk-report.jpg',
-    author: 'Tim Melek Hukum',
-    publishedAt: '2024-01-20',
-    readingTime: 5,
-    views: 1247,
-    likes: 89
-  },
-  {
-    id: '2',
-    title: 'Hak Konsumen dalam Transaksi Online Menurut UU Perlindungan Konsumen',
-    slug: 'hak-konsumen-transaksi-online',
-    excerpt: 'Ketahui hak-hak Anda sebagai konsumen dalam berbelanja online. Mulai dari hak mendapat informasi yang jelas hingga hak pengembalian barang.',
-    category: 'Solusi',
-    featuredImage: '/images/articles/consumer-rights.jpg',
-    author: 'Andi Pratama',
-    publishedAt: '2024-01-18',
-    readingTime: 7,
-    views: 892,
-    likes: 67
-  },
-  {
-    id: '3',
-    title: 'Update UU ITE: Apa yang Berubah dan Dampaknya terhadap Kebebasan Berekspresi',
-    slug: 'update-uu-ite-perubahan-dampak',
-    excerpt: 'Analisis mendalam tentang perubahan UU ITE terbaru, pasal-pasal yang direvisi, dan dampaknya terhadap kebebasan berekspresi di media sosial.',
-    category: 'Regulasi',
-    featuredImage: '/images/articles/uu-ite.jpg',
-    author: 'Sarah Wijaya',
-    publishedAt: '2024-01-15',
-    readingTime: 10,
-    views: 1567,
-    likes: 124
-  },
-  {
-    id: '4',
-    title: 'Panduan Lengkap Hak Pekerja Menurut UU Ketenagakerjaan',
-    slug: 'panduan-hak-pekerja-uu-ketenagakerjaan',
-    excerpt: 'Pelajari hak-hak dasar pekerja yang dijamin undang-undang, termasuk upah minimum, jam kerja, cuti, dan perlindungan keselamatan kerja.',
-    category: 'Solusi',
-    featuredImage: '/images/articles/worker-rights.jpg',
-    author: 'Budi Santoso',
-    publishedAt: '2024-01-12',
-    readingTime: 8,
-    views: 2034,
-    likes: 156
-  },
-  {
-    id: '5',
-    title: 'Cara Mengajukan Gugatan Perdata dengan Benar',
-    slug: 'cara-mengajukan-gugatan-perdata',
-    excerpt: 'Panduan lengkap mengajukan gugatan perdata, mulai dari persiapan dokumen hingga proses di pengadilan.',
-    category: 'Solusi',
-    featuredImage: '/images/articles/civil-lawsuit.jpg',
-    author: 'Dewi Kartika',
-    publishedAt: '2024-01-10',
-    readingTime: 12,
-    views: 1789,
-    likes: 98
-  }
-]
-
 export default function ArticleCarousel() {
   const [articles, setArticles] = useState<CarouselArticle[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -97,15 +29,51 @@ export default function ArticleCarousel() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setArticles(mockCarouselArticles)
-      setIsLoading(false)
-    }, 1000)
+    const fetch = async () => {
+      try {
+        if (!supabase) {
+          setArticles([])
+          return
+        }
+        const { data, error } = await supabase
+          .from('articles')
+          .select('id, title, slug, excerpt, category, featured_image, author, published_at, view_count, like_count, is_featured, featured_rank, featured_at')
+          .eq('status', 'published')
+          .not('published_at', 'is', null)
+          .eq('is_featured', true)
+          .order('featured_rank', { ascending: true, nullsFirst: false })
+          .order('featured_at', { ascending: false, nullsFirst: false })
+          .order('view_count', { ascending: false, nullsFirst: false })
+          .order('published_at', { ascending: false })
+          .limit(10)
+        if (error) throw error
+        const mapped = (data || []).map((a: any) => ({
+          id: a.id,
+          title: a.title,
+          slug: a.slug,
+          excerpt: a.excerpt,
+          category: a.category,
+          featuredImage: (a.featured_image || '').trim() || '/timbangkan.jpg',
+          author: a.author,
+          publishedAt: a.published_at,
+          readingTime: 5,
+          views: a.view_count || 0,
+          likes: a.like_count || 0
+        }))
+        setArticles(mapped)
+      } catch (e) {
+        console.error('Error loading carousel articles:', e)
+        setArticles([])
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetch()
   }, [])
 
   useEffect(() => {
     if (!isAutoPlaying) return
+    if (articles.length === 0) return
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % articles.length)
@@ -137,6 +105,10 @@ export default function ArticleCarousel() {
         </div>
       </section>
     )
+  }
+
+  if (!isLoading && articles.length === 0) {
+    return null
   }
 
   return (

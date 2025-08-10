@@ -109,7 +109,7 @@ const categories = [
 
 // Batik pattern component
 const BatikPattern = ({ pattern }: { pattern: string }) => {
-  const patterns: { [key: string]: JSX.Element } = {
+  const patterns: { [key: string]: React.JSX.Element } = {
     'batik-parang': (
       <pattern id="batik-parang" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
         <path d="M0,20 Q10,10 20,20 T40,20" stroke="currentColor" fill="none" strokeWidth="0.5" opacity="0.1" />

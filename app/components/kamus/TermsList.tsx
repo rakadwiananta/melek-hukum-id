@@ -28,128 +28,7 @@ interface LegalTerm {
 }
 
 // Mock data - replace with Supabase query
-const mockTerms: LegalTerm[] = [
-  {
-    id: '1',
-    term: 'Korupsi',
-    definition: 'Tindakan melawan hukum dengan menyalahgunakan kewenangan, kesempatan, atau sarana yang ada untuk memperkaya diri sendiri, orang lain, atau korporasi yang dapat merugikan keuangan negara atau perekonomian negara.',
-    category: 'anti-korupsi',
-    relatedTerms: ['Gratifikasi', 'Suap', 'Penggelapan'],
-    examples: [
-      'Menerima hadiah dari rekanan proyek pemerintah',
-      'Menggunakan anggaran dinas untuk kepentingan pribadi',
-      'Menerima komisi dari vendor tanpa sepengetahuan instansi'
-    ],
-    source: 'UU No. 31 Tahun 1999 jo. UU No. 20 Tahun 2001',
-    updatedAt: '2024-01-20',
-    viewCount: 3250
-  },
-  {
-    id: '2',
-    term: 'Gratifikasi',
-    definition: 'Pemberian dalam arti luas berupa uang, barang, rabat, komisi, pinjaman tanpa bunga, tiket perjalanan, fasilitas penginapan, perjalanan wisata, pengobatan cuma-cuma, dan fasilitas lainnya.',
-    category: 'anti-korupsi',
-    relatedTerms: ['Korupsi', 'Suap'],
-    examples: [
-      'Menerima parsel lebaran dari vendor',
-      'Mendapat tiket liburan dari kontraktor',
-      'Menerima diskon khusus dari supplier'
-    ],
-    source: 'Penjelasan Pasal 12B UU Tipikor',
-    updatedAt: '2024-01-18',
-    viewCount: 2100
-  },
-  {
-    id: '3',
-    term: 'Praperadilan',
-    definition: 'Wewenang pengadilan negeri untuk memeriksa dan memutus tentang sah atau tidaknya suatu penangkapan, penahanan, penghentian penyidikan, atau penghentian penuntutan.',
-    category: 'pidana',
-    relatedTerms: ['Habeas Corpus', 'Penahanan', 'Penyidikan'],
-    examples: [
-      'Mengajukan praperadilan atas penetapan tersangka',
-      'Meminta pembatalan penahanan yang tidak sah',
-      'Menggugat penghentian penyidikan tanpa alasan jelas'
-    ],
-    source: 'Pasal 77-83 KUHAP',
-    updatedAt: '2024-01-15',
-    viewCount: 1850
-  },
-  {
-    id: '4',
-    term: 'Wanprestasi',
-    definition: 'Kelalaian atau kegagalan dalam memenuhi kewajiban yang telah disepakati dalam suatu perjanjian, baik karena tidak melaksanakan, terlambat melaksanakan, atau melaksanakan tetapi tidak sesuai perjanjian.',
-    category: 'perdata',
-    relatedTerms: ['Ingkar Janji', 'Ganti Rugi', 'Somasi'],
-    examples: [
-      'Tidak membayar cicilan sesuai jadwal',
-      'Terlambat menyerahkan barang pesanan',
-      'Kualitas barang tidak sesuai kontrak'
-    ],
-    source: 'Pasal 1238-1252 KUHPerdata',
-    updatedAt: '2024-01-12',
-    viewCount: 2780
-  },
-  {
-    id: '5',
-    term: 'Somasi',
-    definition: 'Teguran atau peringatan tertulis dari kreditur kepada debitur yang lalai memenuhi kewajibannya, yang merupakan syarat sebelum mengajukan gugatan wanprestasi ke pengadilan.',
-    category: 'perdata',
-    relatedTerms: ['Wanprestasi', 'Gugatan', 'Teguran'],
-    examples: [
-      'Surat peringatan pembayaran hutang',
-      'Teguran untuk menyelesaikan pekerjaan',
-      'Peringatan sebelum pemutusan kontrak'
-    ],
-    source: 'Pasal 1238 KUHPerdata',
-    updatedAt: '2024-01-10',
-    viewCount: 3100
-  },
-  {
-    id: '6',
-    term: 'Legal Standing',
-    definition: 'Hak atau kedudukan hukum seseorang atau badan hukum untuk mengajukan gugatan atau permohonan ke pengadilan karena memiliki kepentingan langsung terhadap suatu perkara.',
-    category: 'tata-negara',
-    relatedTerms: ['Gugatan', 'Pemohon', 'Kepentingan Hukum'],
-    examples: [
-      'Warga negara menggugat UU yang merugikan hak konstitusionalnya',
-      'LSM lingkungan menggugat perusahaan pencemar',
-      'Konsumen menggugat produsen atas produk cacat'
-    ],
-    source: 'Yurisprudensi Mahkamah Konstitusi',
-    updatedAt: '2024-01-08',
-    viewCount: 1560
-  },
-  {
-    id: '7',
-    term: 'Judicial Review',
-    definition: 'Hak menguji atau peninjauan kembali oleh lembaga peradilan terhadap produk hukum yang dikeluarkan oleh lembaga eksekutif maupun legislatif untuk menilai kesesuaiannya dengan peraturan yang lebih tinggi.',
-    category: 'tata-negara',
-    relatedTerms: ['Uji Materi', 'Mahkamah Konstitusi', 'Mahkamah Agung'],
-    examples: [
-      'Uji materi UU terhadap UUD 1945 di MK',
-      'Uji materi Perda terhadap UU di MA',
-      'Pengujian Perpres yang bertentangan dengan UU'
-    ],
-    source: 'UU No. 24 Tahun 2003 tentang MK',
-    updatedAt: '2024-01-05',
-    viewCount: 2200
-  },
-  {
-    id: '8',
-    term: 'Pembuktian Terbalik',
-    definition: 'Sistem pembuktian di mana terdakwa/tersangka wajib membuktikan bahwa harta kekayaannya diperoleh secara sah dan bukan hasil tindak pidana korupsi.',
-    category: 'anti-korupsi',
-    relatedTerms: ['Korupsi', 'Pembuktian', 'TPPU'],
-    examples: [
-      'PNS membuktikan asal-usul kekayaannya',
-      'Pejabat menjelaskan sumber dana pembelian aset',
-      'Tersangka korupsi membuktikan harta warisan'
-    ],
-    source: 'Pasal 37 UU Tipikor',
-    updatedAt: '2024-01-22',
-    viewCount: 1890
-  }
-]
+const mockTerms: LegalTerm[] = []
 
 interface TermsListProps {
   category?: string
@@ -164,19 +43,16 @@ export default function TermsList({ category, searchQuery }: TermsListProps) {
   const [showFilter, setShowFilter] = useState(false)
 
   useEffect(() => {
-    // Simulate API call
-    const fetchTerms = async () => {
-      setIsLoading(true)
-      
-      // In real implementation, fetch from Supabase
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      setTerms(mockTerms)
-      setIsLoading(false)
+    const fetch = async () => {
+      try {
+        // TODO: integrate with Supabase table for terms
+        setTerms([])
+      } finally {
+        setIsLoading(false)
+      }
     }
-
-    fetchTerms()
-  }, [category, searchQuery])
+    fetch()
+  }, [])
 
   // Filter and sort terms
   const filteredAndSortedTerms = useMemo(() => {

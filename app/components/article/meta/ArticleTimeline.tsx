@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase, mockArticles } from '@/app/lib/supabase'
+import { supabase } from '@/app/lib/supabase'
 import { formatDate } from '@/app/lib/utils'
 import { Clock, Eye, Tag, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
@@ -40,15 +40,7 @@ export default function ArticleTimeline({
       try {
         setLoading(true)
         
-        // If Supabase is not configured, use mock data
-        if (!supabase) {
-          const mockData = mockArticles
-            .filter(article => !category || article.category === category)
-            .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
-            .slice(0, limit)
-          setArticles(mockData)
-          return
-        }
+        if (!supabase) { setArticles([]); return }
         
         let query = supabase
           ?.from('articles')
@@ -62,28 +54,14 @@ export default function ArticleTimeline({
 
         const { data, error } = await query
 
-        if (error) {
-          console.error('Error fetching articles:', error)
-          // Fallback to mock data
-          const mockData = mockArticles
-            .filter(article => !category || article.category === category)
-            .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
-            .slice(0, limit)
-          setArticles(mockData)
-          return
-        }
+        if (error) { console.error('Error fetching articles:', error); setArticles([]); return }
 
         if (data) {
           setArticles(data)
         }
       } catch (error) {
         console.error('Error fetching articles:', error)
-        // Fallback to mock data
-        const mockData = mockArticles
-          .filter(article => !category || article.category === category)
-          .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
-          .slice(0, limit)
-        setArticles(mockData)
+        setArticles([])
       } finally {
         setLoading(false)
       }
@@ -154,15 +132,13 @@ export default function ArticleTimeline({
               <div className="ml-8">
                 <div className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow">
                   <div className="flex items-start gap-4">
-                    {article.featured_image && (
-                      <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
-                        <img
-                          src={article.featured_image}
-                          alt={article.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
+                    <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
+                      <img
+                        src={(article.featured_image && !article.featured_image.startsWith('/images/articles/')) ? article.featured_image : '/timbangkan.jpg'}
+                        alt={article.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                     
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-2">

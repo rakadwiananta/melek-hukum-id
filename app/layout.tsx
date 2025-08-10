@@ -3,7 +3,6 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { GoogleAnalytics } from '@/app/components/analytics/GoogleAnalytics'
-import Script from 'next/script'
 import { Toaster } from '@/app/components/ui/Toaster'
 import { ToastProvider } from '@/app/components/ui/use-toast'
 
@@ -45,11 +44,10 @@ export default function RootLayout({
       <head>
         <GoogleAnalytics />
         <meta name="google-adsense-account" content="ca-pub-9240032692197811" />
-        <Script
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9240032692197811"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
       </head>
       <body className={`${inter.className} antialiased`}>

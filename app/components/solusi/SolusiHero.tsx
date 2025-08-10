@@ -193,7 +193,7 @@ export default function SolusiHero() {
                     icon={Users} 
                     title="Forum Diskusi" 
                     desc="Tanya ahli hukum" 
-                    href="/forum"
+                    href="/"
                     delay={0.6}
                     gradient="from-green-500 to-green-600"
                     pattern="batik-ceplok"
@@ -202,7 +202,7 @@ export default function SolusiHero() {
                     icon={Scale} 
                     title="Info Hukum" 
                     desc="Update terkini" 
-                    href="/info"
+                    href="/artikel"
                     delay={0.7}
                     gradient="from-blue-500 to-blue-600"
                     pattern="batik-sido"

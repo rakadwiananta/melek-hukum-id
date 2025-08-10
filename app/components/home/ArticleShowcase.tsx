@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Clock, Eye, Heart, Share2, ChevronRight, BookOpen } from 'lucide-react'
 import { formatDate, calculateReadingTime } from '@/app/lib/utils'
+import { supabase } from '@/app/lib/supabase'
 
 interface Article {
   id: string
@@ -21,73 +22,55 @@ interface Article {
   likes: number
 }
 
-// Mock data - replace with actual API call
-const mockArticles: Article[] = [
-  {
-    id: '1',
-    title: 'Cara Melaporkan Dugaan Korupsi ke KPK dengan Aman dan Efektif',
-    slug: 'cara-melaporkan-dugaan-korupsi-kpk',
-    excerpt: 'Panduan lengkap melaporkan dugaan korupsi ke KPK dengan aman dan efektif. Pelajari prosedur, dokumen yang diperlukan, dan perlindungan saksi.',
-    category: 'Anti-Korupsi',
-    featuredImage: '/images/articles/kpk-report.jpg',
-    author: 'Tim Melek Hukum',
-    publishedAt: '2024-01-20',
-    readingTime: 5,
-    views: 1247,
-    likes: 89
-  },
-  {
-    id: '2',
-    title: 'Hak Konsumen dalam Transaksi Online Menurut UU Perlindungan Konsumen',
-    slug: 'hak-konsumen-transaksi-online',
-    excerpt: 'Ketahui hak-hak Anda sebagai konsumen dalam berbelanja online. Mulai dari hak mendapat informasi yang jelas hingga hak pengembalian barang.',
-    category: 'Solusi',
-    featuredImage: '/images/articles/consumer-rights.jpg',
-    author: 'Andi Pratama',
-    publishedAt: '2024-01-18',
-    readingTime: 7,
-    views: 892,
-    likes: 67
-  },
-  {
-    id: '3',
-    title: 'Update UU ITE: Apa yang Berubah dan Dampaknya terhadap Kebebasan Berekspresi',
-    slug: 'update-uu-ite-perubahan-dampak',
-    excerpt: 'Analisis mendalam tentang perubahan UU ITE terbaru, pasal-pasal yang direvisi, dan dampaknya terhadap kebebasan berekspresi di media sosial.',
-    category: 'Regulasi',
-    featuredImage: '/images/articles/uu-ite.jpg',
-    author: 'Sarah Wijaya',
-    publishedAt: '2024-01-15',
-    readingTime: 10,
-    views: 1567,
-    likes: 124
-  },
-  {
-    id: '4',
-    title: 'Panduan Lengkap Hak Pekerja Menurut UU Ketenagakerjaan',
-    slug: 'panduan-hak-pekerja-uu-ketenagakerjaan',
-    excerpt: 'Pelajari hak-hak dasar pekerja yang dijamin undang-undang, termasuk upah minimum, jam kerja, cuti, dan perlindungan keselamatan kerja.',
-    category: 'Solusi',
-    featuredImage: '/images/articles/worker-rights.jpg',
-    author: 'Budi Santoso',
-    publishedAt: '2024-01-12',
-    readingTime: 8,
-    views: 2034,
-    likes: 156
-  }
-]
-
 export default function ArticleShowcase() {
   const [articles, setArticles] = useState<Article[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null)
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setArticles(mockArticles)
-      setIsLoading(false)
-    }, 1000)
+    const fetch = async () => {
+      try {
+        if (!supabase) { setArticles([]); setIsLoading(false); return }
+        const { data, error } = await supabase
+          .from('articles')
+          .select('id, title, slug, excerpt, category, featured_image, author, published_at, view_count, like_count, is_editor_pick, editor_pick_rank, editor_pick_at')
+          .eq('status', 'published')
+          .not('published_at', 'is', null)
+          .eq('is_editor_pick', true)
+          .order('editor_pick_rank', { ascending: true, nullsFirst: false })
+          .order('editor_pick_at', { ascending: false, nullsFirst: false })
+          .order('published_at', { ascending: false })
+          .limit(6)
+
+        if (error) throw error
+
+        const mapped = (data || []).map((a: any) => {
+          const img = (a.featured_image || '').trim()
+          const featuredImage = (!img || img.includes('/images/articles/')) ? '/timbangkan.jpg' : (img.startsWith('http') || img.startsWith('/')) ? img : `/${img}`
+          const rt = calculateReadingTime(a.excerpt || '')?.match(/\d+/)?.[0]
+          return {
+            id: a.id,
+            title: a.title,
+            slug: a.slug,
+            excerpt: a.excerpt,
+            category: a.category,
+            featuredImage,
+            author: a.author,
+            publishedAt: a.published_at,
+            readingTime: rt ? Number(rt) : 5,
+            views: a.view_count || 0,
+            likes: a.like_count || 0,
+          } as Article
+        })
+        setArticles(mapped)
+      } catch (e) {
+        console.error('Error load showcase:', e)
+        setArticles([])
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetch()
   }, [])
 
   const handleArticleClick = (article: Article) => {
@@ -167,7 +150,7 @@ export default function ArticleShowcase() {
               <Link href={`/artikel/${article.slug}`}>
                 <div className="relative h-64 overflow-hidden">
                   <Image
-                    src={article.featuredImage}
+                    src={article.featuredImage || '/timbangkan.jpg'}
                     alt={article.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -273,7 +256,7 @@ export default function ArticleShowcase() {
               >
                 <div className="relative h-64">
                   <Image
-                    src={selectedArticle.featuredImage}
+                    src={selectedArticle.featuredImage || '/timbangkan.jpg'}
                     alt={selectedArticle.title}
                     fill
                     className="object-cover"

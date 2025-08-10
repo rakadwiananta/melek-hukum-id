@@ -15,10 +15,10 @@ const footerLinks = [
   {
     title: 'Sumber Daya',
     links: [
-      { label: 'Template Dokumen', href: '/solusi/template' },
+      { label: 'Template Dokumen', href: '/solusi/#templates' },
       { label: 'Kalkulator Denda', href: '/tools/kalkulator-denda' },
       { label: 'Kuis Korupsi', href: '/tools/kuis-korupsi' },
-      { label: 'FAQ', href: '/faq' },
+      { label: 'FAQ', href: '/solusi/#faq' },
     ],
   },
   {

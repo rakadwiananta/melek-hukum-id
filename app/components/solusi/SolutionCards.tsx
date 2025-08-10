@@ -16,17 +16,17 @@ const groups: SolutionGroup[] = [
       {
         title: 'Surat Pernyataan',
         description: 'Template resmi untuk berbagai jenis surat pernyataan sesuai format standar',
-        href: '/solusi/template/surat-pernyataan',
+        href: '/solusi/template/surat-pernyataan-kehilangan',
       },
       {
         title: 'Surat Kuasa',
         description: 'Format baku surat kuasa sesuai KUHPerdata untuk berbagai keperluan',
-        href: '/solusi/template/surat-kuasa',
+        href: '/solusi/template/surat-kuasa-hukum',
       },
       {
         title: 'Perjanjian Kerja',
         description: 'Template kontrak kerja sesuai UU Ketenagakerjaan yang berlaku',
-        href: '/solusi/template/perjanjian-kerja',
+        href: '/solusi/template/surat-perjanjian-kerja-pkwtt',
       }
     ]
   },
@@ -39,17 +39,17 @@ const groups: SolutionGroup[] = [
       {
         title: 'Mengurus Dokumen Hilang',
         description: 'Panduan lengkap prosedur pelaporan dan pengurusan dokumen pengganti',
-        href: '/solusi/panduan/dokumen-hilang',
+        href: '/',
       },
       {
         title: 'Prosedur Pelaporan',
         description: 'Langkah-langkah membuat laporan ke kepolisian sesuai SOP',
-        href: '/solusi/panduan/laporan-polisi',
+        href: '/',
       },
       {
         title: 'Gugatan Sederhana',
         description: 'Panduan mengajukan gugatan sederhana sesuai Perma terbaru',
-        href: '/solusi/panduan/gugatan-sederhana',
+        href: '/',
       }
     ]
   },
@@ -62,17 +62,17 @@ const groups: SolutionGroup[] = [
       {
         title: 'Forum Diskusi',
         description: 'Komunitas diskusi hukum dengan moderasi profesional',
-        href: '/forum',
+        href: '/',
       },
       {
         title: 'Konsultasi Online',
         description: 'Layanan konsultasi dengan praktisi hukum berpengalaman',
-        href: '/konsultasi',
+        href: '/',
       },
       {
         title: 'Webinar Edukasi',
         description: 'Program edukasi hukum berkala untuk masyarakat umum',
-        href: '/webinar',
+        href: '/',
       }
     ]
   }

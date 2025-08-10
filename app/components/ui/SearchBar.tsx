@@ -27,15 +27,7 @@ export default function SearchBar({ className }: SearchBarProps) {
   // Mock suggestions - replace with real API call
   useEffect(() => {
     if (query.length > 2) {
-      const mockSuggestions = [
-        'Cara melaporkan korupsi',
-        'UU ITE pasal 27',
-        'Prosedur tilang elektronik',
-        'Hak konsumen dalam jual beli online',
-        'Cara mengurus sertifikat tanah hilang',
-      ].filter(s => s.toLowerCase().includes(query.toLowerCase()))
-      
-      setSuggestions(mockSuggestions)
+      setSuggestions([])
     } else {
       setSuggestions([])
     }

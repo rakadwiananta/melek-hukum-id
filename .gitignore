@@ -37,3 +37,6 @@ next-env.d.ts
 
 # Remove git-installer.exe karena terlalu besar
 git-installer.exe
+
+# netlify
+.netlify/

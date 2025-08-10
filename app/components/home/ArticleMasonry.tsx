@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Eye, Heart, Clock, Calendar, BookOpen, Share2 } from 'lucide-react'
 import { formatDate } from '@/app/lib/utils'
+import { supabase } from '@/app/lib/supabase'
 
 interface MasonryArticle {
   id: string
@@ -22,104 +23,82 @@ interface MasonryArticle {
   featured: boolean
 }
 
-// Mock data - replace with actual API call
-const mockMasonryArticles: MasonryArticle[] = [
-  {
-    id: '1',
-    title: 'Cara Melaporkan Dugaan Korupsi ke KPK dengan Aman dan Efektif',
-    slug: 'cara-melaporkan-dugaan-korupsi-kpk',
-    excerpt: 'Panduan lengkap melaporkan dugaan korupsi ke KPK dengan aman dan efektif. Pelajari prosedur, dokumen yang diperlukan, dan perlindungan saksi.',
-    category: 'Anti-Korupsi',
-    featuredImage: '/images/articles/kpk-report.jpg',
-    author: 'Tim Melek Hukum',
-    publishedAt: '2024-01-20',
-    readingTime: 5,
-    views: 1247,
-    likes: 89,
-    featured: true
-  },
-  {
-    id: '2',
-    title: 'Hak Konsumen dalam Transaksi Online',
-    slug: 'hak-konsumen-transaksi-online',
-    excerpt: 'Ketahui hak-hak Anda sebagai konsumen dalam berbelanja online.',
-    category: 'Solusi',
-    featuredImage: '/images/articles/consumer-rights.jpg',
-    author: 'Andi Pratama',
-    publishedAt: '2024-01-18',
-    readingTime: 7,
-    views: 892,
-    likes: 67,
-    featured: false
-  },
-  {
-    id: '3',
-    title: 'Update UU ITE: Perubahan dan Dampaknya',
-    slug: 'update-uu-ite-perubahan-dampak',
-    excerpt: 'Analisis mendalam tentang perubahan UU ITE terbaru.',
-    category: 'Regulasi',
-    featuredImage: '/images/articles/uu-ite.jpg',
-    author: 'Sarah Wijaya',
-    publishedAt: '2024-01-15',
-    readingTime: 10,
-    views: 1567,
-    likes: 124,
-    featured: false
-  },
-  {
-    id: '4',
-    title: 'Panduan Lengkap Hak Pekerja',
-    slug: 'panduan-hak-pekerja-uu-ketenagakerjaan',
-    excerpt: 'Pelajari hak-hak dasar pekerja yang dijamin undang-undang.',
-    category: 'Solusi',
-    featuredImage: '/images/articles/worker-rights.jpg',
-    author: 'Budi Santoso',
-    publishedAt: '2024-01-12',
-    readingTime: 8,
-    views: 2034,
-    likes: 156,
-    featured: false
-  },
-  {
-    id: '5',
-    title: 'Cara Mengajukan Gugatan Perdata dengan Benar',
-    slug: 'cara-mengajukan-gugatan-perdata',
-    excerpt: 'Panduan lengkap mengajukan gugatan perdata.',
-    category: 'Solusi',
-    featuredImage: '/images/articles/civil-lawsuit.jpg',
-    author: 'Dewi Kartika',
-    publishedAt: '2024-01-10',
-    readingTime: 12,
-    views: 1789,
-    likes: 98,
-    featured: false
-  },
-  {
-    id: '6',
-    title: 'Memahami Hak Cipta dalam Era Digital',
-    slug: 'memahami-hak-cipta-era-digital',
-    excerpt: 'Panduan lengkap tentang hak cipta di era digital.',
-    category: 'Regulasi',
-    featuredImage: '/images/articles/copyright.jpg',
-    author: 'Rina Sari',
-    publishedAt: '2024-01-08',
-    readingTime: 6,
-    views: 1456,
-    likes: 78,
-    featured: false
-  }
-]
-
 export default function ArticleMasonry() {
   const [articles, setArticles] = useState<MasonryArticle[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setArticles(mockMasonryArticles)
-      setIsLoading(false)
-    }, 1000)
+    const fetch = async () => {
+      try {
+        if (!supabase) {
+          setArticles([])
+          return
+        }
+        const { data, error } = await supabase
+          .from('articles')
+          .select('id, title, slug, excerpt, category, featured_image, author, published_at, view_count, like_count, is_latest, latest_rank, latest_at')
+          .eq('status', 'published')
+          .not('published_at', 'is', null)
+          .eq('is_latest', true)
+          .order('latest_rank', { ascending: true, nullsFirst: false })
+          .order('latest_at', { ascending: false, nullsFirst: false })
+          .order('published_at', { ascending: false })
+          .limit(12)
+        if (error) throw error
+
+        let source: any[] = data || []
+
+        // Fallback 1: jika tidak ada kurasi latest, ambil non-kurasi terbaru (mengecualikan unggulan/pilihan)
+        if (source.length === 0) {
+          const { data: nonCurated, error: nonCurErr } = await supabase
+            .from('articles')
+            .select('id, title, slug, excerpt, category, featured_image, author, published_at, view_count, like_count')
+            .eq('status', 'published')
+            .not('published_at', 'is', null)
+            .eq('is_featured', false)
+            .eq('is_editor_pick', false)
+            .order('published_at', { ascending: false })
+            .limit(12)
+          if (nonCurErr) throw nonCurErr
+          source = nonCurated || []
+        }
+
+        // Fallback 2: jika tetap kosong, ambil artikel terbaru umum
+        if (source.length === 0) {
+          const { data: fallbackData, error: fbErr } = await supabase
+            .from('articles')
+            .select('id, title, slug, excerpt, category, featured_image, author, published_at, view_count, like_count')
+            .eq('status', 'published')
+            .not('published_at', 'is', null)
+            .order('published_at', { ascending: false })
+            .limit(12)
+          if (fbErr) throw fbErr
+          source = fallbackData || []
+        }
+
+        const mapped = source.map((a: any, idx: number) => ({
+          id: a.id,
+          title: a.title,
+          slug: a.slug,
+          excerpt: a.excerpt,
+          category: a.category,
+          featuredImage: (a.featured_image || '').trim() || '/timbangkan.jpg',
+          author: a.author,
+          publishedAt: a.published_at,
+          readingTime: 5,
+          views: a.view_count || 0,
+          likes: a.like_count || 0,
+          featured: idx === 0
+        }))
+        setArticles(mapped)
+      } catch (e) {
+        console.error('Error loading masonry articles:', e)
+        setArticles([])
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetch()
   }, [])
 
   const handleShare = (article: MasonryArticle) => {
@@ -132,7 +111,6 @@ export default function ArticleMasonry() {
         url: `${window.location.origin}/artikel/${article.slug}`
       })
     } else {
-      // Fallback: copy to clipboard
       navigator.clipboard.writeText(`${window.location.origin}/artikel/${article.slug}`)
     }
   }
@@ -159,6 +137,10 @@ export default function ArticleMasonry() {
         </div>
       </section>
     )
+  }
+
+  if (!isLoading && articles.length === 0) {
+    return null
   }
 
   return (

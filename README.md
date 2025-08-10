@@ -248,3 +248,17 @@ npm run start
 ## 📄 License
 
 Project ini dilisensikan di bawah MIT License - lihat file [LICENSE](LICENSE) untuk detail.
+
+## Perbaikan Gambar Artikel (Supabase)
+
+Jika ada artikel yang gambarnya 404 atau kosong, jalankan skrip SQL berikut di Supabase (Project → SQL → New Query):
+
+```sql
+-- melek-hukum-id/app/lib/supabase/seed_featured_images.sql
+-- Menetapkan fallback `/timbangkan.jpg` dan memetakan beberapa judul ke ilustrasi yang tersedia
+```
+
+File skrip berada di:
+- `app/lib/supabase/seed_featured_images.sql`
+
+Jalankan dan deploy ulang site untuk melihat perubahan.

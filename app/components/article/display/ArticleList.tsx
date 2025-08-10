@@ -1,10 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase, mockArticles } from '@/app/lib/supabase'
+import { supabase } from '@/app/lib/supabase'
 import { formatDate } from '@/app/lib/utils'
 import { Clock, Eye, Tag, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { FilterState } from '@/app/components/article/meta/CategoryFilter'
+import { getArticles } from '@/app/lib/articles'
 
 interface ArticleListProps {
   category?: string
@@ -12,6 +14,8 @@ interface ArticleListProps {
   showHeader?: boolean
   headerTitle?: string
   showLoadMore?: boolean
+  searchQuery?: string
+  filters?: FilterState
 }
 
 interface Article {
@@ -31,7 +35,14 @@ export default function ArticleList({
   limit = 10, 
   showHeader = false,
   headerTitle = 'Daftar Artikel',
-  showLoadMore = false
+  showLoadMore = false,
+  searchQuery = '',
+  filters = {
+    category: null,
+    author: null,
+    sortBy: 'newest',
+    dateRange: 'all'
+  }
 }: ArticleListProps) {
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
@@ -41,83 +52,36 @@ export default function ArticleList({
   const fetchArticles = async (pageNum: number = 0) => {
     try {
       setLoading(true)
-      
-      // If Supabase is not configured, use mock data
-      if (!supabase) {
-        const mockData = mockArticles
-          .filter(article => !category || article.category === category)
-          .slice(pageNum * limit, (pageNum + 1) * limit)
-        
-        if (pageNum === 0) {
-          setArticles(mockData)
-        } else {
-          setArticles(prev => [...prev, ...mockData])
-        }
-        
-        setHasMore(mockData.length === limit)
-        return
-      }
-      
-      let query = supabase
-        ?.from('articles')
-        ?.select('id, title, slug, excerpt, featured_image, published_at, view_count, category, author')
-        ?.order('published_at', { ascending: false })
-        ?.limit(limit) || { data: null, error: null }
 
-      if (category) {
-        query = query.eq('category', category)
+      const result = await getArticles({
+        category: category || filters.category,
+        author: filters.author,
+        limit,
+        page: pageNum,
+        searchQuery,
+        sortBy: filters.sortBy,
+      })
+
+      if (pageNum === 0) {
+        setArticles(result as any)
+      } else {
+        setArticles((prev) => [...prev, ...(result as any)])
       }
 
-      const { data, error } = await query
-
-      if (error) {
-        console.error('Error fetching articles:', error)
-        // Fallback to mock data on error
-        const mockData = mockArticles
-          .filter(article => !category || article.category === category)
-          .slice(pageNum * limit, (pageNum + 1) * limit)
-        
-        if (pageNum === 0) {
-          setArticles(mockData)
-        } else {
-          setArticles(prev => [...prev, ...mockData])
-        }
-        
-        setHasMore(mockData.length === limit)
-        return
-      }
-
-      if (data) {
-        if (pageNum === 0) {
-          setArticles(data)
-        } else {
-          setArticles(prev => [...prev, ...data])
-        }
-        
-        setHasMore(data.length === limit)
-      }
+      setHasMore(result.length === limit)
+      return
     } catch (error) {
       console.error('Error fetching articles:', error)
-      // Fallback to mock data on error
-      const mockData = mockArticles
-        .filter(article => !category || article.category === category)
-        .slice(pageNum * limit, (pageNum + 1) * limit)
-      
-      if (pageNum === 0) {
-        setArticles(mockData)
-      } else {
-        setArticles(prev => [...prev, ...mockData])
-      }
-      
-      setHasMore(mockData.length === limit)
+      setHasMore(false)
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    fetchArticles()
-  }, [category, limit])
+    setPage(0)
+    fetchArticles(0)
+  }, [category, limit, searchQuery, filters])
 
   const handleLoadMore = () => {
     const nextPage = page + 1
@@ -171,15 +135,13 @@ export default function ArticleList({
         {articles.map((article) => (
           <div key={article.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4">
             <div className="flex items-start gap-4">
-              {article.featured_image && (
-                <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden">
-                  <img
-                    src={article.featured_image}
-                    alt={article.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
+              <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden">
+                <img
+                  src={article.featured_image || '/timbangkan.jpg'}
+                  alt={article.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-2">
