@@ -7,6 +7,7 @@ const footerLinks = [
     title: 'Konten',
     links: [
       { label: 'Kamus Hukum', href: '/kamus-hukum' },
+      { label: 'Panduan Hukum', href: '/panduan' },
       { label: 'Solusi Praktis', href: '/solusi' },
       { label: 'Regulasi', href: '/regulasi' },
       { label: 'Anti-Korupsi', href: '/anti-korupsi' },
@@ -58,6 +59,22 @@ const sitemapData = [
       { label: 'Kategori Tata Negara', href: '/kamus-hukum/kategori/tata-negara' },
       { label: 'KUHPerdata', href: '/kamus-hukum/kuhp' },
       { label: 'Hak Tersangka', href: '/kamus-hukum/hak-tersangka' },
+    ],
+  },
+  {
+    title: 'Panduan Hukum',
+    links: [
+      { label: 'Panduan Hukum Praktis', href: '/panduan' },
+      { label: 'Mengurus Dokumen Hilang', href: '/panduan/mengurus-dokumen-hilang' },
+      { label: 'Prosedur Pelaporan', href: '/panduan/prosedur-pelaporan' },
+      { label: 'Gugatan Sederhana', href: '/panduan/gugatan-sederhana' },
+      { label: 'Prosedur Perceraian', href: '/panduan/cerai-gugat-cerai-talak' },
+      { label: 'Jual Beli Tanah', href: '/panduan/jual-beli-tanah' },
+      { label: 'Somasi yang Benar', href: '/panduan/somasi-dan-teguran' },
+      { label: 'PHK & Pesangon', href: '/panduan/phk-dan-pesangon' },
+      { label: 'Balik Nama Kendaraan', href: '/panduan/balik-nama-kendaraan' },
+      { label: 'Warisan & Hibah', href: '/panduan/warisan-dan-hibah' },
+      { label: 'Membuat Surat Kuasa', href: '/panduan/surat-kuasa' },
     ],
   },
   {

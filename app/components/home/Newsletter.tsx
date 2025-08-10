@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from '@/app/components/ui/use-toast'
 import { X } from 'lucide-react'
 import NewsletterForm from '@/app/components/ui/NewsletterForm'
@@ -26,19 +26,78 @@ export default function Newsletter() {
   const [isPaying, setIsPaying] = useState(false)
   const [qrisString, setQrisString] = useState<string | null>(null)
   const [orderId, setOrderId] = useState<string | null>(null)
-  const [paymentType, setPaymentType] = useState<'qris' | 'gopay' | 'bank_transfer' | 'shopeepay'>('qris')
+  const [paymentType, setPaymentType] = useState<'qris' | 'snap'>('qris')
+
+  // Muat script Snap otomatis saat user memilih opsi Snap
+  useEffect(() => {
+    if (paymentType !== 'snap') return
+    if (typeof window === 'undefined') return
+    if ((window as any).snap) return
+
+    const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY
+    const script = document.createElement('script')
+    script.src = `https://${process.env.MIDTRANS_IS_PRODUCTION === 'true' ? 'app.midtrans.com' : 'app.sandbox.midtrans.com'}/snap/snap.js`
+    if (clientKey) script.setAttribute('data-client-key', clientKey)
+    document.body.appendChild(script)
+    return () => {
+      script.parentNode && script.parentNode.removeChild(script)
+    }
+  }, [paymentType])
 
   const handlePayPremium = async () => {
     try {
       setIsPaying(true)
+
+      if (paymentType === 'snap') {
+        const res = await fetch('/api/payments/snap', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            // jangan kirim email kosong; biarkan server melakukan sanitasi tambahan
+            customer_details: { first_name: 'Pengguna' },
+          })
+        })
+        if (!res.ok) throw new Error('Gagal membuat transaksi (Snap)')
+        const json = await res.json()
+        setOrderId(json?.order_id || null)
+
+        const token = json?.token
+        if (token && (window as any).snap) {
+          ;(window as any).snap.pay(token, {
+            onSuccess: function () {
+              window.location.href = '/payment-success'
+            },
+            onPending: function () {
+              // biarkan pengguna menyelesaikan nanti
+            },
+            onError: function () {
+              window.location.href = '/payment-error'
+            },
+            onClose: function () {
+              // modal ditutup tanpa membayar
+            },
+          })
+          return
+        }
+
+        // Fallback jika token tidak tersedia
+        if (json?.redirect_url) {
+          window.open(json.redirect_url, '_blank')
+          return
+        }
+
+        toast({ title: 'Order dibuat', description: 'Silakan selesaikan pembayaran.' })
+        return
+      }
+
+      // Core API (QRIS)
       const res = await fetch('/api/payments/charge', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          payment_type: paymentType,
+          payment_type: 'qris',
           // gross_amount diabaikan di server (harga dikunci 49.000)
-          customer_details: { first_name: 'Pengguna', email: '' },
-          bank: paymentType === 'bank_transfer' ? 'bca' : undefined,
+          customer_details: { first_name: 'Pengguna' },
         })
       })
       if (!res.ok) throw new Error('Gagal membuat transaksi')
@@ -159,13 +218,11 @@ export default function Newsletter() {
               <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
                 <select
                   value={paymentType}
-                  onChange={(e) => setPaymentType(e.target.value as any)}
+                  onChange={(e) => setPaymentType(e.target.value as 'qris' | 'snap')}
                   className="w-full px-3 py-2 rounded-lg bg-white/90 text-black"
                 >
                   <option value="qris">QRIS (disarankan)</option>
-                  <option value="gopay">GoPay</option>
-                  <option value="shopeepay">ShopeePay</option>
-                  <option value="bank_transfer">Bank Transfer (VA BCA)</option>
+                  <option value="snap">Snap (Semua metode)</option>
                 </select>
                 <motion.button
                   whileHover={{ scale: 1.02 }}

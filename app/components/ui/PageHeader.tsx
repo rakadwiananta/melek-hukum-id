@@ -118,7 +118,7 @@ export default function PageHeader({ title, description, breadcrumb = [] }: Page
           transition={{ duration: 0.8, delay: 0.4 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <Link href="/kamus" className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-center">
+          <Link href="/kamus-hukum" className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-center">
             Jelajahi Kamus Hukum
           </Link>
           <Link href="/artikel" className="px-6 py-3 bg-white text-primary border-2 border-primary rounded-lg hover:bg-primary/5 transition-colors text-center">

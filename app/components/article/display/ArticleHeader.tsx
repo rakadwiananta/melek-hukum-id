@@ -264,7 +264,7 @@ export default function ArticleHeader({
       {article.title}
     </span>
     {/* Main title */}
-    <span className="relative text-5xl md:text-6xl lg:text-7xl font-black bg-gradient-to-br from-gray-900 via-red-900 to-amber-900 bg-clip-text text-transparent leading-tight">
+    <span className="relative text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black bg-gradient-to-br from-gray-900 via-red-900 to-amber-900 bg-clip-text text-transparent leading-tight">
       {article.title}
     </span>
   </h1>
@@ -301,9 +301,9 @@ export default function ArticleHeader({
 )}
 
 {/* Interactive Meta Info Cards */}
-<div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-10">
   {/* Author Card */}
-  <div className="group relative bg-white p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden">
+  <div className="group relative bg-white p-4 sm:p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden">
     <div className="absolute inset-0 bg-gradient-to-br from-red-600 to-amber-600 opacity-0 group-hover:opacity-10 transition-opacity" />
     <div className="relative z-10 flex items-center gap-4">
       <div className="relative">
@@ -325,7 +325,7 @@ export default function ArticleHeader({
   </div>
 
   {/* Date Card */}
-  <div className="group relative bg-white p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden">
+  <div className="group relative bg-white p-4 sm:p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden">
     <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-cyan-600 opacity-0 group-hover:opacity-10 transition-opacity" />
     <div className="relative z-10 flex items-center gap-4">
       <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white shadow-lg group-hover:rotate-12 transition-transform">
@@ -342,7 +342,7 @@ export default function ArticleHeader({
   </div>
 
   {/* Reading Time Card */}
-  <div className="group relative bg-white p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden">
+  <div className="group relative bg-white p-4 sm:p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden">
     <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-pink-600 opacity-0 group-hover:opacity-10 transition-opacity" />
     <div className="relative z-10 flex items-center gap-4">
       <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white shadow-lg group-hover:animate-pulse">
@@ -359,7 +359,7 @@ export default function ArticleHeader({
   </div>
 
   {/* Views Card with Live Animation */}
-  <div className="group relative bg-white p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden">
+  <div className="group relative bg-white p-4 sm:p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden">
     <div className="absolute inset-0 bg-gradient-to-br from-green-600 to-emerald-600 opacity-0 group-hover:opacity-10 transition-opacity" />
     <div className="relative z-10 flex items-center gap-4">
       <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white shadow-lg">
@@ -414,12 +414,12 @@ export default function ArticleHeader({
 
 {/* Enhanced Action Buttons Bar */}
 <div className="relative mb-8">
-  <div className="flex flex-wrap items-center gap-4 p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-3xl border border-gray-200">
+  <div className="flex flex-wrap items-center gap-3 md:gap-4 p-4 md:p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-3xl border border-gray-200">
     {/* Like Button with Animation */}
     <button
       onClick={onLike}
       className={cn(
-        'group relative flex items-center gap-3 px-6 py-3.5 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105',
+        'group relative w-full sm:w-auto flex items-center justify-center gap-3 px-6 py-3.5 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105',
         isLiked 
           ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-xl' 
           : 'bg-white border-2 border-gray-300 hover:border-red-600 hover:shadow-lg'
@@ -461,7 +461,7 @@ export default function ArticleHeader({
 
     {/* Comment Button with Badge */}
     <button
-      className="group relative flex items-center gap-3 px-6 py-3.5 bg-white border-2 border-gray-300 rounded-2xl font-semibold hover:border-blue-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+      className="group relative w-full sm:w-auto flex items-center justify-center gap-3 px-6 py-3.5 bg-white border-2 border-gray-300 rounded-2xl font-semibold hover:border-blue-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105"
     >
       <MessageCircle className="h-5 w-5 text-gray-600 group-hover:text-blue-600 transition-colors" />
       <span className="text-gray-700 group-hover:text-blue-600 font-bold">
@@ -474,7 +474,7 @@ export default function ArticleHeader({
     <button
       onClick={onSave}
       className={cn(
-        'group relative flex items-center gap-3 px-6 py-3.5 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105',
+        'group relative w-full sm:w-auto flex items-center justify-center gap-3 px-6 py-3.5 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105',
         isSaved 
           ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-xl' 
           : 'bg-white border-2 border-gray-300 hover:border-amber-600 hover:shadow-lg'
@@ -499,7 +499,7 @@ export default function ArticleHeader({
     {/* Share Button with Advanced Animation */}
     <button
       onClick={onShare}
-      className="group relative ml-auto flex items-center gap-3 px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 overflow-hidden"
+      className="group relative w-full md:w-auto md:ml-auto flex items-center justify-center gap-3 px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 overflow-hidden"
     >
       {/* Animated background */}
       <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
@@ -514,7 +514,7 @@ export default function ArticleHeader({
   </div>
 
   {/* Floating Engagement Stats */}
-  <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 z-20">
+  <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 z-20 hidden md:block">
     <div className="bg-white px-8 py-3 rounded-full shadow-xl border border-gray-200 backdrop-blur">
       <div className="flex items-center gap-8 text-sm">
         <div className="flex items-center gap-2">
@@ -532,6 +532,9 @@ export default function ArticleHeader({
     </div>
   </div>
 </div>
+
+{/* Spacer agar konten tidak tertutup action bar mobile */}
+<div className="h-20 md:hidden" />
 
 <style jsx>{`
   @keyframes fade-in-up {

@@ -53,6 +53,16 @@ const menuItems = [
       { title: 'Integritas', href: '/anti-korupsi/integritas' },
     ],
   },
+  {
+    title: 'Panduan',
+    href: '/panduan',
+    description: 'Panduan hukum praktis untuk masyarakat',
+    children: [
+      { title: 'Mengurus Dokumen Hilang', href: '/panduan/mengurus-dokumen-hilang' },
+      { title: 'Prosedur Pelaporan', href: '/panduan/prosedur-pelaporan' },
+      { title: 'Gugatan Sederhana', href: '/panduan/gugatan-sederhana' },
+    ],
+  },
 ]
 
 export default function DesktopNav({ className }: { className?: string }) {
