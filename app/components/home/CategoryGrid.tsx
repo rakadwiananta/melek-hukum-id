@@ -32,7 +32,7 @@ const categories = [
     title: 'Template Dokumen',
     description: 'Dokumen hukum siap pakai',
     icon: FileText,
-    href: '/solusi/template',
+    href: '/solusi#templates',
     color: 'from-green-500 to-green-600',
     bgPattern: 'batik-kawung',
     count: '156',

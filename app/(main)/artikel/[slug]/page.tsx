@@ -8,6 +8,8 @@ import Script from 'next/script'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
+export const revalidate = 60
+
 // Interface untuk Article yang sesuai dengan data structure
 interface Article {
   id: string
