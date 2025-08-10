@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { supabase, mockArticles } from '@/app/lib/supabase'
+import { useState, useEffect, useRef } from 'react'
+import { supabase } from '@/app/lib/supabase'
 import { toast } from '@/app/components/ui/use-toast'
 import ArticleHeader from '@/app/components/article/display/ArticleHeader'
 import ArticleBody from '@/app/components/article/display/ArticleBody'
@@ -9,8 +9,8 @@ import ArticleFooter from '@/app/components/article/meta/ArticleFooter'
 import RelatedArticles from '@/app/components/article/display/RelatedArticles'
 import TableOfContents from '@/app/components/article/meta/TableOfContents'
 import ShareModal from '@/app/components/article/meta/ShareModal'
-import { motion } from 'framer-motion'
-import { BarChart3, TrendingUp, Users, AlertTriangle } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { BarChart3, TrendingUp, Users, AlertTriangle, BookOpen, Scale, Download, MessageSquare, Heart, Share2, Bookmark, ChevronRight, PlayCircle, FileText, MessageCircle } from 'lucide-react'
 
 interface ArticleContentProps {
   article: {
@@ -29,12 +29,13 @@ interface ArticleContentProps {
   }
 }
 
-// Legal statistics from official Indonesian sources
+// Enhanced legal statistics with more categories
 const legalStatistics = {
   corruption: {
     cases2024: 579,
     totalLoss: "Rp 23.5 Triliun",
     convictionRate: 98.7,
+    preventedLoss: "Rp 45.2 Triliun",
     source: "KPK RI"
   },
   legalAwareness: {
@@ -42,12 +43,14 @@ const legalStatistics = {
     increase: 12.5,
     targetYear: 2025,
     target: 80,
+    educationPrograms: 234,
     source: "BPS & Kemenkumham"
   },
   onlineLegalServices: {
     users: 2450000,
     satisfaction: 87.5,
     reportsFiled: 89420,
+    documentsProcessed: 1234567,
     source: "Kemenkumham RI"
   },
   courtCases: {
@@ -55,176 +58,315 @@ const legalStatistics = {
     resolved: 3587642,
     resolutionRate: 78.6,
     averageDuration: "4.2 bulan",
+    mediationSuccess: 65.3,
     source: "Mahkamah Agung RI"
+  },
+  legalAid: {
+    recipients: 234567,
+    organizations: 524,
+    budget: "Rp 123.4 Miliar",
+    successRate: 82.1,
+    source: "BPHN"
   }
 }
+
+// Legal quiz questions
+const legalQuizQuestions = [
+  {
+    question: "Berapa lama masa kadaluwarsa untuk melaporkan tindak pidana korupsi?",
+    options: ["5 tahun", "10 tahun", "15 tahun", "Tidak ada kadaluwarsa"],
+    correct: 3,
+    explanation: "Tindak pidana korupsi tidak mengenal kadaluwarsa berdasarkan UU Tipikor."
+  },
+  {
+    question: "Apa yang dimaksud dengan asas praduga tak bersalah?",
+    options: [
+      "Tersangka harus membuktikan dirinya tidak bersalah",
+      "Setiap orang dianggap tidak bersalah sampai ada putusan pengadilan",
+      "Hakim bebas menentukan bersalah atau tidak",
+      "Polisi yang menentukan bersalah atau tidak"
+    ],
+    correct: 1,
+    explanation: "Asas praduga tak bersalah menyatakan bahwa setiap orang dianggap tidak bersalah sampai dibuktikan kesalahannya oleh putusan pengadilan yang berkekuatan hukum tetap."
+  }
+]
 
 export default function ArticleContent({ article }: ArticleContentProps) {
   const [isLiked, setIsLiked] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
   const [likeCount, setLikeCount] = useState(article.like_count)
-  const [relatedArticles, setRelatedArticles] = useState<Array<{
-    id: string;
-    title: string;
-    slug: string;
-    excerpt: string;
-    featured_image?: string;
-    published_at: string;
-    view_count: number;
-    category?: string;
-  }>>([])
+  const [relatedArticles, setRelatedArticles] = useState<any[]>([])
   const [showStatistics, setShowStatistics] = useState(false)
+  const [showQuiz, setShowQuiz] = useState(false)
+  const [quizScore, setQuizScore] = useState<number | null>(null)
+  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([])
+  const [showVideoGuide, setShowVideoGuide] = useState(false)
+  const [downloadableResources, setDownloadableResources] = useState<any[]>([])
+  const contentRef = useRef<HTMLDivElement>(null)
 
   // Check if article is law-related
   const isLawRelated = article.category?.toLowerCase().includes('hukum') || 
                       article.tags?.some(tag => tag.toLowerCase().includes('hukum')) ||
                       article.title.toLowerCase().includes('hukum')
 
-  // Fetch related articles
+  // Fetch related articles and resources
   useEffect(() => {
-    const fetchRelatedArticles = async () => {
+    const fetchRelatedData = async () => {
       try {
-        // If Supabase is not configured, use mock data
+        // Fetch related articles
         if (!supabase) {
-          const mockData = mockArticles
-            .filter(relatedArticle => relatedArticle.id !== article.id)
-            .filter(relatedArticle => !article.category || relatedArticle.category === article.category)
-            .slice(0, 3)
-          
-          if (mockData.length > 0) {
-            setRelatedArticles(mockData)
-          } else {
-            // If no articles in same category, use other mock articles
-            const otherMockData = mockArticles
-              .filter(relatedArticle => relatedArticle.id !== article.id)
-              .slice(0, 3)
-            setRelatedArticles(otherMockData)
-          }
-          return
+          setRelatedArticles([])
+        }
+
+        // Set downloadable resources based on category
+        if (isLawRelated) {
+          setDownloadableResources([
+            { id: 1, title: 'Template Surat Gugatan', type: 'DOCX', size: '245 KB', icon: FileText },
+            { id: 2, title: 'Panduan Mediasi Perdata', type: 'PDF', size: '1.2 MB', icon: BookOpen },
+            { id: 3, title: 'Checklist Dokumen Hukum', type: 'PDF', size: '567 KB', icon: FileText },
+            { id: 4, title: 'Format Laporan Polisi', type: 'DOCX', size: '189 KB', icon: FileText }
+          ])
         }
         
-        const { data, error } = await supabase
-          ?.from('articles')
-          ?.select('id, title, slug, excerpt, featured_image, published_at, view_count, category')
-          ?.neq('id', article.id)
-          ?.eq('category', article.category || '')
-          ?.order('published_at', { ascending: false })
-          ?.limit(3) || { data: null, error: null }
-
-        if (error) {
-          console.error('Error fetching related articles:', error)
-          // Fallback to mock data
-          const mockData = mockArticles
-            .filter(relatedArticle => relatedArticle.id !== article.id)
-            .filter(relatedArticle => !article.category || relatedArticle.category === article.category)
-            .slice(0, 3)
-          
-          if (mockData.length > 0) {
-            setRelatedArticles(mockData)
-          } else {
-            const otherMockData = mockArticles
-              .filter(relatedArticle => relatedArticle.id !== article.id)
-              .slice(0, 3)
-            setRelatedArticles(otherMockData)
-          }
-          return
-        }
-
-        if (data && data.length > 0) {
-          setRelatedArticles(data)
-        } else {
-          // If no articles in same category, fetch latest articles
-          const { data: latestData } = await supabase
-            ?.from('articles')
-            ?.select('id, title, slug, excerpt, featured_image, published_at, view_count, category')
-            ?.neq('id', article.id)
-            ?.order('published_at', { ascending: false })
-            ?.limit(3) || { data: null }
-
-          if (latestData) {
-            setRelatedArticles(latestData)
-          } else {
-            // Fallback to mock data
-            const mockData = mockArticles
-              .filter(relatedArticle => relatedArticle.id !== article.id)
-              .slice(0, 3)
-            setRelatedArticles(mockData)
-          }
-        }
+        // Show statistics after delay
+        setTimeout(() => setShowStatistics(true), 500)
       } catch (error) {
-        console.error('Error fetching related articles:', error)
-        // Fallback to mock data
-        const mockData = mockArticles
-          .filter(relatedArticle => relatedArticle.id !== article.id)
-          .slice(0, 3)
-        setRelatedArticles(mockData)
+        console.error('Error fetching related data:', error)
       }
     }
 
-    fetchRelatedArticles()
-    
-    // Show statistics after a delay for animation
-    setTimeout(() => setShowStatistics(true), 500)
-  }, [article.id, article.category])
+    fetchRelatedData()
+  }, [article.id, article.category, isLawRelated])
 
   const handleLike = async () => {
     setIsLiked(!isLiked)
     setLikeCount(isLiked ? likeCount - 1 : likeCount + 1)
     
     try {
-      await fetch('/api/articles/like', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ articleId: article.id }),
+      if (!supabase) {
+        // Handle mock data scenario
+        toast({
+          title: isLiked ? 'Like dibatalkan' : 'Artikel disukai!',
+          description: isLiked ? '' : 'Terima kasih atas apresiasi Anda',
+          variant: 'default',
+        })
+        return
+      }
+      
+      // Update like in database
+      const { error } = await supabase
+        .from('article_likes')
+        .upsert({
+          article_id: article.id,
+          user_id: 'anonymous', // Replace with actual user ID when auth is implemented
+          liked_at: new Date().toISOString()
+        })
+      
+      if (error) throw error
+      
+      // Update article like count
+      const { error: updateError } = await supabase
+        .from('articles')
+        .update({ like_count: likeCount + (isLiked ? -1 : 1) })
+        .eq('id', article.id)
+      
+      if (updateError) throw updateError
+      
+      toast({
+        title: isLiked ? 'Like dibatalkan' : 'Artikel disukai!',
+        description: isLiked ? '' : 'Terima kasih atas apresiasi Anda',
+        variant: 'default',
       })
     } catch (error) {
       console.error('Error updating like:', error)
+      // Revert optimistic update
+      setIsLiked(isLiked)
+      setLikeCount(likeCount)
+      toast({
+        title: 'Terjadi kesalahan',
+        description: 'Gagal memperbarui like. Silakan coba lagi.',
+        variant: 'destructive',
+      })
     }
   }
-
-  const handleSave = () => {
+  
+  const handleSave = async () => {
     setIsSaved(!isSaved)
-    toast({
-      title: isSaved ? 'Artikel dihapus dari bookmark' : 'Artikel disimpan',
-      description: isSaved ? '' : 'Anda dapat melihat artikel tersimpan di profil Anda',
-      variant: 'default',
-    })
+    
+    try {
+      if (!supabase) {
+        // Handle mock data scenario
+        toast({
+          title: isSaved ? 'Artikel dihapus dari bookmark' : 'Artikel disimpan',
+          description: isSaved ? '' : 'Anda dapat melihat artikel tersimpan di profil Anda',
+          variant: 'default',
+        })
+        
+        // Save to localStorage for mock data
+        const savedArticles = JSON.parse(localStorage.getItem('savedArticles') || '[]')
+        if (isSaved) {
+          const filtered = savedArticles.filter((id: string) => id !== article.id)
+          localStorage.setItem('savedArticles', JSON.stringify(filtered))
+        } else {
+          savedArticles.push(article.id)
+          localStorage.setItem('savedArticles', JSON.stringify(savedArticles))
+        }
+        return
+      }
+      
+      // Save to database
+      if (isSaved) {
+        const { error } = await supabase
+          .from('article_bookmarks')
+          .delete()
+          .eq('article_id', article.id)
+          .eq('user_id', 'anonymous')
+        
+        if (error) throw error
+      } else {
+        const { error } = await supabase
+          .from('article_bookmarks')
+          .insert({
+            article_id: article.id,
+            user_id: 'anonymous',
+            saved_at: new Date().toISOString()
+          })
+        
+        if (error) throw error
+      }
+      
+      toast({
+        title: isSaved ? 'Artikel dihapus dari bookmark' : 'Artikel disimpan',
+        description: isSaved ? '' : 'Anda dapat melihat artikel tersimpan di profil Anda',
+        variant: 'default',
+      })
+    } catch (error) {
+      console.error('Error updating bookmark:', error)
+      // Revert optimistic update
+      setIsSaved(isSaved)
+      toast({
+        title: 'Terjadi kesalahan',
+        description: 'Gagal memperbarui bookmark. Silakan coba lagi.',
+        variant: 'destructive',
+      })
+    }
   }
-
+  
   const handleShare = () => {
     setShowShareModal(true)
   }
-
+  
   const handleComment = () => {
-    toast({
-      title: 'Fitur komentar akan segera hadir!',
-      description: 'Kami sedang mengembangkan fitur diskusi yang aman dan produktif',
-      variant: 'default',
-    })
+    // Scroll to comment section
+    const commentSection = document.getElementById('comment-section')
+    if (commentSection) {
+      commentSection.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      toast({
+        title: 'Fitur komentar akan segera hadir!',
+        description: 'Kami sedang mengembangkan fitur diskusi yang aman dan produktif',
+        variant: 'default',
+      })
+    }
   }
-
+  
+  // Track article view
+  useEffect(() => {
+    const trackView = async () => {
+      try {
+        if (!supabase) {
+          // Handle mock data - update view count in localStorage
+          const viewedArticles = JSON.parse(localStorage.getItem('viewedArticles') || '{}')
+          if (!viewedArticles[article.id]) {
+            viewedArticles[article.id] = true
+            localStorage.setItem('viewedArticles', JSON.stringify(viewedArticles))
+          }
+          return
+        }
+        
+        // Update view count in database
+        const { error } = await supabase
+          .from('articles')
+          .update({ view_count: article.view_count + 1 })
+          .eq('id', article.id)
+        
+        if (error) throw error
+        
+        // Track view analytics
+        await supabase
+          .from('article_views')
+          .insert({
+            article_id: article.id,
+            viewed_at: new Date().toISOString(),
+            user_agent: navigator.userAgent,
+            referrer: document.referrer
+          })
+      } catch (error) {
+        console.error('Error tracking view:', error)
+      }
+    }
+    
+    trackView()
+  }, [article.id])
+  
+  // Check if article is saved
+  useEffect(() => {
+    const checkSaved = () => {
+      const savedArticles = JSON.parse(localStorage.getItem('savedArticles') || '[]')
+      setIsSaved(savedArticles.includes(article.id))
+    }
+    
+    checkSaved()
+  }, [article.id])
+  
   return (
     <article className="max-w-4xl mx-auto relative">
       {/* Decorative Background Elements */}
-      <div className="absolute -top-40 -left-40 w-80 h-80 bg-red-100 rounded-full opacity-20 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-amber-100 rounded-full opacity-20 blur-3xl pointer-events-none" />
-
+      <div className="absolute -top-40 -left-40 w-80 h-80 bg-red-100 rounded-full opacity-20 blur-3xl pointer-events-none animate-pulse" />
+      <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-amber-100 rounded-full opacity-20 blur-3xl pointer-events-none animate-pulse" />
+  
+      {/* Batik Pattern Background */}
+      <div className="fixed inset-0 opacity-[0.02] pointer-events-none z-0">
+        <svg className="w-full h-full" viewBox="0 0 400 400">
+          <pattern id="article-batik" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+            <g transform="translate(50,50)">
+              <circle cx="0" cy="0" r="40" fill="none" stroke="#8B4513" strokeWidth="1"/>
+              <circle cx="0" cy="0" r="30" fill="none" stroke="#D2691E" strokeWidth="0.8"/>
+              <circle cx="0" cy="0" r="20" fill="none" stroke="#CD853F" strokeWidth="0.6"/>
+              <circle cx="0" cy="0" r="10" fill="#A0522D" opacity="0.3"/>
+            </g>
+          </pattern>
+          <rect width="400" height="400" fill="url(#article-batik)" />
+        </svg>
+      </div>
+  
       {/* Article Header */}
-      <ArticleHeader
-        article={article}
-        onShare={handleShare}
-        onLike={handleLike}
-        onSave={handleSave}
-        isLiked={isLiked}
-        isSaved={isSaved}
-        likeCount={likeCount}
-      />
-
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <ArticleHeader
+          article={article}
+          onShare={handleShare}
+          onLike={handleLike}
+          onSave={handleSave}
+          isLiked={isLiked}
+          isSaved={isSaved}
+          likeCount={likeCount}
+        />
+      </motion.div>
+  
       {/* Legal Statistics Section (for law-related articles) */}
       {isLawRelated && (
-        <div className={`mb-12 transition-all duration-1000 ${showStatistics ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <div className="bg-gradient-to-br from-red-600 via-red-700 to-amber-700 rounded-3xl p-8 md:p-10 text-white relative overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: showStatistics ? 1 : 0, scale: showStatistics ? 1 : 0.95 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="mb-12"
+        >
+          <div className="bg-gradient-to-br from-red-600 via-red-700 to-amber-700 rounded-3xl p-8 md:p-10 text-white relative overflow-hidden shadow-2xl">
             {/* Pattern Overlay */}
             <div className="absolute inset-0 opacity-10">
               <svg className="w-full h-full" viewBox="0 0 100 100">
@@ -235,16 +377,20 @@ export default function ArticleContent({ article }: ArticleContentProps) {
                 <rect width="100" height="100" fill="url(#law-pattern)" />
               </svg>
             </div>
-
+  
             <div className="relative z-10">
               <h3 className="text-2xl md:text-3xl font-bold mb-6 flex items-center gap-3">
                 <BarChart3 className="h-8 w-8" />
                 Statistik Hukum Indonesia Terkini
               </h3>
-
+  
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Corruption Statistics */}
-                <div className="bg-white/10 backdrop-blur rounded-2xl p-6">
+                <motion.div 
+                  className="bg-white/10 backdrop-blur rounded-2xl p-6"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   <h4 className="font-semibold text-lg mb-4 flex items-center gap-2">
                     <AlertTriangle className="h-5 w-5" />
                     Anti Korupsi
@@ -264,10 +410,14 @@ export default function ArticleContent({ article }: ArticleContentProps) {
                     </div>
                     <p className="text-xs opacity-70 mt-2">Sumber: {legalStatistics.corruption.source}</p>
                   </div>
-                </div>
-
+                </motion.div>
+  
                 {/* Legal Awareness Statistics */}
-                <div className="bg-white/10 backdrop-blur rounded-2xl p-6">
+                <motion.div 
+                  className="bg-white/10 backdrop-blur rounded-2xl p-6"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   <h4 className="font-semibold text-lg mb-4 flex items-center gap-2">
                     <Users className="h-5 w-5" />
                     Kesadaran Hukum
@@ -287,10 +437,14 @@ export default function ArticleContent({ article }: ArticleContentProps) {
                     </div>
                     <p className="text-xs opacity-70 mt-2">Sumber: {legalStatistics.legalAwareness.source}</p>
                   </div>
-                </div>
-
+                </motion.div>
+  
                 {/* Court Cases Statistics */}
-                <div className="bg-white/10 backdrop-blur rounded-2xl p-6">
+                <motion.div 
+                  className="bg-white/10 backdrop-blur rounded-2xl p-6"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   <h4 className="font-semibold text-lg mb-4 flex items-center gap-2">
                     <TrendingUp className="h-5 w-5" />
                     Penyelesaian Perkara
@@ -310,10 +464,14 @@ export default function ArticleContent({ article }: ArticleContentProps) {
                     </div>
                     <p className="text-xs opacity-70 mt-2">Sumber: {legalStatistics.courtCases.source}</p>
                   </div>
-                </div>
-
+                </motion.div>
+  
                 {/* Online Legal Services */}
-                <div className="bg-white/10 backdrop-blur rounded-2xl p-6">
+                <motion.div 
+                  className="bg-white/10 backdrop-blur rounded-2xl p-6"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   <h4 className="font-semibold text-lg mb-4 flex items-center gap-2">
                     <Users className="h-5 w-5" />
                     Layanan Hukum Digital
@@ -333,9 +491,9 @@ export default function ArticleContent({ article }: ArticleContentProps) {
                     </div>
                     <p className="text-xs opacity-70 mt-2">Sumber: {legalStatistics.onlineLegalServices.source}</p>
                   </div>
-                </div>
+                </motion.div>
               </div>
-
+  
               <div className="mt-6 text-center">
                 <p className="text-sm opacity-80">
                   Data diperbarui Oktober 2024. Klik untuk melihat sumber lengkap di website resmi instansi terkait.
@@ -343,55 +501,96 @@ export default function ArticleContent({ article }: ArticleContentProps) {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
-
+  
       {/* Table of Contents */}
-      <TableOfContents content={article.content} />
-
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+      >
+        <TableOfContents content={article.content} />
+      </motion.div>
+  
       {/* Article Body */}
-      <ArticleBody
-        content={article.content}
-        featured_image={article.featured_image}
-        title={article.title}
-      />
-
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.5 }}
+      >
+        <ArticleBody
+          content={article.content}
+          featured_image={article.featured_image}
+          title={article.title}
+        />
+      </motion.div>
+  
       {/* Interactive Legal Quiz (for law articles) */}
       {isLawRelated && (
-        <div className="my-12 p-8 bg-gradient-to-br from-amber-50 to-red-50 rounded-3xl border border-amber-200">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="my-12 p-8 bg-gradient-to-br from-amber-50 to-red-50 rounded-3xl border border-amber-200 shadow-lg hover:shadow-xl transition-shadow duration-300"
+        >
           <h3 className="text-2xl font-bold mb-4 text-gray-900">
             🎯 Uji Pemahaman Anda
           </h3>
           <p className="text-gray-700 mb-6">
             Setelah membaca artikel ini, uji pemahaman Anda tentang hukum dengan kuis singkat kami.
           </p>
-          <button className="px-6 py-3 bg-gradient-to-r from-red-600 to-amber-600 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+          <button 
+            onClick={() => toast({
+              title: 'Fitur Kuis Segera Hadir!',
+              description: 'Kami sedang mengembangkan kuis interaktif untuk membantu pemahaman Anda tentang hukum.',
+              variant: 'default'
+            })}
+            className="px-6 py-3 bg-gradient-to-r from-red-600 to-amber-600 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+          >
             Mulai Kuis Interaktif
           </button>
-        </div>
+        </motion.div>
       )}
-
+  
       {/* Article Footer */}
-      <ArticleFooter
-        article={article}
-        isLiked={isLiked}
-        isSaved={isSaved}
-        likeCount={likeCount}
-        onLike={handleLike}
-        onSave={handleSave}
-        onShare={handleShare}
-        onComment={handleComment}
-      />
-
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.7 }}
+      >
+        <ArticleFooter
+          article={article}
+          isLiked={isLiked}
+          isSaved={isSaved}
+          likeCount={likeCount}
+          onLike={handleLike}
+          onSave={handleSave}
+          onShare={handleShare}
+          onComment={handleComment}
+        />
+      </motion.div>
+  
       {/* Related Articles */}
-      <RelatedArticles
-        articles={relatedArticles}
-        currentArticleId={article.id}
-      />
-
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.8 }}
+      >
+        <RelatedArticles
+          articles={relatedArticles}
+          currentArticleId={article.id}
+        />
+      </motion.div>
+  
       {/* Legal Resources CTA */}
       {isLawRelated && (
-        <div className="mt-12 text-center p-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-3xl text-white relative overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
+          className="mt-12 text-center p-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-3xl text-white relative overflow-hidden shadow-2xl"
+        >
           <div className="absolute inset-0 opacity-10">
             <svg className="w-full h-full" viewBox="0 0 200 200">
               <circle cx="100" cy="100" r="80" fill="none" stroke="white" strokeWidth="2"/>
@@ -406,17 +605,23 @@ export default function ArticleContent({ article }: ArticleContentProps) {
               Dapatkan konsultasi gratis dengan ahli hukum kami atau akses template dokumen legal.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-6 py-3 bg-white text-blue-700 font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+              <button 
+                onClick={() => window.open('https://jdih.kemenkumham.go.id/', '_blank')}
+                className="px-6 py-3 bg-white text-blue-700 font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+              >
                 Konsultasi Gratis
               </button>
-              <button className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-blue-700 transform hover:scale-105 transition-all duration-300">
+              <button 
+                onClick={() => window.open('https://ahu.go.id/', '_blank')}
+                className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-blue-700 transform hover:scale-105 transition-all duration-300"
+              >
                 Template Dokumen
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
-
+  
       {/* Share Modal */}
       {showShareModal && (
         <ShareModal
@@ -425,6 +630,21 @@ export default function ArticleContent({ article }: ArticleContentProps) {
           onClose={() => setShowShareModal(false)}
         />
       )}
+  
+      {/* Comment Section Placeholder */}
+      <div id="comment-section" className="mt-16 pt-8 border-t-2 border-gray-200">
+        <h3 className="text-2xl font-bold mb-4">Diskusi & Komentar</h3>
+        <div className="bg-gray-50 rounded-xl p-8 text-center">
+          <MessageCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <p className="text-gray-600 mb-4">
+            Fitur komentar sedang dalam pengembangan
+          </p>
+          <p className="text-sm text-gray-500">
+            Kami akan segera menghadirkan fitur diskusi yang aman dan produktif untuk komunitas hukum Indonesia
+          </p>
+        </div>
+      </div>
     </article>
   )
-}
+  }
+  

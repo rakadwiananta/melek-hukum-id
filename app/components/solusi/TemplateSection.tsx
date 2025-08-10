@@ -114,6 +114,17 @@ export default function TemplateSection() {
   })
 
   const handleDownload = (template: Template) => {
+    // Premium gate sederhana via localStorage
+    const isPremium = typeof window !== 'undefined' && localStorage.getItem('mh_premium') === '1'
+
+    if (!isPremium) {
+      // Tampilkan prompt sederhana lalu arahkan ke Solusi (section pricing/payment)
+      alert('Fitur download template premium terkunci. Silakan berlangganan Rp49.000 untuk membuka akses.')
+      // Arahkan ke section newsletter di beranda
+      window.location.href = '/#newsletterform'
+      return
+    }
+
     // Track download dengan Google Analytics
     if (typeof window !== 'undefined' && 'gtag' in window) {
       ;(window as any).gtag('event', 'download', {

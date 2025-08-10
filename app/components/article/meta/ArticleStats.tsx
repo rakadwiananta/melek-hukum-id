@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase, mockArticles } from '@/app/lib/supabase'
+import { supabase } from '@/app/lib/supabase'
 import { FileText, Eye, ThumbsUp, Users, TrendingUp } from 'lucide-react'
 
 interface ArticleStatsProps {
@@ -25,6 +25,7 @@ export default function ArticleStats({ className = '' }: ArticleStatsProps) {
     averageViews: 0
   })
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -33,71 +34,62 @@ export default function ArticleStats({ className = '' }: ArticleStatsProps) {
         
         // If Supabase is not configured, use mock data
         if (!supabase) {
-          const mockData = mockArticles
-          const totalArticles = mockData.length
-          const totalViews = mockData.reduce((sum, article) => sum + (article.view_count || 0), 0)
-          const totalLikes = mockData.reduce((sum, article) => sum + (article.like_count || 0), 0)
-          const uniqueAuthors = new Set(mockData.map(article => article.author).filter(Boolean))
-          const averageViews = totalArticles > 0 ? Math.round(totalViews / totalArticles) : 0
-
           setStats({
-            totalArticles,
-            totalViews,
-            totalLikes,
-            totalAuthors: uniqueAuthors.size,
-            averageViews
+            totalArticles: 0,
+            totalViews: 0,
+            totalLikes: 0,
+            totalAuthors: 0,
+            averageViews: 0
           })
           return
         }
         
-        const { data, error } = await supabase
-          ?.from('articles')
-          ?.select('view_count, like_count, comment_count, author')
-          ?.not('view_count', 'is', null) || { data: null, error: null }
+        // Try to fetch from Supabase with better error handling
+        let supabaseData = null as any[] | null
+        let supabaseError: any = null
+        
+        try {
+          const { data, error } = await supabase
+            .from('articles')
+            .select('view_count, like_count, share_count, author')
+            .eq('status', 'published')
+          
+          if (error) {
+            supabaseError = error
+            console.warn('Supabase error:', error)
+          } else {
+            supabaseData = data || []
+          }
+        } catch (err) {
+          supabaseError = err instanceof Error ? err : new Error('Unknown error')
+          console.warn('Supabase catch error:', err)
+        }
 
-        if (error) {
-          console.error('Error fetching stats:', error)
+        if (supabaseError || !supabaseData || supabaseData.length === 0) {
+          console.log('Using mock data due to Supabase error or no data')
+          setError(supabaseError ? (supabaseError as Error).message : 'No data available')
           // Fallback to mock data
-          const mockData = mockArticles
-          const totalArticles = mockData.length
-          const totalViews = mockData.reduce((sum, article) => sum + (article.view_count || 0), 0)
-          const totalLikes = mockData.reduce((sum, article) => sum + (article.like_count || 0), 0)
-          const uniqueAuthors = new Set(mockData.map(article => article.author).filter(Boolean))
-          const averageViews = totalArticles > 0 ? Math.round(totalViews / totalArticles) : 0
-
           setStats({
-            totalArticles,
-            totalViews,
-            totalLikes,
-            totalAuthors: uniqueAuthors.size,
-            averageViews
+            totalArticles: 0,
+            totalViews: 0,
+            totalLikes: 0,
+            totalAuthors: 0,
+            averageViews: 0
           })
           return
         }
 
-        if (data) {
-          const totalArticles = data.length
-          const totalViews = data.reduce((sum, article) => sum + (article.view_count || 0), 0)
-          const totalLikes = data.reduce((sum, article) => sum + (article.like_count || 0), 0)
-          const uniqueAuthors = new Set(data.map(article => article.author).filter(Boolean))
-          const averageViews = totalArticles > 0 ? Math.round(totalViews / totalArticles) : 0
-
-          setStats({
-            totalArticles,
-            totalViews,
-            totalLikes,
-            totalAuthors: uniqueAuthors.size,
-            averageViews
-          })
-        }
-      } catch (error) {
-        console.error('Error fetching stats:', error)
-        // Fallback to mock data
-        const mockData = mockArticles
-        const totalArticles = mockData.length
-        const totalViews = mockData.reduce((sum, article) => sum + (article.view_count || 0), 0)
-        const totalLikes = mockData.reduce((sum, article) => sum + (article.like_count || 0), 0)
-        const uniqueAuthors = new Set(mockData.map(article => article.author).filter(Boolean))
+        // Process Supabase data with validation
+        const validData = Array.isArray(supabaseData) ? supabaseData : []
+        console.log('Processing stats data:', { 
+          totalRecords: validData.length, 
+          sampleRecord: validData[0] 
+        })
+        
+        const totalArticles = validData.length
+        const totalViews = validData.reduce((sum, article) => sum + (Number(article.view_count) || 0), 0)
+        const totalLikes = validData.reduce((sum, article) => sum + (Number(article.like_count) || 0), 0)
+        const uniqueAuthors = new Set(validData.map(article => article.author).filter(Boolean))
         const averageViews = totalArticles > 0 ? Math.round(totalViews / totalArticles) : 0
 
         setStats({
@@ -106,6 +98,17 @@ export default function ArticleStats({ className = '' }: ArticleStatsProps) {
           totalLikes,
           totalAuthors: uniqueAuthors.size,
           averageViews
+        })
+      } catch (error) {
+        console.error('Error fetching stats:', error)
+        setError(error instanceof Error ? error.message : 'Unknown error occurred')
+        // Fallback to mock data
+        setStats({
+          totalArticles: 0,
+          totalViews: 0,
+          totalLikes: 0,
+          totalAuthors: 0,
+          averageViews: 0
         })
       } finally {
         setLoading(false)
@@ -117,11 +120,17 @@ export default function ArticleStats({ className = '' }: ArticleStatsProps) {
 
   if (loading) {
     return (
-      <div className={`bg-white rounded-lg shadow-sm p-6 ${className}`}>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className={`bg-white rounded-xl shadow-lg border border-gray-100 ${className}`}>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+            <TrendingUp className="h-5 w-5 text-white" />
+          </div>
+          <h3 className="text-lg font-bold text-gray-900">Statistik Artikel</h3>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
           {[...Array(4)].map((_, index) => (
             <div key={index} className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded mb-2"></div>
+              <div className="h-20 bg-gray-200 rounded-lg mb-2"></div>
               <div className="h-4 bg-gray-200 rounded"></div>
             </div>
           ))}
@@ -130,61 +139,76 @@ export default function ArticleStats({ className = '' }: ArticleStatsProps) {
     )
   }
 
+  if (error) {
+    console.warn('ArticleStats error:', error)
+  }
+
+  // Ensure stats are always valid
+  const validStats = {
+    totalArticles: Math.max(0, stats.totalArticles),
+    totalViews: Math.max(0, stats.totalViews),
+    totalLikes: Math.max(0, stats.totalLikes),
+    totalAuthors: Math.max(0, stats.totalAuthors),
+    averageViews: Math.max(0, stats.averageViews)
+  }
+
   const statItems = [
     {
       icon: FileText,
       label: 'Total Artikel',
-      value: stats.totalArticles.toLocaleString(),
+      value: validStats.totalArticles.toLocaleString(),
       color: 'text-blue-600'
     },
     {
       icon: Eye,
       label: 'Total Views',
-      value: stats.totalViews.toLocaleString(),
+      value: validStats.totalViews.toLocaleString(),
       color: 'text-green-600'
     },
     {
       icon: ThumbsUp,
       label: 'Total Likes',
-      value: stats.totalLikes.toLocaleString(),
+      value: validStats.totalLikes.toLocaleString(),
       color: 'text-red-600'
     },
     {
       icon: Users,
       label: 'Penulis',
-      value: stats.totalAuthors.toLocaleString(),
+      value: validStats.totalAuthors.toLocaleString(),
       color: 'text-purple-600'
     }
   ]
 
   return (
-    <div className={`bg-white rounded-lg shadow-sm p-6 ${className}`}>
-      <div className="flex items-center gap-2 mb-6">
-        <TrendingUp className="h-5 w-5 text-primary" />
-        <h3 className="text-lg font-semibold">Statistik Artikel</h3>
+    <div className={`bg-white rounded-xl shadow-lg border border-gray-100 ${className}`}>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+          <TrendingUp className="h-5 w-5 text-white" />
+        </div>
+        <h3 className="text-lg font-bold text-gray-900">Statistik Artikel</h3>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 gap-4 mb-6">
         {statItems.map((item, index) => (
-          <div key={index} className="text-center">
-            <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-3 ${item.color}`}>
+          <div key={index} className="text-center p-4 bg-gray-50 rounded-lg border border-gray-100">
+            <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-sm mb-3 ${item.color}`}>
               <item.icon className="h-6 w-6" />
             </div>
-            <div className="text-2xl font-bold text-gray-900 mb-1">
+            <div className="text-xl font-bold text-gray-900 mb-1">
               {item.value}
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 font-medium">
               {item.label}
             </div>
           </div>
         ))}
       </div>
       
-      <div className="mt-6 pt-6 border-t">
+      <div className="pt-4 border-t border-gray-200">
         <div className="text-center">
-          <div className="text-sm text-gray-600 mb-1">Rata-rata Views per Artikel</div>
-          <div className="text-2xl font-bold text-primary">
-            {stats.averageViews.toLocaleString()}
+          <div className="text-sm text-gray-600 mb-1 font-medium">Rata-rata Views per Artikel</div>
+          <div className="text-2xl font-bold text-blue-600">
+            {validStats.averageViews.toLocaleString()}
           </div>
         </div>
       </div>

@@ -69,6 +69,12 @@ export default function TemplateDetail({
   const handleDownload = async (template: any) => {
     setIsDownloading(true)
     try {
+      const isPremium = typeof window !== 'undefined' && localStorage.getItem('mh_premium') === '1'
+      if (!isPremium) {
+        alert('Download terkunci. Silakan berlangganan Rp49.000 untuk membuka semua template.')
+        setIsDownloading(false)
+        return
+      }
       // Track download dengan Google Analytics
       if (typeof window !== 'undefined' && 'gtag' in window) {
         ;(window as any).gtag('event', 'download', {

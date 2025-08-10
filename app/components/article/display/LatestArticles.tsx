@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase, mockArticles } from '@/app/lib/supabase'
+import { supabase } from '@/app/lib/supabase'
 import { formatDate } from '@/app/lib/utils'
 import { Clock, Eye, Tag, ArrowRight, Star } from 'lucide-react'
 import Link from 'next/link'
@@ -38,15 +38,6 @@ export default function LatestArticles({
       try {
         setLoading(true)
         
-        // If Supabase is not configured, use mock data
-        if (!supabase) {
-          const mockData = mockArticles
-            .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
-            .slice(0, limit)
-          setArticles(mockData)
-          return
-        }
-        
         const { data, error } = await supabase
           ?.from('articles')
           ?.select('id, title, slug, excerpt, featured_image, published_at, view_count, category, author')
@@ -55,11 +46,7 @@ export default function LatestArticles({
 
         if (error) {
           console.error('Error fetching articles:', error)
-          // Fallback to mock data
-          const mockData = mockArticles
-            .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
-            .slice(0, limit)
-          setArticles(mockData)
+          setArticles([])
           return
         }
 
@@ -68,11 +55,7 @@ export default function LatestArticles({
         }
       } catch (error) {
         console.error('Error fetching articles:', error)
-        // Fallback to mock data
-        const mockData = mockArticles
-          .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime())
-          .slice(0, limit)
-        setArticles(mockData)
+        setArticles([])
       } finally {
         setLoading(false)
       }
@@ -130,15 +113,15 @@ export default function LatestArticles({
           >
             <Link href={`/artikel/${article.slug}`} className="block">
               <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                {article.featured_image && (
-                  <Image
-                    src={article.featured_image}
-                    alt={article.title}
-                    width={400}
-                    height={250}
-                    className="w-full h-48 object-cover"
-                  />
-                )}
+                <Image
+                  src={(((article.featured_image || '').trim().length > 0) && !((article.featured_image || '').includes('/images/articles/'))) 
+                    ? (article.featured_image || '').trim() 
+                    : '/timbangkan.jpg'}
+                  alt={article.title}
+                  width={400}
+                  height={250}
+                  className="w-full h-48 object-cover"
+                />
                 <div className="p-4">
                   <h3 className="text-lg font-bold mb-2 line-clamp-2">{article.title}</h3>
                   <p className="text-sm text-gray-700 mb-4 line-clamp-3">{article.excerpt}</p>

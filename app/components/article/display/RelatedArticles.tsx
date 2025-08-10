@@ -85,30 +85,28 @@ export default function RelatedArticles({ articles, currentArticleId }: RelatedA
             <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden border border-gray-100">
               <Link href={`/artikel/${article.slug}`}>
                 {/* Image Container */}
-                {article.featured_image && (
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={article.featured_image}
-                      alt={article.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    
-                    {/* Stats Overlay */}
-                    <div className="absolute top-3 right-3 bg-black/60 backdrop-blur text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5">
-                      <Eye className="h-3 w-3" />
-                      {article.view_count.toLocaleString('id-ID')}
-                    </div>
-
-                    {/* Category Badge */}
-                    {article.category && (
-                      <div className="absolute top-3 left-3 bg-red-600/90 backdrop-blur text-white text-xs px-3 py-1.5 rounded-full font-semibold shadow-lg">
-                        {article.category}
-                      </div>
-                    )}
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src={(article.featured_image && !article.featured_image.startsWith('/images/articles/')) ? article.featured_image : '/timbangkan.jpg'}
+                    alt={article.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  {/* Stats Overlay */}
+                  <div className="absolute top-3 right-3 bg-black/60 backdrop-blur text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                    <Eye className="h-3 w-3" />
+                    {article.view_count.toLocaleString('id-ID')}
                   </div>
-                )}
+
+                  {/* Category Badge */}
+                  {article.category && (
+                    <div className="absolute top-3 left-3 bg-red-600/90 backdrop-blur text-white text-xs px-3 py-1.5 rounded-full font-semibold shadow-lg">
+                      {article.category}
+                    </div>
+                  )}
+                </div>
 
                 {/* Content */}
                 <div className="p-5">

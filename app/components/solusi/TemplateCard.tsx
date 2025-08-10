@@ -76,8 +76,6 @@ export default function TemplateCard({
   })
 
   const handleDetailClick = () => {
-    console.log('Detail clicked for template:', template.id)
-    console.log('Template title:', template.title)
     router.push(`/solusi/template/${template.id}`)
   }
 

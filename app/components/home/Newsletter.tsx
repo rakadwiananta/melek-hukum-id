@@ -26,6 +26,7 @@ export default function Newsletter() {
   const [isPaying, setIsPaying] = useState(false)
   const [qrisString, setQrisString] = useState<string | null>(null)
   const [orderId, setOrderId] = useState<string | null>(null)
+  const [paymentType, setPaymentType] = useState<'qris' | 'gopay' | 'bank_transfer' | 'shopeepay'>('qris')
 
   const handlePayPremium = async () => {
     try {
@@ -34,12 +35,10 @@ export default function Newsletter() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          payment_type: 'qris',
-          gross_amount: 49000,
-          items: [
-            { id: 'premium-template', price: 49000, quantity: 1, name: 'Premium Template Download (Diskon)' }
-          ],
-          customer_details: { first_name: 'Pengguna', email: '' }
+          payment_type: paymentType,
+          // gross_amount diabaikan di server (harga dikunci 49.000)
+          customer_details: { first_name: 'Pengguna', email: '' },
+          bank: paymentType === 'bank_transfer' ? 'bca' : undefined,
         })
       })
       if (!res.ok) throw new Error('Gagal membuat transaksi')
@@ -65,7 +64,7 @@ export default function Newsletter() {
   }
 
   return (
-    <section className="py-12 md:py-20 bg-primary text-white relative overflow-hidden">
+    <section id="newsletterform" className="py-12 md:py-20 bg-primary text-white relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl" />
@@ -156,15 +155,28 @@ export default function Newsletter() {
                   <div className="text-2xl font-bold">Rp49.000</div>
                 </div>
               </div>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handlePayPremium}
-                disabled={isPaying}
-                className="w-full mt-4 px-4 py-3 rounded-lg bg-white text-primary font-semibold disabled:opacity-60"
-              >
-                {isPaying ? 'Memproses...' : 'Upgrade Sekarang'}
-              </motion.button>
+              {/* Payment type selector */}
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                <select
+                  value={paymentType}
+                  onChange={(e) => setPaymentType(e.target.value as any)}
+                  className="w-full px-3 py-2 rounded-lg bg-white/90 text-black"
+                >
+                  <option value="qris">QRIS (disarankan)</option>
+                  <option value="gopay">GoPay</option>
+                  <option value="shopeepay">ShopeePay</option>
+                  <option value="bank_transfer">Bank Transfer (VA BCA)</option>
+                </select>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handlePayPremium}
+                  disabled={isPaying}
+                  className="w-full px-4 py-3 rounded-lg bg-white text-primary font-semibold disabled:opacity-60"
+                >
+                  {isPaying ? 'Memproses...' : 'Bayar Rp49.000'}
+                </motion.button>
+              </div>
             </div>
 
             <div className="mt-6 flex items-start gap-2">

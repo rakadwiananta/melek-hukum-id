@@ -240,8 +240,19 @@ export default function IstilahPidanaComponent({
 
   // Load bookmarks from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('bookmarkedTerms')
-    if (saved) setBookmarkedTerms(JSON.parse(saved))
+    try {
+      const saved = localStorage.getItem('bookmarkedTerms')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed)) {
+          setBookmarkedTerms(parsed)
+        }
+      }
+    } catch (error) {
+      console.warn('Error parsing bookmarked terms from localStorage:', error)
+      // Clear invalid data
+      localStorage.removeItem('bookmarkedTerms')
+    }
     
     // Simulate live stats
     const interval = setInterval(() => {
@@ -328,7 +339,11 @@ export default function IstilahPidanaComponent({
       : [...bookmarkedTerms, id]
     
     setBookmarkedTerms(newBookmarks)
-    localStorage.setItem('bookmarkedTerms', JSON.stringify(newBookmarks))
+    try {
+      localStorage.setItem('bookmarkedTerms', JSON.stringify(newBookmarks))
+    } catch (error) {
+      console.warn('Error saving bookmarks to localStorage:', error)
+    }
   }
 
   const handleExport = async () => {
