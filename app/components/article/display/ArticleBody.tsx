@@ -141,13 +141,15 @@ export default function ArticleBody({ content, featured_image, title }: ArticleB
 
     Object.entries(legalKeywords).forEach(([keyword, info]) => {
       if (paragraph.toLowerCase().includes(keyword)) {
+        const statsEntries = info.stats ? Object.entries(info.stats) : []
+        const mdColsClass = statsEntries.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'
         const infoBox = `
-          <div class="my-8 relative group transform transition-all duration-500 hover:scale-[1.02]">
+          <div class="my-6 sm:my-8 relative group transform transition-all duration-500 hover:scale-[1.02]">
             <!-- 3D Shadow Effect -->
             <div class="absolute inset-0 bg-gradient-to-br ${info.color} rounded-3xl transform rotate-1 scale-[1.01] opacity-20 blur-xl group-hover:opacity-30 transition-opacity"></div>
             
             <!-- Main Card -->
-            <div class="relative bg-gradient-to-br ${info.color} rounded-3xl p-6 md:p-8 text-white shadow-2xl overflow-hidden">
+            <div class="relative bg-gradient-to-br ${info.color} rounded-3xl p-4 sm:p-6 md:p-8 text-white shadow-2xl overflow-hidden">
               <!-- Batik Pattern Overlay -->
               <div class="absolute inset-0 opacity-10">
                 <svg class="w-full h-full" viewBox="0 0 400 300">
@@ -161,24 +163,24 @@ export default function ArticleBody({ content, featured_image, title }: ArticleB
               </div>
               
               <div class="relative z-10">
-                <div class="flex items-start gap-4 mb-4">
-                  <div class="text-5xl filter drop-shadow-lg animate-bounce">${info.icon}</div>
+                <div class="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
+                  <div class="text-4xl md:text-5xl filter drop-shadow-lg animate-bounce">${info.icon}</div>
                   <div class="flex-1">
-                    <h4 class="text-2xl font-bold mb-3 flex items-center gap-2">
+                    <h4 class="text-xl md:text-2xl font-bold mb-2 sm:mb-3 flex items-center gap-2">
                       ${info.title}
                       <span class="inline-block w-2 h-2 bg-white rounded-full animate-pulse"></span>
                     </h4>
-                    <p class="text-white/90 leading-relaxed text-lg">${info.content}</p>
+                    <p class="text-white/90 leading-relaxed text-base md:text-lg">${info.content}</p>
                   </div>
                 </div>
                 
                 <!-- Statistics Grid -->
                 ${info.stats ? `
-                  <div class="grid grid-cols-2 md:grid-cols-${Object.keys(info.stats).length} gap-4 mt-6">
-                    ${Object.entries(info.stats).map(([key, value]) => `
-                      <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center transform hover:scale-105 transition-all duration-300">
-                        <div class="text-2xl font-bold">${value}</div>
-                        <div class="text-sm opacity-80 capitalize">${key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 ${mdColsClass} gap-3 sm:gap-4 mt-4 sm:mt-6">
+                    ${statsEntries.map(([key, value]) => `
+                      <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3 sm:p-4 text-center transform hover:scale-105 transition-all duration-300">
+                        <div class="text-xl sm:text-2xl font-bold">${value}</div>
+                        <div class="text-xs sm:text-sm opacity-80 capitalize">${key.replace(/([A-Z])/g, ' $1').trim()}</div>
                       </div>
                     `).join('')}
                   </div>

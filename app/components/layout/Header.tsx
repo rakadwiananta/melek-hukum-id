@@ -12,6 +12,7 @@ export default function Header() {
     { name: 'Solusi', href: '/solusi' },
     { name: 'Regulasi', href: '/regulasi' },
     { name: 'Anti Korupsi', href: '/anti-korupsi' },
+    { name: 'Panduan', href: '/panduan' },
   ]
 
   return (

@@ -16,6 +16,13 @@ export const midtransCore = new midtransClient.CoreApi({
   clientKey,
 })
 
+// Tambahkan Snap API client untuk web checkout (UI metode pembayaran)
+export const midtransSnap = new midtransClient.Snap({
+  isProduction,
+  serverKey,
+  clientKey,
+})
+
 export function generateOrderId(prefix: string = 'order'): string {
   const now = new Date()
   const rand = Math.random().toString(36).slice(2, 8)

@@ -48,6 +48,16 @@ const menuItems = [
       { title: 'Integritas', href: '/anti-korupsi/integritas' },
     ],
   },
+  {
+    title: 'Panduan Hukum Praktis',
+    href: '/panduan',
+    icon: '📘',
+    children: [
+      { title: 'Mengurus Dokumen Hilang', href: '/panduan/mengurus-dokumen-hilang' },
+      { title: 'Prosedur Pelaporan', href: '/panduan/prosedur-pelaporan' },
+      { title: 'Gugatan Sederhana', href: '/panduan/gugatan-sederhana' },
+    ],
+  },
 ]
 
 export default function MobileNav() {
