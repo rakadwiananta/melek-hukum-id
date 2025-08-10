@@ -25,8 +25,18 @@ export async function POST(request: NextRequest) {
       items = [],
     } = body || {}
 
-    // Harga tetap dari environment, default 49.000
-    const FIXED_PRICE = Number(process.env.MIDTRANS_FIXED_PRICE || 49000)
+    // Harga dari environment wajib diset
+    const fixedPriceEnv = process.env.MIDTRANS_FIXED_PRICE
+    if (!fixedPriceEnv) {
+      return NextResponse.json(
+        {
+          error: 'PRICE_NOT_CONFIGURED',
+          detail: 'Set MIDTRANS_FIXED_PRICE di environment deployment (Netlify).'
+        },
+        { status: 500 }
+      )
+    }
+    const FIXED_PRICE = Number(fixedPriceEnv)
 
     // Tentukan payment_type: dari request atau default dari env
     const payment_type: string = (incomingPaymentType || defaultPaymentType)
@@ -53,7 +63,7 @@ export async function POST(request: NextRequest) {
       // Gunakan 1 item ringkas agar nominal mudah diverifikasi
       item_details: [
         {
-          id: 'premium-49000',
+          id: `premium-${FIXED_PRICE}`,
           price: FIXED_PRICE,
           quantity: 1,
           name: 'Premium Access',
