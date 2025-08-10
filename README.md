@@ -57,7 +57,8 @@ SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
 MIDTRANS_IS_PRODUCTION=false
 MIDTRANS_SERVER_KEY=your_midtrans_server_key
 NEXT_PUBLIC_MIDTRANS_CLIENT_KEY=your_midtrans_client_key
-MIDTRANS_FIXED_PRICE=49000
+# Gunakan nilai contoh, JANGAN commit nilai asli di repo/public docs
+MIDTRANS_FIXED_PRICE=10000
 MIDTRANS_ALLOWED_PAYMENT_TYPES=qris,gopay,bank_transfer
 MIDTRANS_DEFAULT_PAYMENT_TYPE=qris
 MIDTRANS_FINISH_URL=https://yourdomain.com/payment-success
