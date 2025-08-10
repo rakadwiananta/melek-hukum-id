@@ -24,7 +24,7 @@ const menuItems = [
     icon: '🔧',
     children: [
       { title: 'Panduan Praktis', href: '/solusi/panduan' },
-      { title: 'Template Dokumen', href: '/solusi/template' },
+      { title: 'Template Dokumen', href: '/solusi#templates' },
       { title: 'Langkah Hukum', href: '/solusi/langkah' },
     ],
   },
