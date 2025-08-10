@@ -8,7 +8,7 @@
   NODE_ENV = "production"
   # Secrets scanning konfigurasi: abaikan kunci publik dan artefak build
   SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_GA_MEASUREMENT_ID,NEXT_PUBLIC_MIDTRANS_CLIENT_KEY"
-  SECRETS_SCAN_OMIT_PATHS = ".next/**"
+  SECRETS_SCAN_OMIT_PATHS = ".next/**,.netlify/**,node_modules/**"
 
 # Plugin untuk Next.js
 [[plugins]]
