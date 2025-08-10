@@ -57,6 +57,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
 MIDTRANS_IS_PRODUCTION=false
 MIDTRANS_SERVER_KEY=your_midtrans_server_key
 NEXT_PUBLIC_MIDTRANS_CLIENT_KEY=your_midtrans_client_key
+MIDTRANS_FIXED_PRICE=49000
 MIDTRANS_ALLOWED_PAYMENT_TYPES=qris,gopay,bank_transfer
 MIDTRANS_DEFAULT_PAYMENT_TYPE=qris
 MIDTRANS_FINISH_URL=https://yourdomain.com/payment-success
@@ -101,9 +102,14 @@ npm run dev
    - Login ke [Midtrans Dashboard](https://dashboard.midtrans.com)
    - Pilih environment (Sandbox/Production)
    - Masuk ke **Settings** → **Payment** → **Payment Channels**
-   - Aktifkan channel yang diinginkan: QRIS, GoPay, Bank Transfer
+   - Aktifkan channel yang diinginkan: QRIS, GoPay, Bank Transfer, Kartu Kredit/Debit
 
-2. **Konfigurasi URL Redirect:**
+2. **Snap (UI Semua Metode)**
+   - Di halaman, pilih opsi pembayaran `Snap (Semua metode)`.
+   - Sistem akan memuat script Snap dan memanggil `snap.pay(token)` untuk menampilkan UI seperti screenshot.
+   - Pastikan `NEXT_PUBLIC_MIDTRANS_CLIENT_KEY` sudah terisi.
+
+3. **Konfigurasi URL Redirect:**
    - Di **Settings** → **Snap Preferences** → **Payment Channels**
    - Set **Finish Redirect URL** ke: `https://yourdomain.com/payment-success`
    - Set **Error Payment URL** ke: `https://yourdomain.com/payment-error`

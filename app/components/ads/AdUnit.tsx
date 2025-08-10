@@ -27,6 +27,7 @@ export default function AdUnit({
   style = {}
 }: AdUnitProps) {
   const pathname = usePathname()
+  const wrapperRef = useRef<HTMLDivElement>(null)
   const adRef = useRef<HTMLModElement>(null)
   const isLoaded = useRef(false)
 
@@ -36,13 +37,69 @@ export default function AdUnit({
       return
     }
 
-    try {
-      if (!isLoaded.current && adRef.current) {
-        (window.adsbygoogle = window.adsbygoogle || []).push({})
+    // Alias untuk window agar tidak bermasalah saat typing
+    const win: any = typeof window !== 'undefined' ? window : undefined
+
+    let resizeObserver: ResizeObserver | null = null
+    let intersectObserver: IntersectionObserver | null = null
+    let rafId = 0
+    let cancelled = false
+
+    const hasValidWidth = (): boolean => {
+      const el = wrapperRef.current || adRef.current
+      if (!el) return false
+      const rect = el.getBoundingClientRect()
+      const style = win?.getComputedStyle ? win.getComputedStyle(el) : { display: 'block', visibility: 'visible' } as any
+      const displayNone = style.display === 'none' || style.visibility === 'hidden'
+      return !displayNone && rect.width > 0
+    }
+
+    const tryLoadAd = () => {
+      if (cancelled || isLoaded.current) return
+      if (!hasValidWidth()) return
+      try {
+        win.adsbygoogle = win.adsbygoogle || []
+        win.adsbygoogle.push({})
         isLoaded.current = true
+      } catch (err) {
+        // Biasanya error ini terjadi jika width=0; biarkan observer mencoba lagi
+        // tanpa mem-spam console
+        // console.warn('AdSense defer load:', (err as Error)?.message || err)
       }
-    } catch (err) {
-      console.error('AdSense error:', err)
+    }
+
+    // Coba sekali setelah frame render
+    rafId = win?.requestAnimationFrame ? win.requestAnimationFrame(tryLoadAd) : 0
+
+    // Observe visibility agar hanya load saat terlihat
+    if (typeof IntersectionObserver !== 'undefined') {
+      intersectObserver = new IntersectionObserver((entries) => {
+        const entry = entries[0]
+        if (entry && entry.isIntersecting) {
+          tryLoadAd()
+        }
+      }, { root: null, threshold: 0 })
+      if (wrapperRef.current) intersectObserver.observe(wrapperRef.current)
+    } else {
+      // Fallback: langsung coba load
+      tryLoadAd()
+    }
+
+    // Observe perubahan ukuran (mis. responsive/hidden lg:block)
+    const onResizeFallback = () => tryLoadAd()
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => tryLoadAd())
+      if (wrapperRef.current) resizeObserver.observe(wrapperRef.current)
+    } else {
+      win?.addEventListener?.('resize', onResizeFallback)
+    }
+
+    return () => {
+      cancelled = true
+      if (win?.cancelAnimationFrame) win.cancelAnimationFrame(rafId)
+      if (intersectObserver) intersectObserver.disconnect()
+      if (resizeObserver) resizeObserver.disconnect()
+      else win?.removeEventListener?.('resize', onResizeFallback)
     }
   }, [pathname])
 
@@ -57,11 +114,11 @@ export default function AdUnit({
   }
 
   return (
-    <div className={cn('ad-wrapper', className)}>
+    <div ref={wrapperRef} className={cn('ad-wrapper w-full', className)}>
       <ins
         ref={adRef}
         className="adsbygoogle"
-        style={{ display: 'block', ...style }}
+        style={{ display: 'block', width: '100%', ...style }}
         data-ad-client={process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}
         data-ad-slot={slot}
         data-ad-format={format}
