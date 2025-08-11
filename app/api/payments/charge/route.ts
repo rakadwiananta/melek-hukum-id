@@ -10,7 +10,21 @@ const allowedPaymentsEnv = (process.env.MIDTRANS_ALLOWED_PAYMENT_TYPES || '')
   .map((s) => s.trim())
   .filter(Boolean)
 const allowedPayments = new Set(allowedPaymentsEnv)
-const defaultPaymentType = (process.env.MIDTRANS_DEFAULT_PAYMENT_TYPE || 'qris').trim()
+const defaultPaymentType = 'qris'
+
+function sanitizeCustomerDetails(input: any) {
+  if (!input || typeof input !== 'object') return undefined
+  const out: any = {}
+  if (input.first_name) out.first_name = String(input.first_name)
+  if (input.last_name) out.last_name = String(input.last_name)
+  if (input.phone) out.phone = String(input.phone)
+  if (input.email) {
+    const email = String(input.email).trim()
+    const ok = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
+    if (ok) out.email = email
+  }
+  return Object.keys(out).length ? out : undefined
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -69,8 +83,10 @@ export async function POST(request: NextRequest) {
           name: 'Premium Access',
         },
       ],
-      customer_details,
     }
+
+    const sanitized = sanitizeCustomerDetails(customer_details)
+    if (sanitized) params.customer_details = sanitized
 
     // Tambahkan URL redirect jika tersedia di environment
     const finishUrl = process.env.MIDTRANS_FINISH_URL
