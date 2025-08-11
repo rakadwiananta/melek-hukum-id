@@ -157,6 +157,9 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
                     alt={article.title}
                     fill
                     className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    placeholder={getImage(article.featured_image).startsWith('/') ? 'blur' : undefined}
+                    blurDataURL="/timbangkan.jpg"
                   />
                 </motion.div>
                 

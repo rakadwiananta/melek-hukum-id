@@ -132,7 +132,7 @@ export default function HeroSection() {
               width={600}
               height={400}
               className="w-full h-auto"
-              priority
+              sizes="(max-width: 1024px) 50vw, 600px"
             />
           </motion.div>
         </div>

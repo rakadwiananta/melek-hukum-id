@@ -8,11 +8,13 @@ const AdUnit = dynamic(() => import('./AdUnit'), { ssr: false })
 export const HeaderBannerAd = ({ className }: { className?: string }) => (
   <div className={cn('hidden lg:block mb-4 no-print', className)}>
     <div className="max-w-[728px] mx-auto">
-      <AdUnit 
-        slot="1234567890" 
-        format="horizontal"
-        style={{ minHeight: '90px' }}
-      />
+      <div style={{ width: 728, height: 90 }} className="w-full overflow-hidden">
+        <AdUnit 
+          slot="1234567890" 
+          format="horizontal"
+          style={{ minHeight: '90px' }}
+        />
+      </div>
     </div>
   </div>
 )
@@ -20,12 +22,14 @@ export const HeaderBannerAd = ({ className }: { className?: string }) => (
 export const InContentAd = ({ className }: { className?: string }) => (
   <div className={cn('my-8 flex justify-center no-print', className)}>
     <div className="ad-container">
-      <AdUnit 
-        slot="2345678901" 
-        format="rectangle"
-        className="max-w-[336px]"
-        style={{ minHeight: '280px' }}
-      />
+      <div style={{ width: 336, height: 280 }} className="max-w-[336px] overflow-hidden">
+        <AdUnit 
+          slot="2345678901" 
+          format="rectangle"
+          className="max-w-[336px]"
+          style={{ minHeight: '280px' }}
+        />
+      </div>
     </div>
   </div>
 )
@@ -33,12 +37,14 @@ export const InContentAd = ({ className }: { className?: string }) => (
 export const SidebarAd = ({ className }: { className?: string }) => (
   <aside className={cn('hidden xl:block sticky top-20 no-print', className)}>
     <div className="ad-container">
-      <AdUnit 
-        slot="3456789012" 
-        format="vertical"
-        className="max-w-[300px]"
-        style={{ minHeight: '600px' }}
-      />
+      <div style={{ width: 300, height: 600 }} className="max-w-[300px] overflow-hidden">
+        <AdUnit 
+          slot="3456789012" 
+          format="vertical"
+          className="max-w-[300px]"
+          style={{ minHeight: '600px' }}
+        />
+      </div>
     </div>
   </aside>
 )
@@ -46,12 +52,14 @@ export const SidebarAd = ({ className }: { className?: string }) => (
 export const MobileAd = ({ className }: { className?: string }) => (
   <div className={cn('lg:hidden my-6 no-print', className)}>
     <div className="ad-container">
-      <AdUnit 
-        slot="4567890123" 
-        format="auto"
-        responsive={true}
-        style={{ minHeight: '100px' }}
-      />
+      <div style={{ width: '100%', height: 120 as unknown as number }} className="overflow-hidden">
+        <AdUnit 
+          slot="4567890123" 
+          format="auto"
+          responsive={true}
+          style={{ minHeight: '100px' }}
+        />
+      </div>
     </div>
   </div>
 )

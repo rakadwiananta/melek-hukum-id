@@ -5,6 +5,7 @@ import './globals.css'
 import { GoogleAnalytics } from '@/app/components/analytics/GoogleAnalytics'
 import { Toaster } from '@/app/components/ui/Toaster'
 import { ToastProvider } from '@/app/components/ui/use-toast'
+import Script from 'next/script'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -42,11 +43,16 @@ export default function RootLayout({
   return (
     <html lang="id" className={inter.variable}>
       <head>
+        {/* Preconnect untuk resource eksternal agar FCP/LCP lebih cepat */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <GoogleAnalytics />
         <meta name="google-adsense-account" content="ca-pub-9240032692197811" />
-        <script
-          async
+        <Script
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9240032692197811"
+          strategy="afterInteractive"
           crossOrigin="anonymous"
         />
       </head>

@@ -16,10 +16,12 @@ export default function SpectacularHero() {
   const yReverse = useTransform(scrollYProgress, [0, 1], [0, -150])
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.3])
 
+  const reduceMotion = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
   return (
     <section ref={containerRef} className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 to-white">
       {/* Premium Background Design */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0" aria-hidden>
         {/* Mesh Gradient Background */}
         <div className="absolute inset-0 opacity-40">
           <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob" />
@@ -47,15 +49,15 @@ export default function SpectacularHero() {
             
             {/* Left Content */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+              animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               className="order-2 lg:order-1"
             >
               {/* Badge */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={reduceMotion ? false : { opacity: 0, scale: 0.9 }}
+                animate={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
                 transition={{ delay: 0.1 }}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-100 rounded-full mb-8"
               >
@@ -69,8 +71,8 @@ export default function SpectacularHero() {
               {/* Heading */}
               <motion.h1 
                 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-6 leading-[1.1]"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
                 <span className="block">Pahami Hukum</span>
@@ -85,8 +87,8 @@ export default function SpectacularHero() {
               {/* Description */}
               <motion.p
                 className="text-lg lg:text-xl text-gray-600 mb-8 leading-relaxed max-w-xl"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
                 Platform edukasi hukum terlengkap untuk masyarakat Indonesia. 
@@ -96,8 +98,8 @@ export default function SpectacularHero() {
               {/* CTA Buttons */}
               <motion.div
                 className="flex flex-col sm:flex-row gap-4 mb-12"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
                 <Link 
@@ -134,8 +136,8 @@ export default function SpectacularHero() {
               {/* Stats */}
               <motion.div
                 className="grid grid-cols-3 gap-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
               >
                 {[
@@ -146,8 +148,8 @@ export default function SpectacularHero() {
                   <div key={index} className="text-center">
                     <motion.div 
                       className="text-3xl lg:text-4xl font-bold text-gray-900 mb-1"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
+                      initial={reduceMotion ? false : { scale: 0 }}
+                      animate={reduceMotion ? undefined : { scale: 1 }}
                       transition={{ 
                         delay: 0.6 + index * 0.1,
                         type: "spring",
@@ -165,14 +167,14 @@ export default function SpectacularHero() {
             {/* Right Content - Visual Design */}
             <motion.div
               className="relative order-1 lg:order-2"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.8 }}
+              animate={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div className="relative mx-auto w-full max-w-lg">
+              <div className="relative mx-auto w-full max-w-lg" aria-hidden>
                 {/* Animated Background Circles */}
                 <motion.div
-                  style={{ y: yReverse }}
+                  style={{ y: reduceMotion ? 0 : (yReverse as any) }}
                   className="absolute inset-0 flex items-center justify-center"
                 >
                   <div className="absolute w-72 h-72 bg-gradient-to-br from-red-100 to-pink-100 rounded-full opacity-40 blur-3xl" />
@@ -181,7 +183,7 @@ export default function SpectacularHero() {
                 {/* Central Justice Scale Design */}
                 <motion.div
                   className="relative z-10"
-                  animate={{ 
+                  animate={reduceMotion ? undefined : { 
                     y: [0, -10, 0],
                   }}
                   transition={{ 

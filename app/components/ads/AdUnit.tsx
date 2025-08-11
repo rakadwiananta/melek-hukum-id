@@ -63,8 +63,6 @@ export default function AdUnit({
         isLoaded.current = true
       } catch (err) {
         // Biasanya error ini terjadi jika width=0; biarkan observer mencoba lagi
-        // tanpa mem-spam console
-        // console.warn('AdSense defer load:', (err as Error)?.message || err)
       }
     }
 
@@ -123,6 +121,8 @@ export default function AdUnit({
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive}
+        data-adsbygoogle-status="done"
+        aria-hidden
       />
     </div>
   )
