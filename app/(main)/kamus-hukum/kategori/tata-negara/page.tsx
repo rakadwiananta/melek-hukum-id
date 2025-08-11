@@ -177,7 +177,7 @@ const QuickNavigationTataNegara = () => {
     {
       title: 'Lembaga Negara',
       description: 'Penjelasan lembaga-lembaga',
-      href: '/kamus-hukum/kategori/tata-negara/lembaga',
+      href: '/kamus-hukum/kategori/tata-negara/istilah#lembaga-negara',
       icon: Building,
       color: 'from-purple-600 to-purple-700',
       bgColor: 'bg-purple-50',
@@ -188,7 +188,7 @@ const QuickNavigationTataNegara = () => {
     {
       title: 'Sistem Pemerintahan',
       description: 'Sistem pemerintahan Indonesia',
-      href: '/kamus-hukum/kategori/tata-negara/sistem',
+      href: '/kamus-hukum/kategori/tata-negara/istilah#sistem-pemerintahan',
       icon: Crown,
       color: 'from-yellow-600 to-yellow-700',
       bgColor: 'bg-yellow-50',
@@ -199,7 +199,7 @@ const QuickNavigationTataNegara = () => {
     {
       title: 'Hak & Kewajiban',
       description: 'Hak dan kewajiban warga',
-      href: '/kamus-hukum/kategori/tata-negara/hak-kewajiban',
+      href: '/kamus-hukum/kategori/tata-negara/istilah#hak-konstitusional',
       icon: Users,
       color: 'from-green-600 to-green-700',
       bgColor: 'bg-green-50',
@@ -210,7 +210,7 @@ const QuickNavigationTataNegara = () => {
     {
       title: 'Konstitusi',
       description: 'UUD 1945 dan amandemen',
-      href: '/kamus-hukum/kategori/tata-negara/konstitusi',
+      href: '/kamus-hukum/kategori/tata-negara/istilah#hukum-konstitusi',
       icon: Flag,
       color: 'from-red-600 to-red-700',
       bgColor: 'bg-red-50',
@@ -221,7 +221,7 @@ const QuickNavigationTataNegara = () => {
     {
       title: 'Pemilu & Demokrasi',
       description: 'Sistem pemilu Indonesia',
-      href: '/kamus-hukum/kategori/tata-negara/pemilu',
+      href: '/kamus-hukum/kategori/tata-negara/istilah#pemilu',
       icon: Vote,
       color: 'from-indigo-600 to-indigo-700',
       bgColor: 'bg-indigo-50',
@@ -232,7 +232,7 @@ const QuickNavigationTataNegara = () => {
     {
       title: 'Otonomi Daerah',
       description: 'Desentralisasi daerah',
-      href: '/kamus-hukum/kategori/tata-negara/otonomi',
+      href: '/kamus-hukum/kategori/tata-negara/istilah#pemerintahan-daerah',
       icon: Map,
       color: 'from-teal-600 to-teal-700',
       bgColor: 'bg-teal-50',
@@ -243,7 +243,7 @@ const QuickNavigationTataNegara = () => {
     {
       title: 'Hubungan Internasional',
       description: 'Hubungan luar negeri',
-      href: '/kamus-hukum/kategori/tata-negara/internasional',
+      href: '/kamus-hukum/kategori/tata-negara/istilah#hubungan-luar-negeri',
       icon: Globe,
       color: 'from-orange-600 to-orange-700',
       bgColor: 'bg-orange-50',
@@ -368,7 +368,7 @@ const TataNegaraPage = () => {
       id: '2',
       title: 'Lembaga Negara',
       description: 'Penjelasan tentang lembaga-lembaga negara',
-      href: '/kamus-hukum/kategori/tata-negara/lembaga',
+      href: '/kamus-hukum/kategori/tata-negara/istilah#lembaga-negara',
       icon: '🏛️',
       stats: '145 lembaga',
       color: 'from-purple-500 to-purple-600'
@@ -377,7 +377,7 @@ const TataNegaraPage = () => {
       id: '3',
       title: 'Sistem Pemerintahan',
       description: 'Sistem dan mekanisme pemerintahan Indonesia',
-      href: '/kamus-hukum/kategori/tata-negara/sistem',
+      href: '/kamus-hukum/kategori/tata-negara/istilah#sistem-pemerintahan',
       icon: '👑',
       stats: '78 konsep',
       color: 'from-yellow-500 to-yellow-600'
@@ -386,7 +386,7 @@ const TataNegaraPage = () => {
       id: '4',
       title: 'Hak & Kewajiban',
       description: 'Hak dan kewajiban warga negara',
-      href: '/kamus-hukum/kategori/tata-negara/hak-kewajiban',
+      href: '/kamus-hukum/kategori/tata-negara/istilah#hak-konstitusional',
       icon: '👥',
       stats: '67 hak',
       color: 'from-green-500 to-green-600'
