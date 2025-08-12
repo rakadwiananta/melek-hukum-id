@@ -5,6 +5,7 @@ import { supabase } from '@/app/lib/supabase'
 import { formatDate } from '@/app/lib/utils'
 import { Clock, Eye, Tag, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { FilterState } from '@/app/components/article/meta/CategoryFilter'
 import { getArticles } from '@/app/lib/articles'
 
@@ -136,11 +137,17 @@ export default function ArticleList({
           <div key={article.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4">
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden">
-                <img
-                  src={article.featured_image || '/timbangkan.jpg'}
-                  alt={article.title}
-                  className="w-full h-full object-cover"
-                />
+                <div className="relative w-20 h-20">
+                  <Image
+                    src={article.featured_image || '/timbangkan.jpg'}
+                    alt={article.title}
+                    fill
+                    className="object-cover"
+                    loading="eager"
+                    fetchPriority="high"
+                    sizes="80px"
+                  />
+                </div>
               </div>
               
               <div className="flex-1 min-w-0">

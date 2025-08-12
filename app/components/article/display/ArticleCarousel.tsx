@@ -198,6 +198,9 @@ export default function ArticleCarousel({
                 fill
                 className="object-cover"
                 priority
+                loading="eager"
+                fetchPriority="high"
+                sizes="100vw"
               />
               
               {/* Gradient Overlay */}
@@ -353,6 +356,7 @@ export default function ArticleCarousel({
                 <ArticleCard 
                   article={article} 
                   variant="featured" 
+                  index={index}
                 />
               </div>
             ))}

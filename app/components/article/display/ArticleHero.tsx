@@ -206,6 +206,9 @@ export default function ArticleHero({
                 fill
                 className="object-cover group-hover:scale-110 transition-transform duration-1000"
                 priority
+                loading="eager"
+                fetchPriority="high"
+                sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 50vw"
               />
               
               {/* Gradient Overlay */}
@@ -395,6 +398,9 @@ export default function ArticleHero({
             fill
             className="object-cover"
             priority
+            loading="eager"
+            fetchPriority="high"
+            sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 50vw"
           />
         </div>
 
