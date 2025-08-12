@@ -154,6 +154,9 @@ export default function ArticleShowcase() {
                     alt={article.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    priority={index < 6}
+                    loading={index < 6 ? 'eager' : 'lazy'}
+                    fetchPriority={index < 6 ? 'high' : 'auto'}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
