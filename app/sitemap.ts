@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next'
+import { supabase, supabaseAdmin } from '@/app/lib/supabase'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://bicarahukum.my.id'
 
@@ -54,8 +55,24 @@ const templateIds = [
   'surat-pernyataan-kehilangan',
 ]
 
-export default function sitemap(): MetadataRoute.Sitemap {
+async function fetchArticleSlugs(): Promise<{ slug: string; updated_at?: string | null }[]> {
+  const client = supabaseAdmin || supabase
+  if (!client) return []
+
+  const { data, error } = await client
+    .from('articles')
+    .select('slug, updated_at')
+    .eq('is_published', true)
+    .limit(2000)
+
+  if (error || !data) return []
+  return data
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date().toISOString()
+
+  const articleSlugs = await fetchArticleSlugs()
 
   const urls: MetadataRoute.Sitemap = [
     ...staticPaths.map((path) => ({
@@ -67,6 +84,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${BASE_URL}/solusi/template/${id}/`,
       lastModified: now,
       priority: 0.6,
+    })),
+    ...articleSlugs.map((a) => ({
+      url: `${BASE_URL}/artikel/${a.slug}/`,
+      lastModified: a.updated_at || now,
+      priority: 0.8,
     })),
   ]
 
