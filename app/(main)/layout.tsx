@@ -43,8 +43,8 @@ function getMetadataBase(): URL {
 export const metadata: Metadata = {
   metadataBase: getMetadataBase(),
   title: {
-    default: 'Melek Hukum ID - Platform Edukasi Hukum Indonesia',
-    template: '%s | Melek Hukum ID'
+    default: 'Melek Hukum - Platform Edukasi Hukum Indonesia',
+    template: '%s | Melek Hukum'
   },
   description: 'Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia. Pelajari hukum dengan mudah, praktis, dan gratis.',
   keywords: ['hukum indonesia', 'anti korupsi', 'UU ITE', 'panduan hukum', 'cara melapor korupsi', 'edukasi hukum'],
@@ -82,19 +82,19 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'id_ID',
     url: '/',
-    siteName: 'Melek Hukum ID',
-    title: 'Melek Hukum ID - Platform Edukasi Hukum Indonesia',
+    siteName: 'Melek Hukum',
+    title: 'Melek Hukum - Platform Edukasi Hukum Indonesia',
     description: 'Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia',
     images: [{
       url: '/og-image.jpg',
       width: 1200,
       height: 630,
-      alt: 'Melek Hukum ID',
+      alt: 'Melek Hukum',
     }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Melek Hukum ID',
+    title: 'Melek Hukum',
     description: 'Platform edukasi hukum dan anti-korupsi',
     creator: '@melekhukumid',
     images: ['/twitter-image.jpg'],
