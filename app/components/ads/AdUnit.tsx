@@ -20,6 +20,7 @@ declare global {
 }
 
 const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID
+const ADSENSE_ADTEST = process.env.NEXT_PUBLIC_ADSENSE_ADTEST
 
 function isValidClientId(clientId: string | undefined): boolean {
   return typeof clientId === 'string' && clientId.startsWith('ca-pub-') && !clientId.includes('XXXX')
@@ -46,6 +47,7 @@ export default function AdUnit({
 
   const clientConfigured = isValidClientId(ADSENSE_CLIENT_ID)
   const slotConfigured = isValidSlot(slot)
+  const shouldUseAdTest = process.env.NODE_ENV !== 'production' || ADSENSE_ADTEST === 'on'
 
   useEffect(() => {
     // Only load ads in production and when properly configured
@@ -137,6 +139,7 @@ export default function AdUnit({
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive}
+        {...(shouldUseAdTest ? { 'data-adtest': 'on' } as any : {})}
       />
     </div>
   )
