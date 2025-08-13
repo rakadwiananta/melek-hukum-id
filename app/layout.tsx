@@ -12,6 +12,8 @@ const inter = Inter({
   variable: '--font-inter'
 })
 
+const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID
+
 export const metadata: Metadata = {
   title: 'Melek Hukum',
   description: 'Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia',
@@ -29,9 +31,9 @@ export const metadata: Metadata = {
     ]
   },
   manifest: '/manifest.json',
-  other: {
-    'google-adsense-account': 'ca-pub-9240032692197811'
-  }
+  other: ADSENSE_CLIENT_ID ? {
+    'google-adsense-account': ADSENSE_CLIENT_ID
+  } : {}
 }
 
 export default function RootLayout({
@@ -43,12 +45,16 @@ export default function RootLayout({
     <html lang="id" className={inter.variable}>
       <head>
         <GoogleAnalytics />
-        <meta name="google-adsense-account" content="ca-pub-9240032692197811" />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9240032692197811"
-          crossOrigin="anonymous"
-        />
+        {ADSENSE_CLIENT_ID && (
+          <>
+            <meta name="google-adsense-account" content={ADSENSE_CLIENT_ID} />
+            <script
+              async
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+              crossOrigin="anonymous"
+            />
+          </>
+        )}
       </head>
       <body className={`${inter.className} antialiased`}>
         <ToastProvider>
