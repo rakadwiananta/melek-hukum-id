@@ -8,6 +8,7 @@ import Footer from '@/app/components/layout/Footer'
 import { Toaster } from '@/app/components/ui/Toaster'
 import { ToastProvider } from '@/app/components/ui/use-toast'
 import PerformanceMonitor from '@/app/components/PerformanceMonitor'
+import Script from 'next/script'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -48,9 +49,9 @@ export const metadata: Metadata = {
   },
   description: 'Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia. Pelajari hukum dengan mudah, praktis, dan gratis.',
   keywords: ['hukum indonesia', 'anti korupsi', 'UU ITE', 'panduan hukum', 'cara melapor korupsi', 'edukasi hukum'],
-  authors: [{ name: 'Melek Hukum ID Team' }],
-  creator: 'Melek Hukum ID',
-  publisher: 'Melek Hukum ID',
+  authors: [{ name: 'Melek Hukum Team' }],
+  creator: 'Melek Hukum',
+  publisher: 'Melek Hukum',
   formatDetection: {
     email: false,
     address: false,
@@ -92,6 +93,12 @@ export const metadata: Metadata = {
       alt: 'Melek Hukum',
     }],
   },
+  applicationName: 'Melek Hukum',
+  appleWebApp: {
+    title: 'Melek Hukum',
+    capable: true,
+    statusBarStyle: 'default'
+  },
   twitter: {
     card: 'summary_large_image',
     title: 'Melek Hukum',
@@ -116,6 +123,34 @@ export default function RootLayout({
     <html lang="id" className={inter.variable}>
       <head>
         {/* Google AdSense removed - not available in this version */}
+        <Script id="org-schema" type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Melek Hukum',
+              url: process.env.NEXT_PUBLIC_SITE_URL || 'https://melek-hukum-id.netlify.app',
+              logo: (process.env.NEXT_PUBLIC_SITE_URL || 'https://melek-hukum-id.netlify.app') + '/timbangkan.jpg'
+            })
+          }}
+        />
+        <Script id="website-schema" type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'Melek Hukum',
+              alternateName: ['Melek Hukum ID', 'MelekHukum'],
+              url: process.env.NEXT_PUBLIC_SITE_URL || 'https://melek-hukum-id.netlify.app',
+              inLanguage: 'id-ID',
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: (process.env.NEXT_PUBLIC_SITE_URL || 'https://melek-hukum-id.netlify.app') + '/search?q={search_term_string}',
+                'query-input': 'required name=search_term_string'
+              }
+            })
+          }}
+        />
       </head>
       <body className={`${inter.className} antialiased`}>
         <ToastProvider>
