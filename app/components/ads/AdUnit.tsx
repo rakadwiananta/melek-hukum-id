@@ -19,6 +19,19 @@ declare global {
   }
 }
 
+const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID
+
+function isValidClientId(clientId: string | undefined): boolean {
+  return typeof clientId === 'string' && clientId.startsWith('ca-pub-') && !clientId.includes('XXXX')
+}
+
+function isValidSlot(slot: string | undefined): boolean {
+  if (!slot) return false
+  // rudimentary check to avoid obvious placeholders
+  if (['1234567890', '2345678901', '3456789012', '4567890123'].includes(slot)) return false
+  return /^\d{9,20}$/.test(slot)
+}
+
 export default function AdUnit({ 
   slot, 
   format = 'auto', 
@@ -31,11 +44,13 @@ export default function AdUnit({
   const adRef = useRef<HTMLModElement>(null)
   const isLoaded = useRef(false)
 
+  const clientConfigured = isValidClientId(ADSENSE_CLIENT_ID)
+  const slotConfigured = isValidSlot(slot)
+
   useEffect(() => {
-    // Only load ads in production
-    if (process.env.NODE_ENV !== 'production') {
-      return
-    }
+    // Only load ads in production and when properly configured
+    if (process.env.NODE_ENV !== 'production') return
+    if (!clientConfigured || !slotConfigured) return
 
     // Alias untuk window agar tidak bermasalah saat typing
     const win: any = typeof window !== 'undefined' ? window : undefined
@@ -62,9 +77,7 @@ export default function AdUnit({
         win.adsbygoogle.push({})
         isLoaded.current = true
       } catch (err) {
-        // Biasanya error ini terjadi jika width=0; biarkan observer mencoba lagi
-        // tanpa mem-spam console
-        // console.warn('AdSense defer load:', (err as Error)?.message || err)
+        // silently retry via observers
       }
     }
 
@@ -101,14 +114,15 @@ export default function AdUnit({
       if (resizeObserver) resizeObserver.disconnect()
       else win?.removeEventListener?.('resize', onResizeFallback)
     }
-  }, [pathname])
+  }, [pathname, clientConfigured, slotConfigured])
 
-  // Don't render ads in development
-  if (process.env.NODE_ENV !== 'production') {
+  // Don't render ads in development or when misconfigured
+  if (process.env.NODE_ENV !== 'production' || !clientConfigured || !slotConfigured) {
     return (
       <div className={cn('ad-placeholder bg-gray-100 rounded-lg p-4 text-center text-gray-500', className)}>
         <p className="text-sm">Ad Placeholder</p>
-        <p className="text-xs">Slot: {slot}</p>
+        {!clientConfigured && <p className="text-xs">Missing/invalid AdSense client</p>}
+        {!slotConfigured && <p className="text-xs">Missing/invalid ad slot</p>}
       </div>
     )
   }
@@ -119,7 +133,7 @@ export default function AdUnit({
         ref={adRef}
         className="adsbygoogle"
         style={{ display: 'block', width: '100%', ...style }}
-        data-ad-client={process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}
+        data-ad-client={ADSENSE_CLIENT_ID}
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive}
