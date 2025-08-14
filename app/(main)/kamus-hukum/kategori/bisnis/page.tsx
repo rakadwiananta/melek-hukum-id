@@ -1,296 +1,410 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
+'use client'
+
+import React, { Suspense, useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { 
-  Building, 
-  Scale, 
-  BookOpen, 
-  Users, 
-  TrendingUp, 
-  Shield,
-  ArrowRight,
-  Globe,
-  Award
-} from 'lucide-react';
+  Loader2, Briefcase, TrendingUp, Building, ScrollText,
+  BarChart3, Shield, Globe, Activity, Sparkles, ChevronRight,
+  BookOpen, Scale, Users, Award, DollarSign
+} from 'lucide-react'
+import Link from 'next/link'
 
-export const metadata: Metadata = {
-  title: 'Kamus Hukum Bisnis - Kategori Bisnis | Bicara Hukum',
-  description: 'Kumpulan lengkap istilah-istilah hukum bisnis Indonesia. Pelajari definisi, contoh, dan dasar hukum dari berbagai aspek hukum bisnis dan korporasi.',
-  keywords: [
-    'kamus hukum bisnis',
-    'istilah hukum bisnis',
-    'hukum korporasi',
-    'hukum perusahaan',
-    'definisi hukum bisnis',
-    'terminologi bisnis'
-  ],
-  openGraph: {
-    title: 'Kamus Hukum Bisnis - Kategori Bisnis',
-    description: 'Kumpulan lengkap istilah-istilah hukum bisnis Indonesia dengan definisi dan contoh praktis',
-    type: 'website',
-    locale: 'id_ID',
-  },
-  alternates: {
-    canonical: 'https://bicarahukum.my.id/kamus-hukum/kategori/bisnis/',
-  },
-};
-
-const businessCategories = [
-  {
-    id: 'corporate',
-    title: 'Hukum Korporasi',
-    description: 'Istilah-istilah terkait pendirian, pengelolaan, dan struktur perusahaan',
-    icon: Building,
-    count: 45,
-    color: 'bg-blue-50 text-blue-600 border-blue-200',
-    examples: ['Akuisisi', 'Merger', 'Direksi', 'RUPS']
-  },
-  {
-    id: 'contracts',
-    title: 'Kontrak & Perjanjian',
-    description: 'Terminologi dalam pembuatan dan pelaksanaan kontrak bisnis',
-    icon: BookOpen,
-    count: 38,
-    color: 'bg-green-50 text-green-600 border-green-200',
-    examples: ['Force Majeure', 'Addendum', 'Wanprestasi', 'Due Diligence']
-  },
-  {
-    id: 'finance',
-    title: 'Keuangan & Investasi',
-    description: 'Istilah-istilah dalam bidang keuangan perusahaan dan investasi',
-    icon: TrendingUp,
-    count: 52,
-    color: 'bg-purple-50 text-purple-600 border-purple-200',
-    examples: ['Cash Flow', 'Dividend', 'Bond', 'Credit Rating']
-  },
-  {
-    id: 'compliance',
-    title: 'Kepatuhan & Tata Kelola',
-    description: 'Terminologi terkait compliance dan corporate governance',
-    icon: Shield,
-    count: 31,
-    color: 'bg-red-50 text-red-600 border-red-200',
-    examples: ['GCG', 'Compliance', 'Risk Management', 'Anti Monopoli']
-  },
-  {
-    id: 'accounting',
-    title: 'Akuntansi & Audit',
-    description: 'Istilah-istilah dalam bidang akuntansi dan pemeriksaan keuangan',
-    icon: Users,
-    count: 29,
-    color: 'bg-orange-50 text-orange-600 border-orange-200',
-    examples: ['Balance Sheet', 'Audit', 'Amortisasi', 'PSAK']
-  },
-  {
-    id: 'trade',
-    title: 'Perdagangan & Ekspor',
-    description: 'Terminologi dalam perdagangan domestik dan internasional',
-    icon: Globe,
-    count: 24,
-    color: 'bg-teal-50 text-teal-600 border-teal-200',
-    examples: ['Export', 'Import', 'Dumping', 'Free Trade']
-  },
-  {
-    id: 'intellectual-property',
-    title: 'Kekayaan Intelektual',
-    description: 'Istilah-istilah terkait perlindungan kekayaan intelektual',
-    icon: Award,
-    count: 18,
-    color: 'bg-indigo-50 text-indigo-600 border-indigo-200',
-    examples: ['Copyright', 'Patent', 'Trademark', 'Trade Secret']
-  },
-  {
-    id: 'employment',
-    title: 'Ketenagakerjaan',
-    description: 'Terminologi dalam hubungan industrial dan ketenagakerjaan',
-    icon: Users,
-    count: 22,
-    color: 'bg-pink-50 text-pink-600 border-pink-200',
-    examples: ['PHK', 'Outsourcing', 'ESOP', 'Severance Pay']
-  }
-];
-
-export default function BusinessCategoryPage() {
-  const totalTerms = businessCategories.reduce((sum, cat) => sum + cat.count, 0);
+// Enhanced Batik Pattern Component with 3D effect
+const BatikPattern = ({ className = "" }: { className?: string }) => {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+  
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY })
+    }
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <div className="flex justify-center mb-6">
-              <div className="bg-white/10 backdrop-blur-sm rounded-full p-4">
-                <Scale className="h-12 w-12 text-white" />
+    <svg 
+      className={`absolute inset-0 w-full h-full opacity-5 ${className}`} 
+      preserveAspectRatio="xMidYMid slice"
+      style={{
+        transform: `translate(${mousePos.x * 0.01}px, ${mousePos.y * 0.01}px)`
+      }}
+    >
+      <defs>
+        <pattern id="batik-pattern-istilah-3d" x="0" y="0" width="150" height="150" patternUnits="userSpaceOnUse">
+          <g transform="translate(75,75)">
+            <motion.g
+              animate={{ rotate: 360 }}
+              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            >
+              <circle r="30" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+              <circle r="45" fill="none" stroke="currentColor" strokeWidth="0.3"/>
+              <circle r="60" fill="none" stroke="currentColor" strokeWidth="0.2"/>
+            </motion.g>
+            <motion.g
+              animate={{ rotate: -360 }}
+              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+            >
+              <rect x="-20" y="-20" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="0.4" transform="rotate(45)"/>
+              <rect x="-30" y="-30" width="60" height="60" fill="none" stroke="currentColor" strokeWidth="0.2" transform="rotate(45)"/>
+            </motion.g>
+          </g>
+          <path d="M0,75 Q37.5,50 75,75 T150,75" stroke="currentColor" strokeWidth="0.3" fill="none"/>
+          <path d="M75,0 Q50,37.5 75,75 T75,150" stroke="currentColor" strokeWidth="0.3" fill="none"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#batik-pattern-istilah-3d)" />
+    </svg>
+  )
+}
+
+// 3D Card Component
+const Card3D = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
+  const [isHovered, setIsHovered] = useState(false)
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50, rotateX: -20 }}
+      animate={{ opacity: 1, y: 0, rotateX: 0 }}
+      transition={{ delay, type: "spring", stiffness: 100 }}
+      whileHover={{ scale: 1.05, rotateY: 5, z: 50 }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      style={{ transformStyle: 'preserve-3d' }}
+      className="relative"
+    >
+      <motion.div
+        animate={isHovered ? { z: 20 } : { z: 0 }}
+        transition={{ duration: 0.3 }}
+        style={{ transformStyle: 'preserve-3d' }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  )
+}
+
+// Enhanced Loading Component with Statistics
+const LoadingState = () => {
+  const loadingStats = [
+    { label: "Memuat Database", value: "295+ Istilah" },
+    { label: "Sinkronisasi", value: "11 Kategori" },
+    { label: "Render 3D", value: "Nusantara Theme" }
+  ]
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50 flex items-center justify-center">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 sm:p-12 relative overflow-hidden max-w-lg w-full mx-4"
+      >
+        <BatikPattern className="text-emerald-300" />
+        
+        <div className="relative z-10">
+          {/* 3D Loading Icon */}
+          <div className="flex justify-center mb-6">
+            <motion.div
+              animate={{ 
+                rotate: 360,
+                scale: [1, 1.1, 1]
+              }}
+              transition={{ 
+                rotate: { duration: 2, repeat: Infinity, ease: "linear" },
+                scale: { duration: 1.5, repeat: Infinity }
+              }}
+              className="relative"
+            >
+              <div className="p-6 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-3xl shadow-lg">
+                <Briefcase className="h-16 w-16 text-white" />
               </div>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Kamus Hukum Bisnis
-            </h1>
-            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Kumpulan lengkap {totalTerms}+ istilah hukum bisnis Indonesia dengan definisi yang jelas, 
-              contoh praktis, dan dasar hukum yang akurat
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-                <span className="text-sm text-blue-100">Definisi Lengkap</span>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-                <span className="text-sm text-blue-100">Contoh Praktis</span>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-                <span className="text-sm text-blue-100">Dasar Hukum</span>
-              </div>
-            </div>
+              <motion.div
+                className="absolute inset-0 rounded-3xl"
+                animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                style={{
+                  background: "radial-gradient(circle, rgba(16,185,129,0.4) 0%, transparent 70%)"
+                }}
+              />
+            </motion.div>
+          </div>
+
+          {/* Loading Text */}
+          <motion.h2
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="text-2xl font-bold text-center text-gray-800 mb-2"
+          >
+            Memuat Kamus Istilah Bisnis
+          </motion.h2>
+          
+          <p className="text-center text-gray-600 mb-6">
+            Menyiapkan pengalaman visual 3D Nusantara
+          </p>
+
+          {/* Loading Stats */}
+          <div className="space-y-3 mb-6">
+            {loadingStats.map((stat, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.2 }}
+                className="flex justify-between items-center p-3 bg-emerald-50 rounded-lg"
+              >
+                <span className="text-sm text-gray-700">{stat.label}</span>
+                <span className="text-sm font-semibold text-emerald-600">{stat.value}</span>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Progress Bar */}
+          <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden">
+            <motion.div
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-emerald-500 to-blue-500"
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ duration: 2, ease: "easeInOut" }}
+            />
+          </div>
+
+          {/* Loading Dots */}
+          <div className="mt-6 flex justify-center gap-2">
+            {[0, 0.2, 0.4].map((delay, i) => (
+              <motion.div
+                key={i}
+                className="w-3 h-3 bg-emerald-500 rounded-full"
+                animate={{ 
+                  scale: [1, 1.5, 1],
+                  opacity: [0.5, 1, 0.5]
+                }}
+                transition={{ 
+                  duration: 1.5, 
+                  delay, 
+                  repeat: Infinity 
+                }}
+              />
+            ))}
           </div>
         </div>
+      </motion.div>
+    </div>
+  )
+}
+
+// Dynamic import dengan loading state yang lebih baik
+const IstilahBisnisComponent = dynamic(
+  () => import('@/app/components/kamus/istilah/IstilahBisnisComponent'),
+  {
+    loading: () => <LoadingState />,
+    ssr: false,
+  }
+)
+
+// Floating decoration component with 3D effect
+const FloatingElement = ({ delay = 0, children, className = "" }: { delay?: number; children: React.ReactNode; className?: string }) => (
+  <motion.div
+    className={`absolute ${className}`}
+    initial={{ y: 0, z: 0 }}
+    animate={{ 
+      y: [-20, 20, -20],
+      z: [-10, 10, -10],
+      rotate: [-5, 5, -5]
+    }}
+    transition={{
+      delay,
+      duration: 4,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }}
+    style={{ transformStyle: 'preserve-3d' }}
+  >
+    {children}
+  </motion.div>
+)
+
+// Quick Stats Component
+const QuickStats = () => {
+  const stats = [
+    { icon: Building, value: "295+", label: "Istilah Bisnis" },
+    { icon: ScrollText, value: "11", label: "Kategori" },
+    { icon: Scale, value: "100%", label: "Dasar Hukum" },
+    { icon: Users, value: "1.4M+", label: "PT Indonesia" }
+  ]
+
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      {stats.map((stat, idx) => (
+        <Card3D key={idx} delay={idx * 0.1}>
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 text-center border border-emerald-100 shadow-lg">
+            <stat.icon className="h-8 w-8 mx-auto mb-2 text-emerald-600" />
+            <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+            <div className="text-xs text-gray-600">{stat.label}</div>
+          </div>
+        </Card3D>
+      ))}
+    </div>
+  )
+}
+
+export default function Page() {
+  const { scrollY } = useScroll()
+  const backgroundY = useTransform(scrollY, [0, 500], [0, -100])
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollIndicator(window.scrollY < 100)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50 relative overflow-hidden">
+      {/* Animated Background Pattern */}
+      <motion.div style={{ y: backgroundY }}>
+        <BatikPattern className="text-emerald-900" />
+      </motion.div>
+      
+      {/* 3D Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <FloatingElement delay={0} className="top-20 left-10">
+          <div className="w-64 h-64 bg-gradient-to-br from-emerald-200 to-blue-200 rounded-full blur-3xl opacity-30" />
+        </FloatingElement>
+        <FloatingElement delay={1} className="bottom-20 right-10">
+          <div className="w-96 h-96 bg-gradient-to-br from-blue-200 to-emerald-200 rounded-full blur-3xl opacity-30" />
+        </FloatingElement>
+        <FloatingElement delay={2} className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="w-80 h-80 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full blur-3xl opacity-20" />
+        </FloatingElement>
       </div>
 
-      {/* Navigation Breadcrumb */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <nav className="flex items-center space-x-2 text-sm text-gray-600">
-            <Link href="/" className="hover:text-blue-600">Beranda</Link>
-            <ArrowRight className="h-4 w-4" />
-            <Link href="/kamus-hukum" className="hover:text-blue-600">Kamus Hukum</Link>
-            <ArrowRight className="h-4 w-4" />
-            <span className="text-gray-900 font-medium">Kategori Bisnis</span>
+      {/* Enhanced Breadcrumb Navigation */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-10 bg-white/80 backdrop-blur-lg border-b border-emerald-100 sticky top-0"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <nav className="flex items-center gap-2 text-sm">
+            <Link href="/kamus-hukum" className="text-gray-500 hover:text-emerald-600 transition-colors flex items-center gap-1">
+              <BookOpen className="w-4 h-4" />
+              Kamus Hukum
+            </Link>
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <Link href="/kamus-hukum/kategori/bisnis" className="text-gray-500 hover:text-emerald-600 transition-colors flex items-center gap-1">
+              <Briefcase className="w-4 h-4" />
+              Bisnis
+            </Link>
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <span className="text-emerald-600 font-semibold flex items-center gap-1">
+              <ScrollText className="w-4 h-4" />
+              Istilah
+            </span>
           </nav>
         </div>
+      </motion.div>
+
+      {/* Hero Section with 3D Icons */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-8"
+        >
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            <span className="bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Kamus Istilah Hukum Bisnis Indonesia
+            </span>
+          </h1>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Database lengkap dengan visualisasi 3D interaktif dan data statistik terkini
+          </p>
+        </motion.div>
+
+        {/* Quick Access Icons with 3D effect */}
+        <div className="flex justify-center gap-6 mb-8">
+          {[
+            { icon: Building, color: "from-emerald-500 to-teal-500", delay: 0 },
+            { icon: ScrollText, color: "from-blue-500 to-indigo-500", delay: 0.1 },
+            { icon: TrendingUp, color: "from-purple-500 to-pink-500", delay: 0.2 },
+            { icon: Shield, color: "from-amber-500 to-orange-500", delay: 0.3 }
+          ].map((item, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, scale: 0, rotateY: -180 }}
+              animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+              transition={{ delay: item.delay, type: "spring" }}
+              whileHover={{ scale: 1.2, rotateY: 180 }}
+              className="relative"
+            >
+              <div className={`p-4 bg-gradient-to-br ${item.color} rounded-2xl shadow-lg text-white`}>
+                <item.icon className="h-8 w-8" />
+              </div>
+              <motion.div
+                className="absolute inset-0 rounded-2xl"
+                animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0, 0.3] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                style={{
+                  background: `radial-gradient(circle, ${item.color.includes('emerald') ? 'rgba(16,185,129,0.4)' : 'rgba(99,102,241,0.4)'} 0%, transparent 70%)`
+                }}
+              />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Quick Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mb-8"
+        >
+          <QuickStats />
+        </motion.div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Quick Actions */}
-        <div className="mb-12">
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Akses Cepat Kamus Hukum Bisnis
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Pilih cara yang paling sesuai untuk mengeksplorasi istilah-istilah hukum bisnis
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-6">
-              <Link 
-                href="/kamus-hukum/kategori/bisnis/istilah"
-                className="group bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 hover:border-blue-300 rounded-xl p-6 transition-all duration-300 hover:shadow-lg"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600">
-                      Jelajahi Semua Istilah
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      Akses lengkap {totalTerms} istilah hukum bisnis dengan pencarian dan filter
-                    </p>
-                  </div>
-                  <ArrowRight className="h-6 w-6 text-blue-500 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </Link>
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      Panduan Penggunaan
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      Tips dan cara efektif menggunakan kamus hukum bisnis
-                    </p>
-                  </div>
-                  <BookOpen className="h-6 w-6 text-green-500" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Categories Grid */}
-        <div>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Kategori Hukum Bisnis
-            </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Istilah-istilah hukum bisnis telah dikategorikan berdasarkan bidang spesialisasi 
-              untuk memudahkan pencarian dan pembelajaran
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {businessCategories.map((category) => {
-              const IconComponent = category.icon;
-              return (
-                <div
-                  key={category.id}
-                  className="bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-                >
-                  <div className="p-8">
-                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-xl border-2 ${category.color} mb-6`}>
-                      <IconComponent className="h-8 w-8" />
-                    </div>
-                    
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">
-                      {category.title}
-                    </h3>
-                    
-                    <p className="text-gray-600 mb-4 text-sm leading-relaxed">
-                      {category.description}
-                    </p>
-                    
-                    <div className="mb-6">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-gray-700">Jumlah Istilah</span>
-                        <span className="text-sm font-bold text-gray-900">{category.count}</span>
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        Contoh: {category.examples.join(', ')}
-                      </div>
-                    </div>
-                    
-                    <Link
-                      href={`/kamus-hukum/kategori/bisnis/istilah?kategori=${category.id}`}
-                      className="inline-flex items-center justify-center w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium py-3 px-4 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 group"
-                    >
-                      Lihat Istilah
-                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="mt-16">
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-2xl text-white p-8 md:p-12">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold mb-4">
-                Butuh Bantuan Hukum Bisnis?
-              </h2>
-              <p className="text-indigo-100 mb-8 max-w-2xl mx-auto">
-                Konsultasikan kebutuhan hukum bisnis Anda dengan tim ahli kami. 
-                Dapatkan solusi yang tepat untuk perkembangan usaha Anda.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/konsultasi"
-                  className="bg-white text-indigo-600 font-semibold py-3 px-8 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  Konsultasi Gratis
-                </Link>
-                <Link
-                  href="/artikel?kategori=hukum-bisnis"
-                  className="border-2 border-white text-white font-semibold py-3 px-8 rounded-lg hover:bg-white hover:text-indigo-600 transition-colors"
-                >
-                  Baca Artikel
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="relative z-10">
+        <Suspense fallback={<LoadingState />}>
+          <IstilahBisnisComponent />
+        </Suspense>
       </div>
+
+      {/* Scroll Indicator */}
+      <AnimatePresence>
+        {showScrollIndicator && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50"
+          >
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="flex flex-col items-center gap-2"
+            >
+              <span className="text-sm text-gray-600">Scroll untuk eksplor</span>
+              <ChevronRight className="w-5 h-5 text-emerald-600 rotate-90" />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Action Button */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 1 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-full shadow-lg flex items-center justify-center text-white z-50"
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
+        <Activity className="w-6 h-6" />
+      </motion.button>
     </div>
-  );
+  )
 }
