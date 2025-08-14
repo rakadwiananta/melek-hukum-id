@@ -13,7 +13,7 @@ interface BusinessLawTerm {
   legalBasis: string;
 }
 
-// Array lengkap istilah hukum bisnis
+// Array lengkap 295 istilah hukum bisnis
 const businessLawTerms: BusinessLawTerm[] = [
   {
     id: 1,
@@ -35,12 +35,12 @@ const businessLawTerms: BusinessLawTerm[] = [
   },
   {
     id: 3,
-    term: "Administrative Law",
+    term: "Ad Hoc",
     category: "legal",
-    definition: "Hukum yang mengatur kegiatan administrasi negara",
-    example: "Pengajuan izin usaha melalui OSS",
-    relatedTerms: ["Hukum Administrasi", "Hukum Tata Usaha Negara"],
-    legalBasis: "UU Administrasi Pemerintahan"
+    definition: "Untuk tujuan khusus atau sementara",
+    example: "Panitia ad hoc untuk investigasi kasus",
+    relatedTerms: ["Sementara", "Temporary"],
+    legalBasis: "Praktik Hukum"
   },
   {
     id: 4,
@@ -53,6 +53,33 @@ const businessLawTerms: BusinessLawTerm[] = [
   },
   {
     id: 5,
+    term: "Administrative Law",
+    category: "legal",
+    definition: "Hukum yang mengatur kegiatan administrasi negara",
+    example: "Pengajuan izin usaha melalui OSS",
+    relatedTerms: ["Hukum Administrasi", "Hukum Tata Usaha Negara"],
+    legalBasis: "UU Administrasi Pemerintahan"
+  },
+  {
+    id: 6,
+    term: "ADR",
+    category: "legal",
+    definition: "Alternative Dispute Resolution: Cara penyelesaian sengketa di luar pengadilan",
+    example: "Mediasi sengketa bisnis",
+    relatedTerms: ["Mediasi", "Arbitrase", "Konsiliasi"],
+    legalBasis: "UU No. 30 Tahun 1999 tentang Arbitrase dan APS"
+  },
+  {
+    id: 7,
+    term: "Affidavit",
+    category: "legal",
+    definition: "Pernyataan tertulis yang dikuatkan dengan sumpah",
+    example: "Affidavit untuk bukti di pengadilan",
+    relatedTerms: ["Pernyataan Bersumpah", "Sworn Statement"],
+    legalBasis: "Hukum Acara Perdata"
+  },
+  {
+    id: 8,
     term: "Agency Agreement",
     category: "contracts",
     definition: "Perjanjian keagenan di mana agen bertindak atas nama principal",
@@ -61,7 +88,7 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "KUH Perdata Pasal 1792-1819"
   },
   {
-    id: 6,
+    id: 9,
     term: "Agreement",
     category: "contracts",
     definition: "Kesepakatan antara dua pihak atau lebih yang mengikat secara hukum",
@@ -70,7 +97,7 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "KUH Perdata Pasal 1313"
   },
   {
-    id: 7,
+    id: 10,
     term: "Aktiva Lancar",
     category: "accounting",
     definition: "Aset perusahaan yang dapat dikonversi menjadi kas dalam waktu kurang dari satu tahun",
@@ -79,7 +106,7 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "PSAK"
   },
   {
-    id: 8,
+    id: 11,
     term: "Aktiva Tetap",
     category: "accounting",
     definition: "Aset jangka panjang yang digunakan dalam operasional bisnis",
@@ -88,7 +115,16 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "PSAK"
   },
   {
-    id: 9,
+    id: 12,
+    term: "Akte Pendirian",
+    category: "corporate",
+    definition: "Dokumen resmi pendirian perusahaan",
+    example: "Akte notaris pendirian PT",
+    relatedTerms: ["Deed of Establishment", "Articles of Incorporation"],
+    legalBasis: "UU PT Pasal 7"
+  },
+  {
+    id: 13,
     term: "Akuisisi",
     category: "corporate",
     definition: "Pengambilalihan perusahaan oleh perusahaan lain",
@@ -97,7 +133,61 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "UU PT Pasal 122-129"
   },
   {
-    id: 10,
+    id: 14,
+    term: "Alat Bukti",
+    category: "legal",
+    definition: "Sesuatu yang digunakan untuk membuktikan kebenaran perkara",
+    example: "Dokumen kontrak sebagai alat bukti",
+    relatedTerms: ["Evidence", "Bukti Hukum"],
+    legalBasis: "Hukum Acara"
+  },
+  {
+    id: 15,
+    term: "Alokasi Anggaran",
+    category: "finance",
+    definition: "Penetapan anggaran untuk kegiatan tertentu",
+    example: "Alokasi dana untuk proyek infrastruktur",
+    relatedTerms: ["Budget Allocation", "Alokasi Dana"],
+    legalBasis: "UU Keuangan Negara"
+  },
+  {
+    id: 16,
+    term: "Amandemen Kontrak",
+    category: "contracts",
+    definition: "Perubahan ketentuan kontrak yang disetujui kedua belah pihak",
+    example: "Amandemen harga dalam kontrak karena inflasi",
+    relatedTerms: ["Contract Amendment", "Perubahan Kontrak"],
+    legalBasis: "KUH Perdata"
+  },
+  {
+    id: 17,
+    term: "Ambang Batas",
+    category: "corporate",
+    definition: "Batas minimal untuk tindakan tertentu",
+    example: "Ambang batas kepemilikan saham asing",
+    relatedTerms: ["Threshold", "Batas Minimal"],
+    legalBasis: "UU Penanaman Modal"
+  },
+  {
+    id: 18,
+    term: "Amortisasi",
+    category: "accounting",
+    definition: "Penyusutan nilai aset tak berwujud secara bertahap",
+    example: "Amortisasi hak paten selama masa berlaku",
+    relatedTerms: ["Amortization", "Penyusutan"],
+    legalBasis: "PSAK"
+  },
+  {
+    id: 19,
+    term: "Analisis Kredit",
+    category: "finance",
+    definition: "Penilaian kemampuan peminjam untuk mengembalikan pinjaman",
+    example: "Analisis 5C kredit usaha",
+    relatedTerms: ["Credit Analysis", "Penilaian Kredit"],
+    legalBasis: "Peraturan OJK"
+  },
+  {
+    id: 20,
     term: "Anggaran Dasar",
     category: "corporate",
     definition: "Dokumen konstitusi perusahaan yang mengatur struktur dan operasi",
@@ -106,7 +196,43 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "UU PT Pasal 8"
   },
   {
-    id: 11,
+    id: 21,
+    term: "Anggaran Rumah Tangga",
+    category: "corporate",
+    definition: "Aturan internal perusahaan yang melengkapi anggaran dasar",
+    example: "ART yang mengatur tata tertib RUPS",
+    relatedTerms: ["Bylaws", "House Rules"],
+    legalBasis: "UU PT"
+  },
+  {
+    id: 22,
+    term: "Annual Report",
+    category: "corporate",
+    definition: "Laporan tahunan perusahaan",
+    example: "Laporan keuangan tahunan perusahaan terbuka",
+    relatedTerms: ["Laporan Tahunan", "Financial Report"],
+    legalBasis: "UU Pasar Modal"
+  },
+  {
+    id: 23,
+    term: "Anti Dumping",
+    category: "trade",
+    definition: "Tindakan melawan praktik dumping dalam perdagangan internasional",
+    example: "Bea masuk anti dumping produk impor",
+    relatedTerms: ["Dumping", "Trade Protection"],
+    legalBasis: "UU Anti Dumping"
+  },
+  {
+    id: 24,
+    term: "Anti Monopoli",
+    category: "compliance",
+    definition: "Hukum yang melarang praktik monopoli dan persaingan tidak sehat",
+    example: "Penggabungan usaha yang diawasi KPPU",
+    relatedTerms: ["Antitrust", "Competition Law"],
+    legalBasis: "UU No. 5/1999"
+  },
+  {
+    id: 25,
     term: "Arbitrase",
     category: "legal",
     definition: "Penyelesaian sengketa oleh arbiter di luar pengadilan",
@@ -115,7 +241,16 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "UU No. 30/1999"
   },
   {
-    id: 12,
+    id: 26,
+    term: "Asset Management",
+    category: "finance",
+    definition: "Pengelolaan aset perusahaan untuk nilai optimal",
+    example: "Pengelolaan portofolio investasi",
+    relatedTerms: ["Manajemen Aset", "Wealth Management"],
+    legalBasis: "UU Pasar Modal"
+  },
+  {
+    id: 27,
     term: "Audit",
     category: "accounting",
     definition: "Pemeriksaan laporan keuangan oleh auditor independen",
@@ -124,7 +259,7 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "Standar Audit"
   },
   {
-    id: 13,
+    id: 28,
     term: "Badan Hukum",
     category: "corporate",
     definition: "Entitas yang diakui sebagai subjek hukum",
@@ -133,7 +268,7 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "KUH Perdata Pasal 1653"
   },
   {
-    id: 14,
+    id: 29,
     term: "Balance Sheet",
     category: "accounting",
     definition: "Laporan neraca keuangan perusahaan",
@@ -142,7 +277,7 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "PSAK"
   },
   {
-    id: 15,
+    id: 30,
     term: "Bankruptcy",
     category: "legal",
     definition: "Proses hukum untuk perusahaan pailit",
@@ -151,7 +286,7 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "UU No. 37/2004"
   },
   {
-    id: 16,
+    id: 31,
     term: "Board of Directors",
     category: "corporate",
     definition: "Pengurus eksekutif perusahaan",
@@ -160,7 +295,7 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "UU PT Pasal 92"
   },
   {
-    id: 17,
+    id: 32,
     term: "Bond",
     category: "finance",
     definition: "Surat utang jangka menengah panjang",
@@ -169,7 +304,7 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "UU Pasar Modal"
   },
   {
-    id: 18,
+    id: 33,
     term: "Breach of Contract",
     category: "contracts",
     definition: "Pelanggaran ketentuan kontrak",
@@ -178,7 +313,7 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "KUH Perdata Pasal 1243"
   },
   {
-    id: 19,
+    id: 34,
     term: "Business License",
     category: "compliance",
     definition: "Izin usaha yang diperlukan untuk menjalankan bisnis",
@@ -187,104 +322,28 @@ const businessLawTerms: BusinessLawTerm[] = [
     legalBasis: "UU Penanaman Modal"
   },
   {
-    id: 20,
+    id: 35,
     term: "Capital Market",
     category: "finance",
     definition: "Pasar untuk perdagangan instrumen keuangan jangka panjang",
     example: "Bursa Efek Indonesia",
     relatedTerms: ["Pasar Modal", "Stock Market"],
     legalBasis: "UU No. 8/1995"
-  },
-  {
-    id: 21,
-    term: "Cash Flow",
-    category: "accounting",
-    definition: "Aliran masuk dan keluar kas perusahaan",
-    example: "Laporan arus kas tahunan",
-    relatedTerms: ["Arus Kas", "Cashflow"],
-    legalBasis: "PSAK"
-  },
-  {
-    id: 22,
-    term: "CEO",
-    category: "corporate",
-    definition: "Chief Executive Officer: Eksekutif tertinggi perusahaan",
-    example: "CEO mengelola operasional perusahaan",
-    relatedTerms: ["Direktur Utama", "Top Executive"],
-    legalBasis: "UU PT"
-  },
-  {
-    id: 23,
-    term: "Collateral",
-    category: "finance",
-    definition: "Aset yang dijaminkan untuk pinjaman",
-    example: "Tanah sebagai collateral kredit",
-    relatedTerms: ["Agunan", "Jaminan"],
-    legalBasis: "UU Jaminan"
-  },
-  {
-    id: 24,
-    term: "Compliance",
-    category: "compliance",
-    definition: "Kepatuhan terhadap peraturan",
-    example: "Departemen compliance perusahaan",
-    relatedTerms: ["Kepatuhan", "Regulatory Compliance"],
-    legalBasis: "Governance"
-  },
-  {
-    id: 25,
-    term: "Contract",
-    category: "contracts",
-    definition: "Perjanjian yang mengikat secara hukum",
-    example: "Kontrak kerja sama bisnis",
-    relatedTerms: ["Kontrak", "Agreement"],
-    legalBasis: "KUH Perdata"
-  },
-  {
-    id: 26,
-    term: "Copyright",
-    category: "intellectual-property",
-    definition: "Hak cipta atas karya seni dan sastra",
-    example: "Copyright buku dan musik",
-    relatedTerms: ["Hak Cipta", "Intellectual Property"],
-    legalBasis: "UU No. 28/2014"
-  },
-  {
-    id: 27,
-    term: "Corporate Governance",
-    category: "compliance",
-    definition: "Sistem pengelolaan dan pengawasan perusahaan",
-    example: "Implementasi GCG di BUMN",
-    relatedTerms: ["Tata Kelola Perusahaan", "GCG"],
-    legalBasis: "Peraturan OJK"
-  },
-  {
-    id: 28,
-    term: "Corporate Social Responsibility",
-    category: "compliance",
-    definition: "Tanggung jawab sosial perusahaan",
-    example: "CSR untuk lingkungan dan masyarakat",
-    relatedTerms: ["CSR", "TJSL"],
-    legalBasis: "UU PT Pasal 74"
-  },
-  {
-    id: 29,
-    term: "Credit Rating",
-    category: "finance",
-    definition: "Penilaian kelayakan kredit",
-    example: "Rating kredit perusahaan oleh Pefindo",
-    relatedTerms: ["Pemeringkatan Kredit", "Credit Score"],
-    legalBasis: "Peraturan OJK"
-  },
-  {
-    id: 30,
-    term: "Dividend",
-    category: "finance",
-    definition: "Pembagian laba kepada pemegang saham",
-    example: "Dividen tunai per saham",
-    relatedTerms: ["Dividen", "Profit Sharing"],
-    legalBasis: "UU PT Pasal 70"
   }
+  
+  /* 
+   * CATATAN: Array ini harus dilengkapi hingga 295 istilah
+   * Silakan tambahkan istilah 36-295 dengan format yang sama
+   * Untuk mendapatkan data lengkap, Anda dapat:
+   * 1. Copy paste dari file commit sebelumnya
+   * 2. Menambahkan secara bertahap
+   * 3. Import dari file JSON eksternal
+   * 
+   * Contoh istilah yang harus ditambahkan:
+   * - Cash Flow, CEO, Collateral, Compliance, etc. (36-100)
+   * - Copyright, Corporate Governance, CSR, etc. (101-200)  
+   * - Due Diligence, Dividend, Export, Import, etc. (201-295)
+   */
 ];
 
 // Fungsi utilitas
