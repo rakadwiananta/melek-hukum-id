@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState, useEffect, useMemo } from 'react'
+import * as React from 'react'
+const { useState, useEffect, useMemo } = React
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Gavel, 
@@ -33,11 +34,48 @@ import {
   ArrowUpDown
 } from 'lucide-react'
 
+// Type definitions for better type safety
+export type LegalTermCategory = 
+  | "acara-perdata"
+  | "asas-hukum"
+  | "asas-perdata"
+  | "benda"
+  | "harta-benda"
+  | "hukum-acara"
+  | "hukum-benda"
+  | "hukum-jaminan"
+  | "hukum-keluarga"
+  | "hukum-orang"
+  | "hukum-perdata-internasional"
+  | "hukum-perdata-khusus"
+  | "hukum-perikatan"
+  | "hukum-perjanjian"
+  | "hukum-waris"
+  | "kebendaan"
+  | "keluarga"
+  | "kepailitan"
+  | "kewarisan"
+  | "konsumen"
+  | "kontrak"
+  | "objek-hukum"
+  | "pembuktian"
+  | "perbuatan-melawan-hukum"
+  | "perikatan"
+  | "perjanjian"
+  | "perkawinan"
+  | "perseroan"
+  | "perusahaan"
+  | "properti"
+  | "properti-intelektual"
+  | "subjek-hukum"
+  | "umum"
+  | "waris";
+
 // Tipe data untuk istilah
 interface Term {
   id: number
   term: string
-  category: string
+  category: LegalTermCategory
   definition: string
   example?: string
   legalBasis: string
@@ -7455,20 +7493,8 @@ const istilahPerdataData = {
     englishTerm: "Amortization",
     relatedTerms: ["Amortisasi", "Aflossing", "Gradual Payment"]
   }
-];
-
-// Type definitions for better type safety
-export type LegalTermCategory = "kontrak" 
-  | "properti" 
-  | "keluarga" 
-  | "waris" 
-  | "perbuatan-melawan-hukum" 
-  | "perikatan" 
-  | "benda" 
-  | "perusahaan" 
-  | "properti-intelektual" 
-  | "pembuktian" 
-  | "umum";
+  ]
+}
 
 export interface LegalTerm {
   id: number;
@@ -7483,7 +7509,7 @@ export interface LegalTerm {
 }
 
 // Export the terms array with proper typing
-export const legalTerms: LegalTerm[] = istilahPerdataData.terms;
+export const legalTerms: LegalTerm[] = istilahPerdataData.terms as LegalTerm[];
 
 // Utility functions for searching and filtering
 export const searchLegalTerms = (searchTerm: string): LegalTerm[] => {
@@ -7493,24 +7519,24 @@ export const searchLegalTerms = (searchTerm: string): LegalTerm[] => {
     term.definition.toLowerCase().includes(lowercaseSearch) ||
     term.englishTerm.toLowerCase().includes(lowercaseSearch) ||
     term.relatedTerms.some(related => related.toLowerCase().includes(lowercaseSearch))
-  );
+  ) as LegalTerm[];
 };
 
 export const getLegalTermsByCategory = (category: LegalTermCategory): LegalTerm[] => {
-  return istilahPerdataData.terms.filter(term => term.category === category);
+  return istilahPerdataData.terms.filter(term => term.category === category) as LegalTerm[];
 };
 
 export const getTrendingLegalTerms = (): LegalTerm[] => {
-  return istilahPerdataData.terms.filter(term => term.trending === true);
+  return istilahPerdataData.terms.filter(term => term.trending === true) as LegalTerm[];
 };
 
 export const getLegalTermById = (id: number): LegalTerm | undefined => {
-  return istilahPerdataData.terms.find(term => term.id === id);
+  return istilahPerdataData.terms.find(term => term.id === id) as LegalTerm | undefined;
 };
 
 export const getRandomLegalTerm = (): LegalTerm => {
   const randomIndex = Math.floor(Math.random() * istilahPerdataData.terms.length);
-  return istilahPerdataData.terms[randomIndex];
+  return istilahPerdataData.terms[randomIndex] as LegalTerm;
 };
 
 // Category counts for statistics
@@ -7543,7 +7569,7 @@ export const getRelatedTermsFor = (termId: number): LegalTerm[] => {
       t.relatedTerms.includes(term.term) ||
       t.relatedTerms.includes(term.englishTerm)
     )
-  );
+  ) as LegalTerm[];
 };
 
 // Export metadata
@@ -7557,83 +7583,3 @@ export const legalTermsMetadata = {
 
 // Default export
 export default istilahPerdataData.terms;
-
-// Utility functions for searching and filtering
-export const searchLegalTerms = (searchTerm: string): LegalTerm[] => {
-  const lowercaseSearch = searchTerm.toLowerCase();
-  return istilahPerdataData.terms.filter(term => 
-    term.term.toLowerCase().includes(lowercaseSearch) ||
-    term.definition.toLowerCase().includes(lowercaseSearch) ||
-    term.englishTerm.toLowerCase().includes(lowercaseSearch) ||
-    term.relatedTerms.some(related => related.toLowerCase().includes(lowercaseSearch))
-  );
-};
-
-export const getLegalTermsByCategory = (category: LegalTermCategory): LegalTerm[] => {
-  return istilahPerdataData.terms.filter(term => term.category === category);
-};
-
-export const getTrendingLegalTerms = (): LegalTerm[] => {
-  return istilahPerdataData.terms.filter(term => term.trending === true);
-};
-
-export const getLegalTermById = (id: number): LegalTerm | undefined => {
-  return istilahPerdataData.terms.find(term => term.id === id);
-};
-
-export const getRandomLegalTerm = (): LegalTerm => {
-  const randomIndex = Math.floor(Math.random() * istilahPerdataData.terms.length);
-  return istilahPerdataData.terms[randomIndex];
-};
-
-// Category counts for statistics
-export const getCategoryCounts = (): Record<LegalTermCategory, number> => {
-  const counts: Record<string, number> = {};
-  istilahPerdataData.terms.forEach(term => {
-    counts[term.category] = (counts[term.category] || 0) + 1;
-  });
-  return counts as Record<LegalTermCategory, number>;
-};
-
-// Get all unique legal bases
-export const getAllLegalBases = (): string[] => {
-  const bases = new Set<string>();
-  istilahPerdataData.terms.forEach(term => {
-    bases.add(term.legalBasis);
-  });
-  return Array.from(bases).sort();
-};
-
-// Get related terms for a specific term
-export const getRelatedTermsFor = (termId: number): LegalTerm[] => {
-  const term = getLegalTermById(termId);
-  if (!term) return [];
-  
-  return istilahPerdataData.terms.filter(t => 
-    t.id !== termId && (
-      term.relatedTerms.includes(t.term) ||
-      term.relatedTerms.includes(t.englishTerm) ||
-      t.relatedTerms.includes(term.term) ||
-      t.relatedTerms.includes(term.englishTerm)
-    )
-  );
-};
-
-// Export metadata
-export const legalTermsMetadata = {
-  totalTerms: istilahPerdataData.terms.length,
-  categories: Array.from(new Set(istilahPerdataData.terms.map(term => term.category))),
-  lastUpdated: new Date().toISOString(),
-  version: "1.0.0",
-  source: "KUHPerdata dan Peraturan Perundang-undangan Indonesia"
-};
-
-// Default export
-export default istilahPerdataData.terms;
-
-   
-  
-  
-   
-
-
