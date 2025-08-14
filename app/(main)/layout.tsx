@@ -13,7 +13,10 @@ import Script from 'next/script'
 const inter = Inter({ 
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter'
+  variable: '--font-inter',
+  fallback: ['system-ui', 'arial', 'sans-serif'],
+  preload: true,
+  adjustFontFallback: true
 })
 
 export const viewport: Viewport = {
