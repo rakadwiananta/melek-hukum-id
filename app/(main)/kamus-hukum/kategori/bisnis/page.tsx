@@ -194,7 +194,7 @@ const LoadingState = () => {
 
 // Dynamic import dengan loading state yang lebih baik
 const IstilahBisnisComponent = dynamic(
-  () => import('@/app/components/kamus/istilah/IstilahBisnisComponent'),
+  () => import('@/app/components/IstilahBisnisComponent'),
   {
     loading: () => <LoadingState />,
     ssr: false,
