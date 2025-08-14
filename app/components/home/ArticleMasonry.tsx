@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { Eye, Heart, Clock, Calendar, BookOpen, Share2 } from 'lucide-react'
 import { formatDate } from '@/app/lib/utils'
 import { supabase } from '@/app/lib/supabase'
+import { validateAndFixImageUrl } from '@/app/lib/fallback-images'
 
 interface MasonryArticle {
   id: string
@@ -82,7 +83,7 @@ export default function ArticleMasonry() {
           slug: a.slug,
           excerpt: a.excerpt,
           category: a.category,
-          featuredImage: (a.featured_image || '').trim() || '/timbangkan.jpg',
+          featuredImage: validateAndFixImageUrl(a.featured_image, a.category),
           author: a.author,
           publishedAt: a.published_at,
           readingTime: 5,

@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Play, Pause, Eye, Heart, Clock, Calendar } from 'lucide-react'
 import { formatDate } from '@/app/lib/utils'
 import { supabase } from '@/app/lib/supabase'
+import { validateAndFixImageUrl } from '@/app/lib/fallback-images'
 
 interface CarouselArticle {
   id: string
@@ -53,13 +54,7 @@ export default function ArticleCarousel() {
           slug: a.slug,
           excerpt: a.excerpt,
           category: a.category,
-          featuredImage: (() => {
-            const img = (a.featured_image || '').trim()
-            if (!img) return '/timbangkan.jpg'
-            // Fix broken ibb.co.com URLs
-            if (img.includes('i.ibb.co.com')) return '/timbangkan.jpg'
-            return img
-          })(),
+          featuredImage: validateAndFixImageUrl(a.featured_image, a.category),
           author: a.author,
           publishedAt: a.published_at,
           readingTime: 5,

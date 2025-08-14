@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Clock, Eye, Heart, Share2, ChevronRight, BookOpen } from 'lucide-react'
 import { formatDate, calculateReadingTime } from '@/app/lib/utils'
 import { supabase } from '@/app/lib/supabase'
+import { validateAndFixImageUrl } from '@/app/lib/fallback-images'
 
 interface Article {
   id: string
@@ -45,23 +46,7 @@ export default function ArticleShowcase() {
         if (error) throw error
 
         const mapped = (data || []).map((a: any) => {
-          const img = (a.featured_image || '').trim()
-          // Fix broken external image URLs
-          let featuredImage = '/timbangkan.jpg' // default fallback
-          if (img && !img.includes('/images/articles/')) {
-            if (img.startsWith('http')) {
-              // Check if it's a broken ibb.co.com URL and fix it
-              if (img.includes('i.ibb.co.com')) {
-                featuredImage = '/timbangkan.jpg' // fallback for broken ibb.co URLs
-              } else {
-                featuredImage = img
-              }
-            } else if (img.startsWith('/')) {
-              featuredImage = img
-            } else {
-              featuredImage = `/${img}`
-            }
-          }
+          const featuredImage = validateAndFixImageUrl(a.featured_image, a.category)
           const rt = calculateReadingTime(a.excerpt || '')?.match(/\d+/)?.[0]
           return {
             id: a.id,
