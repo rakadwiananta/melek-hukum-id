@@ -8,6 +8,7 @@ import Footer from '@/app/components/layout/Footer'
 import { Toaster } from '@/app/components/ui/Toaster'
 import { ToastProvider } from '@/app/components/ui/use-toast'
 import PerformanceMonitor from '@/app/components/PerformanceMonitor'
+import Script from 'next/script'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -112,10 +113,24 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bicarahukum.my.id'
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'MelekHukum',
+    alternateName: ['Melek Hukum', 'Melek Hukum ID'],
+    url: siteUrl,
+  }
+
   return (
     <html lang="id" className={inter.variable}>
       <head>
         {/* Google AdSense removed - not available in this version */}
+        <Script
+          id="website-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
       </head>
       <body className={`${inter.className} antialiased`}>
         <ToastProvider>

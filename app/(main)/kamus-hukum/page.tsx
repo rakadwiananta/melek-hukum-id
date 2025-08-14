@@ -150,13 +150,26 @@ const categories = [
     id: 'bisnis', 
     label: 'Hukum Bisnis', 
     href: '/kamus-hukum?category=bisnis',
-    count: 412,
+    count: 295,
     icon: TrendingUp,
     color: 'from-gradient-6-start to-gradient-6-end',
     gradient: 'from-indigo-600 via-blue-600 to-purple-600',
     description: 'UU PT, Investasi & HAKI',
     bgPattern: 'pattern-plus',
-    subPages: []
+    subPages: [
+      {
+        title: 'Kategori Bisnis',
+        href: '/kamus-hukum/kategori/bisnis',
+        description: 'Overview lengkap hukum bisnis',
+        icon: TrendingUp
+      },
+      {
+        title: 'Istilah Bisnis',
+        href: '/kamus-hukum/kategori/bisnis/istilah',
+        description: '412 istilah hukum bisnis',
+        icon: BookOpen
+      }
+    ]
   }
 ]
 
