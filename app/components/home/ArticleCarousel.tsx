@@ -145,77 +145,49 @@ export default function ArticleCarousel() {
                 className="absolute inset-0"
               >
                 <Link href={`/artikel/${articles[currentIndex].slug}`}>
-                  {articles[currentIndex].featuredImage ? (
-                    <div className="relative h-full">
-                      <Image
-                        src={articles[currentIndex].featuredImage}
-                        alt={articles[currentIndex].title}
-                        fill
-                        className="object-cover"
-                        sizes="100vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                      
-                      {/* Content Overlay */}
-                      <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                        <div className="mb-4">
-                          <span className="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">
-                            {articles[currentIndex].category}
-                          </span>
+                  <div className="relative h-full">
+                    <Image
+                      src={articles[currentIndex].featuredImage}
+                      alt={articles[currentIndex].title}
+                      fill
+                      className="object-cover"
+                      sizes="100vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                    
+                    {/* Content Overlay */}
+                    <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+                      <div className="mb-4">
+                        <span className="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">
+                          {articles[currentIndex].category}
+                        </span>
+                      </div>
+                      <h3 className="text-2xl md:text-3xl font-bold mb-4 line-clamp-2">
+                        {articles[currentIndex].title}
+                      </h3>
+                      <p className="text-lg mb-4 line-clamp-2 opacity-90">
+                        {articles[currentIndex].excerpt}
+                      </p>
+                      <div className="flex items-center gap-6 text-sm opacity-75">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="h-4 w-4" />
+                          <span>{formatDate(articles[currentIndex].publishedAt)}</span>
                         </div>
-                        <h3 className="text-2xl md:text-3xl font-bold mb-4 line-clamp-2">
-                          {articles[currentIndex].title}
-                        </h3>
-                        <p className="text-lg mb-4 line-clamp-2 opacity-90">
-                          {articles[currentIndex].excerpt}
-                        </p>
-                        <div className="flex items-center gap-6 text-sm opacity-75">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
-                            <span>{formatDate(articles[currentIndex].publishedAt)}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            <span>{articles[currentIndex].readingTime} menit baca</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Eye className="h-4 w-4" />
-                            <span>{articles[currentIndex].views} views</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Heart className="h-4 w-4" />
-                            <span>{articles[currentIndex].likes} likes</span>
-                          </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          <span>{articles[currentIndex].readingTime} menit baca</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Eye className="h-4 w-4" />
+                          <span>{articles[currentIndex].views} views</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Heart className="h-4 w-4" />
+                          <span>{articles[currentIndex].likes} likes</span>
                         </div>
                       </div>
                     </div>
-                  ) : (
-                    <div className="relative h-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                      <div className="text-center p-8">
-                        <div className="mb-4">
-                          <span className="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">
-                            {articles[currentIndex].category}
-                          </span>
-                        </div>
-                        <h3 className="text-2xl md:text-3xl font-bold mb-4 line-clamp-2 text-gray-800">
-                          {articles[currentIndex].title}
-                        </h3>
-                        <p className="text-lg mb-4 line-clamp-2 text-gray-600">
-                          {articles[currentIndex].excerpt}
-                        </p>
-                        <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
-                            <span>{formatDate(articles[currentIndex].publishedAt)}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            <span>{articles[currentIndex].readingTime} menit baca</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                  </div>
                 </Link>
               </motion.div>
             </AnimatePresence>
@@ -270,24 +242,14 @@ export default function ArticleCarousel() {
                     : 'hover:scale-105'
                 }`}
               >
-                {article.featuredImage ? (
-                  <>
-                    <Image
-                      src={article.featuredImage}
-                      alt={article.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 20vw, 15vw"
-                    />
-                    <div className="absolute inset-0 bg-black/40" />
-                  </>
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                    <span className="text-xs text-gray-600 font-medium text-center px-1">
-                      {article.category}
-                    </span>
-                  </div>
-                )}
+                <Image
+                  src={article.featuredImage}
+                  alt={article.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 20vw, 15vw"
+                />
+                <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute top-1 left-1">
                   <span className="px-1 py-0.5 bg-white/90 text-black text-xs font-medium rounded">
                     {index + 1}
