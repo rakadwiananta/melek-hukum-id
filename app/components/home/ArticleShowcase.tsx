@@ -46,7 +46,22 @@ export default function ArticleShowcase() {
 
         const mapped = (data || []).map((a: any) => {
           const img = (a.featured_image || '').trim()
-          const featuredImage = (!img || img.includes('/images/articles/')) ? '/timbangkan.jpg' : (img.startsWith('http') || img.startsWith('/')) ? img : `/${img}`
+          // Fix broken external image URLs
+          let featuredImage = '/timbangkan.jpg' // default fallback
+          if (img && !img.includes('/images/articles/')) {
+            if (img.startsWith('http')) {
+              // Check if it's a broken ibb.co.com URL and fix it
+              if (img.includes('i.ibb.co.com')) {
+                featuredImage = '/timbangkan.jpg' // fallback for broken ibb.co URLs
+              } else {
+                featuredImage = img
+              }
+            } else if (img.startsWith('/')) {
+              featuredImage = img
+            } else {
+              featuredImage = `/${img}`
+            }
+          }
           const rt = calculateReadingTime(a.excerpt || '')?.match(/\d+/)?.[0]
           return {
             id: a.id,
