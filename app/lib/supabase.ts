@@ -8,7 +8,7 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 // Validate environment variables
 const isSupabaseConfigured = supabaseUrl && supabaseAnonKey
 
-if (!isSupabaseConfigured) {
+if (!isSupabaseConfigured && process.env.NODE_ENV !== 'production') {
   console.warn('Supabase environment variables are not set. Please check your .env.local file.')
   console.warn('Required variables: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY')
 }

@@ -475,6 +475,7 @@ export default function ArticleGrid({
                 <ArticleCard 
                   article={article} 
                   variant={viewMode === 'list' ? 'compact' : '3d-batik'} 
+                  index={index}
                 />
               </motion.div>
             ))}

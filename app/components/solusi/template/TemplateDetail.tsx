@@ -103,21 +103,21 @@ export default function TemplateDetail({
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-8 bg-white">
+    <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8 bg-white">
       {/* Header Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="mb-12 border-b border-gray-200 pb-8"
       >
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 lg:gap-8">
           <div className="flex-1">
             <div className="mb-6">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4 leading-tight">{template.title}</h1>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">{template.description}</p>
+                              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">{template.title}</h1>
+                              <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 leading-relaxed">{template.description}</p>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm text-gray-500">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-sm text-gray-500">
               <div className="flex items-center gap-2">
                 <FileText className="h-5 w-5 text-primary" />
                 <span className="font-medium">{template.fileType.toUpperCase()}</span>
@@ -134,11 +134,11 @@ export default function TemplateDetail({
             </div>
           </div>
           
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 sm:gap-4">
             <motion.button
               onClick={() => handleDownload(template)}
               disabled={isDownloading}
-              className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary to-green-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-primary to-green-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={{ scale: isDownloading ? 1 : 1.05 }}
               whileTap={{ scale: isDownloading ? 1 : 0.95 }}
             >
@@ -163,7 +163,8 @@ export default function TemplateDetail({
       </motion.div>
 
       {/* Tabs Navigation */}
-      <div className="flex border-b-2 border-gray-200 mb-8">
+      <div className="-mx-4 sm:mx-0 px-4 sm:px-0 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b-2 border-gray-200 mb-6 sm:mb-8">
+        <div className="flex flex-nowrap">
         {[
           { id: 'content', label: 'Konten Template', icon: FileText },
           { id: 'guide', label: 'Panduan Pengisian', icon: BookOpen },
@@ -173,7 +174,7 @@ export default function TemplateDetail({
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
             className={cn(
-              "flex items-center gap-3 px-8 py-4 border-b-2 font-semibold transition-all duration-300",
+              "flex items-center gap-2 sm:gap-3 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 border-b-2 font-semibold transition-all duration-300 whitespace-nowrap",
               activeTab === tab.id
                 ? "border-primary text-primary bg-primary/5"
                 : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50"
@@ -183,6 +184,7 @@ export default function TemplateDetail({
             {tab.label}
           </button>
         ))}
+        </div>
       </div>
 
       {/* Tab Content */}
@@ -193,23 +195,23 @@ export default function TemplateDetail({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.4 }}
-          className="min-h-[600px]"
+          className="min-h-[360px] sm:min-h-[480px] lg:min-h-[600px]"
         >
           {activeTab === 'content' && (
             <div className="space-y-8">
-              <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-bold text-gray-900">Konten Template</h3>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Konten Template</h3>
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setShowContent(!showContent)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     {showContent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     {showContent ? 'Sembunyikan' : 'Tampilkan'}
                   </button>
                   <button
                     onClick={() => copyToClipboard(content)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     <Copy className="h-4 w-4" />
                     Salin
@@ -221,18 +223,18 @@ export default function TemplateDetail({
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
-                  className="bg-gray-50 border border-gray-200 rounded-xl p-8 font-mono text-sm whitespace-pre-wrap leading-relaxed"
+                  className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-6 lg:p-8 font-mono text-xs sm:text-sm whitespace-pre-wrap leading-relaxed"
                 >
                   {content}
                 </motion.div>
               )}
               
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-                <div className="flex items-start gap-4">
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-6">
+                                  <div className="flex items-start gap-3 sm:gap-4">
                   <AlertCircle className="h-6 w-6 text-blue-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-blue-900 mb-3 text-lg">Catatan Penting</h4>
-                    <ul className="text-blue-800 space-y-2 leading-relaxed">
+                                          <h4 className="font-semibold text-blue-900 mb-2 sm:mb-3 text-base sm:text-lg">Catatan Penting</h4>
+                                          <ul className="text-blue-800 space-y-2 leading-relaxed text-sm">
                       <li className="flex items-start gap-2">
                         <span className="text-blue-600 font-bold">•</span>
                         <span>Template ini sesuai dengan peraturan perundang-undangan Indonesia</span>

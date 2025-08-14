@@ -5,11 +5,16 @@ import { cn } from '@/app/lib/utils'
 // Dynamically import AdUnit with no SSR
 const AdUnit = dynamic(() => import('./AdUnit'), { ssr: false })
 
+const SLOT_HEADER = process.env.NEXT_PUBLIC_ADSENSE_SLOT_HEADER || ''
+const SLOT_IN_CONTENT = process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT || ''
+const SLOT_SIDEBAR = process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR || ''
+const SLOT_MOBILE = process.env.NEXT_PUBLIC_ADSENSE_SLOT_MOBILE || ''
+
 export const HeaderBannerAd = ({ className }: { className?: string }) => (
   <div className={cn('hidden lg:block mb-4 no-print', className)}>
     <div className="max-w-[728px] mx-auto">
       <AdUnit 
-        slot="1234567890" 
+        slot={SLOT_HEADER}
         format="horizontal"
         style={{ minHeight: '90px' }}
       />
@@ -21,7 +26,7 @@ export const InContentAd = ({ className }: { className?: string }) => (
   <div className={cn('my-8 flex justify-center no-print', className)}>
     <div className="ad-container">
       <AdUnit 
-        slot="2345678901" 
+        slot={SLOT_IN_CONTENT}
         format="rectangle"
         className="max-w-[336px]"
         style={{ minHeight: '280px' }}
@@ -34,7 +39,7 @@ export const SidebarAd = ({ className }: { className?: string }) => (
   <aside className={cn('hidden xl:block sticky top-20 no-print', className)}>
     <div className="ad-container">
       <AdUnit 
-        slot="3456789012" 
+        slot={SLOT_SIDEBAR}
         format="vertical"
         className="max-w-[300px]"
         style={{ minHeight: '600px' }}
@@ -47,7 +52,7 @@ export const MobileAd = ({ className }: { className?: string }) => (
   <div className={cn('lg:hidden my-6 no-print', className)}>
     <div className="ad-container">
       <AdUnit 
-        slot="4567890123" 
+        slot={SLOT_MOBILE}
         format="auto"
         responsive={true}
         style={{ minHeight: '100px' }}

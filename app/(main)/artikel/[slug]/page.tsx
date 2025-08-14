@@ -7,6 +7,7 @@ import ReadingProgress from '@/app/components/article/meta/ReadingProgress'
 import Script from 'next/script'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export const revalidate = 60
 
@@ -389,11 +390,16 @@ export default async function ArticlePage({
                         href={`/artikel/${relatedArticle.slug}`}
                         className="block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden"
                       >
-                        <img
-                          src={relatedArticle.featured_image}
-                          alt={relatedArticle.title}
-                          className="w-full h-48 object-cover"
-                        />
+                        <div className="relative w-full h-48">
+                          <Image
+                            src={relatedArticle.featured_image || '/timbangkan.jpg'}
+                            alt={relatedArticle.title}
+                            fill
+                            className="object-cover"
+                            loading="lazy"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          />
+                        </div>
                         <div className="p-4">
                           <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2">
                             {relatedArticle.title}

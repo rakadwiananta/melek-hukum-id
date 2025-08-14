@@ -239,6 +239,8 @@ export default function ArticleBody({ content, featured_image, title }: ArticleB
               fill
               className="object-cover"
               priority
+              loading="eager"
+              fetchPriority="high"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
             />
 
