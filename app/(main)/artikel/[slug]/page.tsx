@@ -122,7 +122,7 @@ export async function generateMetadata({
       creator: '@melekhukumid',
     },
     alternates: {
-      canonical: `https://melekhukum.id/artikel/${slug}`,
+      canonical: `https://bicarahukum.my.id/artikel/${slug}/`,
     },
     robots: {
       index: true,

@@ -62,7 +62,7 @@ async function fetchArticleSlugs(): Promise<{ slug: string; updated_at?: string 
   const { data, error } = await client
     .from('articles')
     .select('slug, updated_at')
-    .eq('is_published', true)
+    .eq('status', 'published')
     .limit(2000)
 
   if (error || !data) return []
@@ -76,7 +76,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const urls: MetadataRoute.Sitemap = [
     ...staticPaths.map((path) => ({
-      url: `${BASE_URL}${path}`,
+      url: `${BASE_URL}${path}${path === '/' ? '' : '/'}`,
       lastModified: now,
       priority: path === '/' ? 1 : 0.7,
     })),
