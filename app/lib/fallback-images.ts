@@ -1,11 +1,11 @@
 // Koleksi gambar fallback berdasarkan kategori
 export const fallbackImages = {
   'anti-korupsi': '/timbangkan.jpg',
-  'regulasi': '/fallback-hukum.jpg', 
+  'regulasi': '/timbangkan.jpg', 
   'solusi': '/timbangkan.jpg',
-  'hukum-pidana': '/fallback-hukum.jpg',
-  'hukum-perdata': '/fallback-hukum.jpg',
-  'hukum-tata-negara': '/illustrations/National_emblem_of_Indonesia_Garuda_Pancasila.svg.webp',
+  'hukum-pidana': '/timbangkan.jpg',
+  'hukum-perdata': '/timbangkan.jpg',
+  'hukum-tata-negara': '/timbangkan.jpg',
   'default': '/timbangkan.jpg'
 } as const
 
@@ -17,10 +17,10 @@ export function getFallbackImage(category?: string): string {
   return fallbackImages[categoryKey as keyof typeof fallbackImages] || fallbackImages.default
 }
 
-// Fungsi untuk memvalidasi URL gambar tanpa fallback
+// Fungsi untuk memvalidasi URL gambar dengan fallback yang lebih pintar
 export function validateAndFixImageUrl(imageUrl: string, category?: string): string {
   if (!imageUrl || imageUrl.trim() === '') {
-    return '' // Kembalikan string kosong jika tidak ada gambar
+    return getFallbackImage(category) // Gunakan fallback jika benar-benar kosong
   }
 
   const cleanUrl = imageUrl.trim()
@@ -32,17 +32,22 @@ export function validateAndFixImageUrl(imageUrl: string, category?: string): str
   
   // Cek jika URL eksternal valid
   if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
-    // Blokir domain yang diketahui bermasalah
+    // Blokir hanya domain yang benar-benar bermasalah
     const problematicDomains = ['i.ibb.co.com']
     const isProblemmatic = problematicDomains.some(domain => cleanUrl.includes(domain))
     
     if (isProblemmatic) {
-      return '' // Kembalikan string kosong untuk URL bermasalah
+      return getFallbackImage(category) // Gunakan fallback untuk URL bermasalah
     }
     
     return cleanUrl
   }
   
-  // Jika bukan URL valid, anggap sebagai path lokal
-  return `/${cleanUrl}`
+  // Jika bukan URL valid tapi ada content, anggap sebagai path lokal
+  if (cleanUrl.length > 0) {
+    return cleanUrl.startsWith('/') ? cleanUrl : `/${cleanUrl}`
+  }
+  
+  // Fallback jika semua gagal
+  return getFallbackImage(category)
 }
