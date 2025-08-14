@@ -46,7 +46,9 @@ const BusinessScene = () => {
       <pointLight position={[-10, -10, -5]} intensity={0.4} color="#f59e0b" />
       
       <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-        <WayangModel scale={1.3} position={[0, -0.3, 0]} />
+        <group position={[0, -0.3, 0]}>
+          <WayangModel scale={1.3} />
+        </group>
       </Float>
 
       {/* Floating business icons */}

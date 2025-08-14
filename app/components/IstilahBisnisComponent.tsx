@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { BusinessLawDictionary } from './IstilahBisnis'
+import { BusinessLawDictionary } from './kamus/istilah/IstilahBisnis'
 import PatternBackground from '@/app/components/nusantara/PatternBackground'
 import NusantaraCanvas from '@/app/components/nusantara/NusantaraCanvas'
 import WayangModel from '@/app/components/nusantara/WayangModel'
@@ -16,7 +16,7 @@ import {
 
 // Komponen Batik Animasi 3D
 const BatikPattern3D = () => {
-  const meshRef = useRef<any>()
+  const meshRef = useRef<any>(null)
   
   useEffect(() => {
     if (meshRef.current) {
@@ -52,7 +52,9 @@ const WayangScene = () => {
       <pointLight position={[-10, -10, -5]} intensity={0.4} color="#fbbf24" />
       
       <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-        <WayangModel scale={1.5} position={[0, -0.5, 0]} />
+        <group position={[0, -0.5, 0]}>
+          <WayangModel scale={1.5} />
+        </group>
       </Float>
       
       <BatikPattern3D />
