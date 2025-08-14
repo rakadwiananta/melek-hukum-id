@@ -1,0 +1,92 @@
+[
+  {
+    "id": 36,
+    "term": "Cash Flow",
+    "category": "accounting",
+    "definition": "Aliran masuk dan keluar kas perusahaan",
+    "example": "Laporan arus kas tahunan menunjukkan kondisi likuiditas",
+    "relatedTerms": ["Arus Kas", "Cashflow", "Liquidity"],
+    "legalBasis": "PSAK 2"
+  },
+  {
+    "id": 37,
+    "term": "CEO",
+    "category": "corporate",
+    "definition": "Chief Executive Officer: Eksekutif tertinggi perusahaan",
+    "example": "CEO bertanggung jawab atas strategi perusahaan",
+    "relatedTerms": ["Direktur Utama", "Top Executive", "Chief"],
+    "legalBasis": "UU PT Pasal 92"
+  },
+  {
+    "id": 38,
+    "term": "Collateral",
+    "category": "finance",
+    "definition": "Aset yang dijaminkan untuk pinjaman",
+    "example": "Tanah sebagai collateral untuk kredit bank",
+    "relatedTerms": ["Agunan", "Jaminan", "Security"],
+    "legalBasis": "UU Jaminan Fidusia"
+  },
+  {
+    "id": 39,
+    "term": "Compliance",
+    "category": "compliance",
+    "definition": "Kepatuhan terhadap peraturan dan hukum",
+    "example": "Departemen compliance memastikan ketaatan regulasi",
+    "relatedTerms": ["Kepatuhan", "Regulatory Compliance", "Governance"],
+    "legalBasis": "GCG Guidelines"
+  },
+  {
+    "id": 40,
+    "term": "Contract",
+    "category": "contracts",
+    "definition": "Perjanjian yang mengikat secara hukum antara pihak-pihak",
+    "example": "Kontrak kerja sama bisnis selama 5 tahun",
+    "relatedTerms": ["Kontrak", "Agreement", "Perjanjian"],
+    "legalBasis": "KUH Perdata Pasal 1313"
+  },
+  {
+    "id": 41,
+    "term": "Copyright",
+    "category": "intellectual-property",
+    "definition": "Hak cipta atas karya seni, sastra, dan ilmu pengetahuan",
+    "example": "Copyright buku, musik, dan software",
+    "relatedTerms": ["Hak Cipta", "Intellectual Property", "IP"],
+    "legalBasis": "UU No. 28/2014"
+  },
+  {
+    "id": 42,
+    "term": "Corporate Governance",
+    "category": "compliance",
+    "definition": "Sistem tata kelola perusahaan yang baik",
+    "example": "Implementasi GCG di perusahaan publik",
+    "relatedTerms": ["GCG", "Tata Kelola", "Good Governance"],
+    "legalBasis": "Peraturan OJK"
+  },
+  {
+    "id": 43,
+    "term": "Credit Rating",
+    "category": "finance",
+    "definition": "Penilaian kelayakan kredit suatu entitas",
+    "example": "Rating AAA dari lembaga pemeringkat",
+    "relatedTerms": ["Pemeringkatan", "Rating", "Credit Score"],
+    "legalBasis": "Peraturan OJK"
+  },
+  {
+    "id": 44,
+    "term": "Due Diligence",
+    "category": "legal",
+    "definition": "Pemeriksaan menyeluruh sebelum transaksi bisnis",
+    "example": "Due diligence sebelum akuisisi perusahaan",
+    "relatedTerms": ["Uji Tuntas", "Investigation", "Review"],
+    "legalBasis": "Praktik Hukum Bisnis"
+  },
+  {
+    "id": 45,
+    "term": "Dividend",
+    "category": "finance",
+    "definition": "Pembagian laba perusahaan kepada pemegang saham",
+    "example": "Dividen tunai Rp 100 per saham",
+    "relatedTerms": ["Dividen", "Profit Distribution", "Payout"],
+    "legalBasis": "UU PT Pasal 70"
+  }
+]
