@@ -17,10 +17,10 @@ export function getFallbackImage(category?: string): string {
   return fallbackImages[categoryKey as keyof typeof fallbackImages] || fallbackImages.default
 }
 
-// Fungsi untuk memvalidasi dan memperbaiki URL gambar
+// Fungsi untuk memvalidasi URL gambar tanpa fallback
 export function validateAndFixImageUrl(imageUrl: string, category?: string): string {
   if (!imageUrl || imageUrl.trim() === '') {
-    return getFallbackImage(category)
+    return '' // Kembalikan string kosong jika tidak ada gambar
   }
 
   const cleanUrl = imageUrl.trim()
@@ -37,7 +37,7 @@ export function validateAndFixImageUrl(imageUrl: string, category?: string): str
     const isProblemmatic = problematicDomains.some(domain => cleanUrl.includes(domain))
     
     if (isProblemmatic) {
-      return getFallbackImage(category)
+      return '' // Kembalikan string kosong untuk URL bermasalah
     }
     
     return cleanUrl

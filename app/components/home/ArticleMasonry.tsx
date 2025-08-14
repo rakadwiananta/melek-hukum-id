@@ -176,35 +176,59 @@ export default function ArticleMasonry() {
               }`}
             >
               <Link href={`/artikel/${article.slug}`}>
-                <div className={`relative overflow-hidden ${article.featured ? 'h-80' : 'h-48'}`}>
-                  <Image
-                    src={article.featuredImage}
-                    alt={article.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">
-                      {article.category}
-                    </span>
-                  </div>
-                  {article.featured && (
-                    <div className="absolute top-4 right-4">
-                      <span className="px-3 py-1 bg-yellow-500 text-white text-sm font-medium rounded-full">
-                        ⭐ Featured
+                {article.featuredImage ? (
+                  <div className={`relative overflow-hidden ${article.featured ? 'h-80' : 'h-48'}`}>
+                    <Image
+                      src={article.featuredImage}
+                      alt={article.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">
+                        {article.category}
                       </span>
                     </div>
-                  )}
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className={`text-white font-semibold line-clamp-2 group-hover:text-green-200 transition-colors ${
-                      article.featured ? 'text-xl' : 'text-lg'
-                    }`}>
-                      {article.title}
-                    </h3>
+                    {article.featured && (
+                      <div className="absolute top-4 right-4">
+                        <span className="px-3 py-1 bg-yellow-500 text-white text-sm font-medium rounded-full">
+                          ⭐ Featured
+                        </span>
+                      </div>
+                    )}
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h3 className={`text-white font-semibold line-clamp-2 group-hover:text-green-200 transition-colors ${
+                        article.featured ? 'text-xl' : 'text-lg'
+                      }`}>
+                        {article.title}
+                      </h3>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className={`relative overflow-hidden bg-gradient-to-br from-green-100 to-teal-100 flex items-center justify-center ${article.featured ? 'h-80' : 'h-48'}`}>
+                    <div className="text-center p-4">
+                      <div className="mb-2">
+                        <span className="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">
+                          {article.category}
+                        </span>
+                      </div>
+                      {article.featured && (
+                        <div className="mb-2">
+                          <span className="px-3 py-1 bg-yellow-500 text-white text-sm font-medium rounded-full">
+                            ⭐ Featured
+                          </span>
+                        </div>
+                      )}
+                      <h3 className={`text-gray-800 font-semibold line-clamp-3 group-hover:text-green-600 transition-colors ${
+                        article.featured ? 'text-xl' : 'text-lg'
+                      }`}>
+                        {article.title}
+                      </h3>
+                    </div>
+                  </div>
+                )}
               </Link>
 
               <div className="p-4">

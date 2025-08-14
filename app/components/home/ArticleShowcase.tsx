@@ -148,29 +148,44 @@ export default function ArticleShowcase() {
               className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
             >
               <Link href={`/artikel/${article.slug}`}>
-                <div className="relative h-64 overflow-hidden">
-                  <Image
-                    src={article.featuredImage || '/timbangkan.jpg'}
-                    alt={article.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    priority={index < 6}
-                    loading={index < 6 ? 'eager' : 'lazy'}
-                    fetchPriority={index < 6 ? 'high' : 'auto'}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">
-                      {article.category}
-                    </span>
+                {article.featuredImage ? (
+                  <div className="relative h-64 overflow-hidden">
+                    <Image
+                      src={article.featuredImage}
+                      alt={article.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      priority={index < 6}
+                      loading={index < 6 ? 'eager' : 'lazy'}
+                      fetchPriority={index < 6 ? 'high' : 'auto'}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">
+                        {article.category}
+                      </span>
+                    </div>
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h3 className="text-white font-semibold text-lg line-clamp-2 group-hover:text-blue-200 transition-colors">
+                        {article.title}
+                      </h3>
+                    </div>
                   </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-white font-semibold text-lg line-clamp-2 group-hover:text-blue-200 transition-colors">
-                      {article.title}
-                    </h3>
+                ) : (
+                  <div className="relative h-64 overflow-hidden bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
+                    <div className="text-center p-6">
+                      <div className="mb-2">
+                        <span className="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">
+                          {article.category}
+                        </span>
+                      </div>
+                      <h3 className="text-gray-800 font-semibold text-lg line-clamp-3 group-hover:text-blue-600 transition-colors">
+                        {article.title}
+                      </h3>
+                    </div>
                   </div>
-                </div>
+                )}
               </Link>
 
               <div className="p-6">
@@ -257,20 +272,30 @@ export default function ArticleShowcase() {
                 className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="relative h-64">
-                  <Image
-                    src={selectedArticle.featuredImage || '/timbangkan.jpg'}
-                    alt={selectedArticle.title}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-primary text-white text-sm rounded-full">
-                      {selectedArticle.category}
-                    </span>
+                {selectedArticle.featuredImage ? (
+                  <div className="relative h-64">
+                    <Image
+                      src={selectedArticle.featuredImage}
+                      alt={selectedArticle.title}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 bg-primary text-white text-sm rounded-full">
+                        {selectedArticle.category}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="relative h-64 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
+                    <div className="text-center p-6">
+                      <span className="px-3 py-1 bg-primary text-white text-sm rounded-full mb-4 inline-block">
+                        {selectedArticle.category}
+                      </span>
+                    </div>
+                  </div>
+                )}
                 <div className="p-6">
                   <h3 className="text-xl font-bold mb-4">{selectedArticle.title}</h3>
                   <p className="text-gray-600 mb-4">{selectedArticle.excerpt}</p>
