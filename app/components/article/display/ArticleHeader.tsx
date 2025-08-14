@@ -255,7 +255,7 @@ export default function ArticleHeader({
 
 {/* Hero Title with 3D Layered Effect */}
 <div className="relative mb-8">
-  <h1 className="relative">
+  <h1 className="relative text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight">
     {/* Shadow layers for 3D effect */}
     <span className="absolute inset-0 text-5xl md:text-6xl lg:text-7xl font-black text-amber-200/30 transform translate-x-4 translate-y-4 blur-sm select-none" aria-hidden="true">
       {article.title}

@@ -29,7 +29,7 @@ export default function ArticleSchema({ article }: ArticleSchemaProps) {
     keywords: article.keywords?.join(', '),
     publisher: {
       '@type': 'Organization',
-      name: 'Melek Hukum ID',
+      name: 'Melek Hukum',
       logo: {
         '@type': 'ImageObject',
         url: `${process.env.NEXT_PUBLIC_SITE_URL}/timbangkan.jpg`,

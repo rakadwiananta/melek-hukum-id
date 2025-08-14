@@ -31,7 +31,7 @@ interface ArticleCardProps {
   index?: number
 }
 
-export default function ArticleCard({ article, variant = 'default', showStats = true, index = 0 }: ArticleCardProps) {
+export default function ArticleCard({ article, variant = 'default', showStats = true, index }: ArticleCardProps) {
   const getImage = (src?: string) => {
     const s = (src || '').trim()
     if (!s || s.includes('/images/articles/')) return '/timbangkan.jpg'
@@ -77,6 +77,9 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
 
   const popularity = getPopularityInfo(article.view_count, article.like_count, article.comment_count)
 
+  // Eager-load only for first few items when index is provided by parent
+  const shouldEagerLoad = typeof index === 'number' && index >= 0 && index < 6
+
   // Handle like action
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -113,7 +116,7 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
           controls.start({
             opacity: 1,
             y: 0,
-            transition: { duration: 0.6, delay: index * 0.1 }
+            transition: { duration: 0.6, delay: (typeof index === 'number' ? index : 0) * 0.1 }
           })
         }
       },
@@ -157,6 +160,10 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
                     alt={article.title}
                     fill
                     className="object-cover"
+                    priority={shouldEagerLoad}
+                    loading={shouldEagerLoad ? 'eager' : 'lazy'}
+                    fetchPriority={shouldEagerLoad ? 'high' : 'auto'}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 </motion.div>
                 
@@ -240,6 +247,7 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
                       alt={article.author || 'Author'}
                       fill
                       className="object-cover"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-white font-bold">

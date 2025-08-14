@@ -5,8 +5,8 @@ const isProduction = process.env.MIDTRANS_IS_PRODUCTION === 'true'
 const serverKey = process.env.MIDTRANS_SERVER_KEY || ''
 const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || ''
 
-if (!serverKey) {
-  // Jangan melempar error di build time; log saja untuk awareness
+if (!serverKey && process.env.NODE_ENV !== 'production') {
+  // Jangan melempar error di build time; log saja untuk awareness saat dev
   console.warn('[Midtrans] MIDTRANS_SERVER_KEY belum diset di environment.')
 }
 
