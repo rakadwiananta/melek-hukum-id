@@ -26,13 +26,8 @@ export function validateAndFixImageUrl(imageUrl: string, category?: string): str
 
   const cleanUrl = imageUrl.trim()
   
-  // Jika URL eksternal, cek apakah bermasalah
+  // Jika URL eksternal, kembalikan apa adanya (semua domain diizinkan)
   if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
-    // Hanya blokir domain yang benar-benar bermasalah
-    if (cleanUrl.includes('i.ibb.co.com')) {
-      return getFallbackImage(category)
-    }
-    // Kembalikan URL asli jika tidak bermasalah
     return cleanUrl
   }
   
