@@ -17,8 +17,11 @@ import {
   Award,
   PiggyBank,
   Landmark,
-  AlertTriangle
+  AlertTriangle,
+  ArrowRight,
+  BookOpen
 } from 'lucide-react'
+import Link from 'next/link'
 
 interface KategoriBisnisProps {
   searchQuery?: string
@@ -402,8 +405,11 @@ export default function KategoriBisnis({ searchQuery }: KategoriBisnisProps) {
   const { scrollY } = useScroll()
   const parallaxY = useTransform(scrollY, [0, 500], [0, -50])
 
+  // Debug logging
+  console.log('KategoriBisnis component rendered')
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+    <div className="relative">
       {/* Animated Background */}
       <motion.div
         style={{ y: parallaxY }}
@@ -509,6 +515,89 @@ export default function KategoriBisnis({ searchQuery }: KategoriBisnisProps) {
               <a href="/tools/kalkulator-pajak" className="text-purple-600 text-sm font-medium hover:underline">
                 Hitung Pajak →
               </a>
+            </div>
+          </motion.div>
+
+          {/* Navigation Card - Hukum Bisnis */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+            className="mt-8 relative z-50"
+          >
+            <div className="bg-white rounded-2xl shadow-2xl border-4 border-emerald-500 overflow-hidden hover:shadow-2xl transition-all duration-300">
+                              <div className="p-6">
+                  {/* Header Section */}
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="p-3 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl shadow-lg">
+                      <Briefcase className="h-8 w-8 text-white" />
+                    </div>
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-1">Hukum Bisnis</h2>
+                    <p className="text-gray-600">UU PT, Investasi & HAKI</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-3xl font-bold text-gray-900 mb-1">412</div>
+                    <div className="text-sm text-gray-500">istilah hukum</div>
+                    <button className="mt-2 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
+                      <ArrowRight className="h-4 w-4 text-gray-600" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Related Pages Section */}
+                <div className="border-t border-gray-100 pt-4">
+                  <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-3">
+                    HALAMAN TERKAIT:
+                  </h3>
+                  
+                  <div className="space-y-3">
+                    {/* Kategori Bisnis Link */}
+                    <Link 
+                      href="/kamus-hukum/kategori/bisnis"
+                      className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-emerald-100 transition-colors">
+                          <Building className="h-4 w-4 text-gray-600 group-hover:text-emerald-600" />
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900 group-hover:text-emerald-600 transition-colors">
+                            Kategori Bisnis
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            Overview lengkap hukum bisnis
+                          </div>
+                        </div>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
+                    </Link>
+
+                    {/* Istilah Bisnis Link */}
+                    <Link 
+                      href="/kamus-hukum/kategori/bisnis/istilah"
+                      className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-emerald-100 transition-colors">
+                          <BookOpen className="h-4 w-4 text-gray-600 group-hover:text-emerald-600" />
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900 group-hover:text-emerald-600 transition-colors">
+                            Istilah Bisnis
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            412 istilah hukum bisnis
+                          </div>
+                        </div>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
+                    </Link>
+
+
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
