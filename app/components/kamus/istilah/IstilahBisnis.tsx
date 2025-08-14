@@ -2800,11 +2800,13 @@ const businessLawTerms: BusinessLawTerm[] = [
   export const BusinessLawDictionary: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
-    const [selectedTerm, setSelectedTerm] = useState<BusinessLawTerm | null>(null);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [sortBy, setSortBy] = useState<'alphabetical' | 'category'>('alphabetical');
     const [bookmarkedTerms, setBookmarkedTerms] = useState<number[]>([]);
     const [showStats, setShowStats] = useState(true);
+    const [expandedTerms, setExpandedTerms] = useState<number[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(20);
     
     const { scrollY } = useScroll();
     const headerScale = useTransform(scrollY, [0, 100], [1, 0.98]);
@@ -2830,6 +2832,14 @@ const businessLawTerms: BusinessLawTerm[] = [
       setBookmarkedTerms(newBookmarks);
       localStorage.setItem('bookmarkedBusinessTerms', JSON.stringify(newBookmarks));
     };
+
+    const toggleExpanded = (id: number) => {
+      setExpandedTerms(prev => 
+        prev.includes(id) 
+          ? prev.filter(termId => termId !== id)
+          : [...prev, id]
+      );
+    };
   
     const filteredTerms = useMemo(() => {
       let terms = selectedCategory === 'all' 
@@ -2853,6 +2863,16 @@ const businessLawTerms: BusinessLawTerm[] = [
       
       return terms;
     }, [searchQuery, selectedCategory, sortBy]);
+
+    // Pagination logic
+    const totalPages = Math.ceil(filteredTerms.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedTerms = filteredTerms.slice(startIndex, startIndex + itemsPerPage);
+
+    // Reset to first page when filters change
+    useEffect(() => {
+      setCurrentPage(1);
+    }, [searchQuery, selectedCategory]);
   
     const categoryCounts = useMemo(() => businessLawUtils.getCategoryCounts(), []);
 
@@ -3088,34 +3108,37 @@ const businessLawTerms: BusinessLawTerm[] = [
               animate={{ opacity: 1 }}
               transition={{ delay: 0.9 }}
             >
-              Menampilkan <span className="text-emerald-600 font-bold">{filteredTerms.length}</span> istilah
+              Menampilkan <span className="text-emerald-600 font-bold">{startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredTerms.length)}</span> dari <span className="text-emerald-600 font-bold">{filteredTerms.length}</span> istilah
             </motion.p>
           </div>
         </div>
   
-        {/* Enhanced Terms Grid with 3D Cards */}
+        {/* Enhanced Terms Grid with 3D Cards and Inline Expand */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-8">
-          <div className={`grid gap-6 ${viewMode === 'grid' ? 'md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
-            {filteredTerms.map((term, index) => {
+          <div className="space-y-4">
+            {paginatedTerms.map((term, index) => {
               const Icon = categoryIcons[term.category] || Briefcase;
               const isBookmarked = bookmarkedTerms.includes(term.id);
+              const isExpanded = expandedTerms.includes(term.id);
               
               return (
-                <Card3D key={term.id} delay={Math.min(index * 0.05, 0.3)}>
+                <Card3D key={term.id} delay={Math.min(index * 0.02, 0.3)}>
                   <motion.div
-                    className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all cursor-pointer border border-emerald-100 overflow-hidden group"
-                    onClick={() => setSelectedTerm(term)}
-                    whileHover={{ scale: 1.01 }}
+                    className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all border border-emerald-100 overflow-hidden"
+                    layout
                   >
-                    {/* Card Header with gradient */}
-                    <div className="bg-gradient-to-r from-emerald-50 to-blue-50 p-4 border-b border-emerald-100">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-start gap-3">
+                    {/* Card Header - Clickable */}
+                    <div 
+                      className="bg-gradient-to-r from-emerald-50 to-blue-50 p-4 border-b border-emerald-100 cursor-pointer hover:from-emerald-100 hover:to-blue-100 transition-all"
+                      onClick={() => toggleExpanded(term.id)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
                           <div className="p-2 bg-white rounded-lg shadow-sm">
                             <Icon className="h-5 w-5 text-emerald-600" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="text-lg font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
+                            <h3 className="text-lg font-bold text-gray-900 hover:text-emerald-600 transition-colors">
                               {term.term}
                             </h3>
                             <span className={`inline-block mt-1 text-xs px-2 py-1 rounded-full ${getCategoryColor(term.category)}`}>
@@ -3124,154 +3147,179 @@ const businessLawTerms: BusinessLawTerm[] = [
                           </div>
                         </div>
                         
-                        {/* Bookmark button */}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleBookmark(term.id);
-                          }}
-                          className="p-1.5 hover:bg-white rounded-lg transition-all"
-                        >
-                          <Bookmark 
-                            className={`h-4 w-4 ${isBookmarked ? 'fill-emerald-500 text-emerald-500' : 'text-gray-400'}`}
-                          />
-                        </button>
+                        <div className="flex items-center gap-2">
+                          {/* Bookmark button */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleBookmark(term.id);
+                            }}
+                            className="p-1.5 hover:bg-white rounded-lg transition-all"
+                          >
+                            <Bookmark 
+                              className={`h-4 w-4 ${isBookmarked ? 'fill-emerald-500 text-emerald-500' : 'text-gray-400'}`}
+                            />
+                          </button>
+                          
+                          {/* Expand button */}
+                          <motion.div
+                            animate={{ rotate: isExpanded ? 180 : 0 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <ChevronDown className="h-5 w-5 text-gray-400" />
+                          </motion.div>
+                        </div>
                       </div>
                     </div>
                     
-                    {/* Card Body */}
+                    {/* Card Body - Always visible */}
                     <div className="p-4">
-                      <p className="text-gray-700 text-sm mb-3 line-clamp-3">
+                      <p className="text-gray-700 text-sm mb-3">
                         {term.definition}
                       </p>
-                      
-                      {term.example && (
-                        <div className="bg-emerald-50 rounded-lg p-3 mb-3">
-                          <p className="text-emerald-700 text-xs italic line-clamp-2">
-                            <span className="font-semibold">Contoh:</span> {term.example}
-                          </p>
-                        </div>
-                      )}
-                      
-                      {/* Legal Basis */}
-                      {term.legalBasis && (
-                        <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                          <Scale className="h-3 w-3" />
-                          <span className="truncate">{term.legalBasis}</span>
-                        </div>
-                      )}
-                      
-                      {/* Related Terms */}
-                      {term.relatedTerms && term.relatedTerms.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-3">
-                          {term.relatedTerms.slice(0, 3).map((rt, idx) => (
-                            <span
-                              key={idx}
-                              className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full"
-                            >
-                              {rt}
-                            </span>
-                          ))}
-                          {term.relatedTerms.length > 3 && (
-                            <span className="text-xs bg-emerald-100 text-emerald-600 px-2 py-1 rounded-full">
-                              +{term.relatedTerms.length - 3}
-                            </span>
-                          )}
-                        </div>
-                      )}
                     </div>
-                    
-                    {/* Card Footer */}
-                    <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
-                      <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span className="flex items-center gap-1">
-                          <Eye className="h-3 w-3" />
-                          Lihat Detail
-                        </span>
-                        <ChevronDown className="h-4 w-4 group-hover:translate-y-1 transition-transform" />
-                      </div>
-                    </div>
+
+                    {/* Expanded Content - Inline */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-4 pb-4 space-y-4">
+                            {/* Example */}
+                            {term.example && (
+                              <div className="bg-emerald-50 rounded-lg p-3">
+                                <h4 className="font-semibold text-emerald-700 mb-2 flex items-center gap-2">
+                                  <Lightbulb className="h-4 w-4" />
+                                  Contoh:
+                                </h4>
+                                <p className="text-emerald-700 text-sm italic">
+                                  {term.example}
+                                </p>
+                              </div>
+                            )}
+                            
+                            {/* Legal Basis */}
+                            {term.legalBasis && (
+                              <div className="bg-blue-50 rounded-lg p-3">
+                                <h4 className="font-semibold text-blue-700 mb-2 flex items-center gap-2">
+                                  <Scale className="h-4 w-4" />
+                                  Dasar Hukum:
+                                </h4>
+                                <p className="text-blue-700 text-sm">
+                                  {term.legalBasis}
+                                </p>
+                              </div>
+                            )}
+                            
+                            {/* Related Terms */}
+                            {term.relatedTerms && term.relatedTerms.length > 0 && (
+                              <div className="bg-purple-50 rounded-lg p-3">
+                                <h4 className="font-semibold text-purple-700 mb-2 flex items-center gap-2">
+                                  <Globe className="h-4 w-4" />
+                                  Istilah Terkait:
+                                </h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {term.relatedTerms.map((rt, idx) => (
+                                    <span
+                                      key={idx}
+                                      className="text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded-full border border-purple-200 hover:bg-purple-200 transition-colors cursor-pointer"
+                                    >
+                                      {rt}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Action Buttons */}
+                            <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                              <div className="flex items-center gap-4 text-xs text-gray-500">
+                                <span className="flex items-center gap-1">
+                                  <Eye className="h-3 w-3" />
+                                  ID: {term.id}
+                                </span>
+                              </div>
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard.writeText(`${term.term}: ${term.definition}`);
+                                }}
+                                className="flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 transition-colors"
+                              >
+                                <Share2 className="h-3 w-3" />
+                                Salin
+                              </button>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.div>
                 </Card3D>
               );
             })}
           </div>
-        </div>
-  
-        {/* Term Detail Modal */}
-        <AnimatePresence>
-          {selectedTerm && (
+
+          {/* Pagination */}
+          {totalPages > 1 && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-              onClick={() => setSelectedTerm(null)}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-8 flex items-center justify-center gap-2"
             >
-              <motion.div
-                initial={{ scale: 0.9, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.9, y: 20 }}
-                className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-                onClick={(e) => e.stopPropagation()}
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-white border border-emerald-200 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-emerald-50 transition-colors"
               >
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h2 className="text-2xl font-bold text-gray-900">{selectedTerm.term}</h2>
-                      <span className={`inline-block mt-2 text-xs px-2 py-1 rounded-full ${getCategoryColor(selectedTerm.category)}`}>
-                        {selectedTerm.category}
-                      </span>
-                    </div>
+                ← Sebelumnya
+              </button>
+              
+              <div className="flex gap-1">
+                {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 7) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 4) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 3) {
+                    pageNum = totalPages - 6 + i;
+                  } else {
+                    pageNum = currentPage - 3 + i;
+                  }
+                  
+                  return (
                     <button
-                      onClick={() => setSelectedTerm(null)}
-                      className="text-gray-400 hover:text-gray-600"
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`w-10 h-10 rounded-lg transition-colors ${
+                        currentPage === pageNum
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-white border border-emerald-200 hover:bg-emerald-50'
+                      }`}
                     >
-                      <X className="w-6 h-6" />
+                      {pageNum}
                     </button>
-                  </div>
-  
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-semibold text-gray-700 mb-1">Definisi</h3>
-                      <p className="text-gray-600">{selectedTerm.definition}</p>
-                    </div>
-  
-                    {selectedTerm.example && (
-                      <div>
-                        <h3 className="font-semibold text-gray-700 mb-1">Contoh</h3>
-                        <p className="text-gray-600 italic">{selectedTerm.example}</p>
-                      </div>
-                    )}
-  
-                    {selectedTerm.relatedTerms && selectedTerm.relatedTerms.length > 0 && (
-                      <div>
-                        <h3 className="font-semibold text-gray-700 mb-1">Istilah Terkait</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedTerm.relatedTerms.map((rt, idx) => (
-                            <span
-                              key={idx}
-                              className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full"
-                            >
-                              {rt}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-  
-                    {selectedTerm.legalBasis && (
-                      <div>
-                        <h3 className="font-semibold text-gray-700 mb-1">Dasar Hukum</h3>
-                        <p className="text-gray-600">{selectedTerm.legalBasis}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
+                  );
+                })}
+              </div>
+              
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-white border border-emerald-200 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-emerald-50 transition-colors"
+              >
+                Selanjutnya →
+              </button>
             </motion.div>
           )}
-        </AnimatePresence>
+        </div>
+  
+        
   
         {/* Export Buttons */}
         <div className="fixed bottom-6 right-6 flex gap-2">

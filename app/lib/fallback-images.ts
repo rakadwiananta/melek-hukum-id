@@ -17,37 +17,35 @@ export function getFallbackImage(category?: string): string {
   return fallbackImages[categoryKey as keyof typeof fallbackImages] || fallbackImages.default
 }
 
-// Fungsi untuk memvalidasi URL gambar dengan fallback yang lebih pintar
+// Fungsi untuk memvalidasi URL gambar - hanya ganti yang bermasalah
 export function validateAndFixImageUrl(imageUrl: string, category?: string): string {
+  // Jika tidak ada gambar, gunakan fallback
   if (!imageUrl || imageUrl.trim() === '') {
-    return getFallbackImage(category) // Gunakan fallback jika benar-benar kosong
+    return getFallbackImage(category)
   }
 
   const cleanUrl = imageUrl.trim()
   
-  // Cek jika URL adalah path lokal yang valid
+  // Jika URL eksternal, cek apakah bermasalah
+  if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
+    // Hanya blokir domain yang benar-benar bermasalah
+    if (cleanUrl.includes('i.ibb.co.com')) {
+      return getFallbackImage(category)
+    }
+    // Kembalikan URL asli jika tidak bermasalah
+    return cleanUrl
+  }
+  
+  // Jika path lokal, kembalikan apa adanya
   if (cleanUrl.startsWith('/')) {
     return cleanUrl
   }
   
-  // Cek jika URL eksternal valid
-  if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
-    // Blokir hanya domain yang benar-benar bermasalah
-    const problematicDomains = ['i.ibb.co.com']
-    const isProblemmatic = problematicDomains.some(domain => cleanUrl.includes(domain))
-    
-    if (isProblemmatic) {
-      return getFallbackImage(category) // Gunakan fallback untuk URL bermasalah
-    }
-    
-    return cleanUrl
-  }
-  
-  // Jika bukan URL valid tapi ada content, anggap sebagai path lokal
+  // Jika ada content tapi bukan URL/path, anggap sebagai path lokal
   if (cleanUrl.length > 0) {
-    return cleanUrl.startsWith('/') ? cleanUrl : `/${cleanUrl}`
+    return `/${cleanUrl}`
   }
   
-  // Fallback jika semua gagal
+  // Fallback terakhir
   return getFallbackImage(category)
 }
