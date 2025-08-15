@@ -6,6 +6,7 @@ import { formatDate } from '@/app/lib/utils'
 import { Clock, Eye, Tag, ArrowRight, TrendingUp, Award, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { ArticleCardImage } from '@/app/components/ui/ArticleImage'
+import { EnhancedArticleCardImage } from '@/app/components/ui/AdvancedArticleImage'
 
 interface ArticleFeaturedProps {
   limit?: number
@@ -201,11 +202,12 @@ export default function ArticleFeatured({
               <div className="flex flex-col md:flex-row">
                 <div className="md:w-2/5 h-64 md:h-auto relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-amber-600/20 z-10"></div>
-                  <ArticleCardImage
+                  <EnhancedArticleCardImage
                     src={article.featured_image}
                     alt={article.title}
                     category={article.category}
                     className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
+                    index={index}
                   />
                     
                     {/* Rank Badge */}

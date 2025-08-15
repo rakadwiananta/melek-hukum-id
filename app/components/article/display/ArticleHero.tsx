@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { TrendingUp, Award, Sparkles, Eye, Clock, ChevronRight, BarChart3, Users, AlertTriangle, Tag } from 'lucide-react'
 import Link from 'next/link'
 import { ArticleHeroImage, ArticleCardImage } from '@/app/components/ui/ArticleImage'
+import { EnhancedArticleHeroImage, EnhancedArticleCardImage } from '@/app/components/ui/AdvancedArticleImage'
 
 interface ArticleHeroProps {
   showLatest?: boolean
@@ -200,11 +201,12 @@ export default function ArticleHero({
             className="relative group"
           >
             <div className="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl">
-              <ArticleHeroImage
+              <EnhancedArticleHeroImage
                 src={featuredArticle.featured_image}
                 alt={featuredArticle.title}
                 category={featuredArticle.category}
                 className="object-cover group-hover:scale-110 transition-transform duration-1000"
+                index={0}
               />
               
               {/* Gradient Overlay */}
@@ -305,11 +307,12 @@ export default function ArticleHero({
                   <Link href={`/artikel/${article.slug}`}>
                     <div className="flex gap-4 p-4">
                       <div className="relative w-32 h-32 flex-shrink-0 rounded-xl overflow-hidden">
-                        <ArticleCardImage
+                        <EnhancedArticleCardImage
                           src={article.featured_image}
                           alt={article.title}
                           category={article.category}
                           className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          index={index + 1}
                         />
                         <div className="absolute top-2 left-2 bg-black/60 backdrop-blur text-white text-xs px-2 py-1 rounded-full font-bold">
                           #{index + 2}
@@ -388,11 +391,12 @@ export default function ArticleHero({
       >
         {/* Background Image with Parallax */}
         <div className="absolute inset-0 transform scale-110 group-hover:scale-125 transition-transform duration-1500">
-          <ArticleHeroImage
+          <EnhancedArticleHeroImage
             src={featuredArticle.featured_image}
             alt={featuredArticle.title}
             category={featuredArticle.category}
             className="object-cover"
+            index={0}
           />
         </div>
 

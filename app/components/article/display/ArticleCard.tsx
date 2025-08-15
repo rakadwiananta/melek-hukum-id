@@ -6,6 +6,7 @@ import { Clock, Eye, Tag, TrendingUp, Award, Flame, Heart, MessageCircle, Share2
 import { useState, useRef, useEffect } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import ArticleImage, { ArticleCardImage, ArticleHeroImage } from '@/app/components/ui/ArticleImage'
+import { EnhancedArticleCardImage, EnhancedArticleHeroImage } from '@/app/components/ui/AdvancedArticleImage'
 
 interface ArticleCardProps {
   article: {
@@ -148,12 +149,13 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
                   transition: { duration: 10, repeat: Infinity, repeatType: "reverse" }
                 }}
               >
-                <ArticleCardImage
+                <EnhancedArticleCardImage
                   src={article.featured_image}
                   alt={article.title}
                   category={article.category}
                   className="object-cover"
                   priority={shouldEagerLoad}
+                  index={index}
                 />
               </motion.div>
                 
@@ -317,11 +319,12 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
           <div className="relative h-[500px] rounded-2xl overflow-hidden">
             {/* Background image with parallax effect */}
             <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
-              <ArticleHeroImage
+              <EnhancedArticleHeroImage
                 src={article.featured_image}
                 alt={article.title}
                 category={article.category}
                 className="object-cover"
+                index={index}
               />
             </div>
             
