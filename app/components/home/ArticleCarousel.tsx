@@ -151,9 +151,11 @@ export default function ArticleCarousel() {
                       src={articles[currentIndex].featuredImage}
                       alt={articles[currentIndex].title}
                       category={articles[currentIndex].category}
-                      className="object-cover"
+                      fill={true}
+                      className="object-cover object-center w-full h-full"
                       priority={true}
                       index={currentIndex}
+                      sizes="100vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                     

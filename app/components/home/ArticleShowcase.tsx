@@ -154,9 +154,11 @@ export default function ArticleShowcase() {
                     src={article.featuredImage}
                     alt={article.title}
                     category={article.category}
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    fill={true}
+                    className="object-cover object-center w-full h-full group-hover:scale-105 transition-transform duration-300"
                     priority={index < 6}
                     index={index}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute top-4 left-4">
@@ -261,8 +263,10 @@ export default function ArticleShowcase() {
                     src={selectedArticle.featuredImage}
                     alt={selectedArticle.title}
                     category={selectedArticle.category}
-                    className="object-cover"
+                    fill={true}
+                    className="object-cover object-center w-full h-full"
                     priority={true}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute top-4 left-4">
