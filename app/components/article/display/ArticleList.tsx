@@ -47,7 +47,7 @@ export default function ArticleList({
   }
 }: ArticleListProps) {
   const [articles, setArticles] = useState<Article[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false) // Changed from true to false
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(0)
 
@@ -91,26 +91,8 @@ export default function ArticleList({
     fetchArticles(nextPage)
   }
 
-  if (loading && articles.length === 0) {
-    return (
-      <div className="space-y-6">
-        {showHeader && (
-          <div className="text-center">
-            <h2 className="text-2xl font-bold">{headerTitle}</h2>
-          </div>
-        )}
-        <div className="space-y-4">
-          {[...Array(limit)].map((_, index) => (
-            <div key={index} className="animate-pulse">
-              <div className="h-20 bg-gray-200 rounded"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }
-
-  if (articles.length === 0) {
+  // Removed loading skeleton - show empty state or articles immediately
+  if (articles.length === 0 && !loading) {
     return (
       <div className="space-y-6">
         {showHeader && (
@@ -153,30 +135,32 @@ export default function ArticleList({
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-2">
                   {article.category && (
-                    <span className="inline-flex items-center px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">
-                      <Tag className="h-3 w-3 mr-1" />
+                    <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-amber-700 bg-amber-100 rounded-full">
+                      <Tag className="h-3 w-3" />
                       {article.category}
                     </span>
                   )}
-                  <time dateTime={article.published_at} className="text-xs text-gray-500 flex items-center gap-1">
-                    <Clock className="h-3 w-3" />
-                    {formatDate(article.published_at)}
-                  </time>
                 </div>
                 
-                <Link href={`/artikel/${article.slug}`}>
-                  <h3 className="font-semibold text-lg mb-2 hover:text-primary transition-colors line-clamp-2">
+                <Link 
+                  href={`/artikel/${article.slug}`}
+                  className="block group"
+                >
+                  <h3 className="font-semibold text-gray-900 group-hover:text-amber-700 transition-colors line-clamp-2 mb-2">
                     {article.title}
                   </h3>
                 </Link>
                 
-                <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                <p className="text-sm text-gray-600 line-clamp-2 mb-3">
                   {article.excerpt}
                 </p>
                 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4 text-xs text-gray-500">
-                    <span>{article.author}</span>
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <div className="flex items-center gap-4">
+                    <span className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      {formatDate(article.published_at)}
+                    </span>
                     <span className="flex items-center gap-1">
                       <Eye className="h-3 w-3" />
                       {article.view_count.toLocaleString()}
@@ -185,10 +169,10 @@ export default function ArticleList({
                   
                   <Link 
                     href={`/artikel/${article.slug}`}
-                    className="flex items-center gap-1 text-primary hover:text-primary-600 text-sm font-medium"
+                    className="flex items-center gap-1 text-amber-600 hover:text-amber-700 transition-colors font-medium"
                   >
-                    Baca Artikel
-                    <ArrowRight className="h-4 w-4" />
+                    Baca
+                    <ArrowRight className="h-3 w-3" />
                   </Link>
                 </div>
               </div>
@@ -196,13 +180,13 @@ export default function ArticleList({
           </div>
         ))}
       </div>
-      
+
       {showLoadMore && hasMore && (
-        <div className="text-center pt-8">
+        <div className="text-center">
           <button
             onClick={handleLoadMore}
             disabled={loading}
-            className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50"
+            className="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {loading ? 'Memuat...' : 'Muat Lebih Banyak'}
           </button>
