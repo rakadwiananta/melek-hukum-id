@@ -7,15 +7,14 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const navigation = [
-    { name: 'Beranda', href: '/' },
-    { name: 'Artikel', href: '/artikel' },
-    { name: 'Semua Artikel', href: '/artikel/semua' },
-    { name: 'Kamus Hukum', href: '/kamus-hukum' },
-    { name: 'Solusi', href: '/solusi' },
-    { name: 'Regulasi', href: '/regulasi' },
-    { name: 'Anti Korupsi', href: '/anti-korupsi' },
-    { name: 'Panduan', href: '/panduan' },
-  ]
+  { name: 'Beranda', href: '/' },
+  { name: 'Artikel', href: '/artikel' },
+  { name: 'Kamus Hukum', href: '/kamus-hukum' },
+  { name: 'Solusi', href: '/solusi' },
+  { name: 'Regulasi', href: '/regulasi' },
+  { name: 'Anti Korupsi', href: '/anti-korupsi' },
+  { name: 'Panduan', href: '/panduan' },
+]
 
   return (
     <header className="bg-white shadow-sm border-b relative z-50">
