@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react'
 import { Search, Filter, Scale, Gavel, FileText, Users, BookOpen, Award, TrendingUp } from 'lucide-react'
-import { motion } from 'framer-motion'
 
 // Lazy load heavy components
 const ArticleList = lazy(() => import('@/app/components/article/display/ArticleList'))
@@ -48,7 +47,7 @@ const ArticleLoader = () => (
   </div>
 )
 
-// Optimized Statistics Component
+// Lightweight Statistics Component with CSS animations
 function Statistics() {
   const stats = [
     { icon: FileText, label: 'Total Artikel', value: '13', color: 'from-blue-500 to-blue-600' },
@@ -59,26 +58,19 @@ function Statistics() {
 
   return (
     <div className="mb-12">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-center mb-8"
-      >
+      <div className="text-center mb-8 animate-fade-in">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Statistik Artikel</h2>
         <p className="text-gray-600 max-w-2xl mx-auto">
           Data terkini mengenai artikel hukum dan interaksi pengguna di platform kami
         </p>
-      </motion.div>
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
-          <motion.div
+          <div
             key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1, duration: 0.5 }}
-            className="group"
+            className="group animate-fade-in"
+            style={{ animationDelay: `${index * 100}ms` }}
           >
             <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 h-full border border-gray-100 hover:border-gray-200">
               <div className="flex flex-col items-center text-center space-y-4">
@@ -91,7 +83,7 @@ function Statistics() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>
@@ -128,51 +120,36 @@ export default function ArtikelPage() {
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-brown-600 via-amber-600 to-red-600 opacity-90"></div>
         <div className="absolute inset-0">
-          <div className="absolute top-10 left-10 opacity-10">
+          <div className="absolute top-10 left-10 opacity-10 animate-bounce">
             <Scale className="h-24 w-24 text-white transform rotate-12" />
           </div>
-          <div className="absolute top-20 right-16 opacity-10">
+          <div className="absolute top-20 right-16 opacity-10 animate-pulse" style={{ animationDelay: '1s' }}>
             <Gavel className="h-20 w-20 text-white transform -rotate-12" />
           </div>
-          <div className="absolute bottom-10 left-1/3 opacity-10">
+          <div className="absolute bottom-10 left-1/3 opacity-10 animate-bounce" style={{ animationDelay: '2s' }}>
             <FileText className="h-28 w-28 text-white transform rotate-6" />
           </div>
-          <div className="absolute bottom-16 right-1/4 opacity-10">
+          <div className="absolute bottom-16 right-1/4 opacity-10 animate-pulse" style={{ animationDelay: '3s' }}>
             <Users className="h-22 w-22 text-white transform -rotate-6" />
           </div>
         </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 md:py-24">
           <div className="text-center text-white">
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
-            >
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight animate-fade-in">
               Artikel Hukum Indonesia
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed"
-            >
+            </h1>
+            <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '200ms' }}>
               Temukan artikel hukum terbaru, referensi resmi, dan analisis perundang-undangan 
               dengan gaya Nusantara yang mudah dipahami
-            </motion.p>
+            </p>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-12">
         {/* Search & Filter Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mb-12"
-        >
+        <div className="mb-12 animate-fade-in" style={{ animationDelay: '300ms' }}>
           <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl p-8 border border-white/20">
             <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
               <div className="flex-1 w-full lg:max-w-2xl">
@@ -188,17 +165,13 @@ export default function ArtikelPage() {
                 </div>
               </div>
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-brown-600 to-amber-600 text-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 font-semibold text-lg whitespace-nowrap"
-              >
+              <button className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-brown-600 to-amber-600 text-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 font-semibold text-lg whitespace-nowrap transform hover:scale-105">
                 <Filter className="h-6 w-6" />
                 <span>Filter Lanjutan</span>
-              </motion.button>
+              </button>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Statistics Section */}
         <Statistics />
@@ -207,12 +180,7 @@ export default function ArtikelPage() {
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
           {/* Articles Section */}
           <div className="xl:col-span-8">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-              className="mb-8"
-            >
+            <div className="mb-8 animate-fade-in" style={{ animationDelay: '400ms' }}>
               <Suspense fallback={<ComponentLoader />}>
                 {componentsLoaded && (
                   <ArticleFilter
@@ -234,13 +202,9 @@ export default function ArtikelPage() {
                   />
                 )}
               </Suspense>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
+            <div className="animate-fade-in" style={{ animationDelay: '500ms' }}>
               <Suspense fallback={<ArticleLoader />}>
                 {componentsLoaded && (
                   <ArticleList
@@ -250,22 +214,14 @@ export default function ArtikelPage() {
                   />
                 )}
               </Suspense>
-            </motion.div>
+            </div>
           </div>
 
           {/* Sidebar */}
           <div className="xl:col-span-4">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-              className="sticky top-8 space-y-8"
-            >
+            <div className="sticky top-8 space-y-8 animate-fade-in" style={{ animationDelay: '600ms' }}>
               {/* Article Stats Card */}
-              <motion.div
-                whileHover={{ y: -2 }}
-                className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
-              >
+              <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6">
                   <h3 className="text-xl font-bold text-white flex items-center gap-2">
                     <TrendingUp className="h-6 w-6" />
@@ -277,13 +233,10 @@ export default function ArtikelPage() {
                     {componentsLoaded && <ArticleStats />}
                   </Suspense>
                 </div>
-              </motion.div>
+              </div>
 
               {/* Popular Articles Card */}
-              <motion.div
-                whileHover={{ y: -2 }}
-                className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
-              >
+              <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <div className="bg-gradient-to-r from-green-500 to-green-600 p-6">
                   <h3 className="text-xl font-bold text-white flex items-center gap-2">
                     <Award className="h-6 w-6" />
@@ -295,13 +248,10 @@ export default function ArtikelPage() {
                     {componentsLoaded && <PopularArticles limit={5} />}
                   </Suspense>
                 </div>
-              </motion.div>
+              </div>
 
               {/* Newsletter Card */}
-              <motion.div
-                whileHover={{ y: -2 }}
-                className="bg-gradient-to-br from-amber-100 via-amber-50 to-brown-100 rounded-2xl shadow-lg border border-amber-200 overflow-hidden"
-              >
+              <div className="bg-gradient-to-br from-amber-100 via-amber-50 to-brown-100 rounded-2xl shadow-lg border border-amber-200 overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <div className="bg-gradient-to-r from-amber-500 to-brown-500 p-6">
                   <h3 className="text-xl font-bold text-white flex items-center gap-2">
                     <Users className="h-6 w-6" />
@@ -313,8 +263,8 @@ export default function ArtikelPage() {
                     {componentsLoaded && <ArticleNewsletter />}
                   </Suspense>
                 </div>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
