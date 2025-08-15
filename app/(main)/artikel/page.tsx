@@ -1,21 +1,60 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import ArticleList from '@/app/components/article/display/ArticleList'
-import ArticleFilter, { FilterState } from '@/app/components/article/meta/CategoryFilter'
-import PopularArticles from '@/app/components/article/display/PopularArticles'
-import ArticleStats from '@/app/components/article/meta/ArticleStats'
-import ArticleNewsletter from '@/app/components/article/meta/ArticleNewsletter'
+import React, { useState, useEffect, lazy, Suspense } from 'react'
 import { Search, Filter, Scale, Gavel, FileText, Users, BookOpen, Award, TrendingUp } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-// Improved Statistics Component with better symmetry
+// Lazy load heavy components
+const ArticleList = lazy(() => import('@/app/components/article/display/ArticleList'))
+const ArticleFilter = lazy(() => import('@/app/components/article/meta/CategoryFilter'))
+const PopularArticles = lazy(() => import('@/app/components/article/display/PopularArticles'))
+const ArticleStats = lazy(() => import('@/app/components/article/meta/ArticleStats'))
+const ArticleNewsletter = lazy(() => import('@/app/components/article/meta/ArticleNewsletter'))
+
+// Import types only
+import type { FilterState } from '@/app/components/article/meta/CategoryFilter'
+
+// Loading components
+const ComponentLoader = ({ className = '' }: { className?: string }) => (
+  <div className={`animate-pulse ${className}`}>
+    <div className="bg-gray-200 rounded-lg h-8 mb-4"></div>
+    <div className="space-y-2">
+      <div className="bg-gray-200 rounded h-4"></div>
+      <div className="bg-gray-200 rounded h-4 w-3/4"></div>
+    </div>
+  </div>
+)
+
+const ArticleLoader = () => (
+  <div className="space-y-6">
+    {[...Array(3)].map((_, i) => (
+      <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="flex flex-col md:flex-row">
+          <div className="md:w-80 md:flex-shrink-0">
+            <div className="h-48 md:h-full w-full bg-gray-200 animate-pulse"></div>
+          </div>
+          <div className="flex-1 p-6 md:p-8">
+            <div className="space-y-4">
+              <div className="bg-gray-200 rounded h-6 w-3/4 animate-pulse"></div>
+              <div className="space-y-2">
+                <div className="bg-gray-200 rounded h-4 animate-pulse"></div>
+                <div className="bg-gray-200 rounded h-4 w-5/6 animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+)
+
+// Optimized Statistics Component
 function Statistics() {
   const stats = [
-    { icon: FileText, label: 'Total Artikel', value: '13', color: 'from-blue-500 to-blue-600', textColor: 'text-blue-600' },
-    { icon: TrendingUp, label: 'Total Views', value: '6.953', color: 'from-green-500 to-green-600', textColor: 'text-green-600' },
-    { icon: Award, label: 'Total Likes', value: '399', color: 'from-red-500 to-red-600', textColor: 'text-red-600' },
-    { icon: BookOpen, label: 'Rata-rata Views', value: '535', color: 'from-purple-500 to-purple-600', textColor: 'text-purple-600' }
+    { icon: FileText, label: 'Total Artikel', value: '13', color: 'from-blue-500 to-blue-600' },
+    { icon: TrendingUp, label: 'Total Views', value: '6.953', color: 'from-green-500 to-green-600' },
+    { icon: Award, label: 'Total Likes', value: '399', color: 'from-red-500 to-red-600' },
+    { icon: BookOpen, label: 'Rata-rata Views', value: '535', color: 'from-purple-500 to-purple-600' }
   ]
 
   return (
@@ -59,7 +98,7 @@ function Statistics() {
   )
 }
 
-// Main Page Component with improved layout
+// Main Page Component
 export default function ArtikelPage() {
   const [filters, setFilters] = useState<FilterState>({
     category: null,
@@ -69,15 +108,23 @@ export default function ArtikelPage() {
   })
 
   const [searchQuery, setSearchQuery] = useState('')
+  const [componentsLoaded, setComponentsLoaded] = useState(false)
+
+  // Load heavy components after initial render
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setComponentsLoaded(true)
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleFilterChange = (newFilters: FilterState) => {
     setFilters(newFilters)
-    console.log('Filters changed:', newFilters)
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-brown-50">
-      {/* Hero Header with better symmetry */}
+      {/* Hero Header */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-brown-600 via-amber-600 to-red-600 opacity-90"></div>
         <div className="absolute inset-0">
@@ -119,7 +166,7 @@ export default function ArtikelPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* Search & Filter Section with better alignment */}
+        {/* Search & Filter Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -156,9 +203,9 @@ export default function ArtikelPage() {
         {/* Statistics Section */}
         <Statistics />
 
-        {/* Main Content Grid with improved symmetry */}
+        {/* Main Content Grid */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
-          {/* Articles Section - Better responsive width */}
+          {/* Articles Section */}
           <div className="xl:col-span-8">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -166,23 +213,27 @@ export default function ArtikelPage() {
               transition={{ delay: 0.4 }}
               className="mb-8"
             >
-              <ArticleFilter
-                categories={[
-                  'Hukum Pidana',
-                  'Hukum Perdata',
-                  'Hukum Tata Negara',
-                  'Hukum Administrasi',
-                  'Hukum Dagang',
-                  'Hukum Adat'
-                ]}
-                authors={[
-                  'Prof. Dr. Jimly Asshiddiqie, S.H.',
-                  'Prof. Dr. Satjipto Rahardjo, S.H.',
-                  'Dr. Todung Mulya Lubis, S.H., LL.M.',
-                  'Tim Melek Hukum'
-                ]}
-                onFilterChange={handleFilterChange}
-              />
+              <Suspense fallback={<ComponentLoader />}>
+                {componentsLoaded && (
+                  <ArticleFilter
+                    categories={[
+                      'Hukum Pidana',
+                      'Hukum Perdata',
+                      'Hukum Tata Negara',
+                      'Hukum Administrasi',
+                      'Hukum Dagang',
+                      'Hukum Adat'
+                    ]}
+                    authors={[
+                      'Prof. Dr. Jimly Asshiddiqie, S.H.',
+                      'Prof. Dr. Satjipto Rahardjo, S.H.',
+                      'Dr. Todung Mulya Lubis, S.H., LL.M.',
+                      'Tim Melek Hukum'
+                    ]}
+                    onFilterChange={handleFilterChange}
+                  />
+                )}
+              </Suspense>
             </motion.div>
 
             <motion.div
@@ -190,15 +241,19 @@ export default function ArtikelPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <ArticleList
-                searchQuery={searchQuery}
-                filters={filters}
-                limit={13}
-              />
+              <Suspense fallback={<ArticleLoader />}>
+                {componentsLoaded && (
+                  <ArticleList
+                    searchQuery={searchQuery}
+                    filters={filters}
+                    limit={13}
+                  />
+                )}
+              </Suspense>
             </motion.div>
           </div>
 
-          {/* Sidebar with better proportions */}
+          {/* Sidebar */}
           <div className="xl:col-span-4">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -218,7 +273,9 @@ export default function ArtikelPage() {
                   </h3>
                 </div>
                 <div className="p-6">
-                  <ArticleStats />
+                  <Suspense fallback={<ComponentLoader />}>
+                    {componentsLoaded && <ArticleStats />}
+                  </Suspense>
                 </div>
               </motion.div>
 
@@ -234,7 +291,9 @@ export default function ArtikelPage() {
                   </h3>
                 </div>
                 <div className="p-6">
-                  <PopularArticles limit={5} />
+                  <Suspense fallback={<ComponentLoader />}>
+                    {componentsLoaded && <PopularArticles limit={5} />}
+                  </Suspense>
                 </div>
               </motion.div>
 
@@ -250,7 +309,9 @@ export default function ArtikelPage() {
                   </h3>
                 </div>
                 <div className="p-6">
-                  <ArticleNewsletter />
+                  <Suspense fallback={<ComponentLoader />}>
+                    {componentsLoaded && <ArticleNewsletter />}
+                  </Suspense>
                 </div>
               </motion.div>
             </motion.div>

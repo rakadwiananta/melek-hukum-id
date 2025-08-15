@@ -6,155 +6,115 @@
 import { supabase } from './supabase'
 import { useState } from 'react'
 
-export interface ImageConfig {
-  src?: string
-  fallback?: string
-  category?: string
-}
-
-// Fallback images berdasarkan kategori
+// Optimized image utilities for better performance
 export const FALLBACK_IMAGES = {
-  'anti-korupsi': '/illustrations/blog-kejaksaan.jpeg',
-  'regulasi': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',
-  'solusi': '/timbangkan.jpg',
-  'kamus-hukum': '/timbangkan.jpg',
-  'hukum-pidana': '/timbangkan.jpg',
-  'hukum-perdata': '/timbangkan.jpg',
-  'hukum-tata-negara': '/timbangkan.jpg',
-  'default': '/timbangkan.jpg'
+  default: '/illustrations/National_emblem_of_Indonesia_Garuda_Pancasila.svg.webp',
+  'Hukum Pidana': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',
+  'Hukum Perdata': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',
+  'Hukum Tata Negara': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',
+  'Hukum Administrasi': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',
+  'Hukum Dagang': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',
+  'Hukum Adat': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',
 }
 
-/**
- * Mendapatkan URL gambar yang valid dengan fallback
- */
-export function getValidImageUrl(config: ImageConfig): string {
-  const { src, category, fallback } = config
-  
-  // Jika tidak ada src, gunakan fallback berdasarkan kategori
+interface ImageUrlOptions {
+  src?: string
+  category?: string
+  width?: number
+  height?: number
+}
+
+export function getValidImageUrl({ src, category, width = 800, height = 600 }: ImageUrlOptions): string {
+  // If no source provided, use category fallback
   if (!src?.trim()) {
-    return getCategoryFallback(category) || fallback || FALLBACK_IMAGES.default
+    return category && FALLBACK_IMAGES[category as keyof typeof FALLBACK_IMAGES] 
+      ? FALLBACK_IMAGES[category as keyof typeof FALLBACK_IMAGES]
+      : FALLBACK_IMAGES.default
   }
 
-  const cleanSrc = src.trim()
+  const trimmedSrc = src.trim()
   
-  // Jika gambar dari path lama atau invalid, gunakan fallback
-  if (cleanSrc.includes('/images/articles/') || cleanSrc === '/timbangkan.jpg') {
-    return getCategoryFallback(category) || fallback || FALLBACK_IMAGES.default
+  // Handle data URLs
+  if (trimmedSrc.startsWith('data:')) {
+    return trimmedSrc
   }
-
-  // Jika URL absolut (Supabase storage), return as is
-  if (cleanSrc.startsWith('http://') || cleanSrc.startsWith('https://')) {
-    return cleanSrc
+  
+  // Handle absolute URLs
+  if (trimmedSrc.startsWith('http://') || trimmedSrc.startsWith('https://')) {
+    return trimmedSrc
   }
-
-  // Jika path relatif, pastikan dimulai dengan /
-  if (cleanSrc.startsWith('/')) {
-    return cleanSrc
+  
+  // Handle relative URLs - ensure they start with /
+  if (!trimmedSrc.startsWith('/')) {
+    return `/${trimmedSrc}`
   }
-
-  return `/${cleanSrc}`
+  
+  return trimmedSrc
 }
 
-/**
- * Mendapatkan fallback image berdasarkan kategori
- */
-function getCategoryFallback(category?: string): string {
-  if (!category) return FALLBACK_IMAGES.default
-  return FALLBACK_IMAGES[category as keyof typeof FALLBACK_IMAGES] || FALLBACK_IMAGES.default
-}
-
-/**
- * Mengecek apakah gambar dapat diakses
- */
 export async function validateImageUrl(url: string): Promise<boolean> {
   try {
-    const response = await fetch(url, { method: 'HEAD' })
-    return response.ok
-  } catch {
+    // Skip validation for data URLs and fallback images
+    if (url.startsWith('data:') || Object.values(FALLBACK_IMAGES).includes(url)) {
+      return true
+    }
+
+    // Use a lightweight HEAD request to check if image exists
+    const response = await fetch(url, { 
+      method: 'HEAD',
+      cache: 'force-cache',
+      // Add timeout to avoid hanging requests
+      signal: AbortSignal.timeout(3000)
+    })
+    
+    return response.ok && (response.headers.get('content-type')?.startsWith('image/') || false)
+  } catch (error) {
+    console.warn('Image validation failed:', url, error)
     return false
   }
 }
 
-/**
- * Hook untuk menangani loading dan error state gambar
- */
-export function useImageState(initialSrc: string) {
-  const [src, setSrc] = useState(initialSrc)
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
-
-  const handleLoad = () => {
-    setIsLoading(false)
-    setHasError(false)
-  }
-
-  const handleError = () => {
-    setIsLoading(false)
-    setHasError(true)
-    // Set fallback image on error
-    setSrc(FALLBACK_IMAGES.default)
-  }
-
-  return {
-    src,
-    isLoading,
-    hasError,
-    handleLoad,
-    handleError
-  }
+// Generate optimized placeholder
+export function generatePlaceholder(width: number = 400, height: number = 300, text: string = 'Melek Hukum ID'): string {
+  const svg = `
+    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">
+      <defs>
+        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#dc2626;stop-opacity:0.8" />
+          <stop offset="100%" style="stop-color:#b91c1c;stop-opacity:0.6" />
+        </linearGradient>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grad)" />
+      <text x="50%" y="45%" text-anchor="middle" fill="white" font-family="system-ui" font-size="18" font-weight="600">
+        ${text}
+      </text>
+      <text x="50%" y="60%" text-anchor="middle" fill="white" font-family="system-ui" font-size="14" opacity="0.8">
+        Artikel Hukum Indonesia
+      </text>
+    </svg>
+  `
+  return `data:image/svg+xml;base64,${btoa(svg)}`
 }
 
-/**
- * Mendapatkan URL gambar dari Supabase Storage
- */
-export function getSupabaseImageUrl(path: string, bucket: string = 'articles'): string | null {
-  if (!supabase) return null
+// Optimize image loading with Next.js Image component
+export function getOptimizedImageProps(src?: string, alt: string = '', width?: number, height?: number) {
+  const optimizedSrc = getValidImageUrl({ src, width, height })
   
-  try {
-    const { data } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(path)
-    
-    return data.publicUrl
-  } catch (error) {
-    console.error('Error getting Supabase image URL:', error)
-    return null
+  return {
+    src: optimizedSrc,
+    alt,
+    width: width || 800,
+    height: height || 600,
+    quality: 75,
+    placeholder: 'blur' as const,
+    blurDataURL: generatePlaceholder(width, height, alt.slice(0, 20)),
+    sizes: width && width < 400 
+      ? '(max-width: 640px) 100vw, 400px'
+      : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
   }
 }
 
-/**
- * Mengupload gambar ke Supabase Storage
- */
-export async function uploadImageToSupabase(
-  file: File, 
-  path: string, 
-  bucket: string = 'articles'
-): Promise<string | null> {
-  if (!supabase) return null
-
-  try {
-    const { data, error } = await supabase.storage
-      .from(bucket)
-      .upload(path, file, {
-        cacheControl: '3600',
-        upsert: true
-      })
-
-    if (error) {
-      console.error('Error uploading image:', error)
-      return null
-    }
-
-    return getSupabaseImageUrl(data.path, bucket)
-  } catch (error) {
-    console.error('Error uploading image:', error)
-    return null
-  }
-}
-
-/**
- * Preload gambar untuk performa yang lebih baik
- */
+// Image preloader for critical images
 export function preloadImage(src: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -164,14 +124,19 @@ export function preloadImage(src: string): Promise<void> {
   })
 }
 
-/**
- * Batch preload multiple images
- */
-export async function preloadImages(urls: string[]): Promise<void> {
-  const promises = urls.map(url => preloadImage(url))
-  try {
-    await Promise.allSettled(promises)
-  } catch (error) {
-    console.warn('Some images failed to preload:', error)
+// Lazy load images with Intersection Observer
+export function createImageObserver(callback: (entry: IntersectionObserverEntry) => void) {
+  if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+    return null
   }
+
+  return new IntersectionObserver(
+    (entries) => {
+      entries.forEach(callback)
+    },
+    {
+      rootMargin: '50px 0px',
+      threshold: 0.1
+    }
+  )
 }
