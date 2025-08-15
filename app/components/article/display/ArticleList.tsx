@@ -8,6 +8,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { FilterState } from '@/app/components/article/meta/CategoryFilter'
 import { getArticles } from '@/app/lib/articles'
+import { RobustArticleCardImage } from '@/app/components/ui/RobustArticleImage'
 
 interface ArticleListProps {
   category?: string
@@ -133,19 +134,18 @@ export default function ArticleList({
       )}
       
       <div className="space-y-4">
-        {articles.map((article) => (
+        {articles.map((article, index) => (
           <div key={article.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4">
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden">
                 <div className="relative w-20 h-20">
-                  <Image
-                    src={article.featured_image || '/timbangkan.jpg'}
+                  <RobustArticleCardImage
+                    src={article.featured_image}
                     alt={article.title}
-                    fill
+                    category={article.category}
                     className="object-cover"
-                    loading="eager"
-                    fetchPriority="high"
-                    sizes="80px"
+                    priority={index < 3}
+                    index={index}
                   />
                 </div>
               </div>

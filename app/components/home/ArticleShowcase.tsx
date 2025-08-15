@@ -8,6 +8,7 @@ import { Calendar, Clock, Eye, Heart, Share2, ChevronRight, BookOpen } from 'luc
 import { formatDate, calculateReadingTime } from '@/app/lib/utils'
 import { supabase } from '@/app/lib/supabase'
 import { validateAndFixImageUrl } from '@/app/lib/fallback-images'
+import { RobustArticleCardImage } from '@/app/components/ui/RobustArticleImage'
 
 interface Article {
   id: string
@@ -149,15 +150,13 @@ export default function ArticleShowcase() {
             >
               <Link href={`/artikel/${article.slug}`}>
                 <div className="relative h-64 overflow-hidden">
-                  <Image
+                  <RobustArticleCardImage
                     src={article.featuredImage}
                     alt={article.title}
-                    fill
+                    category={article.category}
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                     priority={index < 6}
-                    loading={index < 6 ? 'eager' : 'lazy'}
-                    fetchPriority={index < 6 ? 'high' : 'auto'}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    index={index}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute top-4 left-4">
@@ -258,11 +257,12 @@ export default function ArticleShowcase() {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="relative h-64">
-                  <Image
+                  <RobustArticleCardImage
                     src={selectedArticle.featuredImage}
                     alt={selectedArticle.title}
-                    fill
+                    category={selectedArticle.category}
                     className="object-cover"
+                    priority={true}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute top-4 left-4">

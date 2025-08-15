@@ -464,15 +464,10 @@ export default function ArtikelPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <InfiniteArticleList
+              <ArticleList
                 searchQuery={searchQuery}
                 filters={filters}
-                showHeader={true}
-                headerTitle="Semua Artikel Hukum"
-                autoLoadAll={false}
-                maxArticles={2000}
-                batchSize={20}
-                variant="list"
+                limit={13}
               />
             </motion.div>
           </div>
