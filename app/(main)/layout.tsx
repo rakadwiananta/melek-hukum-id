@@ -10,6 +10,8 @@ import { ToastProvider } from '@/app/components/ui/use-toast'
 import PerformanceMonitor from '@/app/components/PerformanceMonitor'
 import ServiceWorkerProvider from '@/app/components/providers/ServiceWorkerProvider'
 import ImagePerformanceMonitor from '@/app/components/debug/ImagePerformanceMonitor'
+import PerformanceDashboard from '@/app/components/performance/PerformanceDashboard'
+import CriticalCSSInjector from '@/app/components/performance/CriticalCSSInjector'
 import Script from 'next/script'
 
 const inter = Inter({ 
@@ -140,6 +142,7 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <ToastProvider>
           <ServiceWorkerProvider>
+            <CriticalCSSInjector />
             <GoogleAnalytics />
             <PerformanceMonitor />
             <div className="min-h-screen flex flex-col">
@@ -149,6 +152,7 @@ export default function RootLayout({
             </div>
             <Toaster />
             <ImagePerformanceMonitor />
+            <PerformanceDashboard />
           </ServiceWorkerProvider>
         </ToastProvider>
       </body>
