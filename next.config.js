@@ -21,96 +21,159 @@ const nextConfig = {
     unoptimized: false,
   },
   
-  // Performance optimizations
+  // Ultra-aggressive performance optimizations
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
+    optimizePackageImports: [
+      'lucide-react',
+      'framer-motion',
+      'clsx',
+      'tailwind-merge'
+    ],
+    // Enable CSS optimization
+    optimizeCss: true,
   },
   
-  // Turbopack configuration (stable in Next.js 15+)
-  turbopack: {
-    rules: {
-      '*.svg': ['@svgr/webpack'],
-    },
-  },
-  
-  // Compiler optimizations for modern browsers
+  // Compiler optimizations for modern browsers only
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
     reactRemoveProperties: process.env.NODE_ENV === 'production',
     styledComponents: false,
+    // Remove development-only code
+    emotion: false,
   },
   
-  // Aggressive bundle optimization
+  // Server optimizations
+  serverExternalPackages: [
+    '@supabase/supabase-js',
+    'midtrans-client',
+  ],
+  
+  // Ultra-aggressive bundle optimization
   webpack: (config, { dev, isServer }) => {
-    // Target modern browsers only
+    // Target only modern browsers (ES2022+)
     if (!dev && !isServer) {
       config.target = ['web', 'es2022']
     }
     
-    // Aggressive tree shaking
+    // Ultra-aggressive tree shaking
     config.optimization = {
       ...config.optimization,
       usedExports: true,
       sideEffects: false,
-      // More aggressive code splitting
+      providedExports: true,
+      innerGraph: true,
+      // More aggressive code splitting with smaller chunks
       splitChunks: {
         chunks: 'all',
-        minSize: 20000,
-        maxSize: 100000,
+        minSize: 15000, // Smaller minimum size
+        maxSize: 50000, // Much smaller maximum size
+        minChunks: 1,
+        maxAsyncRequests: 30,
+        maxInitialRequests: 30,
+        enforceSizeThreshold: 50000,
         cacheGroups: {
           default: false,
           vendors: false,
-          // React framework
-          framework: {
-            name: 'framework',
+          
+          // React core (smallest possible)
+          react: {
+            name: 'react',
             chunks: 'all',
-            test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
-            priority: 50,
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            priority: 60,
             enforce: true,
             reuseExistingChunk: true,
           },
-          // Framer Motion (heavy library)
+          
+          // Scheduler separately
+          scheduler: {
+            name: 'scheduler',
+            chunks: 'all',
+            test: /[\\/]node_modules[\\/]scheduler[\\/]/,
+            priority: 55,
+            enforce: true,
+            reuseExistingChunk: true,
+          },
+          
+          // Framer Motion (split into smaller chunks)
           framerMotion: {
             name: 'framer-motion',
             chunks: 'all',
             test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
-            priority: 40,
+            priority: 45,
             enforce: true,
             reuseExistingChunk: true,
+            maxSize: 30000,
           },
+          
           // Lucide React (icons)
           lucide: {
             name: 'lucide',
             chunks: 'all',
             test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
-            priority: 35,
+            priority: 40,
             enforce: true,
             reuseExistingChunk: true,
           },
-          // Common libraries
+          
+          // Next.js internals
+          nextInternals: {
+            name: 'next-internals',
+            chunks: 'all',
+            test: /[\\/]node_modules[\\/]next[\\/]/,
+            priority: 35,
+            enforce: true,
+            reuseExistingChunk: true,
+            maxSize: 40000,
+          },
+          
+          // Tailwind and CSS utilities
+          styles: {
+            name: 'styles',
+            chunks: 'all',
+            test: /[\\/]node_modules[\\/](clsx|tailwind-merge|class-variance-authority)[\\/]/,
+            priority: 30,
+            enforce: true,
+            reuseExistingChunk: true,
+          },
+          
+          // Common small utilities
+          utils: {
+            name: 'utils',
+            chunks: 'all',
+            test: /[\\/]node_modules[\\/](zod|date-fns|lodash)[\\/]/,
+            priority: 25,
+            enforce: true,
+            reuseExistingChunk: true,
+            maxSize: 25000,
+          },
+          
+          // Application commons (very strict)
           commons: {
             name: 'commons',
             chunks: 'all',
-            minChunks: 2,
+            minChunks: 3, // Must be used in at least 3 places
             priority: 20,
-            maxSize: 80000,
+            maxSize: 30000, // Very small commons
             reuseExistingChunk: true,
+            test: /[\\/]src[\\/]|[\\/]app[\\/]/,
           },
-          // Large libraries
-          lib: {
+          
+          // Remaining vendor libraries (smallest chunks)
+          vendor: {
             test: /[\\/]node_modules[\\/]/,
-            name: 'lib',
+            name: 'vendor',
             chunks: 'all',
             priority: 10,
             minSize: 10000,
-            maxSize: 60000,
+            maxSize: 25000, // Very small vendor chunks
             reuseExistingChunk: true,
           },
         },
       },
     }
     
-    // Aggressive module resolution
+    // Ultra-aggressive module resolution
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
@@ -121,25 +184,37 @@ const nextConfig = {
       os: false,
       stream: false,
       util: false,
+      buffer: false,
+      events: false,
+      url: false,
+      querystring: false,
     }
     
-    // Remove unused modules
+    // Aggressive optimizations for production
     if (!dev) {
       config.optimization.minimize = true
       config.optimization.concatenateModules = true
+      config.optimization.mangleExports = true
+      config.optimization.removeAvailableModules = true
+      config.optimization.removeEmptyChunks = true
+      config.optimization.mergeDuplicateChunks = true
       
-      // Ignore source maps in production for smaller bundles
+      // Remove source maps completely
       config.devtool = false
+      
+      // Aggressive dead code elimination
+      config.optimization.usedExports = 'global'
     }
+    
+    // Module rules for better tree shaking
+    config.module.rules.push({
+      test: /\.js$/,
+      include: /node_modules/,
+      sideEffects: false,
+    })
     
     return config
   },
-  
-  // Remove heavy transpilation
-  transpilePackages: [],
-  
-  // Server optimizations
-  serverExternalPackages: ['@supabase/supabase-js'],
   
   // Performance headers
   async headers() {
@@ -169,7 +244,7 @@ const nextConfig = {
           }
         ],
       },
-      // Aggressive static assets caching
+      // Ultra-aggressive static assets caching
       {
         source: '/_next/static/(.*)',
         headers: [
@@ -192,7 +267,7 @@ const nextConfig = {
     ];
   },
   
-  // Disable source maps in production
+  // Disable source maps completely in production
   productionBrowserSourceMaps: false,
 };
 

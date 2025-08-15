@@ -2,97 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Essential CSS Variables */
-@layer base {
+/* Minimal CSS Variables */
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
   :root {
-    --smooth-ease: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  * {
-    box-sizing: border-box;
-  }
-  
-  html {
-    scroll-behavior: smooth;
-  }
-  
-  body {
-    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
-    line-height: 1.6;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
-/* Essential utility classes */
-@layer utilities {
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  
-  .text-balance {
-    text-wrap: balance;
-  }
-  
-  .transform-gpu {
-    transform: translateZ(0);
-  }
+/* Essential base styles only */
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
-/* Simple background pattern */
-.hero-pattern {
-  background-color: #fff;
-  background-image: linear-gradient(135deg, rgba(220, 38, 38, 0.02) 0%, rgba(217, 119, 6, 0.02) 100%);
-  position: relative;
-}
-
-/* Simple card effects */
-.card-simple {
-  transition: transform 0.2s var(--smooth-ease), box-shadow 0.2s var(--smooth-ease);
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-}
-
-.card-simple:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-}
-
-/* Simple glass effects */
-.glass-effect {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-}
-
-/* Gradient text - only if used */
-.gradient-text {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Optimized animations for mobile performance */
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
+/* Critical animations only */
 @keyframes fade-in {
   from { 
     opacity: 0; 
@@ -104,78 +40,14 @@
   }
 }
 
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes slide-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-/* Optimized animation utilities */
-.animate-shimmer {
-  animation: shimmer 2s infinite;
-}
-
+/* Essential animation utilities */
 .animate-fade-in {
   animation: fade-in 0.6s ease-out forwards;
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.8s ease-out forwards;
-}
-
-.animate-scale-in {
-  animation: scale-in 0.5s ease-out forwards;
-}
-
-.animate-slide-in-left {
-  animation: slide-in-left 0.6s ease-out forwards;
-}
-
-.animate-slide-in-right {
-  animation: slide-in-right 0.6s ease-out forwards;
 }
 
 .animate-spin {
@@ -183,14 +55,6 @@
 }
 
 /* Performance optimizations */
-.will-change-transform {
-  will-change: transform;
-}
-
-.will-change-opacity {
-  will-change: opacity;
-}
-
 .gpu-layer {
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -201,39 +65,5 @@
 .focus-visible:focus-visible {
   outline: 2px solid #dc2626;
   outline-offset: 2px;
-}
-
-/* Print styles */
-@media print {
-  * {
-    background: transparent !important;
-    color: black !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
-  
-  a, a:visited {
-    text-decoration: underline;
-  }
-  
-  img {
-    max-width: 100% !important;
-  }
-  
-  @page {
-    margin: 0.5cm;
-  }
-}
-
-/* Reduced motion for accessibility */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
 }
 
