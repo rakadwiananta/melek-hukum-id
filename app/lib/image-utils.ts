@@ -4,7 +4,6 @@
  */
 
 import { supabase } from './supabase'
-import { useState } from 'react'
 
 // Optimized image utilities for better performance
 export const FALLBACK_IMAGES = {
@@ -22,6 +21,30 @@ interface ImageUrlOptions {
   category?: string
   width?: number
   height?: number
+}
+
+// Get Supabase public URL for images
+export function getSupabaseImageUrl(path: string): string {
+  if (!path || !supabase) {
+    return FALLBACK_IMAGES.default
+  }
+
+  try {
+    // Handle already complete URLs
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path
+    }
+
+    // Get public URL from Supabase storage
+    const { data } = supabase.storage
+      .from('article-images')
+      .getPublicUrl(path)
+    
+    return data?.publicUrl || FALLBACK_IMAGES.default
+  } catch (error) {
+    console.warn('Failed to get Supabase image URL:', error)
+    return FALLBACK_IMAGES.default
+  }
 }
 
 export function getValidImageUrl({ src, category, width = 800, height = 600 }: ImageUrlOptions): string {
@@ -42,6 +65,11 @@ export function getValidImageUrl({ src, category, width = 800, height = 600 }: I
   // Handle absolute URLs
   if (trimmedSrc.startsWith('http://') || trimmedSrc.startsWith('https://')) {
     return trimmedSrc
+  }
+  
+  // Handle Supabase storage paths
+  if (trimmedSrc.includes('supabase') || !trimmedSrc.startsWith('/')) {
+    return getSupabaseImageUrl(trimmedSrc)
   }
   
   // Handle relative URLs - ensure they start with /
