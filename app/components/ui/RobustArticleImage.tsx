@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
-import { getValidImageUrl, FALLBACK_IMAGES, validateImageUrl } from '@/app/lib/image-utils'
+import { getValidImageUrl, getSupabaseImageUrl, FALLBACK_IMAGES, validateImageUrl } from '@/app/lib/image-utils'
 import { cn } from '@/app/lib/utils'
 import { imageRenderTracker } from '@/app/components/debug/ImageRenderMonitor'
 import { imageAutoFixer } from '@/app/lib/image-auto-fix'
@@ -38,11 +38,11 @@ export default function RobustArticleImage({
   priority = false,
   sizes,
   quality = 85,
-  loading = 'eager', // Changed from 'lazy' to 'eager' for immediate loading
-  fetchPriority = 'high', // Changed from 'auto' to 'high' for faster loading
+  loading = 'eager',
+  fetchPriority = 'high',
   onLoad,
   onError,
-  showSkeleton = false, // Disabled skeleton by default
+  showSkeleton = false,
   skeletonClassName,
   index
 }: RobustArticleImageProps) {
@@ -52,14 +52,17 @@ export default function RobustArticleImage({
   
   const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Multiple fallback sources
+  // Multiple fallback sources with better Supabase handling
   const getFallbackSources = (): string[] => {
     const sources = []
     
-    // Level 0: Original source
+    console.log('Getting fallback sources for:', { src, category })
+    
+    // Level 0: Try original source with proper processing
     if (src?.trim()) {
-      const validSrc = getValidImageUrl({ src, category })
-      sources.push(validSrc)
+      const processedSrc = getValidImageUrl({ src, category })
+      console.log('Processed original src:', { original: src, processed: processedSrc })
+      sources.push(processedSrc)
     }
     
     // Level 1: Category-specific fallback
@@ -71,13 +74,15 @@ export default function RobustArticleImage({
     sources.push(FALLBACK_IMAGES.default)
     
     // Level 3: Alternative fallbacks
-    sources.push('/illustrations/blog-kejaksaan.jpeg')
     sources.push('/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg')
     
     // Level 4: Data URL fallback (always works)
     sources.push(generateDataUrlFallback())
     
-    return sources.filter((src, index, self) => self.indexOf(src) === index) // Remove duplicates
+    const uniqueSources = sources.filter((src, index, self) => self.indexOf(src) === index)
+    console.log('Generated fallback sources:', uniqueSources)
+    
+    return uniqueSources
   }
 
   const generateDataUrlFallback = (): string => {
@@ -105,7 +110,10 @@ export default function RobustArticleImage({
   useEffect(() => {
     const sources = getFallbackSources()
     if (sources.length > 0) {
+      console.log('Setting initial src:', sources[0])
       setCurrentSrc(sources[0])
+      setFallbackLevel(0)
+      setHasError(false)
     }
     
     // Track render
@@ -119,6 +127,7 @@ export default function RobustArticleImage({
   }, [src, category])
 
   const handleLoad = () => {
+    console.log('Image loaded successfully:', currentSrc)
     setHasError(false)
     onLoad?.()
     
@@ -127,17 +136,24 @@ export default function RobustArticleImage({
   }
 
   const handleError = () => {
+    console.error('Image failed to load:', currentSrc)
+    
     // Try next fallback level immediately
     const sources = getFallbackSources()
     const nextLevel = fallbackLevel + 1
     
+    console.log('Trying fallback level:', nextLevel, 'of', sources.length)
+    
     if (nextLevel < sources.length) {
       setFallbackLevel(nextLevel)
       setCurrentSrc(sources[nextLevel])
+      console.log('Switching to fallback:', sources[nextLevel])
     } else {
       // All fallbacks failed, use data URL
-      setCurrentSrc(generateDataUrlFallback())
+      const dataUrl = generateDataUrlFallback()
+      setCurrentSrc(dataUrl)
       setHasError(true)
+      console.error('All fallbacks failed, using data URL')
     }
     
     onError?.()
@@ -178,6 +194,8 @@ export default function RobustArticleImage({
     className: cn(className, 'transition-opacity duration-200'),
     ...(fill ? { fill: true } : { width, height })
   }
+
+  console.log('Rendering image with props:', { src: currentSrc, alt, priority, loading })
 
   return <Image {...imageProps} />
 }
