@@ -2,88 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom CSS Variables untuk Theme Spektakuler */
+/* Optimized CSS Variables */
 @layer base {
   :root {
-    /* Color Palette - Vibrant & Professional */
-    --primary-gradient: linear-gradient(135deg, #FF6B6B 0%, #EE5A6F 100%);
-    --secondary-gradient: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
-    --success-gradient: linear-gradient(135deg, #56CCF2 0%, #2F80ED 100%);
-    --warning-gradient: linear-gradient(135deg, #F2994A 0%, #F2C94C 100%);
+    /* Color Palette - Professional */
+    --primary-gradient: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    --secondary-gradient: linear-gradient(135deg, #d97706 0%, #b45309 100%);
     
-    /* Glass Effect Variables */
-    --glass-bg: rgba(255, 255, 255, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.2);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    
-    /* 3D Effect Variables */
-    --perspective: 1000px;
-    --transform-style: preserve-3d;
-    
-    /* Animation Timing */
-    --spring-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    /* Simple Animation Timing */
     --smooth-ease: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
-/* Spectacular Background Patterns */
+/* Simple Background Patterns */
 .hero-pattern {
   background-color: #fff;
-  background-image: 
-    radial-gradient(circle at 1px 1px, rgba(239, 68, 68, 0.1) 1px, transparent 1px),
-    linear-gradient(135deg, rgba(239, 68, 68, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%);
-  background-size: 50px 50px, 100% 100%;
+  background-image: linear-gradient(135deg, rgba(220, 38, 38, 0.02) 0%, rgba(217, 119, 6, 0.02) 100%);
   position: relative;
-  overflow: hidden;
 }
 
-.hero-pattern::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%);
-  animation: float-bubble 20s ease-in-out infinite;
+/* Simple Card Effects */
+.card-simple {
+  transition: transform 0.2s var(--smooth-ease), box-shadow 0.2s var(--smooth-ease);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
-/* 3D Card Effects */
-.card-3d {
-  perspective: var(--perspective);
-  transform-style: var(--transform-style);
-  transition: transform 0.6s var(--smooth-ease);
+.card-simple:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
-.card-3d-inner {
-  transform-style: inherit;
-  transition: transform 0.6s var(--smooth-ease);
-  position: relative;
-  background: linear-gradient(145deg, #ffffff, #f3f4f6);
-  border-radius: 20px;
-  box-shadow: 
-    20px 20px 60px #d1d5db,
-    -20px -20px 60px #ffffff,
-    inset 1px 1px 2px rgba(255, 255, 255, 0.3),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.card-3d:hover .card-3d-inner {
-  transform: rotateY(5deg) rotateX(-5deg) translateZ(20px);
-  box-shadow: 
-    25px 25px 75px #d1d5db,
-    -25px -25px 75px #ffffff,
-    0 10px 40px rgba(0, 0, 0, 0.2);
-}
-
-/* Glassmorphism Effects */
+/* Simple Glass Effects */
 .glass-effect {
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
 }
 
 /* Gradient Text Effects */

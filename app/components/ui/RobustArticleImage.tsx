@@ -38,22 +38,19 @@ export default function RobustArticleImage({
   priority = false,
   sizes,
   quality = 85,
-  loading = 'lazy',
-  fetchPriority = 'auto',
+  loading = 'eager', // Changed from 'lazy' to 'eager' for immediate loading
+  fetchPriority = 'high', // Changed from 'auto' to 'high' for faster loading
   onLoad,
   onError,
-  showSkeleton = true,
+  showSkeleton = false, // Disabled skeleton by default
   skeletonClassName,
   index
 }: RobustArticleImageProps) {
   const [currentSrc, setCurrentSrc] = useState<string>('')
-  const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
   const [fallbackLevel, setFallbackLevel] = useState(0)
-  const [isValidated, setIsValidated] = useState(false)
   
   const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const validationTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   // Multiple fallback sources
   const getFallbackSources = (): string[] => {
@@ -104,115 +101,39 @@ export default function RobustArticleImage({
     return `data:image/svg+xml;base64,${btoa(svg)}`
   }
 
-  // Validate and set image source with auto-fixing
-  const validateAndSetSource = async (sources: string[], level: number = 0) => {
-    if (level >= sources.length) {
-      // All manual sources failed, try auto-fixer as last resort
-      try {
-        const fixResult = await imageAutoFixer.fixImage(src || '', category)
-        setCurrentSrc(fixResult.fixedSrc)
-        setFallbackLevel(fixResult.fallbackLevel)
-        setHasError(!fixResult.success)
-        setIsValidated(true)
-        setIsLoading(false)
-        return
-      } catch (error) {
-        // Auto-fixer also failed, use manual data URL
-        setCurrentSrc(generateDataUrlFallback())
-        setHasError(true)
-        setIsLoading(false)
-        return
-      }
-    }
-
-    const source = sources[level]
-    
-    try {
-      // For data URLs, skip validation
-      if (source.startsWith('data:')) {
-        setCurrentSrc(source)
-        setFallbackLevel(level)
-        setIsValidated(true)
-        return
-      }
-
-      // For regular URLs, validate first
-      const isValid = await validateImageUrl(source)
-      
-      if (isValid) {
-        setCurrentSrc(source)
-        setFallbackLevel(level)
-        setIsValidated(true)
-      } else {
-        // Try next fallback
-        setTimeout(() => {
-          validateAndSetSource(sources, level + 1)
-        }, 100) // Small delay between attempts
-      }
-    } catch (error) {
-      // Try next fallback on error
-      setTimeout(() => {
-        validateAndSetSource(sources, level + 1)
-      }, 100)
-    }
-  }
-
-  // Initialize image source
+  // Initialize source immediately
   useEffect(() => {
     const sources = getFallbackSources()
-    validateAndSetSource(sources, 0)
+    if (sources.length > 0) {
+      setCurrentSrc(sources[0])
+    }
     
+    // Track render
+    imageRenderTracker.trackImageLoad(src || '', category || '', 0)
+
     return () => {
       if (retryTimeoutRef.current) {
         clearTimeout(retryTimeoutRef.current)
-      }
-      if (validationTimeoutRef.current) {
-        clearTimeout(validationTimeoutRef.current)
       }
     }
   }, [src, category])
 
   const handleLoad = () => {
-    setIsLoading(false)
     setHasError(false)
+    onLoad?.()
     
     // Track successful load
-    imageRenderTracker.trackImageLoad(
-      currentSrc, 
-      category || 'unknown', 
-      fallbackLevel
-    )
-    
-    onLoad?.()
+    imageRenderTracker.trackImageLoad(currentSrc, category || '', fallbackLevel)
   }
 
   const handleError = () => {
-    setIsLoading(false)
-    
-    // Track error
-    imageRenderTracker.trackImageError(
-      currentSrc || src || 'unknown',
-      category || 'unknown',
-      'Image failed to load',
-      fallbackLevel
-    )
-    
-    // Try next fallback level
+    // Try next fallback level immediately
     const sources = getFallbackSources()
     const nextLevel = fallbackLevel + 1
     
     if (nextLevel < sources.length) {
       setFallbackLevel(nextLevel)
-      
-      // Clear any pending retry
-      if (retryTimeoutRef.current) {
-        clearTimeout(retryTimeoutRef.current)
-      }
-      
-      // Retry with next fallback after a delay
-      retryTimeoutRef.current = setTimeout(() => {
-        validateAndSetSource(sources, nextLevel)
-      }, 500)
+      setCurrentSrc(sources[nextLevel])
     } else {
       // All fallbacks failed, use data URL
       setCurrentSrc(generateDataUrlFallback())
@@ -220,45 +141,6 @@ export default function RobustArticleImage({
     }
     
     onError?.()
-  }
-
-  // Enhanced skeleton with shimmer
-  const SkeletonComponent = () => (
-    <div className={cn(
-      'relative overflow-hidden',
-      'bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200',
-      'animate-pulse',
-      fill ? 'absolute inset-0' : '',
-      skeletonClassName || className
-    )}
-    style={!fill ? { width, height } : undefined}>
-      {/* Shimmer effect */}
-      <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-      
-      {/* Loading content */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="flex flex-col items-center space-y-2">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-red-600 border-t-transparent"></div>
-          {index !== undefined && (
-            <div className="text-xs text-gray-500 font-medium">
-              Memuat gambar {index + 1}
-            </div>
-          )}
-        </div>
-      </div>
-      
-      {/* Placeholder icon */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-20">
-        <svg className="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
-        </svg>
-      </div>
-    </div>
-  )
-
-  // Show skeleton while loading or validating
-  if ((isLoading || !isValidated) && showSkeleton) {
-    return <SkeletonComponent />
   }
 
   // Error state - should rarely happen with our robust fallbacks
@@ -276,14 +158,8 @@ export default function RobustArticleImage({
             <svg className="w-12 h-12 mx-auto opacity-60" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
             </svg>
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center">
-              <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </div>
           </div>
           <p className="text-xs font-medium">Gambar tidak tersedia</p>
-          <p className="text-xs opacity-70 mt-1">Fallback: Level {fallbackLevel}</p>
         </div>
       </div>
     )
@@ -298,70 +174,48 @@ export default function RobustArticleImage({
     quality,
     loading,
     fetchPriority,
-    className: cn(
-      'transition-all duration-500 ease-out',
-      isLoading ? 'opacity-0 scale-105' : 'opacity-100 scale-100',
-      hasError ? 'opacity-75' : '',
-      className
-    ),
-    ...(sizes && { sizes }),
+    sizes: sizes || (fill ? '100vw' : undefined),
+    className: cn(className, 'transition-opacity duration-200'),
     ...(fill ? { fill: true } : { width, height })
   }
 
   return <Image {...imageProps} />
 }
 
-// Specialized components for different use cases
-export function RobustArticleHeroImage({
-  src,
-  alt,
-  category,
-  className,
-  priority = true,
-  sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw",
-  index
-}: Omit<RobustArticleImageProps, 'fill' | 'width' | 'height'> & { index?: number }) {
+// Export variants for different use cases
+export function RobustArticleCardImage(props: RobustArticleImageProps) {
   return (
     <RobustArticleImage
-      src={src}
-      alt={alt}
-      category={category}
-      fill
-      className={className}
-      priority={priority}
-      sizes={sizes}
+      {...props}
+      priority={props.priority ?? (typeof props.index === 'number' ? props.index < 6 : false)}
       loading="eager"
       fetchPriority="high"
-      quality={95}
-      index={index}
+      showSkeleton={false}
     />
   )
 }
 
-export function RobustArticleCardImage({
-  src,
-  alt,
-  category,
-  className,
-  priority = false,
-  index
-}: Omit<RobustArticleImageProps, 'fill' | 'width' | 'height'> & { index?: number }) {
-  // Auto-priority for first few items
-  const shouldPrioritize = priority || (typeof index === 'number' && index < 3)
-  
+export function RobustArticleHeroImage(props: RobustArticleImageProps) {
   return (
     <RobustArticleImage
-      src={src}
-      alt={alt}
-      category={category}
-      fill
-      className={className}
-      priority={shouldPrioritize}
-      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-      quality={shouldPrioritize ? 90 : 85}
-      loading={shouldPrioritize ? 'eager' : 'lazy'}
-      fetchPriority={shouldPrioritize ? 'high' : 'auto'}
-      index={index}
+      {...props}
+      priority={true}
+      loading="eager"
+      fetchPriority="high"
+      quality={90}
+      showSkeleton={false}
+    />
+  )
+}
+
+export function RobustArticleThumbImage(props: RobustArticleImageProps) {
+  return (
+    <RobustArticleImage
+      {...props}
+      quality={80}
+      loading="eager"
+      fetchPriority="high"
+      showSkeleton={false}
     />
   )
 }
