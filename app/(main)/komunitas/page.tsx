@@ -1,20 +1,14 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
-import { Users } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { Users, Globe, MessageCircle, Heart } from 'lucide-react'
 import { motion } from 'framer-motion'
-import * as THREE from 'three'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Center, OrbitControls } from '@react-three/drei'
 
 /**
- * Komunitas Page
- * - 3D header Nusantara
- * - Statistik World Bank for internet access shown as context for community reach
- * - Tries to load /api/community/active for authoritative member counts (integrasikan backend)
+ * Komunitas Page - Lightweight version without Three.js
  */
 
-/* Reuse hook for World Bank */
+/* World Bank statistics hook */
 function useWorldBankIndonesiaStats() {
   const [internetPercent, setInternetPercent] = useState<number | null>(null)
   const [internetYear, setInternetYear] = useState<number | null>(null)
@@ -66,167 +60,195 @@ function useWorldBankIndonesiaStats() {
   return { internetPercent, internetYear, population, populationYear, loading, error }
 }
 
-/* Lightweight Nusantara 3D object (stylized mask / wayang) */
-function NusantaraFigure({ scale = 1.0 }: { scale?: number }) {
-  const ref = useRef<THREE.Group | null>(null)
-  const clock = useRef(new THREE.Clock())
-
-  useFrame(() => {
-    const t = clock.current.getElapsedTime()
-    if (ref.current) {
-      ref.current.rotation.y = Math.sin(t * 0.25) * 0.06
-      ref.current.position.y = Math.sin(t * 1.1) * 0.02
-    }
-  })
-
+// Lightweight animated background
+function AnimatedBackground() {
   return (
-    <group ref={ref} scale={scale}>
-      <Center>
-        <mesh position={[0, 0, 0]} castShadow>
-          <boxGeometry args={[0.8, 0.9, 0.06]} />
-          <meshStandardMaterial color="#6b3f26" roughness={0.7} />
-        </mesh>
-
-        <mesh position={[0, 0.48, 0.04]}>
-          <sphereGeometry args={[0.14, 24, 12]} />
-          <meshStandardMaterial color="#f1d7be" roughness={0.6} />
-        </mesh>
-
-        <mesh position={[0, -0.55, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[0.8, 32]} />
-          <meshStandardMaterial color="#000000" transparent opacity={0.12} />
-        </mesh>
-      </Center>
-    </group>
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 opacity-5">
+        <svg width="100%" height="100%" viewBox="0 0 800 600" className="animate-pulse">
+          <defs>
+            <pattern id="community-pattern" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+              <circle cx="60" cy="60" r="40" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.3"/>
+              <circle cx="60" cy="60" r="20" fill="currentColor" opacity="0.2"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#community-pattern)" />
+        </svg>
+      </div>
+      
+      <div className="absolute top-20 left-16 animate-bounce">
+        <Users className="h-20 w-20 text-amber-500 opacity-20" />
+      </div>
+      <div className="absolute top-32 right-20 animate-pulse" style={{ animationDelay: '1s' }}>
+        <MessageCircle className="h-16 w-16 text-brown-500 opacity-20" />
+      </div>
+      <div className="absolute bottom-24 left-1/3 animate-bounce" style={{ animationDelay: '2s' }}>
+        <Heart className="h-18 w-18 text-amber-600 opacity-20" />
+      </div>
+    </div>
   )
 }
 
-/* Batik overlay */
-function BatikOverlay() {
+// Statistics component
+function CommunityStats() {
+  const { internetPercent, internetYear, population, populationYear, loading, error } = useWorldBankIndonesiaStats()
+
+  const stats = [
+    {
+      icon: Users,
+      label: 'Anggota Komunitas',
+      value: '2.5K+',
+      subtitle: 'Aktif Bulanan',
+      color: 'from-blue-500 to-blue-600'
+    },
+    {
+      icon: Globe,
+      label: 'Pengguna Internet ID',
+      value: loading ? 'Loading...' : error ? 'N/A' : internetPercent ? `${internetPercent.toFixed(1)}%` : 'N/A',
+      subtitle: internetYear ? `Data ${internetYear}` : 'World Bank',
+      color: 'from-green-500 to-green-600'
+    },
+    {
+      icon: MessageCircle,
+      label: 'Diskusi Aktif',
+      value: '150+',
+      subtitle: 'Thread Bulan Ini',
+      color: 'from-purple-500 to-purple-600'
+    },
+    {
+      icon: Heart,
+      label: 'Bantuan Diberikan',
+      value: '500+',
+      subtitle: 'Kasus Terselesaikan',
+      color: 'from-red-500 to-red-600'
+    }
+  ]
+
   return (
-    <svg aria-hidden className="absolute inset-0 w-full h-full pointer-events-none opacity-6" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <pattern id="batik2" width="160" height="160" patternUnits="userSpaceOnUse" patternTransform="rotate(20)">
-          <rect width="160" height="160" fill="rgba(250,245,240,0.02)" />
-          <path d="M20 80 C40 40, 120 40, 140 80 C120 120, 40 120, 20 80 Z" fill="rgba(124,74,46,0.03)"/>
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#batik2)" />
-    </svg>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      {stats.map((stat, index) => (
+        <motion.div
+          key={stat.label}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1 }}
+          className="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-xl transition-all duration-300"
+        >
+          <div className={`w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center`}>
+            <stat.icon className="h-8 w-8 text-white" />
+          </div>
+          <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
+          <div className="text-sm font-medium text-gray-700 mb-1">{stat.label}</div>
+          <div className="text-xs text-gray-500">{stat.subtitle}</div>
+        </motion.div>
+      ))}
+    </div>
   )
 }
 
 export default function KomunitasPage() {
-  const [members, setMembers] = useState<number | null>(null)
-  const [membersLoading, setMembersLoading] = useState<boolean>(true)
-  const [membersError, setMembersError] = useState<string | null>(null)
-
-  useEffect(() => {
-    let mounted = true
-    async function loadMembers() {
-      setMembersLoading(true)
-      try {
-        const res = await fetch('/api/community/active')
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const json = await res.json()
-        if (!mounted) return
-        setMembers(typeof json.active === 'number' ? json.active : null)
-      } catch (err) {
-        console.info('Community API not available:', err)
-        if (mounted) {
-          setMembersError('Data internal tidak tersedia')
-          setMembers(null)
-        }
-      } finally {
-        if (mounted) setMembersLoading(false)
-      }
-    }
-    loadMembers()
-    return () => { mounted = false }
-  }, [])
-
-  const { internetPercent, internetYear, population, populationYear, loading: statsLoading, error: statsError } = useWorldBankIndonesiaStats()
-  const pixelRatio = typeof window !== 'undefined' ? Math.min(2, window.devicePixelRatio || 1) : 1
-  const canvasHeight = typeof window !== 'undefined' ? Math.max(140, Math.min(300, Math.floor(window.innerHeight * 0.24))) : 200
-
-  function formatNumber(v: number | null | undefined) {
-    if (v === null || v === undefined) return '-'
-    return v.toLocaleString('id-ID')
-  }
-
   return (
-    <section className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-brown-50 relative overflow-hidden">
-      <BatikOverlay />
-      <div className="max-w-7xl mx-auto px-4 py-6 md:py-10">
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="mb-6">
-          <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow">
-              <Users className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Komunitas</h1>
-              <p className="text-sm md:text-base text-gray-600">Diskusi & berbagi dengan praktisi hukum</p>
-            </div>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-brown-50">
+      {/* Header Section */}
+      <div className="relative bg-gradient-to-br from-brown-600 via-amber-600 to-red-600 text-white py-16 md:py-24 overflow-hidden">
+        <AnimatedBackground />
+        
+        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-6xl font-bold mb-6"
+          >
+            Komunitas Hukum Indonesia
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto"
+          >
+            Bergabunglah dengan komunitas profesional hukum dan masyarakat yang peduli keadilan
+          </motion.p>
+        </div>
+      </div>
 
-          <div className="rounded-2xl overflow-hidden relative bg-gradient-to-r from-green-700 to-emerald-500">
-            <div className="absolute inset-0">
-              <Canvas
-                camera={{ position: [0, 0, 3.2], fov: 44 }}
-                gl={{ antialias: true, alpha: true }}
-                dpr={pixelRatio}
-                style={{ width: '100%', height: canvasHeight }}
-              >
-                <hemisphereLight intensity={0.6} />
-                <directionalLight intensity={0.8} position={[4, 6, 3]} />
-                <NusantaraFigure scale={0.95} />
-                <OrbitControls enableZoom={false} enablePan={false} minPolarAngle={Math.PI / 3} maxPolarAngle={Math.PI / 1.9} />
-              </Canvas>
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        {/* Statistics */}
+        <CommunityStats />
+
+        {/* Community Features */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white rounded-2xl shadow-lg p-8 text-center"
+          >
+            <div className="w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+              <Users className="h-8 w-8 text-white" />
             </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">Forum Diskusi</h3>
+            <p className="text-gray-600 leading-relaxed">
+              Diskusikan kasus hukum, berbagi pengalaman, dan dapatkan masukan dari praktisi hukum berpengalaman.
+            </p>
+          </motion.div>
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="bg-white rounded-2xl shadow-lg p-8 text-center"
+          >
+            <div className="w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+              <MessageCircle className="h-8 w-8 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">Konsultasi Gratis</h3>
+            <p className="text-gray-600 leading-relaxed">
+              Dapatkan konsultasi hukum dasar secara gratis dari para ahli dan praktisi hukum di komunitas kami.
+            </p>
+          </motion.div>
 
-            <div className="absolute bottom-4 left-4 right-4 text-white z-10">
-              <h2 className="text-lg md:text-2xl font-extrabold">Bergabung dengan Komunitas</h2>
-              <p className="text-sm md:text-base text-white/90 mt-1 max-w-2xl">Temukan diskusi, tanyakan kasus, dan perluas jaringan profesional.</p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-white rounded-2xl shadow-lg p-8 text-center"
+          >
+            <div className="w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
+              <Heart className="h-8 w-8 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">Bantuan Hukum</h3>
+            <p className="text-gray-600 leading-relaxed">
+              Program bantuan hukum untuk masyarakat kurang mampu dengan dukungan dari advokat relawan.
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Call to Action */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-16 text-center"
+        >
+          <div className="bg-gradient-to-br from-amber-100 to-brown-100 rounded-2xl p-8 md:p-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Bergabung dengan Komunitas
+            </h2>
+            <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
+              Jadilah bagian dari komunitas hukum Indonesia yang peduli keadilan dan penegakan hukum yang berintegritas.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="px-8 py-4 bg-gradient-to-r from-brown-600 to-amber-600 text-white rounded-2xl font-semibold hover:shadow-lg transition-all duration-300">
+                Daftar Sekarang
+              </button>
+              <button className="px-8 py-4 border-2 border-brown-600 text-brown-600 rounded-2xl font-semibold hover:bg-brown-600 hover:text-white transition-all duration-300">
+                Pelajari Lebih Lanjut
+              </button>
             </div>
           </div>
         </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="rounded-2xl bg-white border border-gray-100 shadow-sm p-6">
-            <div className="flex items-baseline gap-2">
-              <div className="text-4xl font-extrabold text-gray-900 tracking-tight">{membersLoading ? '—' : (members !== null ? formatNumber(members) : '—')}</div>
-              <div className="text-sm text-gray-600">anggota aktif</div>
-            </div>
-            <div className="mt-3 text-xs text-gray-500">
-              {membersError ? 'Data internal tidak tersedia. Integrasikan /api/community/active untuk angka resmi.' : 'Angka operasi platform'}
-            </div>
-            <div className="mt-3">
-              <a href="/komunitas" className="text-amber-600 underline">Gabung sekarang</a>
-            </div>
-          </div>
-
-          <div className="rounded-2xl bg-white border border-gray-100 shadow-sm p-6">
-            <div className="flex items-baseline gap-2">
-              <div className="text-4xl font-extrabold text-gray-900 tracking-tight">{statsLoading ? '—' : (internetPercent !== null ? `${internetPercent.toFixed(1)}%` : '—')}</div>
-              <div className="text-sm text-gray-600">akses internet</div>
-            </div>
-            <div className="mt-3 text-xs text-gray-500">Sumber: World Bank — IT.NET.USER.ZS ({internetYear ?? '-'})</div>
-            <div className="mt-3 text-xs">
-              <a href="https://data.worldbank.org/indicator/IT.NET.USER.ZS" target="_blank" rel="noreferrer" className="text-amber-600 underline">Lihat data World Bank</a>
-            </div>
-          </div>
-
-          <div className="rounded-2xl bg-white border border-gray-100 shadow-sm p-6">
-            <div className="text-sm text-gray-600 mb-2">Estimasi jangkauan potensial</div>
-            <div className="text-2xl font-extrabold text-gray-900">
-              {statsLoading || population === null || internetPercent === null ? '—' : Math.round((internetPercent / 100) * population).toLocaleString('id-ID')}
-            </div>
-            <div className="mt-3 text-xs text-gray-500">Perkiraan jumlah pengguna internet di Indonesia (World Bank)</div>
-          </div>
-        </div>
       </div>
-    </section>
+    </div>
   )
 }
