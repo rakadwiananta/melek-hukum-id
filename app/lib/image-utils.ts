@@ -26,57 +26,81 @@ interface ImageUrlOptions {
 // Get Supabase public URL for images
 export function getSupabaseImageUrl(path: string): string {
   if (!path || !supabase) {
+    console.warn('No path or supabase client available:', { path, hasSupabase: !!supabase })
     return FALLBACK_IMAGES.default
   }
 
   try {
     // Handle already complete URLs
     if (path.startsWith('http://') || path.startsWith('https://')) {
+      console.log('Using complete URL:', path)
       return path
     }
 
-    // Get public URL from Supabase storage
-    const { data } = supabase.storage
-      .from('article-images')
-      .getPublicUrl(path)
-    
-    return data?.publicUrl || FALLBACK_IMAGES.default
+    // Handle Supabase storage paths
+    if (path.includes('.') && !path.startsWith('/')) {
+      // This looks like a Supabase storage file
+      const { data } = supabase.storage
+        .from('article-images')
+        .getPublicUrl(path)
+      
+      console.log('Generated Supabase URL:', { path, publicUrl: data.publicUrl })
+      return data.publicUrl
+    }
+
+    // Handle local paths
+    if (path.startsWith('/')) {
+      console.log('Using local path:', path)
+      return path
+    }
+
+    console.warn('Unknown path format:', path)
+    return FALLBACK_IMAGES.default
   } catch (error) {
-    console.warn('Failed to get Supabase image URL:', error)
+    console.error('Failed to get Supabase image URL:', error)
     return FALLBACK_IMAGES.default
   }
 }
 
 export function getValidImageUrl({ src, category, width = 800, height = 600 }: ImageUrlOptions): string {
+  console.log('getValidImageUrl called with:', { src, category })
+  
   // If no source provided, use category fallback
   if (!src?.trim()) {
+    console.log('No src provided, using fallback for category:', category)
     return category && FALLBACK_IMAGES[category as keyof typeof FALLBACK_IMAGES] 
       ? FALLBACK_IMAGES[category as keyof typeof FALLBACK_IMAGES]
       : FALLBACK_IMAGES.default
   }
 
   const trimmedSrc = src.trim()
+  console.log('Processing image src:', trimmedSrc)
   
   // Handle data URLs
   if (trimmedSrc.startsWith('data:')) {
+    console.log('Using data URL')
     return trimmedSrc
   }
   
   // Handle absolute URLs
   if (trimmedSrc.startsWith('http://') || trimmedSrc.startsWith('https://')) {
+    console.log('Using absolute URL')
     return trimmedSrc
   }
   
-  // Handle Supabase storage paths
-  if (trimmedSrc.includes('supabase') || !trimmedSrc.startsWith('/')) {
+  // Handle Supabase storage paths - this is the key fix
+  if (trimmedSrc.includes('.') && !trimmedSrc.startsWith('/')) {
+    console.log('Detected Supabase storage path, processing...')
     return getSupabaseImageUrl(trimmedSrc)
   }
   
   // Handle relative URLs - ensure they start with /
   if (!trimmedSrc.startsWith('/')) {
+    console.log('Converting to absolute path:', `/${trimmedSrc}`)
     return `/${trimmedSrc}`
   }
   
+  console.log('Using trimmed src as-is:', trimmedSrc)
   return trimmedSrc
 }
 
