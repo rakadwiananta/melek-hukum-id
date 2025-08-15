@@ -52,17 +52,21 @@ export default function RobustArticleImage({
   
   const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Multiple fallback sources with better Supabase handling
+  // Multiple fallback sources with better handling
   const getFallbackSources = (): string[] => {
     const sources = []
     
     console.log('Getting fallback sources for:', { src, category })
     
-    // Level 0: Try original source with proper processing
-    if (src?.trim()) {
+    // Level 0: Try original source with proper processing (only if valid)
+    if (src && typeof src === 'string' && src.trim()) {
       const processedSrc = getValidImageUrl({ src, category })
       console.log('Processed original src:', { original: src, processed: processedSrc })
-      sources.push(processedSrc)
+      
+      // Only add if it's not empty and not just a slash
+      if (processedSrc && processedSrc !== '/' && processedSrc.trim()) {
+        sources.push(processedSrc)
+      }
     }
     
     // Level 1: Category-specific fallback
@@ -79,7 +83,9 @@ export default function RobustArticleImage({
     // Level 4: Data URL fallback (always works)
     sources.push(generateDataUrlFallback())
     
-    const uniqueSources = sources.filter((src, index, self) => self.indexOf(src) === index)
+    const uniqueSources = sources.filter((src, index, self) => 
+      src && src.trim() && self.indexOf(src) === index
+    )
     console.log('Generated fallback sources:', uniqueSources)
     
     return uniqueSources
@@ -114,6 +120,11 @@ export default function RobustArticleImage({
       setCurrentSrc(sources[0])
       setFallbackLevel(0)
       setHasError(false)
+    } else {
+      // If no valid sources, use data URL immediately
+      console.warn('No valid sources found, using data URL')
+      setCurrentSrc(generateDataUrlFallback())
+      setHasError(true)
     }
     
     // Track render
@@ -159,12 +170,13 @@ export default function RobustArticleImage({
     onError?.()
   }
 
-  // Error state - should rarely happen with our robust fallbacks
-  if (hasError && !currentSrc) {
+  // Don't render anything if no valid source
+  if (!currentSrc || currentSrc.trim() === '') {
+    console.warn('No valid currentSrc, rendering placeholder')
     return (
       <div className={cn(
-        'bg-gradient-to-br from-red-50 to-red-100 border border-red-200',
-        'flex items-center justify-center text-red-600',
+        'bg-gradient-to-br from-gray-100 to-gray-200 border border-gray-300',
+        'flex items-center justify-center text-gray-500',
         fill ? 'absolute inset-0' : '',
         className
       )}
