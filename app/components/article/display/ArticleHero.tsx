@@ -7,7 +7,7 @@ import LatestArticles from '@/app/components/article/display/LatestArticles'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TrendingUp, Award, Sparkles, Eye, Clock, ChevronRight, BarChart3, Users, AlertTriangle, Tag } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
+import { ArticleHeroImage, ArticleCardImage } from '@/app/components/ui/ArticleImage'
 
 interface ArticleHeroProps {
   showLatest?: boolean
@@ -200,15 +200,11 @@ export default function ArticleHero({
             className="relative group"
           >
             <div className="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl">
-              <Image
-                src={featuredArticle.featured_image || '/placeholder.jpg'}
+              <ArticleHeroImage
+                src={featuredArticle.featured_image}
                 alt={featuredArticle.title}
-                fill
+                category={featuredArticle.category}
                 className="object-cover group-hover:scale-110 transition-transform duration-1000"
-                priority
-                loading="eager"
-                fetchPriority="high"
-                sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 50vw"
               />
               
               {/* Gradient Overlay */}
@@ -309,10 +305,10 @@ export default function ArticleHero({
                   <Link href={`/artikel/${article.slug}`}>
                     <div className="flex gap-4 p-4">
                       <div className="relative w-32 h-32 flex-shrink-0 rounded-xl overflow-hidden">
-                        <Image
-                          src={article.featured_image || '/placeholder.jpg'}
+                        <ArticleCardImage
+                          src={article.featured_image}
                           alt={article.title}
-                          fill
+                          category={article.category}
                           className="object-cover group-hover:scale-110 transition-transform duration-500"
                         />
                         <div className="absolute top-2 left-2 bg-black/60 backdrop-blur text-white text-xs px-2 py-1 rounded-full font-bold">
@@ -392,15 +388,11 @@ export default function ArticleHero({
       >
         {/* Background Image with Parallax */}
         <div className="absolute inset-0 transform scale-110 group-hover:scale-125 transition-transform duration-1500">
-          <Image
-            src={featuredArticle.featured_image || '/placeholder.jpg'}
+          <ArticleHeroImage
+            src={featuredArticle.featured_image}
             alt={featuredArticle.title}
-            fill
+            category={featuredArticle.category}
             className="object-cover"
-            priority
-            loading="eager"
-            fetchPriority="high"
-            sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 50vw"
           />
         </div>
 

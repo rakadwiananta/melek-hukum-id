@@ -1,11 +1,11 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { formatDate, calculateReadingTime } from '@/app/lib/utils'
 import { Clock, Eye, Tag, TrendingUp, Award, Flame, Heart, MessageCircle, Share2, BookOpen, BarChart2, ArrowRight } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import { motion, useAnimation } from 'framer-motion'
+import ArticleImage, { ArticleCardImage, ArticleHeroImage } from '@/app/components/ui/ArticleImage'
 
 interface ArticleCardProps {
   article: {
@@ -32,12 +32,6 @@ interface ArticleCardProps {
 }
 
 export default function ArticleCard({ article, variant = 'default', showStats = true, index }: ArticleCardProps) {
-  const getImage = (src?: string) => {
-    const s = (src || '').trim()
-    if (!s || s.includes('/images/articles/')) return '/timbangkan.jpg'
-    if (s.startsWith('http') || s.startsWith('/')) return s
-    return `/${s}`
-  }
   const [isHovered, setIsHovered] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
   const [likes, setLikes] = useState(article.like_count || 0)
@@ -146,26 +140,22 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
             <div className="absolute inset-0 bg-gradient-to-br from-red-600/5 to-amber-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             
             {/* Image Section with Ken Burns effect */}
-            {getImage(article.featured_image) && (
-              <div className="relative h-64 overflow-hidden">
-                <motion.div
-                  className="absolute inset-0"
-                  animate={{
-                    scale: isHovered ? 1.1 : 1,
-                    transition: { duration: 10, repeat: Infinity, repeatType: "reverse" }
-                  }}
-                >
-                  <Image
-                    src={getImage(article.featured_image)}
-                    alt={article.title}
-                    fill
-                    className="object-cover"
-                    priority={shouldEagerLoad}
-                    loading={shouldEagerLoad ? 'eager' : 'lazy'}
-                    fetchPriority={shouldEagerLoad ? 'high' : 'auto'}
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                </motion.div>
+            <div className="relative h-64 overflow-hidden">
+              <motion.div
+                className="absolute inset-0"
+                animate={{
+                  scale: isHovered ? 1.1 : 1,
+                  transition: { duration: 10, repeat: Infinity, repeatType: "reverse" }
+                }}
+              >
+                <ArticleCardImage
+                  src={article.featured_image}
+                  alt={article.title}
+                  category={article.category}
+                  className="object-cover"
+                  priority={shouldEagerLoad}
+                />
+              </motion.div>
                 
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
@@ -242,12 +232,13 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
               <div className="flex items-center gap-3 mb-4">
                 <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-red-400 to-amber-600">
                   {article.author_avatar ? (
-                    <Image
+                    <ArticleImage
                       src={article.author_avatar}
                       alt={article.author || 'Author'}
                       fill
                       className="object-cover"
                       loading="lazy"
+                      showSkeleton={false}
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-white font-bold">
@@ -326,12 +317,14 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
         <Link href={`/artikel/${article.slug}`}>
           <div className="relative h-[500px] rounded-2xl overflow-hidden">
             {/* Background image with parallax effect */}
-            {getImage(article.featured_image) && (
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                style={{ backgroundImage: `url(${getImage(article.featured_image)})` }}
+            <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
+              <ArticleHeroImage
+                src={article.featured_image}
+                alt={article.title}
+                category={article.category}
+                className="object-cover"
               />
-            )}
+            </div>
             
             {/* Dark overlay gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
