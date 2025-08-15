@@ -8,6 +8,8 @@ import Footer from '@/app/components/layout/Footer'
 import { Toaster } from '@/app/components/ui/Toaster'
 import { ToastProvider } from '@/app/components/ui/use-toast'
 import PerformanceMonitor from '@/app/components/PerformanceMonitor'
+import ServiceWorkerProvider from '@/app/components/providers/ServiceWorkerProvider'
+import ImagePerformanceMonitor from '@/app/components/debug/ImagePerformanceMonitor'
 import Script from 'next/script'
 
 const inter = Inter({ 
@@ -137,14 +139,17 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased`}>
         <ToastProvider>
-          <GoogleAnalytics />
-          <PerformanceMonitor />
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-          <Toaster />
+          <ServiceWorkerProvider>
+            <GoogleAnalytics />
+            <PerformanceMonitor />
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <Toaster />
+            <ImagePerformanceMonitor />
+          </ServiceWorkerProvider>
         </ToastProvider>
       </body>
     </html>

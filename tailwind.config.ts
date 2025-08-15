@@ -54,6 +54,7 @@ const config: Config = {
         'morph': 'morph 8s ease-in-out infinite',
         'glow': 'glow 2s ease-in-out infinite',
         'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+        'shimmer': 'shimmer 2s infinite',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -70,6 +71,10 @@ const config: Config = {
             opacity: '1',
             transform: 'translateY(0)',
           },
+        },
+        shimmer: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
         },
       },
     },
