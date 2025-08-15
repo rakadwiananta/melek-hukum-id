@@ -7,6 +7,7 @@ import { formatDate } from '@/app/lib/utils'
 import { FilterState } from '@/app/components/article/meta/CategoryFilter'
 import { infiniteArticleLoader, type InfiniteLoadingOptions, type LoadMoreResult } from '@/app/lib/infinite-articles'
 import { EnhancedArticleCardImage } from '@/app/components/ui/AdvancedArticleImage'
+import { RobustArticleCardImage } from '@/app/components/ui/RobustArticleImage'
 import { useArticleImagePreloader } from '@/app/hooks/useServiceWorker'
 import type { Article as DbArticle } from '@/app/lib/supabase'
 
@@ -185,7 +186,7 @@ export default function InfiniteArticleList({
       return (
         <div key={key} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group">
           <div className="relative h-48 overflow-hidden">
-            <EnhancedArticleCardImage
+            <RobustArticleCardImage
               src={article.featured_image}
               alt={article.title}
               category={article.category}
@@ -244,7 +245,7 @@ export default function InfiniteArticleList({
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden">
             <div className="relative w-24 h-24">
-              <EnhancedArticleCardImage
+              <RobustArticleCardImage
                 src={article.featured_image}
                 alt={article.title}
                 category={article.category}

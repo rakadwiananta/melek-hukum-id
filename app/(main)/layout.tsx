@@ -12,6 +12,7 @@ import ServiceWorkerProvider from '@/app/components/providers/ServiceWorkerProvi
 import ImagePerformanceMonitor from '@/app/components/debug/ImagePerformanceMonitor'
 import PerformanceDashboard from '@/app/components/performance/PerformanceDashboard'
 import CriticalCSSInjector from '@/app/components/performance/CriticalCSSInjector'
+import ImageRenderMonitor from '@/app/components/debug/ImageRenderMonitor'
 import Script from 'next/script'
 
 const inter = Inter({ 
@@ -152,6 +153,7 @@ export default function RootLayout({
             </div>
             <Toaster />
             <ImagePerformanceMonitor />
+            <ImageRenderMonitor />
             <PerformanceDashboard />
           </ServiceWorkerProvider>
         </ToastProvider>

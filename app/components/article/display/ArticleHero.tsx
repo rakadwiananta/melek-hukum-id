@@ -9,6 +9,7 @@ import { TrendingUp, Award, Sparkles, Eye, Clock, ChevronRight, BarChart3, Users
 import Link from 'next/link'
 import { ArticleHeroImage, ArticleCardImage } from '@/app/components/ui/ArticleImage'
 import { EnhancedArticleHeroImage, EnhancedArticleCardImage } from '@/app/components/ui/AdvancedArticleImage'
+import { RobustArticleHeroImage, RobustArticleCardImage } from '@/app/components/ui/RobustArticleImage'
 
 interface ArticleHeroProps {
   showLatest?: boolean
@@ -201,7 +202,7 @@ export default function ArticleHero({
             className="relative group"
           >
             <div className="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl">
-              <EnhancedArticleHeroImage
+              <RobustArticleHeroImage
                 src={featuredArticle.featured_image}
                 alt={featuredArticle.title}
                 category={featuredArticle.category}
@@ -307,7 +308,7 @@ export default function ArticleHero({
                   <Link href={`/artikel/${article.slug}`}>
                     <div className="flex gap-4 p-4">
                       <div className="relative w-32 h-32 flex-shrink-0 rounded-xl overflow-hidden">
-                        <EnhancedArticleCardImage
+                        <RobustArticleCardImage
                           src={article.featured_image}
                           alt={article.title}
                           category={article.category}
@@ -391,7 +392,7 @@ export default function ArticleHero({
       >
         {/* Background Image with Parallax */}
         <div className="absolute inset-0 transform scale-110 group-hover:scale-125 transition-transform duration-1500">
-          <EnhancedArticleHeroImage
+          <RobustArticleHeroImage
             src={featuredArticle.featured_image}
             alt={featuredArticle.title}
             category={featuredArticle.category}
