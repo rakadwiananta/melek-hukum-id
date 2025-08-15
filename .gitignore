@@ -40,3 +40,23 @@ git-installer.exe
 
 # netlify
 .netlify/
+
+# trace files and build artifacts
+*.trace
+**/*.trace
+trace
+.trace/
+build-trace/
+
+# secrets and sensitive files
+*.key
+*.secret
+.env.production
+.env.staging
+
+# cache and temporary files
+.cache/
+tmp/
+temp/
+.tmp/
+.temp/

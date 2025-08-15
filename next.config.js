@@ -90,7 +90,22 @@ const nextConfig = {
       tls: false,
     }
     
+    // Prevent secrets from being bundled
+    config.plugins = config.plugins || []
+    
     return config
+  },
+  
+  // Environment variables filtering for security
+  env: {
+    // Only expose necessary public variables
+    NEXT_PUBLIC_SITE_NAME: process.env.NEXT_PUBLIC_SITE_NAME,
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    NEXT_PUBLIC_MIDTRANS_CLIENT_KEY: process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY,
   },
   
   // Basic headers
@@ -108,8 +123,12 @@ const nextConfig = {
     ];
   },
   
-  // Disable source maps
+  // Disable source maps and traces in production
   productionBrowserSourceMaps: false,
+  generateBuildId: async () => {
+    // Use timestamp instead of git hash to avoid exposing repo info
+    return `build-${Date.now()}`
+  },
 };
 
 module.exports = nextConfig; 

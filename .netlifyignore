@@ -1,0 +1,58 @@
+# Netlify ignore file - exclude sensitive files and build artifacts
+
+# Development files
+.env*.local
+.env.development
+.env.test
+
+# Build artifacts that might contain secrets
+*.trace
+**/*.trace
+.next/trace
+.next/**/*.trace
+
+# Cache and temporary files
+.cache/
+tmp/
+temp/
+.tmp/
+.temp/
+node_modules/.cache/
+
+# Git and version control
+.git/
+.gitignore
+.gitattributes
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation and development files
+README.md
+CHANGELOG.md
+*.md
+docs/
+documentation/
+
+# Test files
+test/
+tests/
+__tests__/
+*.test.*
+*.spec.*
+
+# Source maps (if not needed in production)
+**/*.map
+
+# Development dependencies
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
