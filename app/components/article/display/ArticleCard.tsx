@@ -224,7 +224,6 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
                   </motion.div>
                 )}
               </div>
-            )}
             
             {/* Content Section */}
             <div className="p-6">
