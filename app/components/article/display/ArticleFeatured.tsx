@@ -7,6 +7,7 @@ import { Clock, Eye, Tag, ArrowRight, TrendingUp, Award, Sparkles } from 'lucide
 import Link from 'next/link'
 import { ArticleCardImage } from '@/app/components/ui/ArticleImage'
 import { EnhancedArticleCardImage } from '@/app/components/ui/AdvancedArticleImage'
+import { RobustArticleCardImage } from '@/app/components/ui/RobustArticleImage'
 
 interface ArticleFeaturedProps {
   limit?: number
@@ -202,7 +203,7 @@ export default function ArticleFeatured({
               <div className="flex flex-col md:flex-row">
                 <div className="md:w-2/5 h-64 md:h-auto relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-amber-600/20 z-10"></div>
-                  <EnhancedArticleCardImage
+                  <RobustArticleCardImage
                     src={article.featured_image}
                     alt={article.title}
                     category={article.category}

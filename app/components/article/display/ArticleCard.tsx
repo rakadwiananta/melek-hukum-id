@@ -7,6 +7,7 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import ArticleImage, { ArticleCardImage, ArticleHeroImage } from '@/app/components/ui/ArticleImage'
 import { EnhancedArticleCardImage, EnhancedArticleHeroImage } from '@/app/components/ui/AdvancedArticleImage'
+import { RobustArticleCardImage, RobustArticleHeroImage } from '@/app/components/ui/RobustArticleImage'
 
 interface ArticleCardProps {
   article: {
@@ -149,7 +150,7 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
                   transition: { duration: 10, repeat: Infinity, repeatType: "reverse" }
                 }}
               >
-                <EnhancedArticleCardImage
+                <RobustArticleCardImage
                   src={article.featured_image}
                   alt={article.title}
                   category={article.category}
@@ -319,7 +320,7 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
           <div className="relative h-[500px] rounded-2xl overflow-hidden">
             {/* Background image with parallax effect */}
             <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
-              <EnhancedArticleHeroImage
+              <RobustArticleHeroImage
                 src={article.featured_image}
                 alt={article.title}
                 category={article.category}
