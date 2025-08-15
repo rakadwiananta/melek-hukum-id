@@ -6,34 +6,52 @@ import ArticleFilter, { FilterState } from '@/app/components/article/meta/Catego
 import PopularArticles from '@/app/components/article/display/PopularArticles'
 import ArticleStats from '@/app/components/article/meta/ArticleStats'
 import ArticleNewsletter from '@/app/components/article/meta/ArticleNewsletter'
-import { Search, Filter, Scale, Gavel, FileText, Users, BookOpen, Award } from 'lucide-react'
+import { Search, Filter, Scale, Gavel, FileText, Users, BookOpen, Award, TrendingUp } from 'lucide-react'
 import { motion } from 'framer-motion'
 
-// Simplified Statistics Component
+// Improved Statistics Component with better symmetry
 function Statistics() {
   const stats = [
-    { icon: FileText, label: 'Total Artikel', value: '13', color: 'text-blue-600' },
-    { icon: Users, label: 'Total Views', value: '6.953', color: 'text-green-600' },
-    { icon: Award, label: 'Total Likes', value: '399', color: 'text-red-600' },
-    { icon: BookOpen, label: 'Rata-rata Views', value: '535', color: 'text-purple-600' }
+    { icon: FileText, label: 'Total Artikel', value: '13', color: 'from-blue-500 to-blue-600', textColor: 'text-blue-600' },
+    { icon: TrendingUp, label: 'Total Views', value: '6.953', color: 'from-green-500 to-green-600', textColor: 'text-green-600' },
+    { icon: Award, label: 'Total Likes', value: '399', color: 'from-red-500 to-red-600', textColor: 'text-red-600' },
+    { icon: BookOpen, label: 'Rata-rata Views', value: '535', color: 'from-purple-500 to-purple-600', textColor: 'text-purple-600' }
   ]
 
   return (
-    <div className="mb-8">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div className="mb-12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-center mb-8"
+      >
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Statistik Artikel</h2>
+        <p className="text-gray-600 max-w-2xl mx-auto">
+          Data terkini mengenai artikel hukum dan interaksi pengguna di platform kami
+        </p>
+      </motion.div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="bg-white/80 backdrop-blur-md rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition-all duration-300"
+            transition={{ delay: index * 0.1, duration: 0.5 }}
+            className="group"
           >
-            <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-3`}>
-              <stat.icon className={`h-6 w-6 ${stat.color}`} />
+            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 h-full border border-gray-100 hover:border-gray-200">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300`}>
+                  <stat.icon className="h-8 w-8 text-white" />
+                </div>
+                <div className="space-y-1">
+                  <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
+                  <div className="text-sm font-medium text-gray-600">{stat.label}</div>
+                </div>
+              </div>
             </div>
-            <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-            <div className="text-sm text-gray-600">{stat.label}</div>
           </motion.div>
         ))}
       </div>
@@ -41,7 +59,7 @@ function Statistics() {
   )
 }
 
-// Main Page Component
+// Main Page Component with improved layout
 export default function ArtikelPage() {
   const [filters, setFilters] = useState<FilterState>({
     category: null,
@@ -58,79 +76,78 @@ export default function ArtikelPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-brown-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Clean Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-12 text-center"
-        >
-          <div className="bg-gradient-to-r from-brown-600 to-amber-600 rounded-2xl p-8 md:p-12 text-white relative overflow-hidden">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-4 left-4">
-                <Scale className="h-16 w-16" />
-              </div>
-              <div className="absolute top-4 right-4">
-                <Gavel className="h-16 w-16" />
-              </div>
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                <FileText className="h-20 w-20" />
-              </div>
-            </div>
-            
-            <div className="relative z-10">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-3xl md:text-5xl font-bold mb-4"
-              >
-                Artikel Hukum Indonesia
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto"
-              >
-                Temukan artikel hukum terbaru, referensi resmi, dan analisis perundang-undangan dengan gaya Nusantara.
-              </motion.p>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-brown-50">
+      {/* Hero Header with better symmetry */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-brown-600 via-amber-600 to-red-600 opacity-90"></div>
+        <div className="absolute inset-0">
+          <div className="absolute top-10 left-10 opacity-10">
+            <Scale className="h-24 w-24 text-white transform rotate-12" />
           </div>
-        </motion.div>
+          <div className="absolute top-20 right-16 opacity-10">
+            <Gavel className="h-20 w-20 text-white transform -rotate-12" />
+          </div>
+          <div className="absolute bottom-10 left-1/3 opacity-10">
+            <FileText className="h-28 w-28 text-white transform rotate-6" />
+          </div>
+          <div className="absolute bottom-16 right-1/4 opacity-10">
+            <Users className="h-22 w-22 text-white transform -rotate-6" />
+          </div>
+        </div>
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 md:py-24">
+          <div className="text-center text-white">
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
+            >
+              Artikel Hukum Indonesia
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed"
+            >
+              Temukan artikel hukum terbaru, referensi resmi, dan analisis perundang-undangan 
+              dengan gaya Nusantara yang mudah dipahami
+            </motion.p>
+          </div>
+        </div>
+      </div>
 
-        {/* Search & Filter */}
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        {/* Search & Filter Section with better alignment */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="mb-8"
+          className="mb-12"
         >
-          <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-6">
-            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-              <motion.div
-                whileFocus={{ scale: 1.02 }}
-                className="relative flex-1 max-w-md"
-              >
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                <input
-                  type="text"
-                  placeholder="Cari artikel hukum..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-300"
-                />
-              </motion.div>
+          <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl p-8 border border-white/20">
+            <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
+              <div className="flex-1 w-full lg:max-w-2xl">
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-6 w-6" />
+                  <input
+                    type="text"
+                    placeholder="Cari artikel hukum, regulasi, atau topik tertentu..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-300 text-lg"
+                  />
+                </div>
+              </div>
 
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-brown-600 to-amber-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-brown-600 to-amber-600 text-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 font-semibold text-lg whitespace-nowrap"
               >
-                <Filter className="h-5 w-5" />
-                <span className="font-medium">Filter Lanjutan</span>
+                <Filter className="h-6 w-6" />
+                <span>Filter Lanjutan</span>
               </motion.button>
             </div>
           </div>
@@ -139,14 +156,15 @@ export default function ArtikelPage() {
         {/* Statistics Section */}
         <Statistics />
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Articles Section */}
-          <div className="lg:col-span-3">
+        {/* Main Content Grid with improved symmetry */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+          {/* Articles Section - Better responsive width */}
+          <div className="xl:col-span-8">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 }}
+              className="mb-8"
             >
               <ArticleFilter
                 categories={[
@@ -180,33 +198,60 @@ export default function ArtikelPage() {
             </motion.div>
           </div>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
+          {/* Sidebar with better proportions */}
+          <div className="xl:col-span-4">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 }}
-              className="sticky top-8 space-y-6"
+              className="sticky top-8 space-y-8"
             >
+              {/* Article Stats Card */}
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="bg-white/80 backdrop-blur rounded-xl shadow-lg border border-gray-100 p-6"
+                whileHover={{ y: -2 }}
+                className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
               >
-                <ArticleStats />
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6">
+                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                    <TrendingUp className="h-6 w-6" />
+                    Statistik Artikel
+                  </h3>
+                </div>
+                <div className="p-6">
+                  <ArticleStats />
+                </div>
               </motion.div>
 
+              {/* Popular Articles Card */}
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="bg-white/80 backdrop-blur rounded-xl shadow-lg border border-gray-100 p-6"
+                whileHover={{ y: -2 }}
+                className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
               >
-                <PopularArticles limit={5} />
+                <div className="bg-gradient-to-r from-green-500 to-green-600 p-6">
+                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                    <Award className="h-6 w-6" />
+                    Artikel Populer
+                  </h3>
+                </div>
+                <div className="p-6">
+                  <PopularArticles limit={5} />
+                </div>
               </motion.div>
 
+              {/* Newsletter Card */}
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="bg-gradient-to-br from-amber-100 to-brown-100 rounded-xl shadow-lg border border-amber-200 p-6"
+                whileHover={{ y: -2 }}
+                className="bg-gradient-to-br from-amber-100 via-amber-50 to-brown-100 rounded-2xl shadow-lg border border-amber-200 overflow-hidden"
               >
-                <ArticleNewsletter />
+                <div className="bg-gradient-to-r from-amber-500 to-brown-500 p-6">
+                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                    <Users className="h-6 w-6" />
+                    Newsletter
+                  </h3>
+                </div>
+                <div className="p-6">
+                  <ArticleNewsletter />
+                </div>
               </motion.div>
             </motion.div>
           </div>

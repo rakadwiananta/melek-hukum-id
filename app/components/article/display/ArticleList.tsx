@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/app/lib/supabase'
 import { formatDate } from '@/app/lib/utils'
-import { Clock, Eye, Tag, ArrowRight } from 'lucide-react'
+import { Clock, Eye, Tag, ArrowRight, User } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FilterState } from '@/app/components/article/meta/CategoryFilter'
 import { getArticles } from '@/app/lib/articles'
 import { RobustArticleCardImage } from '@/app/components/ui/RobustArticleImage'
+import { motion } from 'framer-motion'
 
 interface ArticleListProps {
   category?: string
@@ -47,7 +48,7 @@ export default function ArticleList({
   }
 }: ArticleListProps) {
   const [articles, setArticles] = useState<Article[]>([])
-  const [loading, setLoading] = useState(false) // Changed from true to false
+  const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(0)
 
@@ -91,7 +92,6 @@ export default function ArticleList({
     fetchArticles(nextPage)
   }
 
-  // Removed loading skeleton - show empty state or articles immediately
   if (articles.length === 0 && !loading) {
     return (
       <div className="space-y-6">
@@ -100,96 +100,145 @@ export default function ArticleList({
             <h2 className="text-2xl font-bold">{headerTitle}</h2>
           </div>
         )}
-        <div className="text-center py-12">
-          <p className="text-gray-500">Tidak ada artikel yang ditemukan.</p>
+        <div className="text-center py-16">
+          <div className="max-w-md mx-auto">
+            <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+              <Tag className="h-12 w-12 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Tidak ada artikel ditemukan</h3>
+            <p className="text-gray-600">Coba ubah filter pencarian atau kata kunci yang berbeda.</p>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {showHeader && (
         <div className="text-center">
-          <h2 className="text-2xl font-bold">{headerTitle}</h2>
+          <h2 className="text-3xl font-bold text-gray-900">{headerTitle}</h2>
         </div>
       )}
       
-      <div className="space-y-4">
+      {/* Article Grid - Improved symmetry */}
+      <div className="space-y-6">
         {articles.map((article, index) => (
-          <div key={article.id} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4">
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden">
-                <div className="relative w-20 h-20">
+          <motion.article 
+            key={article.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-gray-200 overflow-hidden"
+          >
+            <div className="flex flex-col md:flex-row">
+              {/* Image Section - Better proportions */}
+              <div className="md:w-80 md:flex-shrink-0">
+                <div className="relative h-48 md:h-full w-full">
                   <RobustArticleCardImage
                     src={article.featured_image}
                     alt={article.title}
                     category={article.category}
-                    className="object-cover"
+                    className="object-cover w-full h-full"
                     priority={index < 3}
                     index={index}
                   />
+                  {/* Category Badge */}
+                  {article.category && (
+                    <div className="absolute top-4 left-4">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-black/70 backdrop-blur-sm rounded-full">
+                        <Tag className="h-3 w-3" />
+                        {article.category}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
               
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-2">
-                  {article.category && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-amber-700 bg-amber-100 rounded-full">
-                      <Tag className="h-3 w-3" />
-                      {article.category}
-                    </span>
-                  )}
-                </div>
-                
-                <Link 
-                  href={`/artikel/${article.slug}`}
-                  className="block group"
-                >
-                  <h3 className="font-semibold text-gray-900 group-hover:text-amber-700 transition-colors line-clamp-2 mb-2">
-                    {article.title}
-                  </h3>
-                </Link>
-                
-                <p className="text-sm text-gray-600 line-clamp-2 mb-3">
-                  {article.excerpt}
-                </p>
-                
-                <div className="flex items-center justify-between text-xs text-gray-500">
-                  <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {formatDate(article.published_at)}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Eye className="h-3 w-3" />
-                      {article.view_count.toLocaleString()}
-                    </span>
-                  </div>
-                  
+              {/* Content Section - Better spacing and alignment */}
+              <div className="flex-1 p-6 md:p-8 flex flex-col justify-between">
+                <div className="space-y-4">
+                  {/* Title */}
                   <Link 
                     href={`/artikel/${article.slug}`}
-                    className="flex items-center gap-1 text-amber-600 hover:text-amber-700 transition-colors font-medium"
+                    className="block group-hover:text-amber-600 transition-colors"
                   >
-                    Baca
-                    <ArrowRight className="h-3 w-3" />
+                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 line-clamp-2 leading-tight">
+                      {article.title}
+                    </h3>
                   </Link>
+                  
+                  {/* Excerpt */}
+                  <p className="text-gray-600 line-clamp-3 text-base leading-relaxed">
+                    {article.excerpt}
+                  </p>
+                </div>
+                
+                {/* Meta Information - Better aligned */}
+                <div className="mt-6 pt-4 border-t border-gray-100">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-6 text-sm text-gray-500">
+                      {/* Author */}
+                      {article.author && (
+                        <span className="flex items-center gap-1.5">
+                          <User className="h-4 w-4" />
+                          <span className="font-medium">{article.author}</span>
+                        </span>
+                      )}
+                      
+                      {/* Date */}
+                      <span className="flex items-center gap-1.5">
+                        <Clock className="h-4 w-4" />
+                        <time dateTime={article.published_at}>
+                          {formatDate(article.published_at)}
+                        </time>
+                      </span>
+                      
+                      {/* Views */}
+                      <span className="flex items-center gap-1.5">
+                        <Eye className="h-4 w-4" />
+                        <span>{article.view_count.toLocaleString()} views</span>
+                      </span>
+                    </div>
+                    
+                    {/* Read More Button */}
+                    <Link 
+                      href={`/artikel/${article.slug}`}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-amber-500 to-brown-500 text-white rounded-full hover:from-amber-600 hover:to-brown-600 transition-all duration-300 font-semibold text-sm group-hover:scale-105 whitespace-nowrap"
+                    >
+                      <span>Baca Artikel</span>
+                      <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.article>
         ))}
       </div>
 
+      {/* Load More Button - Better styling */}
       {showLoadMore && hasMore && (
-        <div className="text-center">
-          <button
+        <div className="text-center pt-8">
+          <motion.button
             onClick={handleLoadMore}
             disabled={loading}
-            className="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-2xl shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-semibold text-lg"
           >
-            {loading ? 'Memuat...' : 'Muat Lebih Banyak'}
-          </button>
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                <span>Memuat...</span>
+              </>
+            ) : (
+              <>
+                <span>Muat Lebih Banyak</span>
+                <ArrowRight className="h-5 w-5" />
+              </>
+            )}
+          </motion.button>
         </div>
       )}
     </div>
