@@ -23,6 +23,16 @@ interface ImageUrlOptions {
   height?: number
 }
 
+// Check if URL is valid external URL
+function isValidExternalUrl(url: string): boolean {
+  try {
+    const urlObj = new URL(url)
+    return ['http:', 'https:'].includes(urlObj.protocol)
+  } catch {
+    return false
+  }
+}
+
 // Get Supabase public URL for images
 export function getSupabaseImageUrl(path: string): string {
   if (!path || !supabase) {
@@ -32,8 +42,8 @@ export function getSupabaseImageUrl(path: string): string {
 
   try {
     // Handle already complete URLs
-    if (path.startsWith('http://') || path.startsWith('https://')) {
-      console.log('Using complete URL:', path)
+    if (isValidExternalUrl(path)) {
+      console.log('Using external URL:', path)
       return path
     }
 
@@ -65,9 +75,9 @@ export function getSupabaseImageUrl(path: string): string {
 export function getValidImageUrl({ src, category, width = 800, height = 600 }: ImageUrlOptions): string {
   console.log('getValidImageUrl called with:', { src, category })
   
-  // If no source provided, use category fallback
-  if (!src?.trim()) {
-    console.log('No src provided, using fallback for category:', category)
+  // Handle empty, null, undefined, or whitespace-only sources
+  if (!src || typeof src !== 'string' || !src.trim()) {
+    console.log('No valid src provided, using fallback for category:', category)
     return category && FALLBACK_IMAGES[category as keyof typeof FALLBACK_IMAGES] 
       ? FALLBACK_IMAGES[category as keyof typeof FALLBACK_IMAGES]
       : FALLBACK_IMAGES.default
@@ -82,9 +92,9 @@ export function getValidImageUrl({ src, category, width = 800, height = 600 }: I
     return trimmedSrc
   }
   
-  // Handle absolute URLs
-  if (trimmedSrc.startsWith('http://') || trimmedSrc.startsWith('https://')) {
-    console.log('Using absolute URL')
+  // Handle external URLs (including i.ibb.co.com)
+  if (isValidExternalUrl(trimmedSrc)) {
+    console.log('Using external URL')
     return trimmedSrc
   }
   
@@ -109,6 +119,11 @@ export async function validateImageUrl(url: string): Promise<boolean> {
     // Skip validation for data URLs and fallback images
     if (url.startsWith('data:') || Object.values(FALLBACK_IMAGES).includes(url)) {
       return true
+    }
+
+    // Skip validation for empty or invalid URLs
+    if (!url || !url.trim()) {
+      return false
     }
 
     // Use a lightweight HEAD request to check if image exists

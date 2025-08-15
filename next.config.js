@@ -9,7 +9,7 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   
-  // Image configuration
+  // Enhanced image configuration for external URLs
   images: {
     formats: ['image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200],
@@ -17,6 +17,44 @@ const nextConfig = {
     minimumCacheTTL: 86400,
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    // Add external domains for image optimization
+    domains: [
+      'i.ibb.co.com',
+      'i.ibb.co',
+      'imgur.com',
+      'i.imgur.com',
+      'supabase.co',
+      'bicarahukum.my.id'
+    ],
+    // Add remote patterns for more flexible matching
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.ibb.co.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ibb.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'bicarahukum.my.id',
+        port: '',
+        pathname: '/**',
+      }
+    ],
+    // Unoptimized fallback for problematic images
+    unoptimized: false,
   },
   
   // Conservative optimizations for Netlify
