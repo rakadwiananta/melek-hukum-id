@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import ArticleList from '@/app/components/article/display/ArticleList'
+import InfiniteArticleList from '@/app/components/article/display/InfiniteArticleList'
 import ArticleFilter, { FilterState } from '@/app/components/article/meta/CategoryFilter'
 import PopularArticles from '@/app/components/article/display/PopularArticles'
 import ArticleStats from '@/app/components/article/meta/ArticleStats'
@@ -463,11 +464,15 @@ export default function ArtikelPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <ArticleList
-                limit={12}
-                showLoadMore={true}
+              <InfiniteArticleList
                 searchQuery={searchQuery}
                 filters={filters}
+                showHeader={true}
+                headerTitle="Semua Artikel Hukum"
+                autoLoadAll={false}
+                maxArticles={2000}
+                batchSize={20}
+                variant="list"
               />
             </motion.div>
           </div>

@@ -8,6 +8,8 @@ export default function Header() {
 
   const navigation = [
     { name: 'Beranda', href: '/' },
+    { name: 'Artikel', href: '/artikel' },
+    { name: 'Semua Artikel', href: '/artikel/semua' },
     { name: 'Kamus Hukum', href: '/kamus-hukum' },
     { name: 'Solusi', href: '/solusi' },
     { name: 'Regulasi', href: '/regulasi' },
