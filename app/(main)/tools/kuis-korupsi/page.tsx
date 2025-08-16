@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import PageHeader from '@/app/components/ui/PageHeader'
 import QuizQuestion from '@/app/components/tools/QuizQuestion'
@@ -587,7 +587,7 @@ export default function KuisKorupsiPage() {
   const [answers, setAnswers] = useState<number[]>([])
   const [showResult, setShowResult] = useState(false)
   const [showExplanation, setShowExplanation] = useState(false)
-  const [timeSpent, setTimeSpent] = useState(0)
+  // timeSpent is calculated dynamically instead of stored as state
   const [quizStartTime, setQuizStartTime] = useState<number | null>(null)
   const [isQuizActive, setIsQuizActive] = useState(false)
   
@@ -616,14 +616,7 @@ export default function KuisKorupsiPage() {
     console.log('Quiz Statistics:', stats)
   }, [])
 
-  useEffect(() => {
-    if (isQuizActive && quizStartTime) {
-      const timer = setInterval(() => {
-        setTimeSpent(Math.floor((Date.now() - quizStartTime) / 1000))
-      }, 1000)
-      return () => clearInterval(timer)
-    }
-  }, [isQuizActive, quizStartTime])
+  // Removed redundant timer - timeSpent is calculated when needed instead of every second
 
   const handleLevelSelect = (level: { name: string; description: string; icon: React.ReactNode; bgColor: string; borderColor: string; textColor: string; locked: boolean; features: Array<{ icon: React.ComponentType<{ className?: string }>; text: string; }> }) => {
     setSelectedLevel(level)
@@ -653,7 +646,6 @@ export default function KuisKorupsiPage() {
       setAnswers([])
       setShowResult(false)
       setShowExplanation(false)
-      setTimeSpent(0)
     }
   }
 
@@ -678,17 +670,16 @@ export default function KuisKorupsiPage() {
     }
   }
 
-  const handleTimeUp = () => {
+  const handleTimeUp = useCallback(() => {
     setIsQuizActive(false)
     setShowResult(true)
-  }
+  }, [])
 
   const resetQuiz = () => {
     setCurrentQuestion(0)
     setAnswers([])
     setShowResult(false)
     setShowExplanation(false)
-    setTimeSpent(0)
     setQuizStartTime(null)
     setIsQuizActive(false)
     setSelectedLevel(null)
@@ -703,6 +694,11 @@ export default function KuisKorupsiPage() {
     return answers.reduce((score, answer, index) => {
       return answer === questionsToUse[index].correctAnswer ? score + 1 : score
     }, 0)
+  }
+
+  const calculateTimeSpent = () => {
+    if (!quizStartTime) return 0
+    return Math.floor((Date.now() - quizStartTime) / 1000)
   }
 
   const getCurrentQuestionData = (): QuizQuestionType => {
@@ -958,7 +954,7 @@ export default function KuisKorupsiPage() {
             <QuizStats
               score={calculateScore()}
               totalQuestions={filteredQuestions.length > 0 ? filteredQuestions.length : (selectedLevel?.questions || quizData.length)}
-              timeSpent={timeSpent}
+              timeSpent={calculateTimeSpent()}
             />
 
             <QuizSummary
@@ -971,13 +967,13 @@ export default function KuisKorupsiPage() {
 
             <QuizLeaderboard
               currentScore={Math.round((calculateScore() / (filteredQuestions.length > 0 ? filteredQuestions.length : (selectedLevel?.questions || quizData.length))) * 100)}
-              currentTime={timeSpent}
+              currentTime={calculateTimeSpent()}
             />
 
             <QuizCertificate
               score={calculateScore()}
               totalQuestions={filteredQuestions.length > 0 ? filteredQuestions.length : (selectedLevel?.questions || quizData.length)}
-              timeSpent={timeSpent}
+              timeSpent={calculateTimeSpent()}
             />
 
             <QuizFeedback
