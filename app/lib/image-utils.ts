@@ -14,6 +14,9 @@ export const FALLBACK_IMAGES = {
   'Hukum Administrasi': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',
   'Hukum Dagang': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',
   'Hukum Adat': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',
+  // Additional fallbacks for reliability
+  fallback1: '/fallback-hukum.jpg',
+  fallback2: '/timbangkan.jpg',
 }
 
 interface ImageUrlOptions {
