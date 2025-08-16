@@ -5,6 +5,7 @@ import { ResponsiveAd } from '@/app/components/ads/AdPlacements'
 import { useState, useEffect, useRef } from 'react'
 import { ChevronUp, BookOpen, Scale, Gavel, FileText, Users, TrendingUp, AlertCircle, CheckCircle, ChevronRight, Clock, Eye } from 'lucide-react'
 import { calculateReadingTime } from '@/app/lib/utils'
+import UniversalArticleFormatter from './UniversalArticleFormatter'
 
 interface ArticleBodyProps {
   content: string
@@ -297,75 +298,20 @@ export default function ArticleBody({ content, featured_image, title }: ArticleB
           />
         </div>
 
-        {/* Content with enhanced styling */}
-        <div className="prose prose-lg max-w-none">
-          {contentParagraphs.map((paragraph, index) => (
-            <div key={index} className="mb-6">
-              {/* Content paragraph */}
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: processContent(
-                    paragraph + (index < contentParagraphs.length - 1 ? '</p>' : ''),
-                    index
-                  )
-                }}
-              />
+        {/* Enhanced Content with Universal Formatter */}
+        <UniversalArticleFormatter 
+          content={content}
+          title={title}
+          category="artikel"
+        />
 
-              {/* Ad placement */}
-              {adPositions.includes(index) && (
-                <div className="my-12 relative">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-gray-100 to-gray-50 rounded-2xl transform rotate-1" />
-                  <div className="relative bg-white p-6 rounded-xl shadow-sm">
-                    <p className="text-xs text-gray-500 text-center mb-2">IKLAN</p>
-                    <ResponsiveAd />
-                  </div>
-                </div>
-              )}
-
-              {/* Legal Tips Box */}
-              {index === Math.floor(contentParagraphs.length / 2) && (
-                <div className="my-12 p-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl text-white relative overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
-                  <div className="absolute inset-0 opacity-10">
-                    <svg className="w-full h-full" viewBox="0 0 100 100">
-                      <pattern id="tips-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                        <circle cx="10" cy="10" r="2" fill="white" />
-                      </pattern>
-                      <rect width="100" height="100" fill="url(#tips-pattern)" />
-                    </svg>
-                  </div>
-
-                  <div className="relative z-10">
-                    <h3 className="text-2xl font-bold mb-4 flex items-center gap-3">💡 Tips Hukum Praktis</h3>
-                    <ul className="space-y-3">
-                      <li className="flex items-start gap-3">
-                        <span className="text-2xl">📱</span>
-                        <span>Gunakan aplikasi resmi pemerintah untuk layanan hukum online</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-2xl">📄</span>
-                        <span>Selalu simpan bukti dokumen dalam bentuk digital dan fisik</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-2xl">⚖️</span>
-                        <span>Konsultasikan masalah hukum dengan advokat berlisensi</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              )}
-
-              {/* Interactive Quote Box */}
-              {index === Math.floor(contentParagraphs.length * 0.75) && (
-                <div className="my-12 relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-amber-100 to-red-100 rounded-3xl transform rotate-1" />
-                  <blockquote className="relative bg-white p-8 rounded-2xl shadow-lg border-l-4 border-red-600">
-                    <p className="text-xl italic text-gray-700 mb-4">"Keadilan yang tertunda adalah keadilan yang diingkari."</p>
-                    <cite className="text-gray-600 font-semibold">- William E. Gladstone</cite>
-                  </blockquote>
-                </div>
-              )}
-            </div>
-          ))}
+        {/* Ad placement in the middle */}
+        <div className="my-12 relative">
+          <div className="absolute -inset-4 bg-gradient-to-r from-gray-100 to-gray-50 rounded-2xl transform rotate-1" />
+          <div className="relative bg-white p-6 rounded-xl shadow-sm">
+            <p className="text-xs text-gray-500 text-center mb-2">IKLAN</p>
+            <ResponsiveAd />
+          </div>
         </div>
       </div>
 
