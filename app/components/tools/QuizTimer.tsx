@@ -1,7 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
 interface QuizTimerProps {
   duration: number // dalam detik
@@ -12,44 +11,69 @@ interface QuizTimerProps {
 export default function QuizTimer({ duration, onTimeUp, className = '' }: QuizTimerProps) {
   const [timeLeft, setTimeLeft] = useState(duration)
   const [isWarning, setIsWarning] = useState(false)
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const onTimeUpRef = useRef(onTimeUp)
 
-  // Reset timeLeft when duration changes
+  // Update the ref when onTimeUp changes to avoid stale closures
   useEffect(() => {
+    onTimeUpRef.current = onTimeUp
+  }, [onTimeUp])
+
+  // Memoized time up handler to prevent recreation
+  const handleTimeUp = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+      timerRef.current = null
+    }
+    onTimeUpRef.current()
+  }, [])
+
+  // Single timer effect - much more efficient
+  useEffect(() => {
+    // Reset timer when duration changes
     setTimeLeft(duration)
-  }, [duration])
-
-  useEffect(() => {
-    if (timeLeft <= 0) {
-      onTimeUp()
-      return
+    
+    // Clear any existing timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
     }
 
-    const timer = setInterval(() => {
+    // Start new timer
+    timerRef.current = setInterval(() => {
       setTimeLeft((prev) => {
-        if (prev <= 1) {
-          onTimeUp()
+        const newTime = prev - 1
+        
+        // Update warning state efficiently
+        if (newTime <= 10 && !isWarning) {
+          setIsWarning(true)
+        } else if (newTime > 10 && isWarning) {
+          setIsWarning(false)
+        }
+        
+        // Handle time up
+        if (newTime <= 0) {
+          handleTimeUp()
           return 0
         }
-        return prev - 1
+        
+        return newTime
       })
     }, 1000)
 
-    return () => clearInterval(timer)
-  }, [timeLeft, onTimeUp])
-
-  useEffect(() => {
-    if (timeLeft <= 10) {
-      setIsWarning(true)
-    } else {
-      setIsWarning(false)
+    // Cleanup on unmount or duration change
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+        timerRef.current = null
+      }
     }
-  }, [timeLeft])
+  }, [duration, handleTimeUp, isWarning])
 
-  const formatTime = (seconds: number) => {
+  const formatTime = useCallback((seconds: number) => {
     const mins = Math.floor(Math.max(0, seconds) / 60)
     const secs = Math.max(0, seconds) % 60
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-  }
+  }, [])
 
   const progress = ((duration - timeLeft) / duration) * 100
 
@@ -57,7 +81,7 @@ export default function QuizTimer({ duration, onTimeUp, className = '' }: QuizTi
     <div className={`flex items-center gap-3 ${className}`}>
       <div className="flex items-center gap-2">
         <svg
-          className={`w-5 h-5 ${isWarning ? 'text-red-500' : 'text-gray-600'}`}
+          className={`w-5 h-5 transition-colors duration-200 ${isWarning ? 'text-red-500' : 'text-gray-600'}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -70,7 +94,7 @@ export default function QuizTimer({ duration, onTimeUp, className = '' }: QuizTi
           />
         </svg>
         <span
-          className={`font-mono text-lg font-bold ${
+          className={`font-mono text-lg font-bold transition-colors duration-200 ${
             isWarning ? 'text-red-500' : 'text-gray-700'
           }`}
         >
@@ -79,11 +103,9 @@ export default function QuizTimer({ duration, onTimeUp, className = '' }: QuizTi
       </div>
       
       <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-        <motion.div
-          className={`h-full ${isWarning ? 'bg-red-500' : 'bg-primary'}`}
-          initial={{ width: 0 }}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.3 }}
+        <div
+          className={`h-full transition-all duration-1000 ease-linear ${isWarning ? 'bg-red-500' : 'bg-blue-600'}`}
+          style={{ width: `${Math.max(0, Math.min(100, progress))}%` }}
         />
       </div>
     </div>
