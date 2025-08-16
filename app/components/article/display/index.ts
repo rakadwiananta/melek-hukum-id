@@ -13,4 +13,5 @@ export { default as FeaturedArticle } from './FeaturedArticle';
 export { default as LatestArticles } from './LatestArticles';
 export { default as PopularArticles } from './PopularArticles';
 export { default as CategoryArticles } from './CategoryArticles';
-export { default as RelatedArticles } from './RelatedArticles'; 
+export { default as RelatedArticles } from './RelatedArticles';
+export { default as ImpeachmentArticle } from './ImpeachmentArticle'; 

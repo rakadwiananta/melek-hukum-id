@@ -13,6 +13,11 @@ export default function QuizTimer({ duration, onTimeUp, className = '' }: QuizTi
   const [timeLeft, setTimeLeft] = useState(duration)
   const [isWarning, setIsWarning] = useState(false)
 
+  // Reset timeLeft when duration changes
+  useEffect(() => {
+    setTimeLeft(duration)
+  }, [duration])
+
   useEffect(() => {
     if (timeLeft <= 0) {
       onTimeUp()
@@ -20,7 +25,13 @@ export default function QuizTimer({ duration, onTimeUp, className = '' }: QuizTi
     }
 
     const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1)
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          onTimeUp()
+          return 0
+        }
+        return prev - 1
+      })
     }, 1000)
 
     return () => clearInterval(timer)
@@ -29,13 +40,15 @@ export default function QuizTimer({ duration, onTimeUp, className = '' }: QuizTi
   useEffect(() => {
     if (timeLeft <= 10) {
       setIsWarning(true)
+    } else {
+      setIsWarning(false)
     }
   }, [timeLeft])
 
   const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins}:${secs.toString().padStart(2, '0')}`
+    const mins = Math.floor(Math.max(0, seconds) / 60)
+    const secs = Math.max(0, seconds) % 60
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
   }
 
   const progress = ((duration - timeLeft) / duration) * 100
