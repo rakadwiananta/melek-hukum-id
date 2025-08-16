@@ -10,6 +10,7 @@ import { FilterState } from '@/app/components/article/meta/CategoryFilter'
 import { getArticles } from '@/app/lib/articles'
 import { RobustArticleCardImage } from '@/app/components/ui/RobustArticleImage'
 import { motion } from 'framer-motion'
+import Pagination from '@/app/components/ui/Pagination'
 
 interface ArticleListProps {
   category?: string
@@ -17,6 +18,7 @@ interface ArticleListProps {
   showHeader?: boolean
   headerTitle?: string
   showLoadMore?: boolean
+  showPagination?: boolean
   searchQuery?: string
   filters?: FilterState
 }
@@ -39,6 +41,7 @@ export default function ArticleList({
   showHeader = false,
   headerTitle = 'Daftar Artikel',
   showLoadMore = false,
+  showPagination = false,
   searchQuery = '',
   filters = {
     category: null,
@@ -51,6 +54,8 @@ export default function ArticleList({
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalArticles, setTotalArticles] = useState(0)
 
   const fetchArticles = async (pageNum: number = 0) => {
     try {
@@ -65,10 +70,22 @@ export default function ArticleList({
         sortBy: filters.sortBy,
       })
 
-      if (pageNum === 0) {
+      if (showPagination) {
+        // For pagination, replace articles
         setArticles(result as any)
+        
+        // Calculate total pages (this is a simplified approach)
+        // In a real app, you'd get the total count from your API
+        const estimatedTotal = result.length === limit ? (pageNum + 1) * limit + 1 : (pageNum * limit) + result.length
+        setTotalArticles(estimatedTotal)
+        setTotalPages(Math.max(1, Math.ceil(estimatedTotal / limit)))
       } else {
-        setArticles((prev) => [...prev, ...(result as any)])
+        // For load more, append articles
+        if (pageNum === 0) {
+          setArticles(result as any)
+        } else {
+          setArticles((prev) => [...prev, ...(result as any)])
+        }
       }
 
       setHasMore(result.length === limit)
@@ -239,6 +256,25 @@ export default function ArticleList({
               </>
             )}
           </motion.button>
+        </div>
+      )}
+
+      {/* Pagination */}
+      {showPagination && totalPages > 1 && (
+        <div className="pt-8">
+          <Pagination
+            currentPage={page + 1}
+            totalPages={totalPages}
+            onPageChange={(newPage) => {
+              setPage(newPage - 1)
+              fetchArticles(newPage - 1)
+              // Scroll to top
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }}
+          />
+          <div className="text-center mt-4 text-sm text-gray-500">
+            Menampilkan {articles.length} artikel dari {totalArticles} total artikel
+          </div>
         </div>
       )}
     </div>

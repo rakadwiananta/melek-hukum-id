@@ -78,6 +78,8 @@ export default function RobustArticleImage({
     sources.push(FALLBACK_IMAGES.default)
     
     // Level 3: Alternative fallbacks
+    sources.push(FALLBACK_IMAGES.fallback1)
+    sources.push(FALLBACK_IMAGES.fallback2)
     sources.push('/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg')
     
     // Level 4: Data URL fallback (always works)

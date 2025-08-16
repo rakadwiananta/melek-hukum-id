@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react'
 import { Search, Filter, Scale, Gavel, FileText, Users, BookOpen, Award, TrendingUp } from 'lucide-react'
+import { useRealTimeStats } from '@/app/hooks/useRealTimeStats'
 
 // Lazy load heavy components
 const ArticleList = lazy(() => import('@/app/components/article/display/ArticleList'))
@@ -49,11 +50,13 @@ const ArticleLoader = () => (
 
 // Lightweight Statistics Component with CSS animations
 function Statistics() {
+  const { stats: realTimeStats } = useRealTimeStats()
+  
   const stats = [
-    { icon: FileText, label: 'Total Artikel', value: '13', color: 'from-blue-500 to-blue-600' },
-    { icon: TrendingUp, label: 'Total Views', value: '6.953', color: 'from-green-500 to-green-600' },
-    { icon: Award, label: 'Total Likes', value: '399', color: 'from-red-500 to-red-600' },
-    { icon: BookOpen, label: 'Rata-rata Views', value: '535', color: 'from-purple-500 to-purple-600' }
+    { icon: FileText, label: 'Total Artikel', value: realTimeStats.totalArticles.toLocaleString(), color: 'from-blue-500 to-blue-600' },
+    { icon: TrendingUp, label: 'Total Views', value: realTimeStats.totalViews.toLocaleString(), color: 'from-green-500 to-green-600' },
+    { icon: Award, label: 'Total Likes', value: realTimeStats.totalLikes.toLocaleString(), color: 'from-red-500 to-red-600' },
+    { icon: BookOpen, label: 'Rata-rata Views', value: realTimeStats.averageViews.toLocaleString(), color: 'from-purple-500 to-purple-600' }
   ]
 
   return (
@@ -210,7 +213,8 @@ export default function ArtikelPage() {
                   <ArticleList
                     searchQuery={searchQuery}
                     filters={filters}
-                    limit={13}
+                    limit={10}
+                    showPagination={true}
                   />
                 )}
               </Suspense>

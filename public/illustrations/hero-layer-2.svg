@@ -1,1 +1,37 @@
- 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" fill="none">
+  <defs>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.08" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.04" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Indonesian ornamental patterns -->
+  <g transform="translate(50, 50)" opacity="0.1">
+    <!-- Simplified Garuda wing pattern -->
+    <path d="M0 20 Q10 0 20 20 Q30 40 40 20 Q30 0 20 20 Q10 40 0 20" fill="url(#grad2)"/>
+  </g>
+  
+  <g transform="translate(300, 350)" opacity="0.08">
+    <!-- Traditional pattern -->
+    <circle cx="0" cy="0" r="15" fill="none" stroke="#f59e0b" stroke-width="1" opacity="0.5"/>
+    <circle cx="0" cy="0" r="10" fill="none" stroke="#f59e0b" stroke-width="1" opacity="0.3"/>
+    <circle cx="0" cy="0" r="5" fill="#f59e0b" opacity="0.2"/>
+  </g>
+  
+  <g transform="translate(700, 200)" opacity="0.06">
+    <!-- Legal document -->
+    <rect x="0" y="0" width="30" height="40" fill="#f59e0b" rx="2" opacity="0.3"/>
+    <rect x="3" y="3" width="24" height="34" fill="white" opacity="0.8"/>
+    <line x1="6" y1="8" x2="24" y2="8" stroke="#f59e0b" stroke-width="0.5"/>
+    <line x1="6" y1="12" x2="21" y2="12" stroke="#f59e0b" stroke-width="0.5"/>
+    <line x1="6" y1="16" x2="23" y2="16" stroke="#f59e0b" stroke-width="0.5"/>
+    <line x1="6" y1="20" x2="20" y2="20" stroke="#f59e0b" stroke-width="0.5"/>
+  </g>
+  
+  <g transform="translate(1000, 400)" opacity="0.05">
+    <!-- Indonesian traditional motif -->
+    <polygon points="15,2 25,12 15,22 5,12" fill="#d97706" opacity="0.4"/>
+    <polygon points="15,6 21,12 15,18 9,12" fill="#f59e0b" opacity="0.6"/>
+  </g>
+</svg> 
