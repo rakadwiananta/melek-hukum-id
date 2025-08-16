@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion'
 import { BookOpen, Quote, List, AlertTriangle, CheckCircle, Info, Lightbulb, Scale, FileText, ExternalLink, Eye, Clock } from 'lucide-react'
 import { calculateReadingTime } from '@/app/lib/utils'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 interface UniversalArticleFormatterProps {
   content: string
@@ -22,6 +24,7 @@ export default function UniversalArticleFormatter({
   title = '',
   category = 'artikel'
 }: UniversalArticleFormatterProps) {
+  const router = useRouter()
   
   // Clean and structure the content like MS Word document
   const formatContent = (rawContent: string): DocumentSection[] => {
@@ -408,18 +411,27 @@ export default function UniversalArticleFormatter({
             Untuk konsultasi lebih lanjut, silakan hubungi ahli hukum yang kompeten.
           </p>
           <div className="grid md:grid-cols-3 gap-4">
-            <button className="flex items-center justify-center gap-3 px-6 py-4 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              <BookOpen className="w-5 h-5 text-blue-600" />
-              <span className="font-semibold text-gray-700">Kamus Hukum</span>
-            </button>
-            <button className="flex items-center justify-center gap-3 px-6 py-4 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              <FileText className="w-5 h-5 text-green-600" />
-              <span className="font-semibold text-gray-700">Template Dokumen</span>
-            </button>
-            <button className="flex items-center justify-center gap-3 px-6 py-4 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              <Scale className="w-5 h-5 text-red-600" />
-              <span className="font-semibold text-gray-700">Konsultasi Hukum</span>
-            </button>
+            <Link 
+              href="/kamus-hukum" 
+              className="flex items-center justify-center gap-3 px-6 py-4 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-blue-400 hover:shadow-md transition-all duration-300 group cursor-pointer"
+            >
+              <BookOpen className="w-5 h-5 text-blue-600 group-hover:scale-110 transition-transform duration-300" />
+              <span className="font-semibold text-gray-700 group-hover:text-blue-700 transition-colors duration-300">Kamus Hukum</span>
+            </Link>
+            <Link 
+              href="/solusi/template" 
+              className="flex items-center justify-center gap-3 px-6 py-4 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-green-400 hover:shadow-md transition-all duration-300 group cursor-pointer"
+            >
+              <FileText className="w-5 h-5 text-green-600 group-hover:scale-110 transition-transform duration-300" />
+              <span className="font-semibold text-gray-700 group-hover:text-green-700 transition-colors duration-300">Template Dokumen</span>
+            </Link>
+            <Link 
+              href="/kontak" 
+              className="flex items-center justify-center gap-3 px-6 py-4 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-red-400 hover:shadow-md transition-all duration-300 group cursor-pointer"
+            >
+              <Scale className="w-5 h-5 text-red-600 group-hover:scale-110 transition-transform duration-300" />
+              <span className="font-semibold text-gray-700 group-hover:text-red-700 transition-colors duration-300">Konsultasi Hukum</span>
+            </Link>
           </div>
         </div>
       </motion.div>

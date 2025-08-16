@@ -544,9 +544,12 @@ export default function ArticleGrid({
             <p className="mb-4 opacity-90">
               Dapatkan konsultasi dengan ahli hukum bersertifikat secara online
             </p>
-            <button className="px-6 py-3 bg-white text-blue-700 font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+            <Link 
+              href="/kontak" 
+              className="inline-block px-6 py-3 bg-white text-blue-700 font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer"
+            >
               Mulai Konsultasi
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -565,9 +568,12 @@ export default function ArticleGrid({
             <p className="mb-4 opacity-90">
               Download template surat, kontrak, dan dokumen hukum lainnya
             </p>
-            <button className="px-6 py-3 bg-white text-orange-700 font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+            <Link 
+              href="/solusi/template" 
+              className="inline-block px-6 py-3 bg-white text-orange-700 font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 cursor-pointer"
+            >
               Lihat Template
-            </button>
+            </Link>
           </div>
         </div>
       </div>
