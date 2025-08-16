@@ -3,7 +3,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  trailingSlash: true,
+  trailingSlash: false,
   
   // Basic performance optimizations
   poweredByHeader: false,
