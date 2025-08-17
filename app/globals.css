@@ -67,3 +67,65 @@ body {
   outline-offset: 2px;
 }
 
+/* Consistent Article Formatting */
+.article-section h1,
+.article-section h2,
+.article-section h3 {
+  @apply font-bold text-gray-900 leading-tight;
+}
+
+.article-section h1 {
+  @apply text-xl md:text-2xl mb-6 text-center;
+}
+
+.article-section h2 {
+  @apply text-lg md:text-xl mb-4;
+}
+
+.article-section h3 {
+  @apply text-base md:text-lg mb-3;
+}
+
+.article-section p {
+  @apply text-gray-800 leading-relaxed mb-5 text-justify;
+  font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+  line-height: 1.7;
+}
+
+.article-section ol,
+.article-section ul {
+  @apply mb-6;
+}
+
+.article-section ol li,
+.article-section ul li {
+  @apply text-gray-800 leading-relaxed mb-3;
+}
+
+.article-section blockquote {
+  @apply border-l-4 border-blue-600 pl-6 py-4 bg-blue-50 my-6 rounded-r-lg;
+}
+
+.article-section blockquote p {
+  @apply text-blue-900 italic text-lg mb-0;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .article-section {
+    @apply px-4;
+  }
+  
+  .article-section p {
+    text-indent: 1rem;
+  }
+  
+  .article-section h1 {
+    @apply text-lg mb-4;
+  }
+  
+  .article-section h2 {
+    @apply text-base mb-3;
+  }
+}
+
