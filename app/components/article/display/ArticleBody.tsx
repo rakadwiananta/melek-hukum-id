@@ -5,7 +5,7 @@ import { ResponsiveAd } from '@/app/components/ads/AdPlacements'
 import { useState, useEffect, useRef } from 'react'
 import { ChevronUp, BookOpen, Scale, Gavel, FileText, Users, TrendingUp, AlertCircle, CheckCircle, ChevronRight, Clock, Eye } from 'lucide-react'
 import { calculateReadingTime } from '@/app/lib/utils'
-import ConsistentArticleFormatter from './ConsistentArticleFormatter'
+import UniversalContentFormatter from './UniversalContentFormatter'
 
 interface ArticleBodyProps {
   content: string
@@ -298,10 +298,11 @@ export default function ArticleBody({ content, featured_image, title }: ArticleB
           />
         </div>
 
-        {/* Enhanced Content with Consistent Formatter */}
-        <ConsistentArticleFormatter 
+        {/* Enhanced Content with Universal Formatter */}
+        <UniversalContentFormatter 
           content={content}
           title={title}
+          contentType="article"
           category="artikel"
         />
 
