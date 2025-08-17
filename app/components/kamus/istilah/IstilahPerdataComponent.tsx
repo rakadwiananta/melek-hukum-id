@@ -226,7 +226,7 @@ const IstilahPerdataComponent: React.FC<IstilahPerdataComponentProps> = ({
 
   // Category icons mapping
   const getCategoryIcon = (category: string) => {
-    const iconMap: Record<string, React.ComponentType> = {
+    const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
       'hukum-orang': Users,
       'hukum-keluarga': Heart,
       'hukum-waris': ScrollText,

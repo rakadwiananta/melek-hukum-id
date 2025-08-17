@@ -86,7 +86,7 @@ interface Term {
 }
 
 // Data Istilah Hukum Perdata Lengkap (743 istilah)
-const istilahPerdataData = {
+export const istilahPerdataData = {
   metadata: {
     total: 743,
     lastUpdated: '20 November 2024',

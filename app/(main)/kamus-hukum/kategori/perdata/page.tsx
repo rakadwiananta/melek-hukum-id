@@ -162,7 +162,7 @@ const quickCategories = [
   }
 ]
 
-export default function PerdataPage() {
+function PerdataPageContent() {
   const searchParams = useSearchParams()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
@@ -497,5 +497,24 @@ export default function PerdataPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function PerdataPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50 to-emerald-50 flex items-center justify-center">
+        <div className="text-center">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            className="w-12 h-12 border-4 border-green-200 border-t-green-600 rounded-full mx-auto mb-4"
+          />
+          <p className="text-gray-600">Memuat halaman...</p>
+        </div>
+      </div>
+    }>
+      <PerdataPageContent />
+    </Suspense>
   )
 }
