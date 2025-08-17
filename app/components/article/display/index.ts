@@ -16,4 +16,5 @@ export { default as CategoryArticles } from './CategoryArticles';
 export { default as RelatedArticles } from './RelatedArticles';
 export { default as ImpeachmentArticle } from './ImpeachmentArticle';
 export { default as UniversalContentFormatter } from './UniversalContentFormatter';
-export { default as ConsistentArticleFormatter } from './ConsistentArticleFormatter'; 
+export { default as ConsistentArticleFormatter } from './ConsistentArticleFormatter';
+export { default as StructuredContentRenderer } from './StructuredContentRenderer'; 
