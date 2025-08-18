@@ -517,7 +517,13 @@ export default function KonsultasiPage() {
                     </div>
                   </div>
 
-                  <button className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300">
+                  <button 
+                    onClick={() => {
+                      // Scroll to consultation form
+                      document.getElementById('consultation-form')?.scrollIntoView({ behavior: 'smooth' })
+                    }}
+                    className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300"
+                  >
                     Konsultasi Sekarang
                   </button>
                 </div>
@@ -548,9 +554,9 @@ export default function KonsultasiPage() {
             </p>
           </motion.div>
 
-          <Card3D>
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 border border-gray-200 shadow-xl">
-              <form onSubmit={handleSubmit} className="space-y-6">
+                     <Card3D>
+             <div id="consultation-form" className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 border border-gray-200 shadow-xl">
+               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
