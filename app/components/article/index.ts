@@ -6,4 +6,3 @@ export * from './meta';
 
 // Template System
 export * from './templates';
-export { default as ArticleSystemBridge } from './ArticleSystemBridge';
