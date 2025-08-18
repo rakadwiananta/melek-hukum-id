@@ -1,15 +1,24 @@
 import { Metadata } from 'next'
 import { Home, FileText, Shield, CheckCircle, MapPin, Calendar } from 'lucide-react'
+import ExistingArticleWrapper from '@/app/components/article/templates/ExistingArticleWrapper'
 
 export const metadata: Metadata = {
-  title: 'Jual Beli Tanah dan Properti - Panduan Aman',
-  description:
-    'Panduan aman jual beli tanah dan properti: cek sertifikat, AJB, balik nama, dan tips menghindari penipuan.',
+  title: 'Jual Beli Tanah dan Properti - Panduan Aman 2024 | Melek Hukum ID',
+  description: 'Panduan aman jual beli tanah dan properti: cek sertifikat, AJB, balik nama, dan tips menghindari penipuan. Prosedur lengkap 2024.',
+  keywords: ['jual beli tanah', 'AJB', 'PPAT', 'sertifikat tanah', 'BPN', 'properti'],
 }
 
 export default function JualBeliTanahPage() {
   return (
-    <article className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <ExistingArticleWrapper
+      title="Jual Beli Tanah dan Properti - Panduan Aman"
+      category="Hukum Perdata"
+      readTime="12 menit"
+      author="Dr. Sari Permata, S.H., M.H."
+      publishedAt="2024-12-14T09:00:00Z"
+      tags={['jual-beli-tanah', 'AJB', 'PPAT', 'sertifikat', 'BPN', 'properti']}
+      summary="Prosedur aman jual beli tanah: cek sertifikat, proses AJB di PPAT, pembayaran, dan balik nama ke BPN. Termasuk tips menghindari penipuan."
+    >
       <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
         <div className="max-w-5xl mx-auto px-4 py-16">
           <div className="flex items-center gap-4 mb-6">
@@ -87,6 +96,6 @@ export default function JualBeliTanahPage() {
           </p>
         </div>
       </div>
-    </article>
+    </ExistingArticleWrapper>
   )
 } 

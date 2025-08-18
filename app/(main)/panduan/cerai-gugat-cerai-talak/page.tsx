@@ -1,15 +1,24 @@
 import { Metadata } from 'next'
 import { Heart, Gavel, Calendar, FileText, Users, AlertTriangle, CheckCircle } from 'lucide-react'
+import ExistingArticleWrapper from '@/app/components/article/templates/ExistingArticleWrapper'
 
 export const metadata: Metadata = {
-  title: 'Prosedur Perceraian - Panduan Lengkap 2024',
-  description:
-    'Panduan lengkap cerai gugat dan cerai talak di Pengadilan Agama/Negeri: syarat, alur persidangan, dokumen, dan estimasi waktu.',
+  title: 'Prosedur Perceraian - Panduan Lengkap 2024 | Melek Hukum ID',
+  description: 'Panduan lengkap cerai gugat dan cerai talak di Pengadilan Agama/Negeri: syarat, alur persidangan, dokumen, dan estimasi waktu.',
+  keywords: ['cerai gugat', 'cerai talak', 'pengadilan agama', 'perceraian', 'mediasi', 'hukum keluarga'],
 }
 
 export default function ProsedurPerceraianPage() {
   return (
-    <article className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <ExistingArticleWrapper
+      title="Prosedur Perceraian - Panduan Lengkap"
+      category="Hukum Keluarga"
+      readTime="15 menit"
+      author="Dr. Ahmad Fauzi, S.H.I., M.H."
+      publishedAt="2024-12-13T11:00:00Z"
+      tags={['cerai-gugat', 'cerai-talak', 'pengadilan-agama', 'mediasi', 'perceraian']}
+      summary="Panduan praktis cerai gugat dan cerai talak: syarat, alur persidangan, biaya, dan tips menghadapi proses di pengadilan."
+    >
       <div className="relative overflow-hidden bg-gradient-to-r from-rose-600 to-pink-600 text-white">
         <div className="max-w-5xl mx-auto px-4 py-16 relative z-10">
           <div className="flex items-center gap-4 mb-6">
@@ -103,6 +112,6 @@ export default function ProsedurPerceraianPage() {
           </div>
         </div>
       </div>
-    </article>
+    </ExistingArticleWrapper>
   )
 } 
