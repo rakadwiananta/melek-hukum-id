@@ -50,7 +50,7 @@ const defaultFaqs: FAQItem[] = [
   {
     question: 'Berapa biaya konsultasi hukum di Indonesia?',
     answer:
-      'Berdasarkan data Peradi 2024, biaya konsultasi hukum bervariasi: Advokat junior Rp 500.000-1.500.000/jam, Advokat senior Rp 1.500.000-5.000.000/jam. Namun, terdapat 234 Pos Bantuan Hukum (Posbakum) di seluruh Indonesia yang memberikan konsultasi gratis untuk masyarakat tidak mampu.',
+      'Berdasarkan data Peradi 2024, biaya konsultasi hukum bervariasi: Advokat junior Rp 500.000-1.500.000/jam, Advokat senior Rp 1.500.000-5.000.000/jam. Namun, terdapat 234 Pos Bantuan Hukum (Posbakum) di seluruh Indonesia yang memberikan bantuan hukum untuk masyarakat tidak mampu. Anda juga dapat menggunakan layanan konsultasi kami dengan tarif terjangkau.',
     icon: Users,
     stats: {
       label: 'Posbakum Gratis',

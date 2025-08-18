@@ -18,8 +18,8 @@ const menuItems = [
     href: '/kamus-hukum',
     description: 'Istilah hukum dalam bahasa sederhana',
     children: [
-      { title: 'Istilah Dasar', href: '/kamus-hukum/istilah-dasar' },
-      { title: 'Konsep Anti-Korupsi', href: '/kamus-hukum/anti-korupsi' },
+      { title: 'Kategori Hukum', href: '/kamus-hukum/kategori' },
+      { title: 'Anti-Korupsi', href: '/kamus-hukum/kategori/anti-korupsi' },
       { title: 'FAQ Hukum', href: '/kamus-hukum/faq' },
     ],
   },
@@ -28,9 +28,9 @@ const menuItems = [
     href: '/solusi',
     description: 'Panduan praktis masalah hukum',
     children: [
-      { title: 'Panduan Praktis', href: '/solusi/panduan' },
-      { title: 'Template Dokumen', href: '/solusi#templates' },
-      { title: 'Langkah Hukum', href: '/solusi/langkah' },
+      { title: 'Panduan Praktis', href: '/panduan' },
+      { title: 'Template Dokumen', href: '/solusi/template' },
+      { title: 'Video Panduan', href: '/video' },
     ],
   },
   {
@@ -38,9 +38,9 @@ const menuItems = [
     href: '/regulasi',
     description: 'Update dan analisis regulasi terbaru',
     children: [
-      { title: 'UU Terbaru', href: '/regulasi/uu-terbaru' },
-      { title: 'Opini Ahli', href: '/regulasi/opini' },
-      { title: 'Dampak Regulasi', href: '/regulasi/dampak' },
+      { title: 'Peraturan Terbaru', href: '/regulasi' },
+      { title: 'Kasus Hukum', href: '/regulasi/kasus' },
+      { title: 'Artikel Hukum', href: '/artikel' },
     ],
   },
   {
@@ -48,9 +48,9 @@ const menuItems = [
     href: '/anti-korupsi',
     description: 'Edukasi pencegahan korupsi',
     children: [
-      { title: 'Edukasi', href: '/anti-korupsi/edukasi' },
-      { title: 'Pencegahan', href: '/anti-korupsi/pencegahan' },
-      { title: 'Integritas', href: '/anti-korupsi/integritas' },
+      { title: 'Cara Melaporkan', href: '/anti-korupsi' },
+      { title: 'Kuis Anti-Korupsi', href: '/tools/kuis-korupsi' },
+      { title: 'Kalkulator Denda', href: '/tools/kalkulator-denda' },
     ],
   },
   {
