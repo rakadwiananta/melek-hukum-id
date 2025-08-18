@@ -92,9 +92,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#dc2626" />
         <meta name="color-scheme" content="light" />
         
-        {/* Monetag Integration */}
-        <meta name="monetag" content="8f8b9f7c84d7834005a1b063a2bfb694" />
-        <script src="https://fpyf8.com/88/tag.min.js" data-zone="164381" async data-cfasync="false"></script>
+
         
         {/* Viewport optimization */}
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
