@@ -13,9 +13,11 @@ import Link from 'next/link'
 // Article Template Interface
 export interface ArticleSection {
   id: string
+  order: number
   title: string
   content: string
   type: 'paragraph' | 'list' | 'numbered-list' | 'quote' | 'warning' | 'info' | 'success'
+  contentType: 'paragraph' | 'list' | 'numbered-list' | 'quote' | 'warning' | 'info' | 'success'
   subsections?: ArticleSection[]
 }
 
@@ -33,6 +35,29 @@ export interface ArticleTemplate {
   sources: string[]
   relatedArticles?: string[]
   disclaimer?: string
+}
+
+export interface ArticleMetadata {
+  id: string
+  title: string
+  subtitle?: string
+  slug: string
+  category: string
+  subcategory?: string
+  tags: string[]
+  author: string
+  publishedAt: string
+  updatedAt?: string
+  readTime: string
+  difficulty: string
+  summary: string
+  metaDescription: string
+  keywords: string[]
+  featured: boolean
+  status: string
+  viewCount?: number
+  likeCount?: number
+  shareCount?: number
 }
 
 // Batik Pattern Component
@@ -165,6 +190,38 @@ const SectionRenderer: React.FC<{ section: ArticleSection; index: number }> = ({
       </div>
     </motion.section>
   )
+}
+
+// Additional interfaces for full article structure
+export interface ArticleSource {
+  id: string
+  title: string
+  type: 'undang-undang' | 'peraturan-pemerintah' | 'peraturan-menteri' | 'putusan-pengadilan' | 'jurnal' | 'buku' | 'website'
+  url?: string
+  year?: number
+  description?: string
+}
+
+export interface RelatedArticle {
+  id: string
+  title: string
+  slug: string
+  category: string
+  readTime: string
+}
+
+export interface FullArticle {
+  metadata: ArticleMetadata
+  sections: ArticleSection[]
+  sources: ArticleSource[]
+  relatedArticles?: RelatedArticle[]
+  disclaimer?: string
+  callToAction?: {
+    title: string
+    description: string
+    buttonText: string
+    buttonLink: string
+  }
 }
 
 // Main Article Template Component
@@ -465,5 +522,7 @@ const ArticleTemplateComponent: React.FC<ArticleTemplateProps> = ({ article }) =
     </div>
   )
 }
+
+// All interfaces are exported above
 
 export default ArticleTemplateComponent
