@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { supabase } from '@/app/lib/supabase'
+import { articleRedirectMap } from './route-handler'
 import ArticleSchema from '@/app/components/seo/ArticleSchema'
 import ArticleContent from '@/app/components/article/display/ArticleContent'
 import ReadingProgress from '@/app/components/article/meta/ReadingProgress'
@@ -156,6 +157,12 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }> 
 }) {
   const { slug } = await params
+  
+  // Check if this slug should be redirected to existing article
+  const redirectPath = articleRedirectMap[slug]
+  if (redirectPath) {
+    redirect(redirectPath)
+  }
   
   let article: Article | null = null
   
