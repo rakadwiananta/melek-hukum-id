@@ -2,4 +2,8 @@
 export * from './display';
 
 // Meta components  
-export * from './meta'; 
+export * from './meta';
+
+// Template System
+export * from './templates';
+export { default as ArticleSystemBridge } from './ArticleSystemBridge';
