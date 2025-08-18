@@ -92,6 +92,9 @@ export default function RootLayout({
         <meta name="theme-color" content="#dc2626" />
         <meta name="color-scheme" content="light" />
         
+        {/* Monetag Integration */}
+        <meta name="monetag" content="8f8b9f7c84d7834005a1b063a2bfb694" />
+        
         {/* Viewport optimization */}
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
       </head>
