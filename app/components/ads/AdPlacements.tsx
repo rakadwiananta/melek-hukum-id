@@ -6,6 +6,10 @@ import { cn } from '@/app/lib/utils'
 const AdUnit = dynamic(() => import('./AdUnit'), { ssr: false })
 const EzoicAd = dynamic(() => import('./EzoicAd'), { ssr: false })
 const EzoicGlobalAds = dynamic(() => import('./EzoicAd').then(mod => ({ default: mod.EzoicGlobalAds })), { ssr: false })
+const AdNowWidget = dynamic(() => import('./AdNowWidget'), { ssr: false })
+const AdNowInContent = dynamic(() => import('./AdNowWidget').then(mod => ({ default: mod.AdNowInContent })), { ssr: false })
+const AdNowSidebar = dynamic(() => import('./AdNowWidget').then(mod => ({ default: mod.AdNowSidebar })), { ssr: false })
+const AdNowFooter = dynamic(() => import('./AdNowWidget').then(mod => ({ default: mod.AdNowFooter })), { ssr: false })
 
 const SLOT_HEADER = process.env.NEXT_PUBLIC_ADSENSE_SLOT_HEADER || ''
 const SLOT_IN_CONTENT = process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT || ''
@@ -102,3 +106,7 @@ export const EzoicSidebarAd = ({ className }: { className?: string }) => (
 
 // Global Ezoic Ads initialization
 export const EzoicGlobalInit = () => <EzoicGlobalAds />
+
+// AdNow Components Export
+export { AdNowInContent, AdNowSidebar, AdNowFooter }
+export { default as AdNowWidget } from './AdNowWidget'
