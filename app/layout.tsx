@@ -69,6 +69,10 @@ export const metadata: Metadata = {
   verification: {
     google: 'your-google-verification-code',
   },
+  
+  other: {
+    'ezoic-site-verification': 'your-actual-ezoic-verification-code',
+  },
 }
 
 export default function RootLayout({
@@ -92,11 +96,11 @@ export default function RootLayout({
         <meta name="theme-color" content="#dc2626" />
         <meta name="color-scheme" content="light" />
         
-        {/* Gatekeeper Consent Scripts */}
+        {/* Gatekeeper Consent Scripts - Must be loaded first */}
         <script src="https://cmp.gatekeeperconsent.com/min.js" data-cfasync="false"></script>
         <script src="https://the.gatekeeperconsent.com/cmp.min.js" data-cfasync="false"></script>
         
-        {/* Ezoic Standalone Scripts */}
+        {/* Ezoic Standalone Scripts - Must be after consent scripts */}
         <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
         <script
           dangerouslySetInnerHTML={{
@@ -121,9 +125,23 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              window.ezstandalone.cmd.push(function () {
-                window.ezstandalone.showAds();
-              });
+              // Wait for Ezoic to load before calling showAds
+              (function() {
+                function initEzoicAds() {
+                  if (window.ezstandalone && window.ezstandalone.cmd) {
+                    window.ezstandalone.cmd.push(function () {
+                      try {
+                        window.ezstandalone.showAds();
+                      } catch (error) {
+                        console.log('Ezoic global showAds error:', error);
+                      }
+                    });
+                  } else {
+                    setTimeout(initEzoicAds, 100);
+                  }
+                }
+                setTimeout(initEzoicAds, 1000);
+              })();
             `
           }}
         />
