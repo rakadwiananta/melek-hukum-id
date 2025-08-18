@@ -92,6 +92,21 @@ export default function RootLayout({
         <meta name="theme-color" content="#dc2626" />
         <meta name="color-scheme" content="light" />
         
+        {/* Gatekeeper Consent Scripts */}
+        <script src="https://cmp.gatekeeperconsent.com/min.js" data-cfasync="false"></script>
+        <script src="https://the.gatekeeperconsent.com/cmp.min.js" data-cfasync="false"></script>
+        
+        {/* Ezoic Standalone Scripts */}
+        <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.ezstandalone = window.ezstandalone || {};
+              ezstandalone.cmd = ezstandalone.cmd || [];
+            `
+          }}
+        />
+        
 
         
         {/* Viewport optimization */}
@@ -101,6 +116,17 @@ export default function RootLayout({
         <div id="root">
           {children}
         </div>
+        
+        {/* Ezoic Global Ads Script */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.ezstandalone.cmd.push(function () {
+                window.ezstandalone.showAds();
+              });
+            `
+          }}
+        />
       </body>
     </html>
   )
