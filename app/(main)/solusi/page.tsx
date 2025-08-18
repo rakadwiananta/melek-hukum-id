@@ -1,5 +1,3 @@
-'use client'
-
 import React from 'react'
 import Link from 'next/link'
 import { Metadata } from 'next'
@@ -26,7 +24,7 @@ const TemplateSection = dynamic(() => import('@/app/components/solusi/TemplateSe
   loading: () => <div className="h-64 bg-gray-100 animate-pulse rounded-lg" />
 })
 
-const PanduanSection = dynamic(() => import('@/app/components/solusi/PanduanSection'), {
+const StatisticsSection = dynamic(() => import('@/app/components/solusi/StatisticsSection'), {
   loading: () => <div className="h-64 bg-gray-100 animate-pulse rounded-lg" />
 })
 
@@ -50,7 +48,7 @@ export default function SolusiPage() {
         
         <TemplateSection />
         
-        <PanduanSection />
+        <StatisticsSection />
         
         <FAQAccordion />
         
