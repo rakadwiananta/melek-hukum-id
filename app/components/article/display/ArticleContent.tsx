@@ -602,17 +602,17 @@ export default function ArticleContent({ article }: ArticleContentProps) {
           <div className="relative z-10">
             <h3 className="text-2xl font-bold mb-4">Butuh Bantuan Hukum?</h3>
             <p className="mb-6 opacity-90">
-              Dapatkan konsultasi gratis dengan ahli hukum kami atau akses template dokumen legal.
+              Dapatkan konsultasi terjangkau dengan ahli hukum kami atau akses template dokumen legal.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 
-                onClick={() => window.open('https://jdih.kemenkumham.go.id/', '_blank')}
+                onClick={() => window.location.href = '/konsultasi'}
                 className="px-6 py-3 bg-white text-blue-700 font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300"
               >
-                Konsultasi Gratis
+                Konsultasi Hukum
               </button>
               <button 
-                onClick={() => window.open('https://ahu.go.id/', '_blank')}
+                onClick={() => window.location.href = '/solusi/template'}
                 className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-blue-700 transform hover:scale-105 transition-all duration-300"
               >
                 Template Dokumen

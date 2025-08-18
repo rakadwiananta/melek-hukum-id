@@ -483,7 +483,7 @@ function PerdataPageContent() {
                 className="px-8 py-4 bg-white text-green-700 font-semibold rounded-2xl hover:bg-gray-50 transition-colors flex items-center gap-2 justify-center"
               >
                 <Users className="w-5 h-5" />
-                Konsultasi Gratis
+                Konsultasi Hukum
               </Link>
               <Link
                 href="/template"

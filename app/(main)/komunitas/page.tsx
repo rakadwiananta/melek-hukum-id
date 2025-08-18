@@ -202,9 +202,9 @@ export default function KomunitasPage() {
             <div className="w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
               <MessageCircle className="h-8 w-8 text-white" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">Konsultasi Gratis</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">Konsultasi Hukum</h3>
             <p className="text-gray-600 leading-relaxed">
-              Dapatkan konsultasi hukum dasar secara gratis dari para ahli dan praktisi hukum di komunitas kami.
+              Dapatkan konsultasi hukum dasar dengan tarif terjangkau dari para ahli dan praktisi hukum di komunitas kami.
             </p>
           </motion.div>
 
