@@ -133,9 +133,9 @@ export default function SolusiHero() {
 
             {/* Quick Links dengan animasi */}
             <div className="flex flex-wrap gap-3 mb-8">
-              <QuickLink href="#popular" icon={FileText} label="Template Populer" />
-              <QuickLink href="#templates" icon={BookOpen} label="Panduan Lengkap" />
-              <QuickLink href="#faq" icon={Users} label="Tanya Jawab" />
+              <QuickLink href="/solusi/template" icon={FileText} label="Template Populer" />
+              <QuickLink href="/panduan" icon={BookOpen} label="Panduan Lengkap" />
+              <QuickLink href="/artikel" icon={Users} label="Artikel Hukum" />
             </div>
 
             {/* Feature highlights */}

@@ -511,10 +511,13 @@ export default function VideoPage() {
           </div>
 
           <div className="text-center mt-12">
-            <button className="px-8 py-4 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-2xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center gap-2 mx-auto">
+            <Link 
+              href="/video?category=all"
+              className="px-8 py-4 bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-2xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center gap-2 mx-auto"
+            >
               Lihat Semua Video
               <ArrowRight className="w-5 h-5" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -537,14 +540,20 @@ export default function VideoPage() {
                 Subscribe channel YouTube kami untuk mendapatkan video panduan hukum terbaru setiap minggunya
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="px-8 py-4 bg-white text-purple-700 font-semibold rounded-2xl hover:bg-gray-50 transition-colors flex items-center gap-2 justify-center">
+                <button 
+                  onClick={() => window.open('https://youtube.com/@melekhukumid', '_blank')}
+                  className="px-8 py-4 bg-white text-purple-700 font-semibold rounded-2xl hover:bg-gray-50 transition-colors flex items-center gap-2 justify-center"
+                >
                   <PlayCircle className="w-5 h-5" />
                   Subscribe YouTube
                 </button>
-                <button className="px-8 py-4 bg-purple-700/30 backdrop-blur-sm text-white font-semibold rounded-2xl border border-purple-400/30 hover:bg-purple-700/40 transition-colors flex items-center gap-2 justify-center">
+                <Link
+                  href="/kontak"
+                  className="px-8 py-4 bg-purple-700/30 backdrop-blur-sm text-white font-semibold rounded-2xl border border-purple-400/30 hover:bg-purple-700/40 transition-colors flex items-center gap-2 justify-center"
+                >
                   <Download className="w-5 h-5" />
-                  Download App
-                </button>
+                  Hubungi Kami
+                </Link>
               </div>
             </div>
           </motion.div>
