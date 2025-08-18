@@ -64,16 +64,32 @@ export async function generateMetadata({
   
   // Coba ambil dari Supabase terlebih dahulu
   if (supabase) {
-    const { data, error } = await supabase
-      .from('articles')
-      .select('*')
-      .eq('slug', slug)
-      .eq('status', 'published')
-      .single()
-    
-    if (!error && data) {
-      article = data
+    try {
+      const { data, error } = await supabase
+        .from('articles')
+        .select('*')
+        .eq('slug', slug)
+        .eq('status', 'published')
+        .single()
+      
+      if (!error && data) {
+        article = data
+      } else if (error) {
+        console.error('Supabase error fetching article:', error)
+        // Log untuk debugging
+        console.log('Attempted to fetch article with slug:', slug)
+        console.log('Error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        })
+      }
+    } catch (err) {
+      console.error('Unexpected error fetching article:', err)
     }
+  } else {
+    console.warn('Supabase client not configured')
   }
   
   // Jika tidak ada data, biarkan metadata minimal non-index
@@ -168,25 +184,44 @@ export default async function ArticlePage({
   
   // Coba ambil dari Supabase terlebih dahulu
   if (supabase) {
-    const { data, error } = await supabase
-      .from('articles')
-      .select(`
-        *,
-        comments(count)
-      `)
-      .eq('slug', slug)
-      .eq('status', 'published')
-      .single()
-    
-    if (!error && data) {
-      article = data
-      
-      // Update view count
-      await supabase
+    try {
+      const { data, error } = await supabase
         .from('articles')
-        .update({ view_count: (data.view_count || 0) + 1 })
-        .eq('id', data.id)
+        .select(`
+          *,
+          comments(count)
+        `)
+        .eq('slug', slug)
+        .eq('status', 'published')
+        .single()
+      
+      if (!error && data) {
+        article = data
+        
+        // Update view count
+        try {
+          await supabase
+            .from('articles')
+            .update({ view_count: (data.view_count || 0) + 1 })
+            .eq('id', data.id)
+        } catch (viewError) {
+          console.warn('Failed to update view count:', viewError)
+        }
+      } else if (error) {
+        console.error('Supabase error fetching article in main component:', error)
+        console.log('Attempted to fetch article with slug:', slug)
+        console.log('Error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        })
+      }
+    } catch (err) {
+      console.error('Unexpected error fetching article in main component:', err)
     }
+  } else {
+    console.warn('Supabase client not configured in main component')
   }
   
   // Jika tidak ada data, 404
