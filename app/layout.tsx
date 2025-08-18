@@ -96,9 +96,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#dc2626" />
         <meta name="color-scheme" content="light" />
         
-        {/* Gatekeeper Consent Scripts - Must be loaded first */}
-        <script src="https://cmp.gatekeeperconsent.com/min.js" data-cfasync="false"></script>
-        <script src="https://the.gatekeeperconsent.com/cmp.min.js" data-cfasync="false"></script>
+
         
         {/* Ezoic Standalone Scripts - Must be after consent scripts */}
         <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
