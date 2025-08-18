@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   },
   
   other: {
-    'ezoic-site-verification': 'your-actual-ezoic-verification-code',
+    'ezoic-site-verification': 'iliv3haIMKkkic7sEAz8wOdIaLB9pT',
   },
 }
 
