@@ -120,8 +120,10 @@ export default function TemplateSection() {
     if (!isPremium) {
       // Tampilkan prompt sederhana lalu arahkan ke Solusi (section pricing/payment)
       alert('Fitur download template premium terkunci. Silakan berlangganan Rp49.000 untuk membuka akses.')
-      // Arahkan ke section newsletter di beranda
-      window.location.href = '/#newsletterform'
+      // Arahkan ke section newsletter di beranda menggunakan router
+      if (typeof window !== 'undefined') {
+        window.location.href = '/#newsletterform'
+      }
       return
     }
 

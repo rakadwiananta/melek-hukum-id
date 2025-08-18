@@ -11,6 +11,7 @@ import TableOfContents from '@/app/components/article/meta/TableOfContents'
 import ShareModal from '@/app/components/article/meta/ShareModal'
 import { motion, AnimatePresence } from 'framer-motion'
 import { BarChart3, TrendingUp, Users, AlertTriangle, BookOpen, Scale, Download, MessageSquare, Heart, Share2, Bookmark, ChevronRight, PlayCircle, FileText, MessageCircle } from 'lucide-react'
+import Link from 'next/link'
 
 interface ArticleContentProps {
   article: {
@@ -540,16 +541,12 @@ export default function ArticleContent({ article }: ArticleContentProps) {
           <p className="text-gray-700 mb-6">
             Setelah membaca artikel ini, uji pemahaman Anda tentang hukum dengan kuis singkat kami.
           </p>
-          <button 
-            onClick={() => toast({
-              title: 'Fitur Kuis Segera Hadir!',
-              description: 'Kami sedang mengembangkan kuis interaktif untuk membantu pemahaman Anda tentang hukum.',
-              variant: 'default'
-            })}
-            className="px-6 py-3 bg-gradient-to-r from-red-600 to-amber-600 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+          <Link 
+            href="/tools/kuis-korupsi"
+            className="inline-block px-6 py-3 bg-gradient-to-r from-red-600 to-amber-600 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 text-center"
           >
             Mulai Kuis Interaktif
-          </button>
+          </Link>
         </motion.div>
       )}
   
@@ -605,18 +602,18 @@ export default function ArticleContent({ article }: ArticleContentProps) {
               Dapatkan konsultasi terjangkau dengan ahli hukum kami atau akses template dokumen legal.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button 
-                onClick={() => window.location.href = '/konsultasi'}
-                className="px-6 py-3 bg-white text-blue-700 font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+              <Link 
+                href="/konsultasi"
+                className="px-6 py-3 bg-white text-blue-700 font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 text-center"
               >
                 Konsultasi Hukum
-              </button>
-              <button 
-                onClick={() => window.location.href = '/solusi/template'}
-                className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-blue-700 transform hover:scale-105 transition-all duration-300"
+              </Link>
+              <Link 
+                href="/solusi/template"
+                className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-blue-700 transform hover:scale-105 transition-all duration-300 text-center"
               >
                 Template Dokumen
-              </button>
+              </Link>
             </div>
           </div>
         </motion.div>
