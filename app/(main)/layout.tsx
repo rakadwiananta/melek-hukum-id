@@ -7,12 +7,9 @@ import Header from '@/app/components/layout/Header'
 import Footer from '@/app/components/layout/Footer'
 import { Toaster } from '@/app/components/ui/Toaster'
 import { ToastProvider } from '@/app/components/ui/use-toast'
-import PerformanceMonitor from '@/app/components/PerformanceMonitor'
 import ServiceWorkerProvider from '@/app/components/providers/ServiceWorkerProvider'
-import ImagePerformanceMonitor from '@/app/components/debug/ImagePerformanceMonitor'
 import PerformanceDashboard from '@/app/components/performance/PerformanceDashboard'
 import CriticalCSSInjector from '@/app/components/performance/CriticalCSSInjector'
-import ImageRenderMonitor from '@/app/components/debug/ImageRenderMonitor'
 import Script from 'next/script'
 
 const inter = Inter({ 
@@ -145,15 +142,12 @@ export default function RootLayout({
           <ServiceWorkerProvider>
             <CriticalCSSInjector />
             <GoogleAnalytics />
-            <PerformanceMonitor />
             <div className="min-h-screen flex flex-col">
               <Header />
               <main className="flex-1">{children}</main>
               <Footer />
             </div>
             <Toaster />
-            <ImagePerformanceMonitor />
-            <ImageRenderMonitor />
             <PerformanceDashboard />
           </ServiceWorkerProvider>
         </ToastProvider>
