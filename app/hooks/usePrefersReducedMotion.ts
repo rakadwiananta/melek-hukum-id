@@ -1,18 +1,41 @@
-'use client'
+import { useState, useEffect } from 'react'
 
-import { useEffect, useState } from 'react'
-
-export default function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false)
+export default function usePrefersReducedMotion(): boolean {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const update = () => setReduced(mq.matches)
-    update()
-    mq.addEventListener?.('change', update)
-    return () => mq.removeEventListener?.('change', update)
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const mediaQueryList = window.matchMedia('(prefers-reduced-motion: reduce)')
+    
+    // Set initial value
+    setPrefersReducedMotion(mediaQueryList.matches)
+
+    // Listen for changes
+    const listener = (event: MediaQueryListEvent) => {
+      setPrefersReducedMotion(event.matches)
+    }
+
+    // Add listener
+    if (mediaQueryList.addEventListener) {
+      mediaQueryList.addEventListener('change', listener)
+    } else {
+      // Fallback for older browsers
+      mediaQueryList.addListener(listener)
+    }
+
+    // Cleanup
+    return () => {
+      if (mediaQueryList.removeEventListener) {
+        mediaQueryList.removeEventListener('change', listener)
+      } else {
+        // Fallback for older browsers
+        mediaQueryList.removeListener(listener)
+      }
+    }
   }, [])
 
-  return reduced
-} 
+  return prefersReducedMotion
+}
