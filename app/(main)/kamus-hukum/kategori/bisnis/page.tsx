@@ -58,28 +58,17 @@ const BatikPattern = ({ className = "" }: { className?: string }) => {
   )
 }
 
-// 3D Card Component
-const Card3D = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
-  const [isHovered, setIsHovered] = useState(false)
-  
+// Enhanced Card Component
+const EnhancedCard = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50, rotateX: -20 }}
-      animate={{ opacity: 1, y: 0, rotateX: 0 }}
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ delay, type: "spring", stiffness: 100 }}
-      whileHover={{ scale: 1.05, rotateY: 5, z: 50 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      style={{ transformStyle: 'preserve-3d' }}
+      whileHover={{ scale: 1.05, y: -5 }}
       className="relative"
     >
-      <motion.div
-        animate={isHovered ? { z: 20 } : { z: 0 }}
-        transition={{ duration: 0.3 }}
-        style={{ transformStyle: 'preserve-3d' }}
-      >
-        {children}
-      </motion.div>
+      {children}
     </motion.div>
   )
 }
@@ -89,7 +78,7 @@ const LoadingState = () => {
   const loadingStats = [
     { label: "Memuat Database", value: "295+ Istilah" },
     { label: "Sinkronisasi", value: "11 Kategori" },
-    { label: "Render 3D", value: "Nusantara Theme" }
+    { label: "Render UI", value: "Nusantara Theme" }
   ]
 
   return (
@@ -139,7 +128,7 @@ const LoadingState = () => {
           </motion.h2>
           
           <p className="text-center text-gray-600 mb-6">
-            Menyiapkan pengalaman visual 3D Nusantara
+            Menyiapkan pengalaman visual interaktif Nusantara
           </p>
 
           {/* Loading Stats */}
@@ -235,13 +224,13 @@ const QuickStats = () => {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
       {stats.map((stat, idx) => (
-        <Card3D key={idx} delay={idx * 0.1}>
+        <EnhancedCard key={idx} delay={idx * 0.1}>
           <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 text-center border border-emerald-100 shadow-lg">
             <stat.icon className="h-8 w-8 mx-auto mb-2 text-emerald-600" />
             <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
             <div className="text-xs text-gray-600">{stat.label}</div>
           </div>
-        </Card3D>
+        </EnhancedCard>
       ))}
     </div>
   )
@@ -267,7 +256,7 @@ export default function Page() {
         <BatikPattern className="text-emerald-900" />
       </motion.div>
       
-      {/* 3D Animated Background Elements */}
+      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <FloatingElement delay={0} className="top-20 left-10">
           <div className="w-64 h-64 bg-gradient-to-br from-emerald-200 to-blue-200 rounded-full blur-3xl opacity-30" />
@@ -319,11 +308,11 @@ export default function Page() {
             </span>
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Database lengkap dengan visualisasi 3D interaktif dan data statistik terkini
+            Database lengkap dengan visualisasi interaktif dan data statistik terkini
           </p>
         </motion.div>
 
-        {/* Quick Access Icons with 3D effect */}
+        {/* Quick Access Icons with hover effects */}
         <div className="flex justify-center gap-6 mb-8">
           {[
             { icon: Building, color: "from-emerald-500 to-teal-500", delay: 0 },

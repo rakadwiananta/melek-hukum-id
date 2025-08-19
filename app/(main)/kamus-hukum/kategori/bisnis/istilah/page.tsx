@@ -9,53 +9,46 @@ import {
 } from 'lucide-react'
 import PatternBackground from '@/app/components/nusantara/PatternBackground'
 import NusantaraCanvas from '@/app/components/nusantara/NusantaraCanvas'
-import WayangModel from '@/app/components/nusantara/WayangModel'
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Float, Environment, PerspectiveCamera } from '@react-three/drei'
-import usePrefersReducedMotion from '@/app/hooks/usePrefersReducedMotion'
+
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 
-// 3D Floating Icons
-const FloatingIcon = ({ Icon, position, color }: any) => {
+// Simple decorative component to replace 3D scene
+const BusinessIllustration = () => {
   return (
-    <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.5}>
-      <mesh position={position}>
-        <boxGeometry args={[0.5, 0.5, 0.5]} />
-        <meshStandardMaterial color={color} metalness={0.3} roughness={0.4} />
-      </mesh>
-    </Float>
-  )
-}
-
-// Enhanced 3D Scene
-const BusinessScene = () => {
-  return (
-    <>
-      <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-      <OrbitControls 
-        enableZoom={false} 
-        enablePan={false} 
-        autoRotate 
-        autoRotateSpeed={0.5}
-        maxPolarAngle={Math.PI / 2.5}
-      />
+    <div className="flex items-center justify-center h-full relative">
+      <motion.div
+        animate={{ 
+          scale: [1, 1.1, 1],
+          rotate: [0, 5, -5, 0]
+        }}
+        transition={{ 
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="text-amber-600 opacity-40 relative z-10"
+      >
+        <Building className="w-24 h-24" />
+      </motion.div>
       
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={0.8} castShadow />
-      <pointLight position={[-10, -10, -5]} intensity={0.4} color="#f59e0b" />
+      {/* Decorative elements */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-0 flex items-center justify-center"
+      >
+        <div className="w-32 h-32 border border-amber-300/30 rounded-full" />
+      </motion.div>
       
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-        <WayangModel scale={1.3} position={[0, -0.3, 0]} />
-      </Float>
-
-      {/* Floating business icons */}
-      <FloatingIcon Icon={Building} position={[-2, 1, -1]} color="#10b981" />
-      <FloatingIcon Icon={Scale} position={[2, 1, -1]} color="#3b82f6" />
-      <FloatingIcon Icon={Globe} position={[0, -1.5, -1]} color="#8b5cf6" />
-      
-      <Environment preset="sunset" />
-    </>
+      <motion.div
+        animate={{ rotate: -360 }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-0 flex items-center justify-center"
+      >
+        <div className="w-48 h-48 border border-rose-300/20 rounded-full" />
+      </motion.div>
+    </div>
   )
 }
 
@@ -164,7 +157,6 @@ const BusinessLawTrends = () => {
 }
 
 export default function Page() {
-  const reduced = usePrefersReducedMotion()
   const { scrollY } = useScroll()
   const headerScale = useTransform(scrollY, [0, 100], [1, 0.98])
   const [activeView, setActiveView] = useState('overview')
@@ -252,7 +244,7 @@ export default function Page() {
       >
         {/* Animated Pattern Overlay */}
         <div className="absolute inset-0 opacity-10">
-          <NusantaraCanvas height={320} reducedMotion={reduced} />
+          <NusantaraCanvas height={320} />
         </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -334,22 +326,18 @@ export default function Page() {
               </div>
             </motion.div>
 
-            {/* Right: 3D Scene */}
-            {!reduced && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-                className="relative h-64 sm:h-80 lg:h-96"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-300/20 to-rose-300/20 rounded-3xl" />
-                <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl">
-                  <Canvas>
-                    <BusinessScene />
-                  </Canvas>
-                </div>
-              </motion.div>
-            )}
+            {/* Right: Business Illustration */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5 }}
+              className="relative h-64 sm:h-80 lg:h-96"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-300/20 to-rose-300/20 rounded-3xl" />
+              <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-amber-100 to-rose-100">
+                <BusinessIllustration />
+              </div>
+            </motion.div>
           </div>
         </div>
       </motion.header>
