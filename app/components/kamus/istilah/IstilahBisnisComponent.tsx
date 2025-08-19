@@ -1,65 +1,14 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BusinessLawDictionary } from './IstilahBisnis'
 import PatternBackground from '@/app/components/nusantara/PatternBackground'
 import NusantaraCanvas from '@/app/components/nusantara/NusantaraCanvas'
-import WayangModel from '@/app/components/nusantara/WayangModel'
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls, PerspectiveCamera, Environment, Float } from '@react-three/drei'
-import usePrefersReducedMotion from '@/app/hooks/usePrefersReducedMotion'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { 
   Building, Scale, TrendingUp, Users, Award, Globe, BarChart3, 
   Shield, BookOpen, DollarSign, Activity, Sparkles
 } from 'lucide-react'
-
-// Komponen Batik Animasi 3D
-const BatikPattern3D = () => {
-  const meshRef = useRef<any>()
-  
-  useEffect(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.z = Math.PI / 6
-    }
-  }, [])
-
-  return (
-    <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.2}>
-      <mesh ref={meshRef} position={[0, 0, -2]}>
-        <planeGeometry args={[10, 10, 32, 32]} />
-        <meshStandardMaterial
-          color="#d97706"
-          metalness={0.3}
-          roughness={0.7}
-          transparent
-          opacity={0.1}
-          wireframe
-        />
-      </mesh>
-    </Float>
-  )
-}
-
-// Komponen Wayang 3D Enhanced
-const WayangScene = () => {
-  return (
-    <>
-      <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-      <OrbitControls enableZoom={false} enablePan={false} maxPolarAngle={Math.PI / 2} />
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[10, 10, 5]} intensity={0.8} castShadow />
-      <pointLight position={[-10, -10, -5]} intensity={0.4} color="#fbbf24" />
-      
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-        <WayangModel scale={1.5} position={[0, -0.5, 0]} />
-      </Float>
-      
-      <BatikPattern3D />
-      <Environment preset="sunset" />
-    </>
-  )
-}
 
 // Komponen Statistik Hukum Bisnis Indonesia
 const BusinessLawStatistics = () => {
@@ -170,7 +119,6 @@ const NusantaraOrnament = ({ className = "" }: { className?: string }) => (
 )
 
 export default function IstilahBisnisComponent() {
-  const reduced = usePrefersReducedMotion()
   const { scrollY } = useScroll()
   const parallaxY = useTransform(scrollY, [0, 500], [0, -100])
   const opacity = useTransform(scrollY, [0, 200], [1, 0.8])
@@ -193,10 +141,10 @@ export default function IstilahBisnisComponent() {
       <NusantaraOrnament className="top-10 left-10 opacity-20" />
       <NusantaraOrnament className="bottom-10 right-10 opacity-20" />
 
-      {/* Hero Section with 3D Canvas */}
+      {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-amber-50/30">
-          <NusantaraCanvas height={320} reducedMotion={reduced} className="opacity-60" />
+          <NusantaraCanvas height={320} className="opacity-60" />
         </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -233,7 +181,7 @@ export default function IstilahBisnisComponent() {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
                   >
-                    Kamus lengkap dengan visualisasi 3D Nusantara
+                    Kamus lengkap dengan visualisasi Nusantara
                   </motion.p>
                 </div>
               </div>
@@ -279,26 +227,38 @@ export default function IstilahBisnisComponent() {
               </div>
             </motion.div>
 
-            {/* Right: 3D Wayang Model */}
-            {!reduced && isLoaded && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="relative h-64 sm:h-80 lg:h-96"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-200/20 to-rose-200/20 rounded-3xl" />
-                <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-amber-200/60">
-                  <Canvas>
-                    <WayangScene />
-                  </Canvas>
+            {/* Right: Decorative Illustration */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="relative h-64 sm:h-80 lg:h-96"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-200/20 to-rose-200/20 rounded-3xl" />
+              <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-amber-200/60 bg-gradient-to-br from-amber-100 to-rose-100">
+                {/* Simplified Illustration */}
+                <div className="flex items-center justify-center h-full">
+                  <motion.div
+                    animate={{ 
+                      scale: [1, 1.1, 1],
+                      rotate: [0, 5, -5, 0]
+                    }}
+                    transition={{ 
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="text-amber-600 opacity-40"
+                  >
+                    <Building className="w-32 h-32" />
+                  </motion.div>
                 </div>
-                
-                {/* Decorative elements */}
-                <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-amber-400 to-rose-400 rounded-full blur-2xl opacity-30" />
-                <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-rose-400 to-red-400 rounded-full blur-2xl opacity-30" />
-              </motion.div>
-            )}
+              </div>
+              
+              {/* Decorative elements */}
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-amber-400 to-rose-400 rounded-full blur-2xl opacity-30" />
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-rose-400 to-red-400 rounded-full blur-2xl opacity-30" />
+            </motion.div>
           </div>
         </div>
       </section>
