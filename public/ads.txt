@@ -1,0 +1,12 @@
+# ads.txt file for bicarahukum.my.id
+# This file is required by Google AdSense for verification
+# Format: domain, publisher_id, relationship, certification_authority
+
+# Google AdSense
+google.com, pub-XXXXXXXXXX, DIRECT, f08c47fec0942fa0
+
+# Replace pub-XXXXXXXXXX with your actual AdSense publisher ID
+# Example: google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0
+
+# Note: Update this file with your actual AdSense publisher ID
+# after getting approved for AdSense
