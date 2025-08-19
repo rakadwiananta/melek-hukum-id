@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { Metadata } from 'next'
 import { BusinessLawDictionary } from '@/app/components/kamus/istilah/IstilahBisnis'
 import { motion } from 'framer-motion'
 import { BookOpen, ChevronRight, Briefcase, ScrollText } from 'lucide-react'
