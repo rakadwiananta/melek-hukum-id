@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { getValidImageUrl, getSupabaseImageUrl, FALLBACK_IMAGES, validateImageUrl } from '@/app/lib/image-utils'
 import { cn } from '@/app/lib/utils'
-import { imageRenderTracker } from '@/app/components/debug/ImageRenderMonitor'
 import { imageAutoFixer } from '@/app/lib/image-auto-fix'
 
 interface RobustArticleImageProps {
@@ -130,7 +129,6 @@ export default function RobustArticleImage({
     }
     
     // Track render
-    imageRenderTracker.trackImageLoad(src || '', category || '', 0)
 
     return () => {
       if (retryTimeoutRef.current) {
@@ -145,7 +143,6 @@ export default function RobustArticleImage({
     onLoad?.()
     
     // Track successful load
-    imageRenderTracker.trackImageLoad(currentSrc, category || '', fallbackLevel)
   }
 
   const handleError = () => {
