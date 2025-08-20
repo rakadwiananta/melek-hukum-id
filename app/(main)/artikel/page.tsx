@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, lazy, Suspense } from 'react'
-import { Search, Filter, Scale, Gavel, FileText, Users, BookOpen, Award, TrendingUp } from 'lucide-react'
+import { Search, Scale, Gavel, FileText, Users, BookOpen, Award, TrendingUp } from 'lucide-react'
 import { useRealTimeStats } from '@/app/hooks/useRealTimeStats'
 
 // Lazy load heavy components
@@ -168,10 +168,7 @@ export default function ArtikelPage() {
                 </div>
               </div>
 
-              <button className="flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-brown-600 to-amber-600 text-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 font-semibold text-lg whitespace-nowrap transform hover:scale-105">
-                <Filter className="h-6 w-6" />
-                <span>Filter Lanjutan</span>
-              </button>
+
             </div>
           </div>
         </div>
