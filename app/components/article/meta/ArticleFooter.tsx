@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Heart, MessageCircle, Share2, Bookmark, ThumbsUp, Award, TrendingUp, Users, BarChart3 } from 'lucide-react'
 import { cn } from '@/app/lib/utils'
+import Link from 'next/link'
 
 interface ArticleFooterProps {
   article: {
@@ -226,20 +227,20 @@ export default function ArticleFooter({
           </p>
           
           <div className="grid md:grid-cols-3 gap-4">
-            <button className="p-4 bg-white/10 backdrop-blur rounded-xl hover:bg-white/20 transition-all duration-300 text-left group">
+            <Link href="/kamus-hukum" className="p-4 bg-white/10 backdrop-blur rounded-xl hover:bg-white/20 transition-all duration-300 text-left group block">
               <h4 className="font-semibold mb-1 group-hover:translate-x-1 transition-transform">📚 Kamus Hukum</h4>
               <p className="text-sm opacity-80">Pelajari istilah hukum</p>
-            </button>
+            </Link>
             
-            <button className="p-4 bg-white/10 backdrop-blur rounded-xl hover:bg-white/20 transition-all duration-300 text-left group">
+            <Link href="/tools/kuis-korupsi" className="p-4 bg-white/10 backdrop-blur rounded-xl hover:bg-white/20 transition-all duration-300 text-left group block">
               <h4 className="font-semibold mb-1 group-hover:translate-x-1 transition-transform">🎯 Kuis Interaktif</h4>
               <p className="text-sm opacity-80">Uji pemahaman Anda</p>
-            </button>
+            </Link>
             
-            <button className="p-4 bg-white/10 backdrop-blur rounded-xl hover:bg-white/20 transition-all duration-300 text-left group">
+            <Link href="/konsultasi" className="p-4 bg-white/10 backdrop-blur rounded-xl hover:bg-white/20 transition-all duration-300 text-left group block">
               <h4 className="font-semibold mb-1 group-hover:translate-x-1 transition-transform">💬 Konsultasi</h4>
               <p className="text-sm opacity-80">Tanya ahli hukum</p>
-            </button>
+            </Link>
           </div>
         </div>
       </div>
