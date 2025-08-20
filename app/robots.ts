@@ -4,11 +4,14 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://bicarahukum.my.id'
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-    },
-    sitemap: [`${BASE_URL}/sitemap.xml`],
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/api/', '/_next/', '/admin/']
+      }
+    ],
+    sitemap: `${BASE_URL}/sitemap.xml`,
     host: BASE_URL.replace(/https?:\/\//, ''),
   }
 }
