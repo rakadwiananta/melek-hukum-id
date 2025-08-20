@@ -86,12 +86,23 @@ const WayangDecoration = ({ className }: { className?: string }) => (
   </svg>
 )
 
-export default function TemplateSection() {
+interface TemplateSectionProps {
+  searchQuery?: string
+}
+
+export default function TemplateSection({ searchQuery: externalSearchQuery }: TemplateSectionProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<SolusiCategory>('Semua')
   const [showFilter, setShowFilter] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [sortBy, setSortBy] = useState<'popular' | 'newest'>('popular')
+
+  // Update local search query when external search query changes
+  useEffect(() => {
+    if (externalSearchQuery) {
+      setSearchQuery(externalSearchQuery)
+    }
+  }, [externalSearchQuery])
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
