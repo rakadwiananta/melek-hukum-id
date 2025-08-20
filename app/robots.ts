@@ -7,10 +7,13 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: [
+          '/',
+          '/_next/static/',  // Allow static assets (JS, CSS, fonts, images)
+        ],
         disallow: [
           '/api/',
-          '/_next/',
+          '/_next/webpack-hmr',  // Block only HMR in development
           '/admin/',
           '/*.json$',
           '/404',
@@ -19,10 +22,12 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: 'Googlebot',
-        allow: '/',
+        allow: [
+          '/',
+          '/_next/static/',  // Explicitly allow static assets for Googlebot
+        ],
         disallow: [
           '/api/',
-          '/_next/',
           '/admin/'
         ]
       }
