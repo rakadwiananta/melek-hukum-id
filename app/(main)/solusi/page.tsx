@@ -1,19 +1,9 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import Link from 'next/link'
-import { Metadata } from 'next'
 import dynamic from 'next/dynamic'
 import { HeaderBannerAd, InContentAd } from '@/app/components/ads/AdPlacements'
-
-export const metadata: Metadata = {
-  title: 'Solusi Masalah Hukum Indonesia - Panduan Praktis & Template Dokumen | Portal Hukum Nusantara',
-  description: 'Platform hukum terlengkap di Indonesia. Akses 500+ template dokumen legal, panduan hukum praktis, dan konsultasi dengan 10.000+ advokat tersertifikasi. Gratis dan terpercaya.',
-  keywords: 'hukum indonesia, template dokumen legal, konsultasi hukum terjangkau, advokat indonesia, bantuan hukum',
-  openGraph: {
-    title: 'Portal Hukum Nusantara - Solusi Hukum Terpercaya',
-    description: 'Akses ribuan template dokumen dan konsultasi hukum terjangkau',
-    images: ['/og-image-solusi.jpg']
-  }
-}
 
 // Lazy load components for better performance
 const SolusiHero = dynamic(() => import('@/app/components/solusi/SolusiHero'), {
@@ -37,16 +27,22 @@ const Newsletter = dynamic(() => import('@/app/components/home/Newsletter'), {
 })
 
 export default function SolusiPage() {
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <HeaderBannerAd />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <SolusiHero />
+        <SolusiHero onSearch={handleSearch} />
         
         <InContentAd />
         
-        <TemplateSection />
+        <TemplateSection searchQuery={searchQuery} />
         
         <StatisticsSection />
         
