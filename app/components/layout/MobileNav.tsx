@@ -25,7 +25,7 @@ const menuItems = [
     children: [
       { title: 'Panduan Praktis', href: '/panduan' },
       { title: 'Template Dokumen', href: '/solusi/template' },
-      { title: 'Video Panduan', href: '/video' },
+
     ],
   },
   {
