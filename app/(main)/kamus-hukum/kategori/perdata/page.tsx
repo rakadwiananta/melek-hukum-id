@@ -479,11 +479,11 @@ function PerdataPageContent() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/konsultasi"
+                href="/panduan"
                 className="px-8 py-4 bg-white text-green-700 font-semibold rounded-2xl hover:bg-gray-50 transition-colors flex items-center gap-2 justify-center"
               >
                 <Users className="w-5 h-5" />
-                Konsultasi Hukum
+                Panduan Hukum
               </Link>
               <Link
                 href="/template"

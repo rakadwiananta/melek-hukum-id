@@ -501,7 +501,7 @@ const ArticleTemplateComponent: React.FC<ArticleTemplateProps> = ({ article }) =
               
               <div className="flex items-center gap-4">
                 <Link
-                  href="/konsultasi"
+                  href="/panduan"
                   className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-all duration-300 font-semibold"
                 >
                   <Users className="w-4 h-4" />

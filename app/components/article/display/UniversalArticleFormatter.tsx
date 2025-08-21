@@ -430,7 +430,7 @@ export default function UniversalArticleFormatter({
               className="flex items-center justify-center gap-3 px-6 py-4 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-red-400 hover:shadow-md transition-all duration-300 group cursor-pointer"
             >
               <Scale className="w-5 h-5 text-red-600 group-hover:scale-110 transition-transform duration-300" />
-              <span className="font-semibold text-gray-700 group-hover:text-red-700 transition-colors duration-300">Konsultasi Hukum</span>
+              <span className="font-semibold text-gray-700 group-hover:text-red-700 transition-colors duration-300">Panduan Hukum</span>
             </Link>
           </div>
         </div>
