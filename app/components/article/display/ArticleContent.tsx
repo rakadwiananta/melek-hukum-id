@@ -10,6 +10,7 @@ import RelatedArticles from '@/app/components/article/display/RelatedArticles'
 import TableOfContents from '@/app/components/article/meta/TableOfContents'
 import ShareModal from '@/app/components/article/meta/ShareModal'
 import CommentSection from '@/app/components/article/comments/CommentSection'
+import MobileCommentFAB from '@/app/components/article/comments/MobileCommentFAB'
 import { motion, AnimatePresence } from 'framer-motion'
 import { BarChart3, TrendingUp, Users, AlertTriangle, BookOpen, Scale, Download, MessageSquare, Heart, Share2, Bookmark, ChevronRight, PlayCircle, FileText, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
@@ -105,6 +106,7 @@ export default function ArticleContent({ article }: ArticleContentProps) {
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([])
   const [showVideoGuide, setShowVideoGuide] = useState(false)
   const [downloadableResources, setDownloadableResources] = useState<any[]>([])
+  const [showCommentForm, setShowCommentForm] = useState(false)
   const contentRef = useRef<HTMLDivElement>(null)
 
   // Check if article is law-related
@@ -239,6 +241,24 @@ export default function ArticleContent({ article }: ArticleContentProps) {
     if (commentSection) {
       commentSection.scrollIntoView({ behavior: 'smooth' })
     }
+  }
+
+  const handleScrollToComments = () => {
+    const commentSection = document.getElementById('comment-section')
+    if (commentSection) {
+      commentSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  const handleOpenCommentForm = () => {
+    setShowCommentForm(true)
+    // Scroll to comment section after opening form
+    setTimeout(() => {
+      const commentSection = document.getElementById('comment-section')
+      if (commentSection) {
+        commentSection.scrollIntoView({ behavior: 'smooth' })
+      }
+    }, 100)
   }
   
   // Track article view
@@ -621,8 +641,17 @@ export default function ArticleContent({ article }: ArticleContentProps) {
         <CommentSection 
           articleId={article.id} 
           initialCommentCount={article.comment_count}
+          showCommentForm={showCommentForm}
+          onToggleCommentForm={setShowCommentForm}
         />
       </div>
+
+      {/* Mobile Comment FAB */}
+      <MobileCommentFAB
+        commentCount={article.comment_count || 0}
+        onScrollToComments={handleScrollToComments}
+        onOpenCommentForm={handleOpenCommentForm}
+      />
     </article>
   )
   }
