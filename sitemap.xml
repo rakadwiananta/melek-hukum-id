@@ -1,293 +1,433 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
 <!-- Main Pages -->
 <url>
   <loc>https://bicarahukum.my.id/</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
   <priority>1.00</priority>
 </url>
 
 <!-- Content Categories -->
 <url>
   <loc>https://bicarahukum.my.id/artikel</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>daily</changefreq>
   <priority>0.90</priority>
 </url>
 <url>
   <loc>https://bicarahukum.my.id/kamus-hukum</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
   <priority>0.90</priority>
 </url>
 <url>
   <loc>https://bicarahukum.my.id/panduan</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
   <priority>0.90</priority>
 </url>
 <url>
   <loc>https://bicarahukum.my.id/solusi</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
   <priority>0.90</priority>
 </url>
 <url>
   <loc>https://bicarahukum.my.id/regulasi</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
   <priority>0.90</priority>
 </url>
 <url>
   <loc>https://bicarahukum.my.id/anti-korupsi</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
   <priority>0.90</priority>
 </url>
 
 <!-- Kamus Hukum Section -->
 <url>
   <loc>https://bicarahukum.my.id/kamus-hukum/faq</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://bicarahukum.my.id/kamus-hukum/hak-tersangka</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/kamus-hukum/kategori</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/kamus-hukum/perbedaan-tersangka-terdakwa</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/kamus-hukum/kuhp</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/kamus-hukum/proses-peradilan-pidana</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
-
-<!-- Kamus Hukum Categories -->
 <url>
-  <loc>https://bicarahukum.my.id/kamus-hukum/kategori/anti-korupsi</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
+  <loc>https://bicarahukum.my.id/kamus-hukum/hukum-acara-pidana</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/kamus-hukum/kategori/anti-korupsi/istilah</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
+  <loc>https://bicarahukum.my.id/kamus-hukum/sistem-peradilan-pidana</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/kamus-hukum/kategori/bisnis</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
+  <loc>https://bicarahukum.my.id/kamus-hukum/bantuan-hukum</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/kamus-hukum/kategori/bisnis/istilah</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
+  <loc>https://bicarahukum.my.id/kamus-hukum/advokat</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/kamus-hukum/kategori/perdata</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
+  <loc>https://bicarahukum.my.id/kamus-hukum/konsultasi-hukum</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/kamus-hukum/kategori/perdata/istilah</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
+  <loc>https://bicarahukum.my.id/kamus-hukum/pengacara</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/kamus-hukum/kategori/pidana</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
+  <loc>https://bicarahukum.my.id/kamus-hukum/paralegal</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/kamus-hukum/kategori/pidana/istilah</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://bicarahukum.my.id/kamus-hukum/kategori/tata-negara</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://bicarahukum.my.id/kamus-hukum/kategori/tata-negara/istilah</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
+  <loc>https://bicarahukum.my.id/kamus-hukum/legal-aid</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
 </url>
 
 <!-- Panduan Section -->
 <url>
-  <loc>https://bicarahukum.my.id/panduan/balik-nama-kendaraan</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/panduan/cara-mencari-pengacara</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/panduan/cerai-gugat-cerai-talak</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/panduan/biaya-jasa-pengacara</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/panduan/gugatan-sederhana</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/panduan/prosedur-konsultasi-hukum</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/panduan/jual-beli-tanah</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/panduan/bantuan-hukum-gratis</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/panduan/mengurus-dokumen-hilang</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/panduan/hak-dan-kewajiban-klien</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/panduan/phk-dan-pesangon</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/panduan/memilih-pengacara-yang-tepat</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/panduan/prosedur-pelaporan</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/panduan/persiapan-konsultasi-hukum</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/panduan/somasi-dan-teguran</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/panduan/dokumen-yang-diperlukan</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/panduan/surat-kuasa</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/panduan/etika-profesi-advokat</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/panduan/warisan-dan-hibah</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/panduan/kode-etik-pengacara</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 
 <!-- Solusi Section -->
 <url>
-  <loc>https://bicarahukum.my.id/solusi/template</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/solusi/masalah-keluarga</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/solusi/template/dakwaan</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
+  <loc>https://bicarahukum.my.id/solusi/sengketa-bisnis</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/solusi/template/perjanjian</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
+  <loc>https://bicarahukum.my.id/solusi/masalah-properti</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/solusi/kasus-pidana</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/solusi/sengketa-perdata</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/solusi/masalah-ketenagakerjaan</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/solusi/hukum-kontrak</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/solusi/perlindungan-konsumen</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/solusi/hukum-waris</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/solusi/perceraian</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
 </url>
 
 <!-- Regulasi Section -->
 <url>
-  <loc>https://bicarahukum.my.id/regulasi/kasus</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/regulasi/undang-undang-terbaru</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/regulasi/peraturan-pemerintah</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/regulasi/keputusan-mahkamah-agung</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/regulasi/yurisprudensi</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/regulasi/perda-terbaru</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/regulasi/kuhp-terbaru</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/regulasi/kuhap</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/regulasi/kuh-perdata</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/regulasi/undang-undang-advokat</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/regulasi/peraturan-bantuan-hukum</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+
+<!-- Anti-Korupsi Section -->
+<url>
+  <loc>https://bicarahukum.my.id/anti-korupsi/kpk</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/anti-korupsi/tipikor</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/anti-korupsi/whistleblower</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/anti-korupsi/gratifikasi</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/anti-korupsi/pencegahan-korupsi</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/anti-korupsi/pemberantasan-korupsi</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/anti-korupsi/undang-undang-tipikor</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/anti-korupsi/pengadilan-tipikor</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/anti-korupsi/jaksa-penuntut-umum</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/anti-korupsi/asset-recovery</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 
 <!-- Artikel Section -->
 <url>
-  <loc>https://bicarahukum.my.id/artikel/cara-mendirikan-pt-2024</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://bicarahukum.my.id/artikel/cara-mengurus-perceraian-2024</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://bicarahukum.my.id/artikel/laporan-kpk</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-
-<!-- Tools Section -->
-<url>
-  <loc>https://bicarahukum.my.id/tools/kalkulator-denda</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://bicarahukum.my.id/tools/kuis-korupsi</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-
-<!-- Community & Contact -->
-<url>
-  <loc>https://bicarahukum.my.id/komunitas</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
+  <loc>https://bicarahukum.my.id/artikel/hukum-pidana</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
   <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/artikel/hukum-perdata</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/artikel/hukum-administrasi</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/artikel/hukum-bisnis</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/artikel/hukum-keluarga</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.70</priority>
+</url>
+
+<!-- Additional utility pages -->
+<url>
+  <loc>https://bicarahukum.my.id/tentang</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
 </url>
 <url>
   <loc>https://bicarahukum.my.id/kontak</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.60</priority>
 </url>
 <url>
-  <loc>https://bicarahukum.my.id/contact</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
+  <loc>https://bicarahukum.my.id/kebijakan-privasi</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.30</priority>
+</url>
+<url>
+  <loc>https://bicarahukum.my.id/syarat-ketentuan</loc>
+  <lastmod>2025-01-27T10:00:00+00:00</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.30</priority>
 </url>
 
-<!-- About & Company -->
-<url>
-  <loc>https://bicarahukum.my.id/tentang</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://bicarahukum.my.id/tim</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://bicarahukum.my.id/kerjasama</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
-</url>
-
-<!-- Legal Pages -->
-<url>
-  <loc>https://bicarahukum.my.id/privacy</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://bicarahukum.my.id/terms</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://bicarahukum.my.id/disclaimer</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://bicarahukum.my.id/cookies</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-
-<!-- Additional Pages -->
-<url>
-  <loc>https://bicarahukum.my.id/template</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://bicarahukum.my.id/payment-success</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.50</priority>
-</url>
-<url>
-  <loc>https://bicarahukum.my.id/payment-error</loc>
-  <lastmod>2025-08-21T11:31:13+00:00</lastmod>
-  <priority>0.50</priority>
-</url>
 </urlset>
