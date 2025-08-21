@@ -184,7 +184,7 @@ export default function ArticleShowcase() {
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      <span>{formatDate(article.publishedAt, { dateStyle: 'short' })}</span>
+                      <span>{formatDate(article.publishedAt)}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
