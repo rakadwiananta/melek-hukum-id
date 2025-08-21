@@ -5,7 +5,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://bicarahukum.my.id'
   
   // Use ISO 8601 date format for better Google compatibility
-  const currentDate = new Date().toISOString().split('T')[0]
+  const currentDate = new Date().toISOString()
   
   // Define all pages
   const pages = [
