@@ -276,7 +276,7 @@ WHERE a.status = 'published';
 -- View: User Interactions
 CREATE OR REPLACE VIEW user_interactions AS
 SELECT 
-    user_identifier,
+    users.user_identifier,
     -- Like statistics
     COALESCE(likes.total_likes, 0) as total_likes,
     COALESCE(likes.recent_likes, 0) as likes_last_7_days,
@@ -375,14 +375,14 @@ JOIN articles a ON c.article_id = a.id;
 -- View: Daily Activity Summary
 CREATE OR REPLACE VIEW daily_activity AS
 SELECT 
-    activity_date,
-    SUM(new_likes) as total_likes,
-    SUM(new_comments) as total_comments,
-    SUM(new_bookmarks) as total_bookmarks,
-    SUM(new_views) as total_views,
-    COUNT(DISTINCT CASE WHEN new_likes > 0 THEN user_identifier END) as active_likers,
-    COUNT(DISTINCT CASE WHEN new_comments > 0 THEN user_identifier END) as active_commenters,
-    COUNT(DISTINCT CASE WHEN new_bookmarks > 0 THEN user_identifier END) as active_bookmarkers
+    daily_stats.activity_date,
+    SUM(daily_stats.new_likes) as total_likes,
+    SUM(daily_stats.new_comments) as total_comments,
+    SUM(daily_stats.new_bookmarks) as total_bookmarks,
+    SUM(daily_stats.new_views) as total_views,
+    COUNT(DISTINCT CASE WHEN daily_stats.new_likes > 0 THEN daily_stats.user_identifier END) as active_likers,
+    COUNT(DISTINCT CASE WHEN daily_stats.new_comments > 0 THEN daily_stats.user_identifier END) as active_commenters,
+    COUNT(DISTINCT CASE WHEN daily_stats.new_bookmarks > 0 THEN daily_stats.user_identifier END) as active_bookmarkers
 FROM (
     SELECT 
         created_at::date as activity_date,
@@ -430,8 +430,8 @@ FROM (
     FROM article_views
     GROUP BY created_at::date, user_identifier
 ) daily_stats
-GROUP BY activity_date
-ORDER BY activity_date DESC;
+GROUP BY daily_stats.activity_date
+ORDER BY daily_stats.activity_date DESC;
 
 -- View: Comment Moderation Queue
 CREATE OR REPLACE VIEW comment_moderation_queue AS
