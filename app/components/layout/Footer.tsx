@@ -19,7 +19,7 @@ const footerLinks = [
       { label: 'Template Dokumen', href: '/solusi/#templates' },
       { label: 'Kalkulator Denda', href: '/tools/kalkulator-denda' },
       { label: 'Kuis Korupsi', href: '/tools/kuis-korupsi' },
-      { label: 'FAQ', href: '/solusi/#faq' },
+      { label: 'FAQ', href: '/kamus-hukum/faq' },
     ],
   },
   {
@@ -81,7 +81,7 @@ const sitemapData = [
     title: 'Solusi Hukum',
     links: [
       { label: 'Solusi Praktis', href: '/solusi' },
-      { label: 'FAQ Hukum', href: '/solusi#faq' },
+      { label: 'FAQ Hukum', href: '/kamus-hukum/faq' },
       { label: 'Template Dokumen', href: '/solusi#templates' },
       { label: 'Statistik Hukum', href: '/solusi#statistics' },
       { label: 'Panduan Praktis', href: '/solusi#popular' },
