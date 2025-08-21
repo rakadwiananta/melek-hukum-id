@@ -237,7 +237,7 @@ export default function ArticleFooter({
               <p className="text-sm opacity-80">Uji pemahaman Anda</p>
             </Link>
             
-            <Link href="/konsultasi" className="p-4 bg-white/10 backdrop-blur rounded-xl hover:bg-white/20 transition-all duration-300 text-left group block">
+            <Link href="/panduan" className="p-4 bg-white/10 backdrop-blur rounded-xl hover:bg-white/20 transition-all duration-300 text-left group block">
               <h4 className="font-semibold mb-1 group-hover:translate-x-1 transition-transform">💬 Konsultasi</h4>
               <p className="text-sm opacity-80">Tanya ahli hukum</p>
             </Link>

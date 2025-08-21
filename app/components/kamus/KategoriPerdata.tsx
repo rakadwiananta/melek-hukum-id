@@ -498,7 +498,7 @@ export default function KategoriPerdata({ searchQuery }: KategoriPerdataProps) {
               <p className="text-sm text-gray-600 mb-3">
                 Layanan konsultasi hukum keluarga terpercaya.
               </p>
-              <a href="/konsultasi/keluarga" className="text-red-600 text-sm font-medium hover:underline">
+              <a href="/panduan" className="text-red-600 text-sm font-medium hover:underline">
                 Konsultasi Sekarang →
               </a>
             </div>

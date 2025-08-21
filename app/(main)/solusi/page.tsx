@@ -54,23 +54,23 @@ export default function SolusiPage() {
         <section className="text-center py-16 bg-gradient-to-r from-primary via-red-600 to-pink-600 rounded-3xl text-white shadow-2xl mt-16">
           <div className="max-w-4xl mx-auto px-6">
             <h3 className="text-3xl md:text-4xl font-bold mb-4">
-              Mulai Konsultasi Hukum Anda Sekarang
+              Mulai Panduan Hukum Anda Sekarang
             </h3>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
               Dapatkan solusi hukum yang tepat dan terpercaya untuk masalah Anda
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
-                href="/konsultasi"
+                href="/solusi/template"
                 className="px-8 py-4 bg-gradient-to-r from-primary to-red-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105 text-center"
               >
-                Konsultasi Hukum
+                Lihat Template
               </Link>
               <Link 
-                href="/solusi/template"
+                href="/panduan"
                 className="px-8 py-4 border-2 border-primary text-primary rounded-xl font-semibold hover:bg-primary hover:text-white transition-all duration-300 text-center"
               >
-                Lihat Template
+                Panduan Hukum
               </Link>
             </div>
           </div>

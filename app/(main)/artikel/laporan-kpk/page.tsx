@@ -317,7 +317,7 @@ export default function LaporanKPKPage() {
               {
                 title: 'Konsultasi Anti-Korupsi',
                 description: 'Konsultasi dengan ahli hukum pidana dan anti-korupsi',
-                url: '/konsultasi?type=anti-korupsi',
+                url: "/panduan",
                 icon: Users
               }
             ].map((link, index) => {

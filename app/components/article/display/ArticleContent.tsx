@@ -611,10 +611,10 @@ export default function ArticleContent({ article }: ArticleContentProps) {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
-                href="/konsultasi"
+                href="/panduan"
                 className="px-6 py-3 bg-white text-blue-700 font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 text-center"
               >
-                Konsultasi Hukum
+                Panduan Hukum
               </Link>
               <Link 
                 href="/solusi/template"

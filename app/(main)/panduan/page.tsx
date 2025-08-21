@@ -316,7 +316,7 @@ export default function PanduanPage() {
             <div className="bg-white rounded-xl p-5 border border-blue-100">
               <h4 className="font-semibold text-gray-900 mb-2">Konsultasi Online</h4>
               <p className="text-sm text-gray-600 mb-3">Tanya jawab langsung dengan konsultan hukum berpengalaman</p>
-              <Link href="/konsultasi" className="text-blue-600 font-medium text-sm hover:underline">
+              <Link href="/panduan" className="text-blue-600 font-medium text-sm hover:underline">
                 Mulai Konsultasi →
               </Link>
             </div>

@@ -271,7 +271,7 @@ export default function KategoriPage() {
                 Cari di Kamus
               </Link>
               <Link
-                href="/konsultasi"
+                href="/panduan"
                 className="px-8 py-4 bg-blue-700/30 backdrop-blur-sm text-white font-semibold rounded-2xl border border-blue-400/30 hover:bg-blue-700/40 transition-colors flex items-center gap-2 justify-center"
               >
                 <Users className="w-5 h-5" />
