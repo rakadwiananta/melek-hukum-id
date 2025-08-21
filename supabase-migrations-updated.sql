@@ -8,7 +8,7 @@
 -- ===========================================
 CREATE TABLE IF NOT EXISTS article_likes (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    article_id TEXT NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
+    article_id UUID NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
     user_identifier TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(article_id, user_identifier)
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS article_likes (
 -- ===========================================
 CREATE TABLE IF NOT EXISTS article_bookmarks (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    article_id TEXT NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
+    article_id UUID NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
     user_identifier TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     UNIQUE(article_id, user_identifier)
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS article_bookmarks (
 -- ===========================================
 CREATE TABLE IF NOT EXISTS article_comments (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    article_id TEXT NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
+    article_id UUID NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     author_name TEXT NOT NULL,
     author_email TEXT,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS article_comments (
 -- ===========================================
 CREATE TABLE IF NOT EXISTS article_views (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    article_id TEXT NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
+    article_id UUID NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
     user_identifier TEXT NOT NULL,
     user_agent TEXT,
     referrer TEXT,
@@ -459,9 +459,9 @@ ORDER BY cd.moderation_priority DESC, cd.created_at ASC;
 -- ===========================================
 
 -- Function: Get Article Engagement
-CREATE OR REPLACE FUNCTION get_article_engagement(article_id_param TEXT)
+CREATE OR REPLACE FUNCTION get_article_engagement(article_id_param UUID)
 RETURNS TABLE (
-    article_id TEXT,
+    article_id UUID,
     title TEXT,
     total_likes BIGINT,
     total_comments BIGINT,
@@ -511,7 +511,7 @@ $$ LANGUAGE plpgsql;
 -- Function: Get Trending Articles
 CREATE OR REPLACE FUNCTION get_trending_articles(days_param INTEGER DEFAULT 7, limit_param INTEGER DEFAULT 10)
 RETURNS TABLE (
-    article_id TEXT,
+    article_id UUID,
     title TEXT,
     category TEXT,
     recent_likes BIGINT,
@@ -573,7 +573,7 @@ GRANT SELECT ON comment_details TO authenticated;
 GRANT SELECT ON daily_activity TO authenticated;
 GRANT SELECT ON comment_moderation_queue TO authenticated;
 
-GRANT EXECUTE ON FUNCTION get_article_engagement(TEXT) TO anon, authenticated;
+GRANT EXECUTE ON FUNCTION get_article_engagement(UUID) TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION get_user_activity(TEXT) TO authenticated;
 GRANT EXECUTE ON FUNCTION get_trending_articles(INTEGER, INTEGER) TO anon, authenticated;
 
