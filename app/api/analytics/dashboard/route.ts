@@ -130,7 +130,7 @@ export async function GET(request: NextRequest) {
         total_comments: totalComments,
         total_bookmarks: totalBookmarks,
         total_articles: overviewStats?.length || 0,
-        avg_engagement_rate: overviewStats?.length > 0 
+        avg_engagement_rate: (overviewStats?.length || 0) > 0 
           ? (totalLikes + totalComments) / totalViews * 100 
           : 0
       },
