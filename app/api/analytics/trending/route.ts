@@ -27,13 +27,13 @@ export async function GET(request: NextRequest) {
     // Filter berdasarkan kategori jika diperlukan
     let filteredData = data || []
     if (category) {
-      filteredData = filteredData.filter(item => 
+      filteredData = filteredData.filter((item: any) => 
         item.category?.toLowerCase() === category.toLowerCase()
       )
     }
 
     // Mendapatkan data lengkap artikel
-    const articleIds = filteredData.map(item => item.article_id)
+    const articleIds = filteredData.map((item: any) => item.article_id)
     
     if (articleIds.length === 0) {
       return NextResponse.json({
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
     if (articlesError) throw articlesError
 
     // Menggabungkan data trending dengan data artikel
-    const enrichedData = filteredData.map(trendItem => {
+    const enrichedData = filteredData.map((trendItem: any) => {
       const articleData = articlesData?.find(article => article.id === trendItem.article_id)
       return {
         ...trendItem,
