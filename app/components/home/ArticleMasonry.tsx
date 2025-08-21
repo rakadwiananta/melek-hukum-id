@@ -303,7 +303,7 @@ export default function ArticleMasonry() {
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
-                      <span>{formatDate(article.publishedAt, { dateStyle: 'short' })}</span>
+                      <span>{formatDate(article.publishedAt)}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
