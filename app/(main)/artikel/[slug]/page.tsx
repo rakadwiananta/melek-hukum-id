@@ -315,25 +315,28 @@ export default async function ArticlePage({
                   </p>
                   
                   {/* Author Info */}
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-amber-500 bg-gradient-to-r from-amber-400 to-brown-400 flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">
+                  <div className="space-y-4 mb-6">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-amber-500 bg-gradient-to-r from-amber-400 to-brown-400 flex items-center justify-center flex-shrink-0">
+                        <span className="text-white font-bold text-sm md:text-lg">
                           {article.author.charAt(0).toUpperCase()}
                         </span>
                       </div>
-                      <div>
-                        <p className="font-semibold text-gray-900">{article.author}</p>
-                        <p className="text-sm text-gray-600">Penulis Melek Hukum ID</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-gray-900 text-sm sm:text-base truncate">{article.author}</p>
+                        <p className="text-xs sm:text-sm text-gray-600">Penulis Melek Hukum ID</p>
                       </div>
                     </div>
                     
-                    {/* Real-time Views */}
-                    <RealTimeArticleView 
-                      articleId={article.id}
-                      initialViewCount={article.view_count}
-                      initialLikeCount={article.like_count}
-                    />
+                    {/* Real-time Views - Full width on mobile */}
+                    <div className="w-full">
+                      <RealTimeArticleView 
+                        articleId={article.id}
+                        initialViewCount={article.view_count}
+                        initialLikeCount={article.like_count}
+                        className="w-full"
+                      />
+                    </div>
                   </div>
                 </div>
                 

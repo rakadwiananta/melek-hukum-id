@@ -28,28 +28,33 @@ export default function RealTimeArticleView({
   const currentLikeCount = viewData?.like_count ?? initialLikeCount
 
   return (
-    <div className={`flex items-center gap-4 text-sm text-gray-600 ${className}`}>
-      {/* View Count */}
-      <div className="flex items-center gap-1.5">
-        <Eye className="h-4 w-4" />
-        <span className="font-medium">
-          {currentViewCount.toLocaleString()} views
-        </span>
-        {hasIncrementedView && !loading && (
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse ml-1" 
-               title="View counted" />
-        )}
+    <div className={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600 ${className}`}>
+      {/* Top row on mobile: View and Like counts */}
+      <div className="flex items-center gap-3 sm:gap-4">
+        {/* View Count */}
+        <div className="flex items-center gap-1.5">
+          <Eye className="h-4 w-4 flex-shrink-0" />
+          <span className="font-medium text-xs sm:text-sm">
+            {currentViewCount.toLocaleString()}
+          </span>
+          <span className="hidden sm:inline text-xs sm:text-sm">views</span>
+          {hasIncrementedView && !loading && (
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse ml-1" 
+                 title="View counted" />
+          )}
+        </div>
+
+        {/* Like Count */}
+        <div className="flex items-center gap-1.5">
+          <Heart className="h-4 w-4 flex-shrink-0" />
+          <span className="font-medium text-xs sm:text-sm">
+            {currentLikeCount.toLocaleString()}
+          </span>
+          <span className="hidden sm:inline text-xs sm:text-sm">likes</span>
+        </div>
       </div>
 
-      {/* Like Count */}
-      <div className="flex items-center gap-1.5">
-        <Heart className="h-4 w-4" />
-        <span className="font-medium">
-          {currentLikeCount.toLocaleString()} likes
-        </span>
-      </div>
-
-      {/* Real-time indicator */}
+      {/* Bottom row on mobile: Real-time indicator */}
       <div className="flex items-center gap-1.5 text-xs text-gray-500">
         <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
         <span>Live</span>
@@ -80,10 +85,10 @@ export function CompactRealTimeView({
 
   return (
     <div className={`flex items-center gap-1 text-xs text-gray-500 ${className}`}>
-      <Eye className="h-3 w-3" />
-      <span>{currentViewCount.toLocaleString()}</span>
+      <Eye className="h-3 w-3 flex-shrink-0" />
+      <span className="font-medium">{currentViewCount.toLocaleString()}</span>
       {showLive && (
-        <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse ml-1" />
+        <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse ml-1 flex-shrink-0" />
       )}
     </div>
   )
