@@ -66,14 +66,18 @@ export async function GET(request: NextRequest) {
 
     // Test 4: RPC Functions Test
     try {
-      // Try to call a simple RPC function
+      // Try to call a simple RPC function with a real article ID if available
+      const testArticleId = results.articles_test?.articles?.[0]?.id || 'f47ac10b-58cc-4372-a567-0e02b2c3d479'
+      
       const { data, error } = await supabase
-        .rpc('get_article_stats', { article_id_param: '00000000-0000-0000-0000-000000000000' })
+        .rpc('get_article_stats', { article_id_param: testArticleId })
 
       results.rpc_functions_test = {
         success: !error,
         error: error?.message || null,
-        rpc_available: !error
+        rpc_available: !error,
+        test_article_id: testArticleId,
+        result: data || null
       }
     } catch (err) {
       results.rpc_functions_test = {
