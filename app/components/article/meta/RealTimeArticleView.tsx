@@ -27,6 +27,18 @@ export default function RealTimeArticleView({
   const currentViewCount = viewData?.view_count ?? initialViewCount
   const currentLikeCount = viewData?.like_count ?? initialLikeCount
 
+  // Debug logging
+  useEffect(() => {
+    console.log('RealTimeArticleView rendered:', {
+      articleId,
+      initialViewCount,
+      currentViewCount,
+      viewData,
+      loading,
+      hasIncrementedView
+    })
+  }, [articleId, initialViewCount, currentViewCount, viewData, loading, hasIncrementedView])
+
   return (
     <div className={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600 ${className}`}>
       {/* Top row on mobile: View and Like counts */}

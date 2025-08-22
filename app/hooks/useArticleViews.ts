@@ -50,7 +50,12 @@ export function useArticleViews({
 
   // Increment view count
   const incrementView = useCallback(async () => {
-    if (hasIncrementedView) return // Prevent multiple increments per session
+    if (hasIncrementedView) {
+      console.log('View already incremented for this session')
+      return // Prevent multiple increments per session
+    }
+    
+    console.log('Attempting to increment view for article:', articleId)
     
     try {
       const response = await fetch(`/api/articles/${articleId}/view`, {
@@ -61,16 +66,26 @@ export function useArticleViews({
       })
       
       const result = await response.json()
+      console.log('View increment response:', result)
       
       if (response.ok && result.success) {
-        setViewData(prev => prev ? {
-          ...prev,
-          view_count: result.view_count
-        } : null)
+        setViewData(prev => {
+          const newData = {
+            id: articleId,
+            view_count: result.view_count,
+            like_count: prev?.like_count || 0,
+            title: prev?.title
+          }
+          console.log('Updated view data after increment:', newData)
+          return newData
+        })
         setHasIncrementedView(true)
         
         // Store in sessionStorage to prevent multiple increments
         sessionStorage.setItem(`article_viewed_${articleId}`, 'true')
+        console.log('View increment successful, stored in session')
+      } else {
+        console.error('View increment failed:', result)
       }
     } catch (error) {
       console.error('Error incrementing view:', error)
@@ -91,18 +106,27 @@ export function useArticleViews({
           filter: `id=eq.${articleId}`
         }, 
         (payload) => {
+          console.log('Real-time update received:', payload)
           if (payload.new) {
-            setViewData(prev => prev ? {
-              ...prev,
-              view_count: payload.new.view_count || prev.view_count,
-              like_count: payload.new.like_count || prev.like_count
-            } : null)
+            setViewData(prev => {
+              const newData = {
+                id: payload.new.id,
+                view_count: payload.new.view_count || prev?.view_count || 0,
+                like_count: payload.new.like_count || prev?.like_count || 0,
+                title: payload.new.title || prev?.title
+              }
+              console.log('Updating view data:', newData)
+              return newData
+            })
           }
         }
       )
-      .subscribe()
+      .subscribe((status) => {
+        console.log('Subscription status:', status)
+      })
 
     return () => {
+      console.log('Unsubscribing from real-time channel')
       channel.unsubscribe()
     }
   }, [articleId, enableRealTime])

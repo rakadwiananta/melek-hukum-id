@@ -16,20 +16,38 @@ DECLARE
     existing_view_count INTEGER;
     new_view_count INTEGER;
     result JSON;
+    article_exists BOOLEAN;
 BEGIN
-    -- Check if this IP has already viewed this article today
-    -- (Optional: untuk prevent spam views dari IP yang sama)
+    -- Check if article exists
+    SELECT EXISTS(SELECT 1 FROM articles WHERE id = article_id_param) INTO article_exists;
+    
+    IF NOT article_exists THEN
+        RETURN json_build_object(
+            'success', false,
+            'error', 'Article not found',
+            'new_view_count', 0
+        );
+    END IF;
+    
+    -- Check if this IP has already viewed this article in the last hour
+    -- (Reduced from daily to hourly for better real-time testing)
     IF NOT EXISTS (
         SELECT 1 FROM article_views 
         WHERE article_id = article_id_param 
         AND user_identifier = viewer_ip 
-        AND created_at >= CURRENT_DATE
+        AND created_at >= (NOW() - INTERVAL '1 hour')
     ) THEN
         -- Insert new view record
         INSERT INTO article_views (article_id, user_identifier, created_at)
         VALUES (article_id_param, viewer_ip, viewed_at);
         
-        -- Get updated view count (akan otomatis di-update oleh trigger)
+        -- Manually increment view count in articles table
+        UPDATE articles 
+        SET view_count = COALESCE(view_count, 0) + 1,
+            updated_at = NOW()
+        WHERE id = article_id_param;
+        
+        -- Get updated view count
         SELECT COALESCE(view_count, 0) INTO new_view_count
         FROM articles 
         WHERE id = article_id_param;
@@ -41,7 +59,7 @@ BEGIN
             'message', 'View recorded successfully'
         );
     ELSE
-        -- Get current view count (view sudah ada untuk hari ini)
+        -- Get current view count (view sudah ada dalam 1 jam terakhir)
         SELECT COALESCE(view_count, 0) INTO new_view_count
         FROM articles 
         WHERE id = article_id_param;
@@ -50,7 +68,7 @@ BEGIN
         result := json_build_object(
             'success', true,
             'new_view_count', new_view_count,
-            'message', 'View already recorded today'
+            'message', 'View already recorded in the last hour'
         );
     END IF;
     
@@ -77,10 +95,28 @@ RETURNS JSON AS $$
 DECLARE
     new_view_count INTEGER;
     result JSON;
+    article_exists BOOLEAN;
 BEGIN
+    -- Check if article exists
+    SELECT EXISTS(SELECT 1 FROM articles WHERE id = article_id_param) INTO article_exists;
+    
+    IF NOT article_exists THEN
+        RETURN json_build_object(
+            'success', false,
+            'error', 'Article not found',
+            'new_view_count', 0
+        );
+    END IF;
+    
     -- Insert new view record
     INSERT INTO article_views (article_id, user_identifier, created_at)
     VALUES (article_id_param, viewer_ip, NOW());
+    
+    -- Manually increment view count in articles table
+    UPDATE articles 
+    SET view_count = COALESCE(view_count, 0) + 1,
+        updated_at = NOW()
+    WHERE id = article_id_param;
     
     -- Get updated view count
     SELECT COALESCE(view_count, 0) INTO new_view_count
