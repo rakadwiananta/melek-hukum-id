@@ -39,44 +39,61 @@ export async function POST(
       })
 
     if (error) {
-      console.error('Error incrementing view:', error)
+      console.error('Error incrementing view (RPC):', error)
       
-      // Fallback: Get current count and increment
-      const { data: currentArticle, error: fetchError } = await supabase
-        .from('articles')
-        .select('view_count')
-        .eq('id', id)
-        .single()
-
-      if (fetchError) throw fetchError
-
-      const newViewCount = (currentArticle?.view_count || 0) + 1
-      
-      const { data: updateData, error: updateError } = await supabase
-        .from('articles')
-        .update({ 
-          view_count: newViewCount,
-          updated_at: now
+      // Fallback: Try simple increment without duplicate check
+      const { data: fallbackData, error: fallbackError } = await supabase
+        .rpc('increment_article_views_simple', {
+          article_id_param: id,
+          viewer_ip: clientIP
         })
-        .eq('id', id)
-        .select('view_count')
-        .single()
 
-      if (updateError) {
-        throw updateError
+      if (fallbackError) {
+        console.error('Error with simple increment:', fallbackError)
+        
+        // Final fallback: Direct database update
+        const { data: currentArticle, error: fetchError } = await supabase
+          .from('articles')
+          .select('view_count')
+          .eq('id', id)
+          .single()
+
+        if (fetchError) throw fetchError
+
+        const newViewCount = (currentArticle?.view_count || 0) + 1
+        
+        const { data: updateData, error: updateError } = await supabase
+          .from('articles')
+          .update({ 
+            view_count: newViewCount,
+            updated_at: now
+          })
+          .eq('id', id)
+          .select('view_count')
+          .single()
+
+        if (updateError) {
+          throw updateError
+        }
+
+        return NextResponse.json({
+          success: true,
+          view_count: updateData?.view_count || 0,
+          message: 'View count updated (direct fallback method)'
+        })
       }
 
       return NextResponse.json({
         success: true,
-        view_count: updateData?.view_count || 0,
-        message: 'View count updated (fallback method)'
+        view_count: fallbackData?.new_view_count || 0,
+        message: fallbackData?.message || 'View count updated (simple method)'
       })
     }
 
     return NextResponse.json({
       success: true,
       view_count: data?.new_view_count || 0,
-      message: 'View count updated successfully'
+      message: data?.message || 'View count updated successfully'
     })
 
   } catch (error) {
