@@ -9,6 +9,7 @@ import Script from 'next/script'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Image from 'next/image'
+import RealTimeArticleView from '@/app/components/article/meta/RealTimeArticleView'
 
 export const revalidate = 60
 
@@ -314,16 +315,25 @@ export default async function ArticlePage({
                   </p>
                   
                   {/* Author Info */}
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-amber-500 bg-gradient-to-r from-amber-400 to-brown-400 flex items-center justify-center">
-                      <span className="text-white font-bold text-lg">
-                        {article.author.charAt(0).toUpperCase()}
-                      </span>
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-amber-500 bg-gradient-to-r from-amber-400 to-brown-400 flex items-center justify-center">
+                        <span className="text-white font-bold text-lg">
+                          {article.author.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900">{article.author}</p>
+                        <p className="text-sm text-gray-600">Penulis Melek Hukum ID</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-semibold text-gray-900">{article.author}</p>
-                      <p className="text-sm text-gray-600">Penulis Melek Hukum ID</p>
-                    </div>
+                    
+                    {/* Real-time Views */}
+                    <RealTimeArticleView 
+                      articleId={article.id}
+                      initialViewCount={article.view_count}
+                      initialLikeCount={article.like_count}
+                    />
                   </div>
                 </div>
                 
