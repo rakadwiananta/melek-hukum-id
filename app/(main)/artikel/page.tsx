@@ -68,21 +68,21 @@ function Statistics() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         {stats.map((stat, index) => (
           <div
             key={stat.label}
             className="group animate-fade-in"
             style={{ animationDelay: `${index * 100}ms` }}
           >
-            <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 h-full border border-gray-100 hover:border-gray-200">
-              <div className="flex flex-col items-center text-center space-y-4">
-                <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300`}>
-                  <stat.icon className="h-8 w-8 text-white" />
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-3 sm:p-6 h-full border border-gray-100 hover:border-gray-200">
+              <div className="flex flex-col items-center text-center space-y-2 sm:space-y-4">
+                <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300`}>
+                  <stat.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                 </div>
                 <div className="space-y-1">
-                  <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
-                  <div className="text-sm font-medium text-gray-600">{stat.label}</div>
+                  <div className="text-xl sm:text-3xl font-bold text-gray-900">{stat.value}</div>
+                  <div className="text-xs sm:text-sm font-medium text-gray-600 leading-tight">{stat.label}</div>
                 </div>
               </div>
             </div>
@@ -152,23 +152,21 @@ export default function ArtikelPage() {
 
       <div className="max-w-7xl mx-auto px-4 py-12">
         {/* Search & Filter Section */}
-        <div className="mb-12 animate-fade-in" style={{ animationDelay: '300ms' }}>
-          <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-xl p-8 border border-white/20">
-            <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
+        <div className="mb-8 sm:mb-12 animate-fade-in" style={{ animationDelay: '300ms' }}>
+          <div className="bg-white/90 backdrop-blur-lg rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-8 border border-white/20">
+            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 items-center justify-between">
               <div className="flex-1 w-full lg:max-w-2xl">
                 <div className="relative">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-6 w-6" />
+                  <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 sm:h-6 sm:w-6" />
                   <input
                     type="text"
-                    placeholder="Cari artikel hukum, regulasi, atau topik tertentu..."
+                    placeholder="Cari artikel hukum..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-300 text-lg"
+                    className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-300 text-sm sm:text-lg"
                   />
                 </div>
               </div>
-
-
             </div>
           </div>
         </div>
@@ -220,16 +218,16 @@ export default function ArtikelPage() {
 
           {/* Sidebar */}
           <div className="xl:col-span-4">
-            <div className="sticky top-8 space-y-8 animate-fade-in" style={{ animationDelay: '600ms' }}>
+            <div className="sticky top-4 sm:top-8 space-y-6 sm:space-y-8 animate-fade-in" style={{ animationDelay: '600ms' }}>
               {/* Article Stats Card */}
-              <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6">
-                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                    <TrendingUp className="h-6 w-6" />
+              <div className="bg-white/90 backdrop-blur-lg rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6" />
                     Statistik Artikel
                   </h3>
                 </div>
-                <div className="p-6">
+                <div className="p-4 sm:p-6">
                   <Suspense fallback={<ComponentLoader />}>
                     {componentsLoaded && <ArticleStats />}
                   </Suspense>
@@ -237,9 +235,9 @@ export default function ArtikelPage() {
               </div>
 
               {/* Popular Articles Card */}
-              <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="bg-gradient-to-r from-green-500 to-green-600 p-6">
-                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
+              <div className="bg-white/90 backdrop-blur-lg rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gradient-to-r from-green-500 to-green-600 p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
                     <Award className="h-6 w-6" />
                     Artikel Populer
                   </h3>
@@ -252,14 +250,14 @@ export default function ArtikelPage() {
               </div>
 
               {/* Newsletter Card */}
-              <div className="bg-gradient-to-br from-amber-100 via-amber-50 to-brown-100 rounded-2xl shadow-lg border border-amber-200 overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="bg-gradient-to-r from-amber-500 to-brown-500 p-6">
-                  <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                    <Users className="h-6 w-6" />
+              <div className="bg-gradient-to-br from-amber-100 via-amber-50 to-brown-100 rounded-xl sm:rounded-2xl shadow-lg border border-amber-200 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gradient-to-r from-amber-500 to-brown-500 p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                    <Users className="h-5 w-5 sm:h-6 sm:w-6" />
                     Newsletter
                   </h3>
                 </div>
-                <div className="p-6">
+                <div className="p-4 sm:p-6">
                   <Suspense fallback={<ComponentLoader />}>
                     {componentsLoaded && <ArticleNewsletter />}
                   </Suspense>
