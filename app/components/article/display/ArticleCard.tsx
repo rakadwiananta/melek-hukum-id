@@ -8,6 +8,7 @@ import { motion, useAnimation } from 'framer-motion'
 import ArticleImage, { ArticleCardImage, ArticleHeroImage } from '@/app/components/ui/ArticleImage'
 import { EnhancedArticleCardImage, EnhancedArticleHeroImage } from '@/app/components/ui/AdvancedArticleImage'
 import { RobustArticleCardImage, RobustArticleHeroImage } from '@/app/components/ui/RobustArticleImage'
+import { CompactRealTimeView } from '@/app/components/article/meta/RealTimeArticleView'
 
 interface ArticleCardProps {
   article: {
@@ -412,7 +413,11 @@ export default function ArticleCard({ article, variant = 'default', showStats = 
           <h3 className="font-bold text-lg text-gray-900 line-clamp-2">{article.title}</h3>
           <p className="text-sm text-gray-600 line-clamp-3 mt-2">{article.excerpt}</p>
           <div className="mt-4 flex items-center gap-3 text-xs text-gray-500">
-            <span className="flex items-center gap-1"><Eye className="h-4 w-4" />{article.view_count.toLocaleString('id-ID')}</span>
+            <CompactRealTimeView 
+              articleId={article.id}
+              initialViewCount={article.view_count}
+              showLive={true}
+            />
             <span className="flex items-center gap-1"><Clock className="h-4 w-4" />{readingTime}</span>
           </div>
         </div>
