@@ -10,6 +10,12 @@ export default function robots(): MetadataRoute.Robots {
         allow: [
           '/',
           '/_next/static/',  // Allow static assets (JS, CSS, fonts, images)
+          '/favicon.ico',
+          '/favicon-16x16.png',
+          '/favicon-32x32.png',
+          '/apple-touch-icon.png',
+          '/android-chrome-192x192.png',
+          '/android-chrome-512x512.png'
         ],
         disallow: [
           '/api/',
@@ -25,6 +31,12 @@ export default function robots(): MetadataRoute.Robots {
         allow: [
           '/',
           '/_next/static/',  // Explicitly allow static assets for Googlebot
+          '/favicon.ico',
+          '/favicon-16x16.png',
+          '/favicon-32x32.png',
+          '/apple-touch-icon.png',
+          '/android-chrome-192x192.png',
+          '/android-chrome-512x512.png'
         ],
         disallow: [
           '/api/',
