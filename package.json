@@ -15,10 +15,14 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:analyze": "cross-env ANALYZE=true next build",
+    "build:production": "NODE_ENV=production next build",
     "export": "next build && next export",
     "start": "next start",
     "lint": "next lint",
-    "analyze": "cross-env ANALYZE=true next build"
+    "analyze": "cross-env ANALYZE=true next build",
+    "performance:audit": "lighthouse http://localhost:3000 --output=json --output-path=./lighthouse-report.json",
+    "performance:budget": "cross-env BUNDLE_ANALYZER=true next build"
   },
   "dependencies": {
     "@netlify/plugin-nextjs": "^5.12.0",
