@@ -2,13 +2,16 @@ import type { Metadata } from 'next'
 import { Inter, Poppins } from 'next/font/google'
 import './globals.css'
 import Script from 'next/script'
+import PerformanceWrapper from '@/app/components/performance/PerformanceWrapper'
 
-// Optimized font loading
+// Optimized font loading with better performance
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
   preload: true,
+  fallback: ['system-ui', 'arial', 'sans-serif'],
+  adjustFontFallback: true,
 })
 
 const poppins = Poppins({
@@ -17,6 +20,8 @@ const poppins = Poppins({
   display: 'swap',
   variable: '--font-poppins',
   preload: true,
+  fallback: ['system-ui', 'arial', 'sans-serif'],
+  adjustFontFallback: true,
 })
 
 export const metadata: Metadata = {
@@ -86,11 +91,17 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${inter.variable} ${poppins.variable}`}>
       <head>
-        {/* Preconnect to external domains */}
+        {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link rel="preconnect" href="https://bicarahukum.my.id" />
+        <link rel="preconnect" href="https://supabase.co" />
         
-        {/* Favicon */}
+        {/* DNS prefetch for better performance */}
+        <link rel="dns-prefetch" href="//www.ezojs.com" />
+        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+        
+        {/* Favicon with better loading */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -99,22 +110,25 @@ export default function RootLayout({
         <meta name="theme-color" content="#dc2626" />
         <meta name="color-scheme" content="light" />
         
-        {/* Ezoic Standalone Scripts - non-blocking */}
+        {/* Viewport optimization */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        
+        {/* Performance hints */}
+        <link rel="preload" href="/timbangkan.jpg" as="image" />
+        
+        {/* Ezoic Standalone Scripts - non-blocking with better loading */}
         <Script id="ezoic-sa" src="//www.ezojs.com/ezoic/sa.min.js" strategy="lazyOnload" />
         <Script id="ezoic-sa-init" strategy="lazyOnload">{`
           window.ezstandalone = window.ezstandalone || {};
           ezstandalone.cmd = ezstandalone.cmd || [];
         `}</Script>
-        
-        {/* Viewport optimization */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
       </head>
       <body className={`${inter.className} antialiased bg-white text-gray-900`}>
         <div id="root">
           {children}
         </div>
         
-        {/* Ezoic Global Ads Script */}
+        {/* Ezoic Global Ads Script - optimized loading */}
         <Script id="ezoic-showads" strategy="lazyOnload">{`
           (function() {
             function initEzoicAds() {
@@ -130,9 +144,13 @@ export default function RootLayout({
                 setTimeout(initEzoicAds, 100);
               }
             }
-            setTimeout(initEzoicAds, 1000);
+            // Delay loading to improve initial page load
+            setTimeout(initEzoicAds, 2000);
           })();
         `}</Script>
+        
+        {/* Performance monitoring */}
+        <PerformanceWrapper />
       </body>
     </html>
   )

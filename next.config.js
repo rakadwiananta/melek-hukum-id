@@ -5,16 +5,16 @@ const nextConfig = {
   },
   trailingSlash: false,
   
-  // Basic performance optimizations
+  // Enhanced performance optimizations
   poweredByHeader: false,
   reactStrictMode: true,
   
-  // Enhanced image configuration for external URLs
+  // Enhanced image configuration for better performance
   images: {
-    formats: ['image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256],
-    minimumCacheTTL: 86400,
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 31536000, // 1 year
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     // Add external domains for image optimization
@@ -57,12 +57,23 @@ const nextConfig = {
     unoptimized: false,
   },
   
-  // Conservative optimizations for Netlify
+  // Enhanced experimental optimizations
   experimental: {
-    optimizePackageImports: ['lucide-react'],
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
+    optimizeCss: true,
   },
   
-  // Basic compiler optimizations
+  // Turbopack configuration
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
+  
+  // Enhanced compiler optimizations
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
     reactRemoveProperties: process.env.NODE_ENV === 'production',
@@ -74,15 +85,31 @@ const nextConfig = {
     'midtrans-client',
   ],
   
-  // Conservative webpack configuration
+  // Enhanced webpack configuration for performance
   webpack: (config, { dev, isServer }) => {
-    // Basic optimizations only
+    // Production optimizations
     if (!dev) {
       config.optimization.minimize = true
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            enforce: true,
+          },
+        },
+      }
       config.devtool = false
     }
     
-    // Basic module resolution
+    // Module resolution optimizations
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
@@ -108,7 +135,7 @@ const nextConfig = {
     NEXT_PUBLIC_MIDTRANS_CLIENT_KEY: process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY,
   },
   
-  // Basic headers
+  // Enhanced headers for better caching and performance
   async headers() {
     return [
       {
@@ -126,7 +153,30 @@ const nextConfig = {
       { source: '/:path*.jpeg', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
       { source: '/:path*.gif', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
       { source: '/:path*.webp', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
+      { source: '/:path*.avif', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
       { source: '/:path*.svg', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
+      // Performance headers for HTML
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY'
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin'
+          }
+        ],
+      },
       {
         source: '/sitemap.xml',
         headers: [
@@ -214,6 +264,9 @@ const nextConfig = {
     // Use timestamp instead of git hash to avoid exposing repo info
     return `build-${Date.now()}`
   },
+  
+  // Performance optimizations
+  compress: true,
 };
 
 module.exports = nextConfig; 

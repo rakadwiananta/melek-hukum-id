@@ -2,15 +2,9 @@ import React from 'react'
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import '../globals.css'
-import { GoogleAnalytics } from '@/app/components/analytics/GoogleAnalytics'
-import Header from '@/app/components/layout/Header'
-import Footer from '@/app/components/layout/Footer'
-import { Toaster } from '@/app/components/ui/Toaster'
-import { ToastProvider } from '@/app/components/ui/use-toast'
-import ServiceWorkerProvider from '@/app/components/providers/ServiceWorkerProvider'
-import PerformanceDashboard from '@/app/components/performance/PerformanceDashboard'
-import CriticalCSSInjector from '@/app/components/performance/CriticalCSSInjector'
 import Script from 'next/script'
+import LayoutWrapper from '@/app/components/layout/LayoutWrapper'
+import PerformanceWrapper from '@/app/components/performance/PerformanceWrapper'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -138,19 +132,10 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.className} antialiased`}>
-        <ToastProvider>
-          <ServiceWorkerProvider>
-            <CriticalCSSInjector />
-            <GoogleAnalytics />
-            <div className="min-h-screen flex flex-col">
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-            <Toaster />
-            <PerformanceDashboard />
-          </ServiceWorkerProvider>
-        </ToastProvider>
+        <LayoutWrapper>
+          {children}
+        </LayoutWrapper>
+        <PerformanceWrapper />
       </body>
     </html>
   )
