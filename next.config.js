@@ -120,6 +120,13 @@ const nextConfig = {
           }
         ],
       },
+      // Long cache for public images and static assets
+      { source: '/:path*.png', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
+      { source: '/:path*.jpg', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
+      { source: '/:path*.jpeg', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
+      { source: '/:path*.gif', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
+      { source: '/:path*.webp', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
+      { source: '/:path*.svg', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
       {
         source: '/sitemap.xml',
         headers: [

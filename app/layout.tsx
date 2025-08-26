@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Poppins } from 'next/font/google'
 import './globals.css'
+import Script from 'next/script'
 
 // Optimized font loading
 const inter = Inter({
@@ -98,20 +99,12 @@ export default function RootLayout({
         <meta name="theme-color" content="#dc2626" />
         <meta name="color-scheme" content="light" />
         
-
-        
-        {/* Ezoic Standalone Scripts - Must be after consent scripts */}
-        <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.ezstandalone = window.ezstandalone || {};
-              ezstandalone.cmd = ezstandalone.cmd || [];
-            `
-          }}
-        />
-        
-
+        {/* Ezoic Standalone Scripts - non-blocking */}
+        <Script id="ezoic-sa" src="//www.ezojs.com/ezoic/sa.min.js" strategy="lazyOnload" />
+        <Script id="ezoic-sa-init" strategy="lazyOnload">{`
+          window.ezstandalone = window.ezstandalone || {};
+          ezstandalone.cmd = ezstandalone.cmd || [];
+        `}</Script>
         
         {/* Viewport optimization */}
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -122,29 +115,24 @@ export default function RootLayout({
         </div>
         
         {/* Ezoic Global Ads Script */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Wait for Ezoic to load before calling showAds
-              (function() {
-                function initEzoicAds() {
-                  if (window.ezstandalone && window.ezstandalone.cmd) {
-                    window.ezstandalone.cmd.push(function () {
-                      try {
-                        window.ezstandalone.showAds();
-                      } catch (error) {
-                        console.log('Ezoic global showAds error:', error);
-                      }
-                    });
-                  } else {
-                    setTimeout(initEzoicAds, 100);
+        <Script id="ezoic-showads" strategy="lazyOnload">{`
+          (function() {
+            function initEzoicAds() {
+              if (window.ezstandalone && window.ezstandalone.cmd) {
+                window.ezstandalone.cmd.push(function () {
+                  try {
+                    window.ezstandalone.showAds();
+                  } catch (error) {
+                    console.log('Ezoic global showAds error:', error);
                   }
-                }
-                setTimeout(initEzoicAds, 1000);
-              })();
-            `
-          }}
-        />
+                });
+              } else {
+                setTimeout(initEzoicAds, 100);
+              }
+            }
+            setTimeout(initEzoicAds, 1000);
+          })();
+        `}</Script>
       </body>
     </html>
   )
