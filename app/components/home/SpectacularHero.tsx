@@ -1,50 +1,26 @@
 'use client'
 
 import { useRef, useEffect, useState } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
 import Link from 'next/link'
-import Image from 'next/image'
 
 export default function SpectacularHero() {
-  const containerRef = useRef<HTMLDivElement>(null)
   const [isLoaded, setIsLoaded] = useState(false)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  })
-
-  // Optimized parallax transforms with reduced complexity
-  const y = useTransform(scrollYProgress, [0, 1], [0, 100])
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.3])
 
   useEffect(() => {
     // Delay animations to improve initial load
-    const timer = setTimeout(() => setIsLoaded(true), 100)
+    const timer = setTimeout(() => setIsLoaded(true), 50)
     return () => clearTimeout(timer)
   }, [])
 
   return (
-    <section ref={containerRef} className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 to-white">
+    <section className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 to-white">
       {/* Simplified Background Design */}
       <div className="absolute inset-0">
-        {/* Optimized Mesh Gradient Background */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-50" />
-          <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-50" />
-          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-50" />
+        {/* Minimal Background */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30" />
+          <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-30" />
         </div>
-
-        {/* Simplified Grid Pattern */}
-        <div 
-          className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, #000 1px, transparent 1px),
-              linear-gradient(to bottom, #000 1px, transparent 1px)
-            `,
-            backgroundSize: '4rem 4rem'
-          }}
-        />
       </div>
 
       {/* Main Content */}
@@ -53,33 +29,18 @@ export default function SpectacularHero() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full">
             
             {/* Left Content */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6 }}
-              className="order-2 lg:order-1"
-            >
+            <div className="order-2 lg:order-1">
               {/* Badge */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={isLoaded ? { opacity: 1, scale: 1 } : {}}
-                transition={{ delay: 0.1 }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-100 rounded-full mb-8"
-              >
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-100 rounded-full mb-8">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
                 </span>
                 <span className="text-sm font-medium text-red-700">Platform Hukum #1 di Indonesia</span>
-              </motion.div>
+              </div>
 
               {/* Heading */}
-              <motion.h1 
-                className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-6 leading-[1.1]"
-                initial={{ opacity: 0, y: 20 }}
-                animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.2 }}
-              >
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-6 leading-[1.1]">
                 <span className="block">Pahami Hukum</span>
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-rose-600">
                   Indonesia
@@ -87,26 +48,16 @@ export default function SpectacularHero() {
                 <span className="block text-3xl sm:text-4xl lg:text-5xl xl:text-6xl text-gray-700 mt-2">
                   dengan Mudah
                 </span>
-              </motion.h1>
+              </h1>
 
               {/* Description */}
-              <motion.p
-                className="text-lg lg:text-xl text-gray-600 mb-8 leading-relaxed max-w-xl"
-                initial={{ opacity: 0, y: 20 }}
-                animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.3 }}
-              >
+              <p className="text-lg lg:text-xl text-gray-600 mb-8 leading-relaxed max-w-xl">
                 Platform edukasi hukum terlengkap untuk masyarakat Indonesia. 
                 Akses ribuan informasi hukum, template dokumen, dan panduan praktis anti-korupsi.
-              </motion.p>
+              </p>
 
               {/* CTA Buttons */}
-              <motion.div
-                className="flex flex-col sm:flex-row gap-4 mb-12"
-                initial={{ opacity: 0, y: 20 }}
-                animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.4 }}
-              >
+              <div className="flex flex-col sm:flex-row gap-4 mb-12">
                 <Link 
                   href="/kamus-hukum"
                   className="group relative inline-flex items-center justify-center px-8 py-4 bg-gray-900 text-white rounded-xl font-semibold overflow-hidden transition-all duration-300 hover:bg-gray-800"
@@ -136,68 +87,36 @@ export default function SpectacularHero() {
                   </svg>
                   <span>Test Anti-Korupsi</span>
                 </Link>
-              </motion.div>
+              </div>
 
               {/* Stats */}
-              <motion.div
-                className="grid grid-cols-3 gap-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.5 }}
-              >
+              <div className="grid grid-cols-3 gap-8">
                 {[
                   { value: '500+', label: 'Istilah Hukum' },
                   { value: '50+', label: 'Template' },
                   { value: '10K+', label: 'Pengguna' }
                 ].map((stat, index) => (
                   <div key={index} className="text-center">
-                    <motion.div 
-                      className="text-3xl lg:text-4xl font-bold text-gray-900 mb-1"
-                      initial={{ scale: 0 }}
-                      animate={isLoaded ? { scale: 1 } : {}}
-                      transition={{ 
-                        delay: 0.6 + index * 0.1,
-                        type: "spring",
-                        stiffness: 200
-                      }}
-                    >
+                    <div className="text-3xl lg:text-4xl font-bold text-gray-900 mb-1">
                       {stat.value}
-                    </motion.div>
+                    </div>
                     <div className="text-sm text-gray-600">{stat.label}</div>
                   </div>
                 ))}
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
 
             {/* Right Content - Simplified Visual Design */}
-            <motion.div
-              className="relative order-1 lg:order-2"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={isLoaded ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
+            <div className="relative order-1 lg:order-2">
               <div className="relative mx-auto w-full max-w-lg">
-                {/* Simplified Background Circles */}
-                <motion.div
-                  style={{ y }}
-                  className="absolute inset-0 flex items-center justify-center"
-                >
-                  <div className="absolute w-72 h-72 bg-gradient-to-br from-red-100 to-pink-100 rounded-full opacity-40 blur-3xl" />
-                </motion.div>
+                {/* Simple Background Circle */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="absolute w-72 h-72 bg-gradient-to-br from-red-100 to-pink-100 rounded-full opacity-30 blur-3xl" />
+                </div>
 
-                {/* Central Justice Scale Design - Simplified */}
-                <motion.div
-                  className="relative z-10"
-                  animate={isLoaded ? { 
-                    y: [0, -5, 0],
-                  } : {}}
-                  transition={{ 
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  {/* Optimized SVG Design */}
+                {/* Simplified Justice Scale Design */}
+                <div className="relative z-10">
+                  {/* Simple SVG Design */}
                   <svg
                     viewBox="0 0 400 400"
                     className="w-full h-auto"
@@ -240,9 +159,9 @@ export default function SpectacularHero() {
                       </linearGradient>
                     </defs>
                   </svg>
-                </motion.div>
+                </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
