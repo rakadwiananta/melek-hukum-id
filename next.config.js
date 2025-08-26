@@ -79,12 +79,6 @@ const nextConfig = {
     reactRemoveProperties: process.env.NODE_ENV === 'production',
   },
   
-  // Server optimizations
-  serverExternalPackages: [
-    '@supabase/supabase-js',
-    'midtrans-client',
-  ],
-  
   // Enhanced webpack configuration for performance
   webpack: (config, { dev, isServer }) => {
     // Production optimizations
@@ -97,16 +91,32 @@ const nextConfig = {
             test: /[\\/]node_modules[\\/]/,
             name: 'vendors',
             chunks: 'all',
+            priority: 10,
+            enforce: true,
           },
           common: {
             name: 'common',
             minChunks: 2,
             chunks: 'all',
             enforce: true,
+            priority: 5,
+          },
+          framer: {
+            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+            name: 'framer-motion',
+            chunks: 'all',
+            priority: 20,
           },
         },
       }
       config.devtool = false
+      
+      // Tree shaking optimizations
+      config.optimization.usedExports = true
+      config.optimization.sideEffects = false
+      
+      // Module concatenation
+      config.optimization.concatenateModules = true
     }
     
     // Module resolution optimizations
@@ -115,6 +125,15 @@ const nextConfig = {
       fs: false,
       net: false,
       tls: false,
+      crypto: false,
+      stream: false,
+      url: false,
+      zlib: false,
+      http: false,
+      https: false,
+      assert: false,
+      os: false,
+      path: false,
     }
     
     // Prevent secrets from being bundled
@@ -174,6 +193,10 @@ const nextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin'
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()'
           }
         ],
       },
@@ -267,6 +290,18 @@ const nextConfig = {
   
   // Performance optimizations
   compress: true,
+  
+  // Bundle analyzer
+  ...(process.env.ANALYZE === 'true' && {
+    webpack: (config) => {
+      config.plugins.push(
+        new (require('@next/bundle-analyzer'))({
+          enabled: true,
+        })
+      )
+      return config
+    },
+  }),
 };
 
 module.exports = nextConfig; 
