@@ -7,7 +7,8 @@ import { supabase } from './supabase'
 
 // Optimized image utilities for better performance
 export const FALLBACK_IMAGES = {
-  default: '/illustrations/National_emblem_of_Indonesia_Garuda_Pancasila.svg.webp',
+  // Use a very small JPEG as the default fallback to reduce bytes
+  default: '/fallback-hukum.jpg',
   'Hukum Pidana': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',
   'Hukum Perdata': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',
   'Hukum Tata Negara': '/illustrations/makna-pembukaan-uud-1945-lengka-20210907100613.jpg',

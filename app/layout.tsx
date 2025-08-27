@@ -104,8 +104,7 @@ export default function RootLayout({
         {/* Viewport optimization */}
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         
-        {/* Performance hints */}
-        <link rel="preload" href="/timbangkan.jpg" as="image" />
+        {/* Performance hints: remove non-critical image preload to reduce render-blocking */}
         
         {/* Critical CSS inline */}
         <style dangerouslySetInnerHTML={{

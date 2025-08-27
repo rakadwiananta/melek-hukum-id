@@ -226,6 +226,16 @@ const nextConfig = {
           }
         ],
       },
+      // Cache PWA manifest and app icons aggressively
+      {
+        source: '/manifest.json',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          { key: 'Content-Type', value: 'application/manifest+json' }
+        ],
+      },
+      { source: '/android-chrome-192x192.png', headers: [ { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' } ] },
+      { source: '/android-chrome-512x512.png', headers: [ { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' } ] },
       {
         source: '/favicon.ico',
         headers: [
