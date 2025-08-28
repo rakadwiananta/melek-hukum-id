@@ -1,249 +1,197 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { ChevronRight, List, X } from 'lucide-react'
-import { cn } from '@/app/lib/utils'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ChevronDown, ChevronUp, List, BookOpen } from 'lucide-react'
 
 interface TableOfContentsProps {
   content: string
+  className?: string
 }
 
-interface Heading {
+interface TocItem {
   id: string
   text: string
   level: number
+  isActive: boolean
 }
 
-export default function TableOfContents({ content }: TableOfContentsProps) {
-  const [headings, setHeadings] = useState<Heading[]>([])
-  const [activeId, setActiveId] = useState<string>('')
-  const [isOpen, setIsOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+export default function TableOfContents({ content, className = '' }: TableOfContentsProps) {
+  const [tocItems, setTocItems] = useState<TocItem[]>([])
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [activeSection, setActiveSection] = useState<string>('')
+  const tocRef = useRef<HTMLDivElement>(null)
 
+  // Generate TOC items from content
   useEffect(() => {
-    // Extract headings from content
-    const tempDiv = document.createElement('div')
-    tempDiv.innerHTML = content
-    
-    const elements = tempDiv.querySelectorAll('h2, h3')
-    const extractedHeadings: Heading[] = []
-    
-    elements.forEach((element, index) => {
-      const text = element.textContent || ''
-      const id = `heading-${index}`
-      extractedHeadings.push({
-        id,
-        text,
-        level: element.tagName === 'H2' ? 2 : 3
+    const generateToc = () => {
+      const tempDiv = document.createElement('div')
+      tempDiv.innerHTML = content
+      
+      const headings = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6')
+      const items: TocItem[] = []
+      
+      headings.forEach((heading, index) => {
+        const level = parseInt(heading.tagName.charAt(1))
+        const text = heading.textContent || ''
+        const id = `section-${index}`
+        
+        // Set ID on the heading element
+        heading.setAttribute('id', id)
+        
+        items.push({
+          id,
+          text,
+          level,
+          isActive: false
+        })
       })
-    })
-    
-    setHeadings(extractedHeadings)
-
-    // Check if mobile
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+      
+      setTocItems(items)
     }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    
-    return () => window.removeEventListener('resize', checkMobile)
+
+    // Wait for content to be rendered
+    setTimeout(generateToc, 100)
   }, [content])
 
+  // Track active section on scroll
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id)
+    const handleScroll = () => {
+      if (tocItems.length === 0) return
+
+      const scrollPosition = window.scrollY + 100
+
+      let currentActive = ''
+      tocItems.forEach(item => {
+        const element = document.getElementById(item.id)
+        if (element) {
+          const elementTop = element.offsetTop
+          if (scrollPosition >= elementTop) {
+            currentActive = item.id
           }
-        })
-      },
-      { rootMargin: '-100px 0px -70% 0px' }
-    )
+        }
+      })
 
-    headings.forEach((heading) => {
-      const element = document.getElementById(heading.id)
-      if (element) observer.observe(element)
-    })
+      setActiveSection(currentActive)
+    }
 
-    return () => observer.disconnect()
-  }, [headings])
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [tocItems])
 
-  const scrollToHeading = (id: string) => {
+  const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
-      const offset = 100
-      const top = element.getBoundingClientRect().top + window.scrollY - offset
-      window.scrollTo({ top, behavior: 'smooth' })
-      if (isMobile) setIsOpen(false)
+      const offsetTop = element.offsetTop - 100
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth'
+      })
     }
   }
 
-  if (headings.length === 0) return null
-
-  // Mobile Floating Button
-  if (isMobile) {
-    return (
-      <>
-        {/* Floating TOC Button */}
-        <button
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-24 right-4 z-40 bg-gradient-to-r from-red-600 to-amber-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300"
-          aria-label="Daftar Isi"
-        >
-          <List className="h-6 w-6" />
-        </button>
-
-        {/* Mobile TOC Modal */}
-        {isOpen && (
-          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm animate-fade-in">
-            <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl animate-slide-up max-h-[70vh] overflow-hidden">
-              <div className="sticky top-0 bg-white border-b border-gray-200 p-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-bold text-gray-900">Daftar Isi</h3>
-                  <button
-                    onClick={() => setIsOpen(false)}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-              
-              <nav className="p-4 overflow-y-auto max-h-[calc(70vh-80px)]">
-                <ul className="space-y-2">
-                  {headings.map((heading) => (
-                    <li
-                      key={heading.id}
-                      className={cn(
-                        "transition-all duration-300",
-                        heading.level === 3 && "ml-4"
-                      )}
-                    >
-                      <button
-                        onClick={() => scrollToHeading(heading.id)}
-                        className={cn(
-                          "w-full text-left px-4 py-3 rounded-lg transition-all duration-300",
-                          "hover:bg-red-50 hover:text-red-700",
-                          activeId === heading.id
-                            ? "bg-gradient-to-r from-red-600 to-amber-600 text-white shadow-lg"
-                            : "text-gray-700"
-                        )}
-                      >
-                        <span className="flex items-center gap-2">
-                          <ChevronRight className={cn(
-                            "h-4 w-4 transition-transform",
-                            activeId === heading.id && "rotate-90"
-                          )} />
-                          <span className={cn(
-                            "line-clamp-2",
-                            heading.level === 2 ? "font-semibold" : "text-sm"
-                          )}>
-                            {heading.text}
-                          </span>
-                        </span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </div>
-          </div>
-        )}
-      </>
-    )
+  const getLevelClass = (level: number) => {
+    switch (level) {
+      case 1: return 'font-bold text-lg'
+      case 2: return 'font-semibold text-base ml-2'
+      case 3: return 'font-medium text-sm ml-4'
+      case 4: return 'text-sm ml-6'
+      case 5: return 'text-xs ml-8'
+      case 6: return 'text-xs ml-10'
+      default: return 'text-base'
+    }
   }
 
-  // Desktop Sticky Sidebar
+  if (tocItems.length === 0) {
+    return null
+  }
+
   return (
-    <aside className="hidden lg:block">
-      <div className="sticky top-24 bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-        {/* Header with Gradient */}
-        <div className="bg-gradient-to-r from-red-600 to-amber-600 p-4">
-          <h3 className="text-white font-bold flex items-center gap-2">
-            <List className="h-5 w-5" />
-            Daftar Isi
-          </h3>
-        </div>
-
-        {/* Content */}
-        <nav className="p-4 max-h-[calc(100vh-300px)] overflow-y-auto">
-          <ul className="space-y-1">
-            {headings.map((heading) => (
-              <li
-                key={heading.id}
-                className={cn(
-                  "transition-all duration-300",
-                  heading.level === 3 && "ml-4"
-                )}
-              >
-                <button
-                  onClick={() => scrollToHeading(heading.id)}
-                  className={cn(
-                    "w-full text-left px-3 py-2 rounded-lg transition-all duration-300 text-sm",
-                    "hover:bg-red-50 hover:text-red-700",
-                    activeId === heading.id
-                      ? "bg-red-50 text-red-700 font-semibold border-l-4 border-red-600"
-                      : "text-gray-600 hover:translate-x-1"
-                  )}
-                >
-                  <span className="flex items-center gap-2">
-                    {heading.level === 2 && (
-                      <ChevronRight className={cn(
-                        "h-3 w-3 transition-transform flex-shrink-0",
-                        activeId === heading.id && "rotate-90"
-                      )} />
-                    )}
-                    <span className="line-clamp-2">{heading.text}</span>
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        {/* Progress Indicator */}
-        <div className="p-4 border-t border-gray-100">
-          <div className="text-xs text-gray-500 mb-2">Progress Membaca</div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-red-600 to-amber-600 transition-all duration-300"
-              style={{ 
-                width: `${((headings.findIndex(h => h.id === activeId) + 1) / headings.length) * 100}%` 
-              }}
-            />
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className={`bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden ${className}`}
+      ref={tocRef}
+    >
+      {/* Header */}
+      <div className="bg-gradient-to-r from-amber-500 to-red-600 text-white p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <BookOpen className="h-5 w-5" />
+            <h3 className="font-semibold text-lg">Daftar Isi</h3>
           </div>
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+            aria-label={isExpanded ? 'Sembunyikan daftar isi' : 'Tampilkan daftar isi'}
+          >
+            {isExpanded ? (
+              <ChevronUp className="h-4 w-4" />
+            ) : (
+              <ChevronDown className="h-4 w-4" />
+            )}
+          </button>
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
+      {/* TOC Content */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="p-4 max-h-96 overflow-y-auto">
+              <nav className="space-y-2">
+                {tocItems.map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                  >
+                    <button
+                      onClick={() => scrollToSection(item.id)}
+                      className={`w-full text-left p-2 rounded-lg transition-all duration-200 hover:bg-amber-50 hover:text-amber-700 ${
+                        activeSection === item.id
+                          ? 'bg-amber-100 text-amber-800 border-l-4 border-amber-500'
+                          : 'text-gray-700'
+                      } ${getLevelClass(item.level)}`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-amber-400 flex-shrink-0" />
+                        <span className="truncate">{item.text}</span>
+                      </div>
+                    </button>
+                  </motion.div>
+                ))}
+              </nav>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        @keyframes slide-up {
-          from {
-            transform: translateY(100%);
-          }
-          to {
-            transform: translateY(0);
-          }
-        }
-
-        .animate-fade-in {
-          animation: fade-in 0.3s ease-out;
-        }
-
-        .animate-slide-up {
-          animation: slide-up 0.3s ease-out;
-        }
-      `}</style>
-    </aside>
+      {/* Mobile TOC Toggle */}
+      <div className="md:hidden border-t border-gray-100">
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="w-full p-3 text-left text-gray-600 hover:bg-gray-50 transition-colors flex items-center justify-between"
+        >
+          <span className="flex items-center gap-2">
+            <List className="h-4 w-4" />
+            <span className="text-sm font-medium">
+              {isExpanded ? 'Sembunyikan' : 'Tampilkan'} Daftar Isi
+            </span>
+          </span>
+          <span className="text-xs text-gray-500">
+            {tocItems.length} bagian
+          </span>
+        </button>
+      </div>
+    </motion.div>
   )
 }

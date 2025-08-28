@@ -8,6 +8,7 @@ import ArticleBody from '@/app/components/article/display/ArticleBody'
 import ArticleFooter from '@/app/components/article/meta/ArticleFooter'
 import RelatedArticles from '@/app/components/article/display/RelatedArticles'
 import TableOfContents from '@/app/components/article/meta/TableOfContents'
+import DisclaimerBox from '@/app/components/article/meta/DisclaimerBox'
 import ShareModal from '@/app/components/article/meta/ShareModal'
 import CommentSection from '@/app/components/article/comments/CommentSection'
 import MobileCommentFAB from '@/app/components/article/comments/MobileCommentFAB'
@@ -518,6 +519,7 @@ export default function ArticleContent({ article }: ArticleContentProps) {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
+        className="mb-8"
       >
         <TableOfContents content={article.content} />
       </motion.div>
