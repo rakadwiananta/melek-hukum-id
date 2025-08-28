@@ -5,6 +5,7 @@ import { articleRedirectMap } from './route-handler'
 import ArticleSchema from '@/app/components/seo/ArticleSchema'
 import ArticleContent from '@/app/components/article/display/ArticleContent'
 import ReadingProgress from '@/app/components/article/meta/ReadingProgress'
+import DisclaimerBox from '@/app/components/article/meta/DisclaimerBox'
 import Script from 'next/script'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
@@ -212,6 +213,20 @@ export default async function ArticlePage({
     }
   }
 
+  // Extract FAQ data from content if available
+  const extractFAQData = (content: string) => {
+    const faqMatches = content.match(/<h[2-3][^>]*>([^<]+)<\/h[2-3]>/g)
+    if (faqMatches && faqMatches.length > 0) {
+      return faqMatches.slice(0, 5).map((match, index) => ({
+        question: match.replace(/<[^>]+>/g, ''),
+        answer: `Jawaban untuk pertanyaan ${index + 1} dapat ditemukan dalam artikel ini.`
+      }))
+    }
+    return undefined
+  }
+
+  const faqData = extractFAQData(article.content)
+
   return (
     <>
       <ArticleSchema 
@@ -223,50 +238,12 @@ export default async function ArticlePage({
           published_at: article.published_at,
           updated_at: article.updated_at || article.published_at,
           featured_image: article.featured_image,
-          keywords: article.keywords
-        }} 
+          keywords: article.keywords,
+          url: `https://melekhukum.id/artikel/${slug}`
+        }}
+        faqData={faqData}
       />
       <ReadingProgress />
-      
-      {/* Structured Data */}
-      <Script
-        id="article-structured-data"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Article',
-            headline: article.title,
-            description: article.excerpt,
-            image: article.featured_image,
-            datePublished: article.published_at,
-            dateModified: article.updated_at || article.published_at,
-            author: {
-              '@type': 'Person',
-              name: article.author,
-            },
-            publisher: {
-              '@type': 'Organization',
-              name: 'Melek Hukum ID',
-              logo: {
-                '@type': 'ImageObject',
-                url: 'https://melekhukum.id/logo.png',
-              },
-            },
-            mainEntityOfPage: {
-              '@type': 'WebPage',
-              '@id': `https://melekhukum.id/artikel/${slug}`,
-            },
-            keywords: article.keywords?.join(', ') || article.tags?.join(', ') || '',
-            articleSection: article.category,
-            wordCount: article.content.split(' ').length,
-            speakable: {
-              '@type': 'SpeakableSpecification',
-              cssSelector: ['.article-title', '.article-excerpt', '.article-content'],
-            },
-          }),
-        }}
-      />
       
       {/* Mobile Optimized Container */}
       <div className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-brown-50">
@@ -338,6 +315,11 @@ export default async function ArticlePage({
                       />
                     </div>
                   </div>
+                </div>
+                
+                {/* Legal Disclaimer */}
+                <div className="p-6 md:p-8 border-b border-gray-100">
+                  <DisclaimerBox variant="legal" />
                 </div>
                 
                 {/* Article Content */}
@@ -417,6 +399,7 @@ export default async function ArticlePage({
                             fill
                             className="object-cover"
                             loading="lazy"
+                            decoding="async"
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           />
                         </div>

@@ -3,7 +3,9 @@
 import { motion } from 'framer-motion'
 import { BookOpen, Clock, FileText, Info, CheckCircle, Quote, Scale } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { calculateReadingTime } from '@/app/lib/utils'
+import DisclaimerBox from '@/app/components/article/meta/DisclaimerBox'
 
 interface StructuredContentRendererProps {
   content: string // JSON string or plain text from Supabase
@@ -106,14 +108,14 @@ export default function StructuredContentRenderer({
         
         sections.push({
           type: 'heading',
-          content: trimmed.replace(':', ''),
+          content: trimmed,
           level: 2
         })
         return
       }
       
-      // Detect numbered lists
-      if (isNumberedList(trimmed)) {
+      // Detect lists
+      if (isListItem(trimmed)) {
         if (currentParagraph.trim()) {
           sections.push({
             type: 'paragraph',
@@ -122,15 +124,21 @@ export default function StructuredContentRenderer({
           currentParagraph = ''
         }
         
-        // Collect consecutive list items
-        const listItems = extractListItems(lines, index)
-        if (listItems.length > 0) {
-          sections.push({
-            type: 'list',
-            content: '',
-            items: listItems
-          })
+        // Collect list items
+        const listItems = [trimmed]
+        let i = index + 1
+        while (i < lines.length && isListItem(lines[i].trim())) {
+          listItems.push(lines[i].trim())
+          i++
         }
+        
+        sections.push({
+          type: 'list',
+          content: 'List',
+          items: listItems
+        })
+        
+        // Skip processed lines
         return
       }
       
@@ -146,36 +154,13 @@ export default function StructuredContentRenderer({
         
         sections.push({
           type: 'quote',
-          content: trimmed.replace(/^["'""]|["'""]$/g, '')
-        })
-        return
-      }
-      
-      // Detect conclusion
-      if (isConclusion(trimmed)) {
-        if (currentParagraph.trim()) {
-          sections.push({
-            type: 'paragraph',
-            content: currentParagraph.trim()
-          })
-          currentParagraph = ''
-        }
-        
-        sections.push({
-          type: 'conclusion',
-          content: trimmed
+          content: trimmed.replace(/^["']|["']$/g, '')
         })
         return
       }
       
       // Regular paragraph content
-      if (trimmed.length > 10) {
-        if (currentParagraph && currentParagraph.length > 0) {
-          currentParagraph += ' ' + trimmed
-        } else {
-          currentParagraph = trimmed
-        }
-      }
+      currentParagraph += (currentParagraph ? ' ' : '') + trimmed
     })
     
     // Add final paragraph
@@ -186,268 +171,137 @@ export default function StructuredContentRenderer({
       })
     }
     
-    // Calculate metadata
-    const fullText = sections.map(s => s.content).join(' ')
-    const wordCount = fullText.split(/\s+/).length
-    const readingTime = Math.ceil(wordCount / 200)
+    // Calculate reading time in minutes
+    const wordsPerMinute = 200
+    const words = plainTextContent.trim().split(/\s+/).length
+    const readingTime = Math.ceil(words / wordsPerMinute)
     
     return {
       sections,
       metadata: {
-        wordCount,
-        readingTime,
+        wordCount: plainTextContent.split(' ').length,
+        readingTime: readingTime,
         lastUpdated: new Date().toISOString(),
         contentType: 'article'
       }
     }
   }
 
-  // Helper functions for content detection
   const isMajorHeading = (text: string): boolean => {
-    return /^[A-Z\s]{5,}$/.test(text) && !text.includes(':')
-  }
-  
-  const isSubHeading = (text: string): boolean => {
-    return text.endsWith(':') && text.length < 100 && text.split(' ').length < 8
-  }
-  
-  const isNumberedList = (text: string): boolean => {
-    return /^(\d+\.|[a-z]\.)/.test(text)
-  }
-  
-  const isQuote = (text: string): boolean => {
-    return (text.startsWith('"') && text.endsWith('"')) ||
-           (text.startsWith('"') && text.endsWith('"'))
-  }
-  
-  const isConclusion = (text: string): boolean => {
-    const lowerText = text.toLowerCase()
-    return lowerText.includes('dengan demikian') ||
-           lowerText.includes('oleh karena itu') ||
-           lowerText.includes('kesimpulan')
-  }
-  
-  const extractListItems = (lines: string[], startIndex: number): string[] => {
-    const items = []
-    
-    for (let i = startIndex; i < lines.length; i++) {
-      const line = lines[i].trim()
-      if (/^(\d+\.|[a-z]\.)/.test(line)) {
-        items.push(line.replace(/^(\d+\.|[a-z]\.)/, '').trim())
-      } else if (line.length > 5) {
-        break
-      }
-    }
-    
-    return items
+    return text.length > 3 && text === text.toUpperCase() && !text.includes('.')
   }
 
+  const isSubHeading = (text: string): boolean => {
+    return text.endsWith(':') && text.length > 5
+  }
+
+  const isListItem = (text: string): boolean => {
+    return /^[-•*]\s/.test(text) || /^\d+\.\s/.test(text)
+  }
+
+  const isQuote = (text: string): boolean => {
+    return (text.startsWith('"') && text.endsWith('"')) || 
+           (text.startsWith("'") && text.endsWith("'"))
+  }
+
+  // Process content and add lazy loading to images
+  const processContentWithLazyLoading = (content: string): string => {
+    return content.replace(
+      /<img([^>]*)>/gi,
+      '<img$1 loading="lazy" decoding="async">'
+    )
+  }
+
+  // Parse content
   const structuredContent = parseStoredContent(content)
   
   if (!structuredContent) {
+    // Fallback: render as plain HTML with lazy loading
     return (
-      <div className="max-w-4xl mx-auto bg-white p-8">
-        <div className="text-center text-gray-500">
-          <FileText className="w-12 h-12 mx-auto mb-4" />
-          <p>Tidak dapat memuat konten artikel</p>
-        </div>
+      <div className="prose prose-lg max-w-none">
+        <DisclaimerBox variant="legal" className="mb-8" />
+        <div 
+          className="article-content"
+          dangerouslySetInnerHTML={{ 
+            __html: processContentWithLazyLoading(content) 
+          }} 
+        />
       </div>
     )
   }
-  
-  const { sections, metadata: contentMetadata } = structuredContent
-  const readingTime = metadata.readingTime || contentMetadata.readingTime
-  const wordCount = metadata.wordCount || contentMetadata.wordCount
 
   return (
-    <article className="max-w-4xl mx-auto bg-white">
-      {/* Professional Article Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-8 pb-6 border-b-2 border-gray-200"
-      >
-        {title && (
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
-            {title}
-          </h1>
-        )}
-        
-        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-          <div className="flex items-center gap-2">
-            <FileText className="w-4 h-4" />
-            <span>Oleh {author}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4" />
-            <span>{readingTime} menit baca</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-4 h-4" />
-            <span>{sections.length} bagian</span>
-          </div>
-          <div className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">
-            {category.charAt(0).toUpperCase() + category.slice(1)}
-          </div>
-          {wordCount && (
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              <span>{wordCount.toLocaleString('id-ID')} kata</span>
-            </div>
-          )}
-        </div>
-      </motion.div>
-
-      {/* Structured Content Rendering */}
-      <div className="space-y-6 md:space-y-8">
-        {sections.map((section, index) => (
+    <div className="prose prose-lg max-w-none">
+      {/* Legal Disclaimer */}
+      <DisclaimerBox variant="legal" className="mb-8" />
+      
+      {/* Structured Content */}
+      <div className="article-content space-y-8">
+        {structuredContent.sections.map((section, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="content-section"
+            transition={{ duration: 0.6, delay: index * 0.1 }}
           >
-            {/* Major Headings */}
-            {section.type === 'heading' && section.level === 1 && (
-              <div className="mb-8 mt-12">
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900 uppercase tracking-wide text-center">
-                  {section.content}
-                </h2>
+            {section.type === 'heading' && (
+              <div className={`${section.level === 1 ? 'text-3xl' : 'text-2xl'} font-bold text-gray-900 mb-4`}>
+                {section.content}
               </div>
             )}
-
-            {/* Sub Headings */}
-            {section.type === 'heading' && section.level === 2 && (
-              <div className="mb-6 mt-8">
-                <h3 className="text-lg md:text-xl font-bold text-gray-900">
-                  {section.content}
-                </h3>
-              </div>
-            )}
-
-            {/* Paragraphs */}
+            
             {section.type === 'paragraph' && (
-              <div className="mb-5">
-                <p className="text-gray-800 leading-relaxed text-base md:text-lg text-justify" 
-                   style={{ textIndent: '1.5em' }}>
-                  {section.content}
-                </p>
-              </div>
+              <div 
+                className="text-gray-700 leading-relaxed"
+                dangerouslySetInnerHTML={{ 
+                  __html: processContentWithLazyLoading(section.content) 
+                }}
+              />
             )}
-
-            {/* Lists */}
+            
             {section.type === 'list' && section.items && (
-              <div className="mb-6">
-                <ol className="space-y-3">
-                  {section.items.map((item, itemIndex) => (
-                    <li key={itemIndex} className="flex items-start gap-3">
-                      <span className="flex-shrink-0 w-7 h-7 bg-blue-600 text-white text-sm font-semibold rounded-full flex items-center justify-center mt-0.5">
-                        {itemIndex + 1}
-                      </span>
-                      <p className="text-gray-800 leading-relaxed text-base flex-1 text-justify">
-                        {item}
-                      </p>
-                    </li>
-                  ))}
-                </ol>
-              </div>
+              <ul className="list-disc list-inside space-y-2 text-gray-700">
+                {section.items.map((item, itemIndex) => (
+                  <li key={itemIndex} className="leading-relaxed">
+                    {item.replace(/^[-•*]\s/, '').replace(/^\d+\.\s/, '')}
+                  </li>
+                ))}
+              </ul>
             )}
-
-            {/* Conclusions */}
-            {section.type === 'conclusion' && (
-              <div className="mb-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-600 rounded-r-lg">
-                <div className="flex items-start gap-4">
-                  <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-bold text-green-900 mb-3 uppercase text-sm tracking-wider">
-                      KESIMPULAN
-                    </h4>
-                    <p className="text-green-800 leading-relaxed text-base text-justify">
-                      {section.content}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Quotes */}
+            
             {section.type === 'quote' && (
-              <div className="mb-8 mx-4 md:mx-8">
-                <div className="relative">
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-600"></div>
-                  <blockquote className="pl-6 py-4 bg-blue-50 border border-blue-200 rounded-r-lg">
-                    <Quote className="w-6 h-6 text-blue-600 mb-2" />
-                    <p className="text-lg italic text-blue-900 mb-3 leading-relaxed">
-                      {section.content}
-                    </p>
-                  </blockquote>
-                </div>
-              </div>
-            )}
-
-            {/* Legal Reference Inserts */}
-            {(index > 0 && (index + 1) % 5 === 0) && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 }}
-                className="my-8 p-5 bg-gray-50 border border-gray-200 rounded-lg"
-              >
-                <div className="flex items-start gap-3">
-                  <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wide">
-                      Referensi Hukum
-                    </h4>
-                    <p className="text-gray-700 text-sm leading-relaxed">
-                      Artikel ini disusun berdasarkan peraturan perundang-undangan yang berlaku. 
-                      Untuk konsultasi lebih lanjut, hubungi ahli hukum berlisensi.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
+              <blockquote className="border-l-4 border-amber-500 pl-6 py-4 bg-amber-50 rounded-r-lg">
+                <p className="text-lg italic text-gray-700">"{section.content}"</p>
+              </blockquote>
             )}
           </motion.div>
         ))}
       </div>
-
-      {/* Professional Article Footer */}
+      
+      {/* Article Footer */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="mt-12 pt-8 border-t-2 border-gray-200"
+        transition={{ duration: 0.6, delay: 0.8 }}
+        className="mt-12 p-6 bg-gray-50 rounded-xl"
       >
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div className="flex items-center gap-4 text-sm text-gray-600">
-            <Scale className="w-4 h-4" />
-            <span>Konten ini telah direview oleh tim ahli hukum Melek Hukum ID</span>
+        <div className="flex items-center justify-between text-sm text-gray-600">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              {structuredContent.metadata.readingTime} menit baca
+            </span>
+            <span className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              {structuredContent.metadata.wordCount} kata
+            </span>
           </div>
-          <div className="flex gap-4">
-            <Link 
-              href="/kamus-hukum" 
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-            >
-              Kamus Hukum →
-            </Link>
-            <Link 
-              href="/solusi/template" 
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-            >
-              Template Dokumen →
-            </Link>
-          </div>
-        </div>
-        
-        {/* Content Quality Indicator */}
-        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <div className="flex items-center gap-2 text-sm text-blue-800">
-            <CheckCircle className="w-4 h-4" />
-            <span className="font-medium">Konten Terstruktur:</span>
-            <span>Artikel ini menggunakan format terstruktur untuk konsistensi tampilan optimal.</span>
+          <div className="flex items-center gap-2">
+            <Scale className="h-4 w-4" />
+            <span>Konten Hukum</span>
           </div>
         </div>
       </motion.div>
-    </article>
+    </div>
   )
 }
