@@ -224,7 +224,7 @@ const CaseStatisticsOverview = () => {
 const CrimeTypeDistribution = () => {
   return (
     <Card3D delay={0.3} className="lg:col-span-3">
-      <div className="bg-white rounded-xl shadow-lg p-6 h-full">
+      <div className="bg-white rounded-xl shadow-lg p-6 h-full min-w-0">
         <h3 className="text-xl font-bold mb-6 flex items-center">
           <Scale className="h-6 w-6 mr-2 text-indigo-600" />
           Distribusi Jenis Kejahatan
@@ -249,7 +249,7 @@ const CrimeTypeDistribution = () => {
                 </div>
               </div>
               
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 min-w-0">
                 <div className="flex-1">
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <motion.div
@@ -260,7 +260,7 @@ const CrimeTypeDistribution = () => {
                     />
                   </div>
                 </div>
-                <span className="text-xs text-gray-600 whitespace-nowrap">
+                <span className="text-xs text-gray-600 break-words">
                   {type.cases.toLocaleString('id-ID')} kasus
                 </span>
               </div>

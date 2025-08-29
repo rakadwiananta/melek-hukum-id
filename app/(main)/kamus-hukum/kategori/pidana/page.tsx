@@ -258,7 +258,7 @@ function KategoriPidanaPageContent({
           </motion.div>
 
           {/* Real Statistics with 3D Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
             {[
               { 
                 icon: BookOpen, 
