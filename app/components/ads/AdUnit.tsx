@@ -19,7 +19,7 @@ declare global {
   }
 }
 
-const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID
+const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-9240032692197811'
 
 function isValidClientId(clientId: string | undefined): boolean {
   return typeof clientId === 'string' && clientId.startsWith('ca-pub-') && !clientId.includes('XXXX')
