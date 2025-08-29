@@ -1,77 +1,44 @@
+import React from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { GoogleAnalytics } from '@/app/components/analytics/GoogleAnalytics'
+import { Toaster } from '@/app/components/ui/Toaster'
+import { ToastProvider } from '@/app/components/ui/use-toast'
 import Script from 'next/script'
-import PerformanceWrapper from '@/app/components/performance/PerformanceWrapper'
 
-// Optimized font loading with better performance
-const inter = Inter({
+const inter = Inter({ 
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
-  preload: true,
-  fallback: ['system-ui', 'arial', 'sans-serif'],
-  adjustFontFallback: true,
-  weight: ['400', '500', '600', '700'], // Only load necessary weights
+  variable: '--font-inter'
 })
 
+const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID
+const isDevelopment = process.env.NODE_ENV === 'development'
+
 export const metadata: Metadata = {
-  title: {
-    template: '%s | Melek Hukum ID',
-    default: 'Melek Hukum ID - Portal Hukum Indonesia Terpercaya'
+  title: 'Wacana Hukum',
+  description: 'Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia',
+  verification: {
+    google: 'cdb930fb42e17478', // Tambahkan verification code
   },
-  description: 'Portal hukum Indonesia terpercaya dengan artikel, regulasi, dan solusi hukum terkini. Akses informasi hukum yang akurat dan mudah dipahami.',
-  keywords: 'hukum indonesia, artikel hukum, regulasi, konsultasi hukum, portal hukum',
-  authors: [{ name: 'Tim Melek Hukum' }],
-  creator: 'Melek Hukum ID',
-  publisher: 'Melek Hukum ID',
-  metadataBase: new URL('https://wacanahukum.com'),
-  
-  openGraph: {
-    type: 'website',
-    locale: 'id_ID',
-    url: 'https://wacanahukum.com',
-    siteName: 'Melek Hukum ID',
-    title: 'Melek Hukum ID - Portal Hukum Indonesia',
-    description: 'Portal hukum Indonesia terpercaya dengan informasi hukum terkini',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Melek Hukum ID'
-      }
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' }
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
+    ],
+    other: [
+      { rel: 'manifest', url: '/manifest.json' }
     ]
   },
-  
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Melek Hukum ID - Portal Hukum Indonesia',
-    description: 'Portal hukum Indonesia terpercaya dengan informasi hukum terkini',
-    images: ['/twitter-image.jpg']
-  },
-  
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  
-  verification: {
-    google: 'your-google-verification-code',
-  },
-  
-  other: {
-    'ezoic-site-verification': 'iliv3haIMKkkic7sEAz8wOdIaLB9pT',
-    'msvalidate.01': '137F17AF7BD19D00FC8E11CACAF733FF',
-    'yandex-verification': 'bff52e920f382b21',
-  },
+  manifest: '/manifest.json',
+  other: ADSENSE_CLIENT_ID ? {
+    'google-adsense-account': ADSENSE_CLIENT_ID
+  } : {}
 }
 
 export default function RootLayout({
@@ -84,6 +51,7 @@ export default function RootLayout({
   return (
     <html lang="id" className={inter.variable}>
       <head>
+<<<<<<< HEAD
         {isValidAdsenseClient && (
           <meta name="google-adsense-account" content={ADSENSE_CLIENT_ID as string} />
         )}
@@ -258,4 +226,4 @@ export default function RootLayout({
       </body>
     </html>
   )
-} 
+}
