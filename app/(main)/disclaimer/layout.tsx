@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: 'Disclaimer - Melek Hukum ID',
     description: 'Penting untuk dibaca sebelum menggunakan layanan kami. Disclaimer lengkap tentang penggunaan platform Melek Hukum ID.',
     type: 'website',
-    url: 'https://bicarahukum.my.id/disclaimer',
+    url: 'https://wacanahukum.com/disclaimer',
   },
   robots: {
     index: true,

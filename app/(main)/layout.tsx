@@ -112,7 +112,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bicarahukum.my.id'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://wacanahukum.com'
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
