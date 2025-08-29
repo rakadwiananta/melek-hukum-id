@@ -65,11 +65,6 @@ const groups: SolutionGroup[] = [
         href: '/',
       },
       {
-        title: 'Konsultasi Online',
-        description: 'Layanan konsultasi dengan praktisi hukum berpengalaman',
-        href: '/',
-      },
-      {
         title: 'Webinar Edukasi',
         description: 'Program edukasi hukum berkala untuk masyarakat umum',
         href: '/',

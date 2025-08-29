@@ -5,7 +5,7 @@ import './globals.css'
 import { GoogleAnalytics } from '@/app/components/analytics/GoogleAnalytics'
 import { Toaster } from '@/app/components/ui/Toaster'
 import { ToastProvider } from '@/app/components/ui/use-toast'
-import Script from 'next/script' // PENTING: Import Script dari next/script
+import Script from 'next/script'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -13,15 +13,15 @@ const inter = Inter({
   variable: '--font-inter'
 })
 
-// Konfigurasi AdSense dan Verification
+// Google AdSense Configuration
 const ADSENSE_CLIENT_ID = 'ca-pub-9240032692197811'
-const GOOGLE_VERIFICATION = 'googlecdb930fb42e17478' // Verification code dari file HTML Anda
+const GOOGLE_VERIFICATION = 'googlecdb930fb42e17478'
 
 export const metadata: Metadata = {
-  title: 'Wacana Hukum', // Sesuaikan dengan domain wacanahukum.com
+  title: 'Wacana Hukum',
   description: 'Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia',
   verification: {
-    google: GOOGLE_VERIFICATION, // PENTING: Tambahkan verification
+    google: GOOGLE_VERIFICATION,
   },
   icons: {
     icon: [
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   other: {
-    'google-adsense-account': ADSENSE_CLIENT_ID // Meta tag AdSense
+    'google-adsense-account': ADSENSE_CLIENT_ID
   }
 }
 

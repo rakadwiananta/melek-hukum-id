@@ -1,166 +1,98 @@
 'use client'
 
-import React, { Suspense } from 'react'
-import dynamic from 'next/dynamic'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Loader2, Briefcase, TrendingUp, Building, ScrollText } from 'lucide-react'
+import React from 'react'
+import { Metadata } from 'next'
+import { BusinessLawDictionary } from '@/app/components/kamus/istilah/IstilahBisnis'
+import { motion } from 'framer-motion'
+import { BookOpen, ChevronRight, Briefcase, ScrollText } from 'lucide-react'
 import Link from 'next/link'
+import PatternBackground from '@/app/components/nusantara/PatternBackground'
 
-// Batik Pattern Component
-const BatikPattern = ({ className = "" }: { className?: string }) => (
-	<svg 
-		className={`absolute inset-0 w-full h-full opacity-5 ${className}`} 
-		preserveAspectRatio="xMidYMid slice"
-	>
-		<defs>
-			<pattern id="batik-pattern-istilah" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-				<circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" strokeWidth="0.5"/>
-				<circle cx="75" cy="25" r="20" fill="none" stroke="currentColor" strokeWidth="0.5"/>
-				<circle cx="25" cy="75" r="20" fill="none" stroke="currentColor" strokeWidth="0.5"/>
-				<circle cx="75" cy="75" r="20" fill="none" stroke="currentColor" strokeWidth="0.5"/>
-				<path d="M25,25 L75,75 M75,25 L25,75" stroke="currentColor" strokeWidth="0.3"/>
-			</pattern>
-		</defs>
-		<rect width="100%" height="100%" fill="url(#batik-pattern-istilah)" />
-	</svg>
-)
+export default function IstilahBisnisPage() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-red-50 relative overflow-hidden">
+      {/* Background Pattern */}
+      <PatternBackground />
+      
+      {/* Enhanced Breadcrumb Navigation */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-10 bg-white/80 backdrop-blur-lg border-b border-amber-100 sticky top-0"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <nav className="flex items-center gap-2 text-sm">
+            <Link href="/kamus-hukum" className="text-gray-500 hover:text-amber-600 transition-colors flex items-center gap-1">
+              <BookOpen className="w-4 h-4" />
+              Kamus Hukum
+            </Link>
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <Link href="/kamus-hukum/kategori/bisnis" className="text-gray-500 hover:text-amber-600 transition-colors flex items-center gap-1">
+              <Briefcase className="w-4 h-4" />
+              Bisnis
+            </Link>
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <span className="text-amber-600 font-semibold flex items-center gap-1">
+              <ScrollText className="w-4 h-4" />
+              Istilah
+            </span>
+          </nav>
+        </div>
+      </motion.div>
 
-// Enhanced Loading Component
-const LoadingState = () => (
-	<div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50 flex items-center justify-center">
-		<div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-8 relative overflow-hidden">
-			<BatikPattern className="text-emerald-300" />
-			<div className="relative z-10 flex flex-col items-center">
-				<motion.div
-					animate={{ rotate: 360 }}
-					transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-					className="mb-4"
-				>
-					<div className="p-4 bg-gradient-to-br from-emerald-500 to-blue-500 rounded-2xl">
-						<Briefcase className="h-12 w-12 text-white" />
-					</div>
-				</motion.div>
-				<motion.div
-					animate={{ opacity: [0.5, 1, 0.5] }}
-					transition={{ duration: 1.5, repeat: Infinity }}
-					className="flex items-center gap-2"
-				>
-					<Loader2 className="h-5 w-5 text-emerald-600 animate-spin" />
-					<span className="text-lg font-semibold text-gray-700">Memuat Kamus Istilah Bisnis...</span>
-				</motion.div>
-				<div className="mt-4 flex gap-2">
-					{[0, 0.2, 0.4].map((delay, i) => (
-						<motion.div
-							key={i}
-							className="w-2 h-2 bg-emerald-500 rounded-full"
-							animate={{ scale: [1, 1.5, 1] }}
-							transition={{ duration: 1, delay, repeat: Infinity }}
-						/>
-					))}
-				</div>
-			</div>
-		</div>
-	</div>
-)
+      {/* Hero Section */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-8"
+        >
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <motion.div
+              whileHover={{ scale: 1.1, rotate: 180 }}
+              transition={{ type: "spring", stiffness: 200 }}
+              className="p-4 bg-gradient-to-br from-amber-500 to-rose-500 rounded-2xl shadow-xl"
+            >
+              <ScrollText className="h-10 w-10 text-white" />
+            </motion.div>
+            <div>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                <span className="bg-gradient-to-r from-amber-600 via-rose-600 to-red-600 bg-clip-text text-transparent">
+                  Istilah Hukum Bisnis Indonesia
+                </span>
+              </h1>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto mt-2">
+                Kamus lengkap istilah hukum bisnis dengan definisi, contoh, dan dasar hukum
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
 
-// Dynamic import dengan loading state yang lebih baik
-const IstilahBisnisComponent = dynamic(
-	() => import('@/app/components/kamus/istilah/IstilahBisnisComponent'),
-	{
-		loading: () => <LoadingState />,
-		ssr: false,
-	}
-)
+      {/* Main Dictionary Content */}
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <motion.div 
+          className="rounded-3xl bg-white/90 backdrop-blur-lg shadow-2xl ring-1 ring-gray-200/70 overflow-hidden"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <BusinessLawDictionary />
+        </motion.div>
+      </main>
 
-// Floating decoration component
-const FloatingElement = ({ delay = 0, children }: { delay?: number; children: React.ReactNode }) => (
-	<motion.div
-		initial={{ y: 0 }}
-		animate={{ 
-			y: [-10, 10, -10],
-			rotate: [-3, 3, -3]
-		}}
-		transition={{
-			delay,
-			duration: 4,
-			repeat: Infinity,
-			ease: "easeInOut"
-		}}
-	>
-		{children}
-	</motion.div>
-)
-
-export default function Page() {
-	return (
-		<div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50 relative overflow-hidden">
-			{/* Background Pattern */}
-			<BatikPattern className="text-emerald-900" />
-			
-			{/* Animated Background Elements */}
-			<div className="absolute inset-0 overflow-hidden pointer-events-none">
-				<motion.div
-					animate={{ 
-						x: [0, 100, 0],
-						y: [0, -100, 0],
-					}}
-					transition={{ duration: 20, repeat: Infinity }}
-					className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-emerald-200 to-blue-200 rounded-full blur-3xl opacity-20"
-				/>
-				<motion.div
-					animate={{ 
-						x: [0, -100, 0],
-						y: [0, 100, 0],
-					}}
-					transition={{ duration: 25, repeat: Infinity }}
-					className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-br from-blue-200 to-emerald-200 rounded-full blur-3xl opacity-20"
-				/>
-			</div>
-
-			{/* Breadcrumb Navigation */}
-			<div className="relative z-10 bg-white/80 backdrop-blur-sm border-b border-emerald-100">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-					<nav className="flex items-center gap-2 text-sm">
-						<Link href="/kamus-hukum" className="text-gray-500 hover:text-emerald-600 transition-colors">
-							Kamus Hukum
-						</Link>
-						<span className="text-gray-400">/</span>
-						<Link href="/kamus-hukum/kategori/bisnis" className="text-gray-500 hover:text-emerald-600 transition-colors">
-							Bisnis
-						</Link>
-						<span className="text-gray-400">/</span>
-						<span className="text-emerald-600 font-semibold">Istilah</span>
-					</nav>
-				</div>
-			</div>
-
-			{/* Quick Access Icons */}
-			<div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-				<div className="flex justify-center gap-4">
-					<FloatingElement delay={0}>
-						<div className="p-3 bg-white rounded-xl shadow-lg border border-emerald-100">
-							<Building className="h-6 w-6 text-emerald-600" />
-						</div>
-					</FloatingElement>
-					<FloatingElement delay={0.5}>
-						<div className="p-3 bg-white rounded-xl shadow-lg border border-blue-100">
-							<ScrollText className="h-6 w-6 text-blue-600" />
-						</div>
-					</FloatingElement>
-					<FloatingElement delay={1}>
-						<div className="p-3 bg-white rounded-xl shadow-lg border border-purple-100">
-							<TrendingUp className="h-6 w-6 text-purple-600" />
-						</div>
-					</FloatingElement>
-				</div>
-			</div>
-
-			{/* Main Content */}
-			<div className="relative z-10">
-				<Suspense fallback={<LoadingState />}>
-					<IstilahBisnisComponent />
-				</Suspense>
-			</div>
-		</div>
-	)
+      {/* Floating Action Button */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 1 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-amber-500 to-rose-500 rounded-full shadow-lg flex items-center justify-center text-white z-50"
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
+        <BookOpen className="w-6 h-6" />
+      </motion.button>
+    </div>
+  )
 }

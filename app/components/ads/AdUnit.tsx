@@ -19,7 +19,7 @@ declare global {
   }
 }
 
-const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID
+const ADSENSE_CLIENT_ID = 'ca-pub-9240032692197811'
 
 function isValidClientId(clientId: string | undefined): boolean {
   return typeof clientId === 'string' && clientId.startsWith('ca-pub-') && !clientId.includes('XXXX')
@@ -44,13 +44,13 @@ export default function AdUnit({
   const adRef = useRef<HTMLModElement>(null)
   const isLoaded = useRef(false)
 
-  const clientConfigured = isValidClientId(ADSENSE_CLIENT_ID)
+  const clientConfigured = true // Always true since we're using hardcoded client ID
   const slotConfigured = isValidSlot(slot)
 
   useEffect(() => {
     // Only load ads in production and when properly configured
     if (process.env.NODE_ENV !== 'production') return
-    if (!clientConfigured || !slotConfigured) return
+    if (!slotConfigured) return
 
     // Alias untuk window agar tidak bermasalah saat typing
     const win: any = typeof window !== 'undefined' ? window : undefined
@@ -117,11 +117,10 @@ export default function AdUnit({
   }, [pathname, clientConfigured, slotConfigured])
 
   // Don't render ads in development or when misconfigured
-  if (process.env.NODE_ENV !== 'production' || !clientConfigured || !slotConfigured) {
+  if (process.env.NODE_ENV !== 'production' || !slotConfigured) {
     return (
       <div className={cn('ad-placeholder bg-gray-100 rounded-lg p-4 text-center text-gray-500', className)}>
         <p className="text-sm">Ad Placeholder</p>
-        {!clientConfigured && <p className="text-xs">Missing/invalid AdSense client</p>}
         {!slotConfigured && <p className="text-xs">Missing/invalid ad slot</p>}
       </div>
     )

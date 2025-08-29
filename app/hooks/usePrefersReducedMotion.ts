@@ -1,18 +1,37 @@
-'use client'
+import { useState, useEffect } from 'react'
 
-import { useEffect, useState } from 'react'
-
-export default function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false)
+/**
+ * Hook untuk mendeteksi preferensi pengguna terhadap reduced motion
+ * Menggunakan CSS media query prefers-reduced-motion
+ */
+export default function usePrefersReducedMotion(): boolean {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const update = () => setReduced(mq.matches)
-    update()
-    mq.addEventListener?.('change', update)
-    return () => mq.removeEventListener?.('change', update)
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    // Check for prefers-reduced-motion media query
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    
+    // Set initial value
+    setPrefersReducedMotion(mediaQuery.matches)
+
+    // Listen for changes
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches)
+    }
+
+    // Add event listener
+    mediaQuery.addEventListener('change', handleChange)
+
+    // Cleanup
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange)
+    }
   }, [])
 
-  return reduced
-} 
+  return prefersReducedMotion
+}

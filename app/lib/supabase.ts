@@ -40,7 +40,7 @@ export interface Article {
   slug: string
   content: string
   excerpt: string
-  category: 'kamus-hukum' | 'solusi' | 'regulasi' | 'anti-korupsi'
+  category: string
   featured_image: string
   author: string
   published_at: string

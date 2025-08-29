@@ -7,7 +7,9 @@ import LatestArticles from '@/app/components/article/display/LatestArticles'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TrendingUp, Award, Sparkles, Eye, Clock, ChevronRight, BarChart3, Users, AlertTriangle, Tag } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
+import { ArticleHeroImage, ArticleCardImage } from '@/app/components/ui/ArticleImage'
+import { EnhancedArticleHeroImage, EnhancedArticleCardImage } from '@/app/components/ui/AdvancedArticleImage'
+import { RobustArticleHeroImage, RobustArticleCardImage } from '@/app/components/ui/RobustArticleImage'
 
 interface ArticleHeroProps {
   showLatest?: boolean
@@ -47,6 +49,9 @@ export default function ArticleHero({
   const [loading, setLoading] = useState(true)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
+  const [email, setEmail] = useState('')
+  const [newsletterLoading, setNewsletterLoading] = useState(false)
+  const [newsletterMessage, setNewsletterMessage] = useState('')
 
   useEffect(() => {
     const fetchHeroContent = async () => {
@@ -108,6 +113,41 @@ export default function ArticleHero({
       return () => clearInterval(interval)
     }
   }, [variant, trendingArticles.length])
+
+  const handleNewsletterSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!email) {
+      setNewsletterMessage('Mohon masukkan email Anda')
+      return
+    }
+
+    setNewsletterLoading(true)
+    setNewsletterMessage('')
+
+    try {
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        setNewsletterMessage('Terima kasih! Anda berhasil berlangganan newsletter.')
+        setEmail('')
+      } else {
+        setNewsletterMessage(result.error || 'Terjadi kesalahan. Silakan coba lagi.')
+      }
+    } catch (error) {
+      setNewsletterMessage('Terjadi kesalahan. Silakan coba lagi.')
+    } finally {
+      setNewsletterLoading(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -200,15 +240,12 @@ export default function ArticleHero({
             className="relative group"
           >
             <div className="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl">
-              <Image
-                src={featuredArticle.featured_image || '/placeholder.jpg'}
+              <RobustArticleHeroImage
+                src={featuredArticle.featured_image}
                 alt={featuredArticle.title}
-                fill
+                category={featuredArticle.category}
                 className="object-cover group-hover:scale-110 transition-transform duration-1000"
-                priority
-                loading="eager"
-                fetchPriority="high"
-                sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 50vw"
+                index={0}
               />
               
               {/* Gradient Overlay */}
@@ -309,11 +346,12 @@ export default function ArticleHero({
                   <Link href={`/artikel/${article.slug}`}>
                     <div className="flex gap-4 p-4">
                       <div className="relative w-32 h-32 flex-shrink-0 rounded-xl overflow-hidden">
-                        <Image
-                          src={article.featured_image || '/placeholder.jpg'}
+                        <RobustArticleCardImage
+                          src={article.featured_image}
                           alt={article.title}
-                          fill
+                          category={article.category}
                           className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          index={index + 1}
                         />
                         <div className="absolute top-2 left-2 bg-black/60 backdrop-blur text-white text-xs px-2 py-1 rounded-full font-bold">
                           #{index + 2}
@@ -359,9 +397,28 @@ export default function ArticleHero({
               <p className="text-gray-700 text-sm mb-4">
                 Dapatkan update artikel hukum terbaru langsung di email Anda
               </p>
-              <button className="w-full px-4 py-3 bg-gradient-to-r from-red-600 to-amber-600 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300">
-                Berlangganan Newsletter
-              </button>
+              <form onSubmit={handleNewsletterSubscribe} className="space-y-3">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Masukkan email Anda"
+                  className="w-full px-4 py-2 text-sm rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  disabled={newsletterLoading}
+                />
+                <button 
+                  type="submit"
+                  disabled={newsletterLoading}
+                  className="w-full px-4 py-3 bg-gradient-to-r from-red-600 to-amber-600 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                >
+                  {newsletterLoading ? 'Berlangganan...' : 'Berlangganan Newsletter'}
+                </button>
+                {newsletterMessage && (
+                  <p className={`text-center text-xs ${newsletterMessage.includes('berhasil') ? 'text-green-600' : 'text-red-600'}`}>
+                    {newsletterMessage}
+                  </p>
+                )}
+              </form>
             </motion.div>
           </div>
         </div>
@@ -392,15 +449,12 @@ export default function ArticleHero({
       >
         {/* Background Image with Parallax */}
         <div className="absolute inset-0 transform scale-110 group-hover:scale-125 transition-transform duration-1500">
-          <Image
-            src={featuredArticle.featured_image || '/placeholder.jpg'}
+          <RobustArticleHeroImage
+            src={featuredArticle.featured_image}
             alt={featuredArticle.title}
-            fill
+            category={featuredArticle.category}
             className="object-cover"
-            priority
-            loading="eager"
-            fetchPriority="high"
-            sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 50vw"
+            index={0}
           />
         </div>
 

@@ -2,13 +2,9 @@ import React from 'react'
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import '../globals.css'
-import { GoogleAnalytics } from '@/app/components/analytics/GoogleAnalytics'
-import Header from '@/app/components/layout/Header'
-import Footer from '@/app/components/layout/Footer'
-import { Toaster } from '@/app/components/ui/Toaster'
-import { ToastProvider } from '@/app/components/ui/use-toast'
-import PerformanceMonitor from '@/app/components/PerformanceMonitor'
 import Script from 'next/script'
+import LayoutWrapper from '@/app/components/layout/LayoutWrapper'
+import PerformanceWrapper from '@/app/components/performance/PerformanceWrapper'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -116,7 +112,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bicarahukum.my.id'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://wacanahukum.com'
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -126,27 +122,15 @@ export default function RootLayout({
   }
 
   return (
-    <html lang="id" className={inter.variable}>
-      <head>
-        {/* Google AdSense removed - not available in this version */}
-        <Script
-          id="website-schema"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-        />
-      </head>
-      <body className={`${inter.className} antialiased`}>
-        <ToastProvider>
-          <GoogleAnalytics />
-          <PerformanceMonitor />
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-          <Toaster />
-        </ToastProvider>
-      </body>
-    </html>
+    <LayoutWrapper>
+      {/* Inject website schema from within the layout tree (no extra <head> tag) */}
+      <Script
+        id="website-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      {children}
+      <PerformanceWrapper />
+    </LayoutWrapper>
   )
 }

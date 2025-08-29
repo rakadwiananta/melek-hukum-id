@@ -2,51 +2,70 @@
   "name": "melek-hukum-id",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11",
+    "not op_mini all"
+  ],
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:analyze": "cross-env ANALYZE=true next build",
+    "build:production": "NODE_ENV=production next build",
+    "build:fast": "cross-env NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 next build",
     "export": "next build && next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "cross-env ANALYZE=true next build",
+    "performance:audit": "lighthouse http://localhost:3000 --output=json --output-path=./lighthouse-report.json",
+    "performance:budget": "cross-env BUNDLE_ANALYZER=true next build",
+    "performance:test": "npm run build && npm run start & sleep 10 && npm run performance:audit && pkill -f 'next start'",
+    "clean": "rm -rf .next out dist",
+    "type-check": "tsc --noEmit"
   },
-    "dependencies": {
-     "@netlify/plugin-nextjs": "^5.12.0",
-     "@next/third-parties": "^15.4.5",
-     "@supabase/supabase-js": "^2.53.0",
-     "@tailwindcss/typography": "^0.5.16",
-     "@types/gtag.js": "^0.0.20",
-     "@types/node": "^20.19.9",
-     "@types/react": "^19",
-     "@types/react-dom": "^19",
-     "autoprefixer": "^10.4.21",
-     "chart.js": "^4.5.0",
-     "clsx": "^2.1.1",
-           "docx": "^9.5.1",
-      "framer-motion": "^12.23.12",
-           "lucide-react": "^0.536.0",
-       "midtrans-client": "^1.4.2",
-       "three": "^0.164.1",
-       "@react-three/fiber": "^9.3.0",
-               "@react-three/drei": "^10.6.1",
-       "next": "15.4.5",
-       "react": "19.1.0",
-       "react-chartjs-2": "^5.3.0",
-       "react-dom": "19.1.0",
-       "tailwind-merge": "^3.3.1",
-       "typescript": "^5",
-       "zod": "^4.0.14"
-    },
+  "dependencies": {
+    "@netlify/plugin-nextjs": "^5.12.0",
+    "@next/third-parties": "^15.4.5",
+    "@supabase/supabase-js": "^2.53.0",
+    "@tailwindcss/typography": "^0.5.16",
+    "@types/gtag.js": "^0.0.20",
+    "@types/node": "^20.19.9",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.21",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.12",
+    "lucide-react": "^0.536.0",
+    "midtrans-client": "^1.4.2",
+    "next": "15.4.5",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "tailwind-merge": "^3.3.1",
+    "typescript": "^5",
+    "zod": "^4.0.14"
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^15.4.5",
+    "critters": "^0.0.23",
+    "cross-env": "^7.0.3",
     "eslint": "^9",
     "eslint-config-next": "15.4.5",
     "netlify-cli": "^23.0.0",
     "tailwindcss": "^3.4.17",
-    "web-vitals": "^5.1.0",
-    "@types/three": "^0.164.0"
+    "web-vitals": "^5.1.0"
   },
   "overrides": {
-    "three-mesh-bvh": "^0.8.0",
-    "@react-three/fiber": "^9.3.0"
+    "@types/react": "^19",
+    "@types/react-dom": "^19"
+  },
+  "resolutions": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19"
   }
 }

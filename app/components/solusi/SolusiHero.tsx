@@ -6,7 +6,11 @@ import Link from 'next/link'
 import { motion, useAnimation } from 'framer-motion'
 import { Search, FileText, BookOpen, Users, ArrowRight, Scale, Shield } from 'lucide-react'
 
-export default function SolusiHero() {
+interface SolusiHeroProps {
+  onSearch?: (query: string) => void
+}
+
+export default function SolusiHero({ onSearch }: SolusiHeroProps) {
   const router = useRouter()
   const [query, setQuery] = useState('')
   const controls = useAnimation()
@@ -28,7 +32,17 @@ export default function SolusiHero() {
     e.preventDefault()
     const trimmed = query.trim()
     if (!trimmed) return
-    router.push(`/search?q=${encodeURIComponent(trimmed)}&scope=solusi`)
+    
+    // Call the search callback to update the templates section
+    if (onSearch) {
+      onSearch(trimmed)
+    }
+    
+    // Scroll to templates section
+    const templatesSection = document.getElementById('templates')
+    if (templatesSection) {
+      templatesSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
   }
 
   return (
@@ -133,9 +147,9 @@ export default function SolusiHero() {
 
             {/* Quick Links dengan animasi */}
             <div className="flex flex-wrap gap-3 mb-8">
-              <QuickLink href="#popular" icon={FileText} label="Template Populer" />
-              <QuickLink href="#templates" icon={BookOpen} label="Panduan Lengkap" />
-              <QuickLink href="#faq" icon={Users} label="Tanya Jawab" />
+              <QuickLink href="/solusi/template" icon={FileText} label="Template Populer" />
+              <QuickLink href="/panduan" icon={BookOpen} label="Panduan Lengkap" />
+              <QuickLink href="/artikel" icon={Users} label="Artikel Hukum" />
             </div>
 
             {/* Feature highlights */}

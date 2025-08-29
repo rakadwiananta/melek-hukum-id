@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { FileText, AlertTriangle, Clock, CheckCircle, MapPin, CreditCard, Download, Lightbulb } from 'lucide-react'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Mengurus Dokumen Hilang - Panduan Lengkap 2024',
@@ -294,10 +295,13 @@ export default function MengurusDokumenHilangPage() {
 
           {/* Download Checklist */}
           <div className="mt-8 text-center">
-            <button className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-xl">
+            <Link 
+              href="/solusi/template/surat-pernyataan-kehilangan"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-xl hover:bg-primary-600 transition-all transform hover:scale-105 shadow-lg"
+            >
               <Download className="h-5 w-5" />
               Download Checklist Dokumen
-            </button>
+            </Link>
           </div>
         </div>
       </article>

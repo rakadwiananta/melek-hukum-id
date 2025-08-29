@@ -1,15 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import PageHeader from '@/app/components/ui/PageHeader'
-import PatternBackground from '@/app/components/nusantara/PatternBackground'
-import dynamic from 'next/dynamic'
-import TrustedStats, { StatItem } from '@/app/components/stats/TrustedStats'
-import usePrefersReducedMotion from '@/app/hooks/usePrefersReducedMotion'
 import { Cookie, Shield, Settings, Info, ChevronDown, ChevronUp } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-const NusantaraCanvas = dynamic(() => import('@/app/components/nusantara/NusantaraCanvas'), { ssr: false })
 
 interface CookieCategory {
   id: string
@@ -22,329 +15,263 @@ interface CookieCategory {
 
 interface CookieDetail {
   name: string
-  provider: string
   purpose: string
-  expiry: string
-  type: string
+  duration: string
+  type: 'necessary' | 'functional' | 'analytics' | 'marketing'
 }
 
+const cookieCategories: CookieCategory[] = [
+  {
+    id: 'necessary',
+    title: 'Cookie Penting',
+    description: 'Cookie yang diperlukan untuk fungsi dasar website',
+    required: true,
+    icon: <Shield className="w-5 h-5" />,
+    cookies: [
+      {
+        name: 'session_id',
+        purpose: 'Menyimpan informasi sesi pengguna',
+        duration: '1 jam',
+        type: 'necessary'
+      },
+      {
+        name: 'csrf_token',
+        purpose: 'Perlindungan keamanan form',
+        duration: '1 hari',
+        type: 'necessary'
+      }
+    ]
+  },
+  {
+    id: 'functional',
+    title: 'Cookie Fungsional',
+    description: 'Cookie untuk meningkatkan pengalaman pengguna',
+    required: false,
+    icon: <Settings className="w-5 h-5" />,
+    cookies: [
+      {
+        name: 'theme_preference',
+        purpose: 'Menyimpan preferensi tema',
+        duration: '30 hari',
+        type: 'functional'
+      }
+    ]
+  },
+  {
+    id: 'analytics',
+    title: 'Cookie Analitik',
+    description: 'Cookie untuk menganalisis penggunaan website',
+    required: false,
+    icon: <Info className="w-5 h-5" />,
+    cookies: [
+      {
+        name: 'ga_tracking',
+        purpose: 'Google Analytics tracking',
+        duration: '2 tahun',
+        type: 'analytics'
+      }
+    ]
+  }
+]
+
 export default function CookiesPage() {
-  const reduced = usePrefersReducedMotion()
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
-  const [cookiePreferences, setCookiePreferences] = useState({
+  const [cookieSettings, setCookieSettings] = useState<Record<string, boolean>>({
     necessary: true,
-    analytics: true,
     functional: true,
+    analytics: false,
     marketing: false
   })
-
-  const stats: StatItem[] = [
-    { 
-      label: 'Pengguna menerima semua cookie', 
-      value: '68%', 
-      sourceLabel: 'Analytics Internal Q3 2024', 
-      sourceUrl: '#',
-      ariaDescription: 'Persentase pengguna yang menerima semua jenis cookie'
-    },
-    {
-      label: 'Pengguna kustomisasi preferensi',
-      value: '32%',
-      sourceLabel: 'Analytics Internal Q3 2024',
-      sourceUrl: '#',
-      ariaDescription: 'Persentase pengguna yang mengatur preferensi cookie secara manual'
-    }
-  ]
-
-  const cookieCategories: CookieCategory[] = [
-    {
-      id: 'necessary',
-      title: 'Cookie Esensial',
-      description: 'Cookie yang diperlukan untuk fungsi dasar website. Tidak dapat dinonaktifkan.',
-      required: true,
-      icon: <Shield className="w-5 h-5" />,
-      cookies: [
-        {
-          name: 'sessionId',
-          provider: 'Melek Hukum ID',
-          purpose: 'Menyimpan sesi pengguna untuk navigasi antar halaman',
-          expiry: 'Saat browser ditutup',
-          type: 'Session'
-        },
-        {
-          name: 'cookieConsent',
-          provider: 'Melek Hukum ID',
-          purpose: 'Menyimpan preferensi cookie pengguna',
-          expiry: '1 tahun',
-          type: 'Persistent'
-        }
-      ]
-    },
-    {
-      id: 'analytics',
-      title: 'Cookie Analitik',
-      description: 'Membantu kami memahami bagaimana pengunjung menggunakan website.',
-      required: false,
-      icon: <Info className="w-5 h-5" />,
-      cookies: [
-        {
-          name: '_ga',
-          provider: 'Google Analytics',
-          purpose: 'Membedakan pengguna unik dengan ID acak',
-          expiry: '2 tahun',
-          type: 'Persistent'
-        },
-        {
-          name: '_gid',
-          provider: 'Google Analytics',
-          purpose: 'Membedakan pengguna unik per hari',
-          expiry: '24 jam',
-          type: 'Persistent'
-        }
-      ]
-    },
-    {
-      id: 'functional',
-      title: 'Cookie Fungsional',
-      description: 'Meningkatkan fungsionalitas website dengan menyimpan preferensi.',
-      required: false,
-      icon: <Settings className="w-5 h-5" />,
-      cookies: [
-        {
-          name: 'language',
-          provider: 'Melek Hukum ID',
-          purpose: 'Menyimpan preferensi bahasa',
-          expiry: '1 tahun',
-          type: 'Persistent'
-        },
-        {
-          name: 'theme',
-          provider: 'Melek Hukum ID',
-          purpose: 'Menyimpan preferensi tema (terang/gelap)',
-          expiry: '1 tahun',
-          type: 'Persistent'
-        }
-      ]
-    },
-    {
-      id: 'marketing',
-      title: 'Cookie Marketing',
-      description: 'Cookie untuk menampilkan konten yang relevan dengan minat Anda.',
-      required: false,
-      icon: <Cookie className="w-5 h-5" />,
-      cookies: [
-        {
-          name: 'fbp',
-          provider: 'Facebook',
-          purpose: 'Melacak dan menampilkan iklan relevan',
-          expiry: '3 bulan',
-          type: 'Persistent'
-        }
-      ]
-    }
-  ]
 
   const toggleCategory = (categoryId: string) => {
     setExpandedCategory(expandedCategory === categoryId ? null : categoryId)
   }
 
-  const handlePreferenceChange = (category: string, value: boolean) => {
-    setCookiePreferences(prev => ({
+  const updateCookieSetting = (categoryId: string, enabled: boolean) => {
+    setCookieSettings(prev => ({
       ...prev,
-      [category]: value
+      [categoryId]: enabled
     }))
   }
 
-  const savePreferences = () => {
-    // Implementasi simpan preferensi
-    console.log('Preferensi disimpan:', cookiePreferences)
-    // Show toast notification
-  }
-
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
-      <PatternBackground />
-      <div className="relative z-10">
-        <PageHeader 
-          title="Kebijakan Cookie" 
-          description="Kami menggunakan cookie untuk meningkatkan pengalaman Anda di website ini"
-          breadcrumb={[{ label: 'Tentang', href: '/tentang' }, { label: 'Kebijakan Cookie' }]} 
-        />
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-brown-50">
+      {/* Header */}
+      <div className="relative bg-gradient-to-br from-brown-600 via-amber-600 to-red-600 text-white py-16 md:py-20">
+        <div className="absolute inset-0 opacity-10">
+          <svg width="100%" height="100%" viewBox="0 0 800 600">
+            <defs>
+              <pattern id="cookie-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#cookie-pattern)" />
+          </svg>
+        </div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <NusantaraCanvas height={180} reducedMotion={reduced} className="mb-6" />
-          
-          {/* Penjelasan Umum */}
-          <motion.div 
+        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+          <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+            <Cookie className="h-10 w-10 text-white" />
+          </div>
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl shadow-sm border p-6 mb-6"
+            className="text-4xl md:text-5xl font-bold mb-4"
           >
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Apa itu Cookie?</h2>
-            <div className="prose prose-gray max-w-none">
-              <p className="text-gray-700 leading-relaxed mb-4">
-                Cookie adalah file teks kecil yang disimpan di perangkat Anda saat mengunjungi website. 
-                Cookie membantu website mengingat informasi tentang kunjungan Anda, seperti preferensi 
-                bahasa dan pengaturan lainnya.
-              </p>
-              <p className="text-gray-700 leading-relaxed">
-                Kami menggunakan cookie untuk:
-              </p>
-              <ul className="list-disc pl-6 mt-2 space-y-1 text-gray-700">
-                <li>Memastikan website berfungsi dengan baik</li>
-                <li>Menganalisis cara pengunjung menggunakan website</li>
-                <li>Menyimpan preferensi Anda</li>
-                <li>Menampilkan konten yang relevan</li>
-              </ul>
-            </div>
-          </motion.div>
-
-          {/* Cookie Manager */}
-          <motion.div 
+            Kebijakan Cookie
+          </motion.h1>
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white rounded-2xl shadow-sm border p-6 mb-6"
+            className="text-xl text-white/90 max-w-2xl mx-auto"
           >
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Kelola Preferensi Cookie</h2>
-            
-            <div className="space-y-4">
-              {cookieCategories.map((category) => (
-                <div key={category.id} className="border rounded-lg">
-                  <div 
-                    className="p-4 cursor-pointer"
-                    onClick={() => toggleCategory(category.id)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="text-primary">{category.icon}</div>
-                        <div>
-                          <h3 className="font-medium text-gray-900">{category.title}</h3>
-                          <p className="text-sm text-gray-600 mt-1">{category.description}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        {category.required ? (
-                          <span className="text-sm text-gray-500">Wajib</span>
-                        ) : (
-                          <label className="relative inline-flex items-center cursor-pointer">
-                            <input
-                              type="checkbox"
-                              className="sr-only peer"
-                              checked={cookiePreferences[category.id as keyof typeof cookiePreferences]}
-                              onChange={(e) => handlePreferenceChange(category.id, e.target.checked)}
-                              onClick={(e) => e.stopPropagation()}
-                            />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                          </label>
-                        )}
-                        {expandedCategory === category.id ? 
-                          <ChevronUp className="w-5 h-5 text-gray-400" /> : 
-                          <ChevronDown className="w-5 h-5 text-gray-400" />
-                        }
-                      </div>
+            Informasi tentang penggunaan cookie di website Melek Hukum ID
+          </motion.p>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        {/* Introduction */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white rounded-2xl shadow-lg p-8 mb-8"
+        >
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Apa itu Cookie?</h2>
+          <p className="text-gray-600 leading-relaxed mb-4">
+            Cookie adalah file kecil yang disimpan di perangkat Anda ketika mengunjungi website kami. 
+            Cookie membantu kami menyediakan layanan yang lebih baik dan pengalaman yang lebih personal.
+          </p>
+          <p className="text-gray-600 leading-relaxed">
+            Kami menggunakan berbagai jenis cookie untuk tujuan yang berbeda. Anda dapat mengatur preferensi 
+            cookie Anda di bawah ini.
+          </p>
+        </motion.div>
+
+        {/* Cookie Categories */}
+        <div className="space-y-4">
+          {cookieCategories.map((category, index) => (
+            <motion.div
+              key={category.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="bg-white rounded-2xl shadow-lg overflow-hidden"
+            >
+              <div className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-brown-500 flex items-center justify-center text-white">
+                      {category.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">{category.title}</h3>
+                      <p className="text-gray-600 text-sm">{category.description}</p>
                     </div>
                   </div>
-                  
-                  <AnimatePresence>
-                    {expandedCategory === category.id && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-4 pb-4">
-                          <table className="w-full text-sm">
-                            <thead>
-                              <tr className="border-t">
-                                <th className="text-left py-2 font-medium text-gray-700">Nama</th>
-                                <th className="text-left py-2 font-medium text-gray-700">Provider</th>
-                                <th className="text-left py-2 font-medium text-gray-700">Tujuan</th>
-                                <th className="text-left py-2 font-medium text-gray-700">Masa Berlaku</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {category.cookies.map((cookie, idx) => (
-                                <tr key={idx} className="border-t">
-                                  <td className="py-2 text-gray-600">{cookie.name}</td>
-                                  <td className="py-2 text-gray-600">{cookie.provider}</td>
-                                  <td className="py-2 text-gray-600">{cookie.purpose}</td>
-                                  <td className="py-2 text-gray-600">{cookie.expiry}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div className="flex items-center gap-4">
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={cookieSettings[category.id]}
+                        onChange={(e) => updateCookieSetting(category.id, e.target.checked)}
+                        disabled={category.required}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-amber-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-600"></div>
+                    </label>
+                    <button
+                      onClick={() => toggleCategory(category.id)}
+                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      {expandedCategory === category.id ? (
+                        <ChevronUp className="w-5 h-5 text-gray-500" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-gray-500" />
+                      )}
+                    </button>
+                  </div>
                 </div>
-              ))}
-            </div>
 
-            <div className="mt-6 flex justify-end space-x-3">
-              <button 
-                className="px-5 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                onClick={() => setCookiePreferences({
-                  necessary: true,
-                  analytics: false,
-                  functional: false,
-                  marketing: false
-                })}
-              >
-                Tolak Semua
-              </button>
-              <button 
-                className="px-5 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-                onClick={savePreferences}
-              >
-                Simpan Preferensi
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Cara Mengatur Cookie di Browser */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white rounded-2xl shadow-sm border p-6"
-          >
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Cara Mengatur Cookie di Browser</h2>
-            <p className="text-gray-700 mb-4">
-              Anda juga dapat mengatur cookie melalui pengaturan browser:
-            </p>
-            <div className="space-y-3">
-              {[
-                { browser: 'Chrome', url: 'https://support.google.com/chrome/answer/95647' },
-                { browser: 'Firefox', url: 'https://support.mozilla.org/en-US/kb/enable-and-disable-cookies-website-preferences' },
-                { browser: 'Safari', url: 'https://support.apple.com/guide/safari/manage-cookies-and-website-data-sfri11471/mac' },
-                { browser: 'Edge', url: 'https://support.microsoft.com/en-us/microsoft-edge/manage-cookies-in-microsoft-edge-168dab11-0753-043d-7c16-ede5947fc64d' }
-              ].map((item) => (
-                <a
-                  key={item.browser}
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <span className="text-gray-700">{item.browser}</span>
-                  <span className="text-sm text-primary">Pelajari lebih lanjut →</span>
-                </a>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Statistik */}
-          <div className="mt-8">
-            <TrustedStats
-              title="Statistik Penggunaan Cookie"
-              description="Data penggunaan cookie berdasarkan preferensi pengguna"
-              stats={stats}
-            />
-          </div>
+                <AnimatePresence>
+                  {expandedCategory === category.id && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="mt-6 pt-6 border-t border-gray-200">
+                        <h4 className="font-medium text-gray-900 mb-4">Detail Cookie:</h4>
+                        <div className="space-y-4">
+                          {category.cookies.map((cookie) => (
+                            <div key={cookie.name} className="bg-gray-50 rounded-lg p-4">
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                  <span className="text-sm font-medium text-gray-700">Nama:</span>
+                                  <p className="text-sm text-gray-900">{cookie.name}</p>
+                                </div>
+                                <div>
+                                  <span className="text-sm font-medium text-gray-700">Tujuan:</span>
+                                  <p className="text-sm text-gray-900">{cookie.purpose}</p>
+                                </div>
+                                <div>
+                                  <span className="text-sm font-medium text-gray-700">Durasi:</span>
+                                  <p className="text-sm text-gray-900">{cookie.duration}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          ))}
         </div>
+
+        {/* Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
+        >
+          <button className="px-8 py-3 bg-gradient-to-r from-brown-600 to-amber-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300">
+            Simpan Preferensi
+          </button>
+          <button className="px-8 py-3 border-2 border-brown-600 text-brown-600 rounded-xl font-semibold hover:bg-brown-600 hover:text-white transition-all duration-300">
+            Terima Semua
+          </button>
+        </motion.div>
+
+        {/* Additional Information */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mt-12 bg-amber-50 rounded-2xl p-8"
+        >
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Informasi Tambahan</h3>
+          <div className="space-y-4 text-gray-700">
+            <p>
+              Anda dapat mengubah pengaturan cookie kapan saja melalui browser Anda. Namun, menonaktifkan 
+              beberapa cookie dapat mempengaruhi fungsionalitas website.
+            </p>
+            <p>
+              Untuk informasi lebih lanjut tentang bagaimana kami menggunakan data Anda, silakan baca 
+              <a href="/privacy" className="text-brown-600 hover:underline font-medium"> Kebijakan Privasi</a> kami.
+            </p>
+            <p>
+              Jika Anda memiliki pertanyaan tentang penggunaan cookie, silakan hubungi kami di 
+              <a href="/kontak" className="text-brown-600 hover:underline font-medium"> halaman kontak</a>.
+            </p>
+          </div>
+        </motion.div>
       </div>
     </div>
   )

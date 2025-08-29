@@ -312,26 +312,19 @@ export default function PanduanPage() {
         {/* Additional Resources */}
         <div className="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Butuh Bantuan Lebih Lanjut?</h3>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl p-5 border border-blue-100">
               <h4 className="font-semibold text-gray-900 mb-2">Konsultasi Online</h4>
               <p className="text-sm text-gray-600 mb-3">Tanya jawab langsung dengan konsultan hukum berpengalaman</p>
-              <Link href="/konsultasi" className="text-blue-600 font-medium text-sm hover:underline">
+              <a href="https://peradi.or.id" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-medium text-sm hover:underline">
                 Mulai Konsultasi →
-              </Link>
+              </a>
             </div>
             <div className="bg-white rounded-xl p-5 border border-blue-100">
               <h4 className="font-semibold text-gray-900 mb-2">Template Dokumen</h4>
               <p className="text-sm text-gray-600 mb-3">Download template surat dan dokumen hukum siap pakai</p>
               <Link href="/template" className="text-blue-600 font-medium text-sm hover:underline">
                 Lihat Template →
-              </Link>
-            </div>
-            <div className="bg-white rounded-xl p-5 border border-blue-100">
-              <h4 className="font-semibold text-gray-900 mb-2">Video Tutorial</h4>
-              <p className="text-sm text-gray-600 mb-3">Panduan visual step-by-step untuk berbagai prosedur</p>
-              <Link href="/video" className="text-blue-600 font-medium text-sm hover:underline">
-                Tonton Video →
               </Link>
             </div>
           </div>

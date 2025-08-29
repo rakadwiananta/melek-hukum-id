@@ -8,9 +8,13 @@ import ArticleBody from '@/app/components/article/display/ArticleBody'
 import ArticleFooter from '@/app/components/article/meta/ArticleFooter'
 import RelatedArticles from '@/app/components/article/display/RelatedArticles'
 import TableOfContents from '@/app/components/article/meta/TableOfContents'
+import DisclaimerBox from '@/app/components/article/meta/DisclaimerBox'
 import ShareModal from '@/app/components/article/meta/ShareModal'
+import CommentSection from '@/app/components/article/comments/CommentSection'
+import MobileCommentFAB from '@/app/components/article/comments/MobileCommentFAB'
 import { motion, AnimatePresence } from 'framer-motion'
 import { BarChart3, TrendingUp, Users, AlertTriangle, BookOpen, Scale, Download, MessageSquare, Heart, Share2, Bookmark, ChevronRight, PlayCircle, FileText, MessageCircle } from 'lucide-react'
+import Link from 'next/link'
 
 interface ArticleContentProps {
   article: {
@@ -103,6 +107,7 @@ export default function ArticleContent({ article }: ArticleContentProps) {
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([])
   const [showVideoGuide, setShowVideoGuide] = useState(false)
   const [downloadableResources, setDownloadableResources] = useState<any[]>([])
+  const [showCommentForm, setShowCommentForm] = useState(false)
   const contentRef = useRef<HTMLDivElement>(null)
 
   // Check if article is law-related
@@ -140,114 +145,88 @@ export default function ArticleContent({ article }: ArticleContentProps) {
   }, [article.id, article.category, isLawRelated])
 
   const handleLike = async () => {
+    const previousState = isLiked
+    const previousCount = likeCount
+    
+    // Optimistic update
     setIsLiked(!isLiked)
     setLikeCount(isLiked ? likeCount - 1 : likeCount + 1)
     
     try {
-      if (!supabase) {
-        // Handle mock data scenario
-        toast({
-          title: isLiked ? 'Like dibatalkan' : 'Artikel disukai!',
-          description: isLiked ? '' : 'Terima kasih atas apresiasi Anda',
-          variant: 'default',
+      const response = await fetch(`/api/articles/${article.id}/like`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: isLiked ? 'unlike' : 'like'
         })
-        return
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update like')
       }
-      
-      // Update like in database
-      const { error } = await supabase
-        .from('article_likes')
-        .upsert({
-          article_id: article.id,
-          user_id: 'anonymous', // Replace with actual user ID when auth is implemented
-          liked_at: new Date().toISOString()
-        })
-      
-      if (error) throw error
-      
-      // Update article like count
-      const { error: updateError } = await supabase
-        .from('articles')
-        .update({ like_count: likeCount + (isLiked ? -1 : 1) })
-        .eq('id', article.id)
-      
-      if (updateError) throw updateError
+
+      // Update with actual count from server
+      setLikeCount(data.likeCount)
       
       toast({
-        title: isLiked ? 'Like dibatalkan' : 'Artikel disukai!',
-        description: isLiked ? '' : 'Terima kasih atas apresiasi Anda',
+        title: previousState ? 'Like dibatalkan' : 'Artikel disukai!',
+        description: previousState ? '' : 'Terima kasih atas apresiasi Anda',
         variant: 'default',
       })
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating like:', error)
       // Revert optimistic update
-      setIsLiked(isLiked)
-      setLikeCount(likeCount)
+      setIsLiked(previousState)
+      setLikeCount(previousCount)
+      
       toast({
         title: 'Terjadi kesalahan',
-        description: 'Gagal memperbarui like. Silakan coba lagi.',
+        description: error.message || 'Gagal memperbarui like. Silakan coba lagi.',
         variant: 'destructive',
       })
     }
   }
   
   const handleSave = async () => {
+    const previousState = isSaved
+    
+    // Optimistic update
     setIsSaved(!isSaved)
     
     try {
-      if (!supabase) {
-        // Handle mock data scenario
-        toast({
-          title: isSaved ? 'Artikel dihapus dari bookmark' : 'Artikel disimpan',
-          description: isSaved ? '' : 'Anda dapat melihat artikel tersimpan di profil Anda',
-          variant: 'default',
+      const response = await fetch(`/api/articles/${article.id}/bookmark`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: isSaved ? 'unsave' : 'save'
         })
-        
-        // Save to localStorage for mock data
-        const savedArticles = JSON.parse(localStorage.getItem('savedArticles') || '[]')
-        if (isSaved) {
-          const filtered = savedArticles.filter((id: string) => id !== article.id)
-          localStorage.setItem('savedArticles', JSON.stringify(filtered))
-        } else {
-          savedArticles.push(article.id)
-          localStorage.setItem('savedArticles', JSON.stringify(savedArticles))
-        }
-        return
-      }
-      
-      // Save to database
-      if (isSaved) {
-        const { error } = await supabase
-          .from('article_bookmarks')
-          .delete()
-          .eq('article_id', article.id)
-          .eq('user_id', 'anonymous')
-        
-        if (error) throw error
-      } else {
-        const { error } = await supabase
-          .from('article_bookmarks')
-          .insert({
-            article_id: article.id,
-            user_id: 'anonymous',
-            saved_at: new Date().toISOString()
-          })
-        
-        if (error) throw error
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update bookmark')
       }
       
       toast({
-        title: isSaved ? 'Artikel dihapus dari bookmark' : 'Artikel disimpan',
-        description: isSaved ? '' : 'Anda dapat melihat artikel tersimpan di profil Anda',
+        title: previousState ? 'Artikel dihapus dari bookmark' : 'Artikel disimpan',
+        description: previousState ? '' : 'Anda dapat melihat artikel tersimpan di profil Anda',
         variant: 'default',
       })
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating bookmark:', error)
       // Revert optimistic update
-      setIsSaved(isSaved)
+      setIsSaved(previousState)
+      
       toast({
         title: 'Terjadi kesalahan',
-        description: 'Gagal memperbarui bookmark. Silakan coba lagi.',
+        description: error.message || 'Gagal memperbarui bookmark. Silakan coba lagi.',
         variant: 'destructive',
       })
     }
@@ -262,13 +241,25 @@ export default function ArticleContent({ article }: ArticleContentProps) {
     const commentSection = document.getElementById('comment-section')
     if (commentSection) {
       commentSection.scrollIntoView({ behavior: 'smooth' })
-    } else {
-      toast({
-        title: 'Fitur komentar akan segera hadir!',
-        description: 'Kami sedang mengembangkan fitur diskusi yang aman dan produktif',
-        variant: 'default',
-      })
     }
+  }
+
+  const handleScrollToComments = () => {
+    const commentSection = document.getElementById('comment-section')
+    if (commentSection) {
+      commentSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  const handleOpenCommentForm = () => {
+    setShowCommentForm(true)
+    // Scroll to comment section after opening form
+    setTimeout(() => {
+      const commentSection = document.getElementById('comment-section')
+      if (commentSection) {
+        commentSection.scrollIntoView({ behavior: 'smooth' })
+      }
+    }, 100)
   }
   
   // Track article view
@@ -310,14 +301,33 @@ export default function ArticleContent({ article }: ArticleContentProps) {
     trackView()
   }, [article.id])
   
-  // Check if article is saved
+  // Initialize like and save states from API
   useEffect(() => {
-    const checkSaved = () => {
-      const savedArticles = JSON.parse(localStorage.getItem('savedArticles') || '[]')
-      setIsSaved(savedArticles.includes(article.id))
+    const initializeStates = async () => {
+      try {
+        // Check like status
+        const likeResponse = await fetch(`/api/articles/${article.id}/like`)
+        if (likeResponse.ok) {
+          const likeData = await likeResponse.json()
+          setIsLiked(likeData.isLiked)
+          setLikeCount(likeData.likeCount)
+        }
+
+        // Check bookmark status
+        const bookmarkResponse = await fetch(`/api/articles/${article.id}/bookmark`)
+        if (bookmarkResponse.ok) {
+          const bookmarkData = await bookmarkResponse.json()
+          setIsSaved(bookmarkData.isBookmarked)
+        }
+      } catch (error) {
+        console.error('Error initializing states:', error)
+        // Fallback to localStorage for offline functionality
+        const savedArticles = JSON.parse(localStorage.getItem('savedArticles') || '[]')
+        setIsSaved(savedArticles.includes(article.id))
+      }
     }
     
-    checkSaved()
+    initializeStates()
   }, [article.id])
   
   return (
@@ -509,6 +519,7 @@ export default function ArticleContent({ article }: ArticleContentProps) {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.4 }}
+        className="mb-8"
       >
         <TableOfContents content={article.content} />
       </motion.div>
@@ -540,16 +551,12 @@ export default function ArticleContent({ article }: ArticleContentProps) {
           <p className="text-gray-700 mb-6">
             Setelah membaca artikel ini, uji pemahaman Anda tentang hukum dengan kuis singkat kami.
           </p>
-          <button 
-            onClick={() => toast({
-              title: 'Fitur Kuis Segera Hadir!',
-              description: 'Kami sedang mengembangkan kuis interaktif untuk membantu pemahaman Anda tentang hukum.',
-              variant: 'default'
-            })}
-            className="px-6 py-3 bg-gradient-to-r from-red-600 to-amber-600 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+          <Link 
+            href="/tools/kuis-korupsi"
+            className="inline-block px-6 py-3 bg-gradient-to-r from-red-600 to-amber-600 text-white font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 text-center"
           >
             Mulai Kuis Interaktif
-          </button>
+          </Link>
         </motion.div>
       )}
   
@@ -602,21 +609,21 @@ export default function ArticleContent({ article }: ArticleContentProps) {
           <div className="relative z-10">
             <h3 className="text-2xl font-bold mb-4">Butuh Bantuan Hukum?</h3>
             <p className="mb-6 opacity-90">
-              Dapatkan konsultasi gratis dengan ahli hukum kami atau akses template dokumen legal.
+              Dapatkan konsultasi terjangkau dengan ahli hukum kami atau akses template dokumen legal.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button 
-                onClick={() => window.open('https://jdih.kemenkumham.go.id/', '_blank')}
-                className="px-6 py-3 bg-white text-blue-700 font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+              <Link 
+                href="/panduan"
+                className="px-6 py-3 bg-white text-blue-700 font-semibold rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300 text-center"
               >
-                Konsultasi Gratis
-              </button>
-              <button 
-                onClick={() => window.open('https://ahu.go.id/', '_blank')}
-                className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-blue-700 transform hover:scale-105 transition-all duration-300"
+                Panduan Hukum
+              </Link>
+              <Link 
+                href="/solusi/template"
+                className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-blue-700 transform hover:scale-105 transition-all duration-300 text-center"
               >
                 Template Dokumen
-              </button>
+              </Link>
             </div>
           </div>
         </motion.div>
@@ -631,19 +638,22 @@ export default function ArticleContent({ article }: ArticleContentProps) {
         />
       )}
   
-      {/* Comment Section Placeholder */}
-      <div id="comment-section" className="mt-16 pt-8 border-t-2 border-gray-200">
-        <h3 className="text-2xl font-bold mb-4">Diskusi & Komentar</h3>
-        <div className="bg-gray-50 rounded-xl p-8 text-center">
-          <MessageCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600 mb-4">
-            Fitur komentar sedang dalam pengembangan
-          </p>
-          <p className="text-sm text-gray-500">
-            Kami akan segera menghadirkan fitur diskusi yang aman dan produktif untuk komunitas hukum Indonesia
-          </p>
-        </div>
+      {/* Comment Section */}
+      <div id="comment-section">
+        <CommentSection 
+          articleId={article.id} 
+          initialCommentCount={article.comment_count}
+          showCommentForm={showCommentForm}
+          onToggleCommentForm={setShowCommentForm}
+        />
       </div>
+
+      {/* Mobile Comment FAB */}
+      <MobileCommentFAB
+        commentCount={article.comment_count || 0}
+        onScrollToComments={handleScrollToComments}
+        onOpenCommentForm={handleOpenCommentForm}
+      />
     </article>
   )
   }
