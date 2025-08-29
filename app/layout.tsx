@@ -79,10 +79,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID
+  const isValidAdsenseClient = typeof ADSENSE_CLIENT_ID === 'string' && ADSENSE_CLIENT_ID.startsWith('ca-pub-')
   return (
     <html lang="id" className={inter.variable}>
       <head>
-        <meta name="google-adsense-account" content="ca-pub-9240032692197811" />
+        {isValidAdsenseClient && (
+          <meta name="google-adsense-account" content={ADSENSE_CLIENT_ID as string} />
+        )}
         {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -208,12 +212,14 @@ export default function RootLayout({
         }} />
         
         {/* Google AdSense Script */}
-        <Script 
-          async 
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9240032692197811"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        {isValidAdsenseClient && (
+          <Script 
+            async 
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
         
         {/* Ezoic Standalone Scripts - non-blocking with better loading */}
         <Script id="ezoic-sa" src="//www.ezojs.com/ezoic/sa.min.js" strategy="lazyOnload" />
