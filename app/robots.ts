@@ -42,6 +42,14 @@ export default function robots(): MetadataRoute.Robots {
           '/api/',
           '/admin/'
         ]
+      },
+      {
+        userAgent: 'Mediapartners-Google',
+        allow: '/'
+      },
+      {
+        userAgent: 'AdsBot-Google',
+        allow: '/'
       }
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

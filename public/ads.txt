@@ -1,1 +1,6 @@
+# ads.txt file for bicarahukum.my.id
+# Google AdSense
+google.com, pub-9240032692197811, DIRECT, f08c47fec0942fa0
+
+# Google Ad Manager
 google.com, pub-9240032692197811, DIRECT, f08c47fec0942fa0

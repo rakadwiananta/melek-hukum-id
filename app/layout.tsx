@@ -25,12 +25,12 @@ export const metadata: Metadata = {
   authors: [{ name: 'Tim Melek Hukum' }],
   creator: 'Melek Hukum ID',
   publisher: 'Melek Hukum ID',
-  metadataBase: new URL('https://wacanahukum.com'),
+  metadataBase: new URL('https://bicarahukum.my.id'),
   
   openGraph: {
     type: 'website',
     locale: 'id_ID',
-    url: 'https://wacanahukum.com',
+    url: 'https://bicarahukum.my.id',
     siteName: 'Melek Hukum ID',
     title: 'Melek Hukum ID - Portal Hukum Indonesia',
     description: 'Portal hukum Indonesia terpercaya dengan informasi hukum terkini',
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   },
   
   verification: {
-    google: 'your-google-verification-code',
+    google: 'google-site-verification',
   },
   
   other: {
@@ -85,7 +85,7 @@ export default function RootLayout({
         {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="preconnect" href="https://wacanahukum.com" />
+        <link rel="preconnect" href="https://bicarahukum.my.id" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://supabase.co" />
         
