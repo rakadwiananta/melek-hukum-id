@@ -113,7 +113,7 @@ const Card3D = ({ children, delay = 0, className = "" }: Card3DProps) => {
       onHoverStart={() => !isMobile && setIsHovered(true)}
       onHoverEnd={() => !isMobile && setIsHovered(false)}
       style={{ transformStyle: "preserve-3d", transformPerspective: 1000 }}
-      className={className}
+      className={`w-full ${className}`}
     >
       <motion.div
         animate={!isMobile && isHovered ? { rotateY: 5, rotateX: -5 } : { rotateY: 0, rotateX: 0 }}
@@ -131,7 +131,7 @@ const CaseStatisticsOverview = () => {
   
   return (
     <Card3D delay={0.2} className="lg:col-span-2">
-      <div className="bg-gradient-to-br from-slate-50 to-white rounded-xl shadow-lg p-6 h-full">
+      <div className="bg-gradient-to-br from-slate-50 to-white rounded-xl shadow-lg p-6 h-full min-w-0 overflow-hidden">
         <BatikParang />
         <div className="relative z-10">
           <h3 className="text-xl font-bold mb-4 flex items-center">
@@ -224,7 +224,7 @@ const CaseStatisticsOverview = () => {
 const CrimeTypeDistribution = () => {
   return (
     <Card3D delay={0.3} className="lg:col-span-3">
-      <div className="bg-white rounded-xl shadow-lg p-6 h-full min-w-0">
+      <div className="bg-white rounded-xl shadow-lg p-6 h-full min-w-0 overflow-hidden">
         <h3 className="text-xl font-bold mb-6 flex items-center">
           <Scale className="h-6 w-6 mr-2 text-indigo-600" />
           Distribusi Jenis Kejahatan
@@ -278,7 +278,7 @@ const PrisonStatistics = () => {
   
   return (
     <Card3D delay={0.4}>
-      <div className="bg-gradient-to-br from-orange-50 to-white rounded-xl shadow-lg p-6 h-full">
+      <div className="bg-gradient-to-br from-orange-50 to-white rounded-xl shadow-lg p-6 h-full min-w-0 overflow-hidden">
         <h3 className="text-lg font-bold mb-4 flex items-center">
           <Building2 className="h-5 w-5 mr-2 text-orange-600" />
           Populasi Lapas/Rutan
@@ -327,7 +327,7 @@ const RecidivismRate = () => {
   
   return (
     <Card3D delay={0.5}>
-      <div className="bg-gradient-to-br from-red-50 to-white rounded-xl shadow-lg p-6 h-full">
+      <div className="bg-gradient-to-br from-red-50 to-white rounded-xl shadow-lg p-6 h-full min-w-0 overflow-hidden">
         <h3 className="text-lg font-bold mb-4 flex items-center">
           <UserX className="h-5 w-5 mr-2 text-red-600" />
           Tingkat Residivis
