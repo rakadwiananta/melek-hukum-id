@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, Clock, Eye, Heart, Share2, ChevronRight, BookOpen } from 'lucide-react'
 import { formatDate, calculateReadingTime } from '@/app/lib/utils'
 import { supabase } from '@/app/lib/supabase'
+import { validateAndFixImageUrl } from '@/app/lib/fallback-images'
+import { RobustArticleCardImage } from '@/app/components/ui/RobustArticleImage'
 
 interface Article {
   id: string
@@ -45,23 +47,7 @@ export default function ArticleShowcase() {
         if (error) throw error
 
         const mapped = (data || []).map((a: any) => {
-          const img = (a.featured_image || '').trim()
-          // Fix broken external image URLs
-          let featuredImage = '/timbangkan.jpg' // default fallback
-          if (img && !img.includes('/images/articles/')) {
-            if (img.startsWith('http')) {
-              // Check if it's a broken ibb.co.com URL and fix it
-              if (img.includes('i.ibb.co.com')) {
-                featuredImage = '/timbangkan.jpg' // fallback for broken ibb.co URLs
-              } else {
-                featuredImage = img
-              }
-            } else if (img.startsWith('/')) {
-              featuredImage = img
-            } else {
-              featuredImage = `/${img}`
-            }
-          }
+          const featuredImage = validateAndFixImageUrl(a.featured_image, a.category)
           const rt = calculateReadingTime(a.excerpt || '')?.match(/\d+/)?.[0]
           return {
             id: a.id,
@@ -164,15 +150,15 @@ export default function ArticleShowcase() {
             >
               <Link href={`/artikel/${article.slug}`}>
                 <div className="relative h-64 overflow-hidden">
-                  <Image
-                    src={article.featuredImage || '/timbangkan.jpg'}
+                  <RobustArticleCardImage
+                    src={article.featuredImage}
                     alt={article.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    category={article.category}
+                    fill={true}
+                    className="object-cover object-center w-full h-full group-hover:scale-105 transition-transform duration-300"
                     priority={index < 6}
-                    loading={index < 6 ? 'eager' : 'lazy'}
-                    fetchPriority={index < 6 ? 'high' : 'auto'}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    index={index}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute top-4 left-4">
@@ -198,7 +184,7 @@ export default function ArticleShowcase() {
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      <span>{formatDate(article.publishedAt, { dateStyle: 'short' })}</span>
+                      <span>{formatDate(article.publishedAt)}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
@@ -273,11 +259,14 @@ export default function ArticleShowcase() {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="relative h-64">
-                  <Image
-                    src={selectedArticle.featuredImage || '/timbangkan.jpg'}
+                  <RobustArticleCardImage
+                    src={selectedArticle.featuredImage}
                     alt={selectedArticle.title}
-                    fill
-                    className="object-cover"
+                    category={selectedArticle.category}
+                    fill={true}
+                    className="object-cover object-center w-full h-full"
+                    priority={true}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute top-4 left-4">

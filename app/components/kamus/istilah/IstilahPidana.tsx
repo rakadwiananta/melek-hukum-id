@@ -6988,7 +6988,7 @@ const istilahPidanaData = {
     example: "Jasa hukum advokat dalam pembelaan terdakwa",
     legalBasis: "UU Advokat",
     englishTerm: "Legal Services",
-    relatedTerms: ["Bantuan Hukum", "Legal Aid", "Konsultasi Hukum"]
+    relatedTerms: ["Bantuan Hukum", "Legal Aid", "Panduan Hukum"]
   },
   {
     id: 694,
@@ -8463,7 +8463,7 @@ const istilahPidanaData = {
     example: "Konseling hukum untuk tersangka",
     legalBasis: "UU Advokat",
     englishTerm: "Legal Counseling",
-    relatedTerms: ["Konsultasi Hukum", "Legal Advice"]
+    relatedTerms: ["Panduan Hukum", "Legal Advice"]
   },
   {
     id: 841,
@@ -8577,7 +8577,7 @@ const istilahPidanaData = {
   },
   {
     id: 852,
-    term: "Konsultasi Hukum",
+    term: "Panduan Hukum",
     category: "proses-pidana",
     definition: "Pemberian nasihat hukum oleh ahli",
     example: "Konsultasi dengan advokat sebelum diperiksa",

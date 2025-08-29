@@ -234,7 +234,7 @@ export default function DisclaimerPage() {
                 Cari Advokat
               </a>
               <a
-                href="/konsultasi"
+                href="/panduan"
                 className="px-6 py-3 bg-white text-primary border-2 border-primary rounded-lg hover:bg-primary/5 transition-colors"
               >
                 Konsultasi Online

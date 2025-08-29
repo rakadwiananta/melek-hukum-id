@@ -5,7 +5,9 @@ import { supabase } from '@/app/lib/supabase'
 import { formatDate } from '@/app/lib/utils'
 import { Clock, Eye, Tag, ArrowRight, TrendingUp, Award, Sparkles } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
+import { ArticleCardImage } from '@/app/components/ui/ArticleImage'
+import { EnhancedArticleCardImage } from '@/app/components/ui/AdvancedArticleImage'
+import { RobustArticleCardImage } from '@/app/components/ui/RobustArticleImage'
 
 interface ArticleFeaturedProps {
   limit?: number
@@ -199,14 +201,15 @@ export default function ArticleFeatured({
               </div>
 
               <div className="flex flex-col md:flex-row">
-                {article.featured_image && (
-                  <div className="md:w-2/5 h-64 md:h-auto relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-amber-600/20 z-10"></div>
-                    <img
-                      src={article.featured_image || '/timbangkan.jpg'}
-                      alt={article.title}
-                      className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
-                    />
+                <div className="md:w-2/5 h-64 md:h-auto relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-amber-600/20 z-10"></div>
+                  <RobustArticleCardImage
+                    src={article.featured_image}
+                    alt={article.title}
+                    category={article.category}
+                    className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
+                    index={index}
+                  />
                     
                     {/* Rank Badge */}
                     <div className="absolute top-4 left-4 z-20">
@@ -218,7 +221,6 @@ export default function ArticleFeatured({
                       </div>
                     </div>
                   </div>
-                )}
                 
                 <div className="flex-1 p-8">
                   {/* Category & Stats */}

@@ -86,12 +86,23 @@ const WayangDecoration = ({ className }: { className?: string }) => (
   </svg>
 )
 
-export default function TemplateSection() {
+interface TemplateSectionProps {
+  searchQuery?: string
+}
+
+export default function TemplateSection({ searchQuery: externalSearchQuery }: TemplateSectionProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<SolusiCategory>('Semua')
   const [showFilter, setShowFilter] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const [sortBy, setSortBy] = useState<'popular' | 'newest'>('popular')
+
+  // Update local search query when external search query changes
+  useEffect(() => {
+    if (externalSearchQuery) {
+      setSearchQuery(externalSearchQuery)
+    }
+  }, [externalSearchQuery])
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -120,8 +131,10 @@ export default function TemplateSection() {
     if (!isPremium) {
       // Tampilkan prompt sederhana lalu arahkan ke Solusi (section pricing/payment)
       alert('Fitur download template premium terkunci. Silakan berlangganan Rp49.000 untuk membuka akses.')
-      // Arahkan ke section newsletter di beranda
-      window.location.href = '/#newsletterform'
+      // Arahkan ke section newsletter di beranda menggunakan router
+      if (typeof window !== 'undefined') {
+        window.location.href = '/#newsletterform'
+      }
       return
     }
 

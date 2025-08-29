@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/app/lib/utils'
 import { downloadTemplate } from './export'
+import UniversalContentFormatter from '@/app/components/article/display/UniversalContentFormatter'
 
 interface TemplateGuide {
   title: string
@@ -223,9 +224,18 @@ export default function TemplateDetail({
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
-                  className="bg-gray-50 border border-gray-200 rounded-xl p-4 sm:p-6 lg:p-8 font-mono text-xs sm:text-sm whitespace-pre-wrap leading-relaxed"
+                  className="bg-gray-50 border border-gray-200 rounded-xl overflow-hidden"
                 >
-                  {content}
+                  <UniversalContentFormatter
+                    content={content}
+                    title=""
+                    contentType="template"
+                    author="Tim Legal Melek Hukum"
+                    metadata={{
+                      downloadable: true,
+                      templateId: template.id
+                    }}
+                  />
                 </motion.div>
               )}
               

@@ -781,7 +781,11 @@ export default function AntiKorupsiKategoriPage() {
                             transition={{ delay: index * 0.05 }}
                             whileHover={{ scale: 1.02 }}
                             className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 border border-gray-200 hover:shadow-lg transition-all cursor-pointer"
-                            onClick={() => window.location.href = `/kamus-hukum/kategori/anti-korupsi/istilah?category=${category.id}`}
+                            onClick={() => {
+                              if (typeof window !== 'undefined') {
+                                window.location.href = `/kamus-hukum/kategori/anti-korupsi/istilah?category=${category.id}`
+                              }
+                            }}
                           >
                             <div className="flex items-start gap-3">
                               <div className={`p-2 rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md`}>

@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { RobustArticleCardImage, RobustArticleHeroImage } from '@/app/components/ui/RobustArticleImage'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Play, Pause, Eye, Heart, Clock, Calendar } from 'lucide-react'
 import { formatDate } from '@/app/lib/utils'
 import { supabase } from '@/app/lib/supabase'
+import { validateAndFixImageUrl } from '@/app/lib/fallback-images'
 
 interface CarouselArticle {
   id: string
@@ -53,13 +55,7 @@ export default function ArticleCarousel() {
           slug: a.slug,
           excerpt: a.excerpt,
           category: a.category,
-          featuredImage: (() => {
-            const img = (a.featured_image || '').trim()
-            if (!img) return '/timbangkan.jpg'
-            // Fix broken ibb.co.com URLs
-            if (img.includes('i.ibb.co.com')) return '/timbangkan.jpg'
-            return img
-          })(),
+          featuredImage: validateAndFixImageUrl(a.featured_image, a.category),
           author: a.author,
           publishedAt: a.published_at,
           readingTime: 5,
@@ -151,11 +147,14 @@ export default function ArticleCarousel() {
               >
                 <Link href={`/artikel/${articles[currentIndex].slug}`}>
                   <div className="relative h-full">
-                    <Image
+                    <RobustArticleHeroImage
                       src={articles[currentIndex].featuredImage}
                       alt={articles[currentIndex].title}
-                      fill
-                      className="object-cover"
+                      category={articles[currentIndex].category}
+                      fill={true}
+                      className="object-cover object-center w-full h-full"
+                      priority={true}
+                      index={currentIndex}
                       sizes="100vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
@@ -247,12 +246,13 @@ export default function ArticleCarousel() {
                     : 'hover:scale-105'
                 }`}
               >
-                <Image
+                <RobustArticleCardImage
                   src={article.featuredImage}
                   alt={article.title}
-                  fill
+                  category={article.category}
                   className="object-cover"
-                  sizes="(max-width: 768px) 20vw, 15vw"
+                  priority={index < 5}
+                  index={index}
                 />
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute top-1 left-1">

@@ -1,329 +1,99 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
-import ArticleList from '@/app/components/article/display/ArticleList'
-import ArticleFilter, { FilterState } from '@/app/components/article/meta/CategoryFilter'
-import PopularArticles from '@/app/components/article/display/PopularArticles'
-import ArticleStats from '@/app/components/article/meta/ArticleStats'
-import ArticleNewsletter from '@/app/components/article/meta/ArticleNewsletter'
-import { Search, Filter, Scale, Gavel, FileText, Users } from 'lucide-react'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import * as THREE from 'three'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { Center, OrbitControls } from '@react-three/drei'
+import React, { useState, useEffect, lazy, Suspense } from 'react'
+import { Search, Scale, Gavel, FileText, Users, BookOpen, Award, TrendingUp } from 'lucide-react'
+import { useRealTimeStats } from '@/app/hooks/useRealTimeStats'
 
-// ------------------------- Improved Wayang 3D Scene -------------------------
-function WayangScene() {
-  const groupRef = useRef<THREE.Group | null>(null)
-  const leftArmRef = useRef<THREE.Mesh | null>(null)
-  const rightArmRef = useRef<THREE.Mesh | null>(null)
-  const clockRef = useRef(new THREE.Clock())
+// Lazy load heavy components
+const ArticleList = lazy(() => import('@/app/components/article/display/ArticleList'))
+const ArticleFilter = lazy(() => import('@/app/components/article/meta/CategoryFilter'))
+const PopularArticles = lazy(() => import('@/app/components/article/display/PopularArticles'))
+const ArticleStats = lazy(() => import('@/app/components/article/meta/ArticleStats'))
+const ArticleNewsletter = lazy(() => import('@/app/components/article/meta/ArticleNewsletter'))
 
-  // subtle hover / pointer parallax state
-  const pointer = useRef({ x: 0, y: 0 })
-  useEffect(() => {
-    function onMove(e: MouseEvent) {
-      pointer.current.x = (e.clientX / window.innerWidth) * 2 - 1
-      pointer.current.y = (e.clientY / window.innerHeight) * 2 - 1
-    }
-    function onTouch(e: TouchEvent) {
-      if (e.touches && e.touches[0]) {
-        pointer.current.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1
-        pointer.current.y = (e.touches[0].clientY / window.innerHeight) * 2 - 1
-      }
-    }
-    window.addEventListener('mousemove', onMove)
-    window.addEventListener('touchmove', onTouch, { passive: true })
-    return () => {
-      window.removeEventListener('mousemove', onMove)
-      window.removeEventListener('touchmove', onTouch)
-    }
-  }, [])
+// Import types only
+import type { FilterState } from '@/app/components/article/meta/CategoryFilter'
 
-  useFrame((state, delta) => {
-    const t = clockRef.current.getElapsedTime()
-    // gentle bobbing
-    const bob = Math.sin(t * 1.0) * 0.03
-    if (groupRef.current) {
-      // base float
-      groupRef.current.position.y = bob
-      // slow rotation with pointer parallax
-      const targetRotY = Math.sin(t * 0.25) * 0.06 + pointer.current.x * 0.06
-      const targetRotX = pointer.current.y * 0.03
-      groupRef.current.rotation.y += (targetRotY - groupRef.current.rotation.y) * 0.08
-      groupRef.current.rotation.x += (targetRotX - groupRef.current.rotation.x) * 0.08
-    }
-
-    // arms swing a bit
-    if (leftArmRef.current && rightArmRef.current) {
-      const armSwing = Math.sin(t * 1.8) * 0.25
-      leftArmRef.current.rotation.z = -0.45 + armSwing * 0.25
-      rightArmRef.current.rotation.z = 0.45 - armSwing * 0.25
-    }
-  })
-
-  // Materials
-  const woodMaterial = new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#6b3f26'),
-    roughness: 0.65,
-    metalness: 0.05
-  })
-
-  const skinMaterial = new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#eac9ad'),
-    roughness: 0.6,
-    metalness: 0.02
-  })
-
-  const goldMaterial = new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#E6B12C'),
-    roughness: 0.18,
-    metalness: 0.95
-  })
-
-  const clothMaterial = new THREE.MeshStandardMaterial({
-    color: new THREE.Color('#7a2d45'),
-    roughness: 0.6,
-    metalness: 0.05
-  })
-
-  // Body silhouette: use LatheGeometry with a refined profile
-  const bodyProfile = [
-    new THREE.Vector2(0.0, -0.9),
-    new THREE.Vector2(0.18, -0.78),
-    new THREE.Vector2(0.34, -0.5),
-    new THREE.Vector2(0.38, -0.15),
-    new THREE.Vector2(0.34, 0.2),
-    new THREE.Vector2(0.22, 0.45),
-    new THREE.Vector2(0.12, 0.65),
-    new THREE.Vector2(0.05, 0.75)
-  ]
-
-  return (
-    <group ref={groupRef} dispose={null} scale={0.95}>
-      <Center>
-        {/* Body (lathe) */}
-        <mesh position={[0, -0.08, 0]} castShadow receiveShadow>
-          <latheGeometry args={[bodyProfile, 64]} />
-          <meshStandardMaterial attach="material" color={woodMaterial.color} roughness={woodMaterial.roughness} metalness={woodMaterial.metalness} />
-        </mesh>
-
-        {/* Decorative cloth / sarong band around lower body */}
-        <mesh position={[0, 0.12, 0.12]} rotation={[0.2, 0, 0]}>
-          <torusGeometry args={[0.34, 0.08, 16, 64]} />
-          <meshStandardMaterial color={clothMaterial.color} roughness={clothMaterial.roughness} metalness={clothMaterial.metalness} />
-        </mesh>
-
-        {/* Head */}
-        <group position={[0, 0.72, 0.06]}>
-          <mesh castShadow receiveShadow>
-            <sphereGeometry args={[0.12, 32, 16]} />
-            <meshStandardMaterial color={skinMaterial.color} roughness={skinMaterial.roughness} metalness={skinMaterial.metalness} />
-          </mesh>
-
-          {/* Eyes (simple dots) */}
-          <mesh position={[-0.04, 0.02, 0.095]}>
-            <sphereGeometry args={[0.01, 8, 8]} />
-            <meshStandardMaterial color="#2b2b2b" />
-          </mesh>
-          <mesh position={[0.04, 0.02, 0.095]}>
-            <sphereGeometry args={[0.01, 8, 8]} />
-            <meshStandardMaterial color="#2b2b2b" />
-          </mesh>
-
-          {/* Tiny nose */}
-          <mesh position={[0, -0.01, 0.12]} rotation={[Math.PI / 2, 0, 0]}>
-            <coneGeometry args={[0.01, 0.02, 8]} />
-            <meshStandardMaterial color={skinMaterial.color} />
-          </mesh>
-
-          {/* Crown: torus + small cones as spikes */}
-          <mesh position={[0, 0.165, 0]}>
-            <torusGeometry args={[0.18, 0.03, 16, 64]} />
-            <meshStandardMaterial color={goldMaterial.color} roughness={goldMaterial.roughness} metalness={goldMaterial.metalness} />
-          </mesh>
-
-          {/* crown spikes */}
-          <group position={[0, 0.22, 0]}>
-            {[ -0.5, -0.15, 0.2, 0.5 ].map((xOffset, i) => (
-              <mesh key={i} position={[xOffset * 0.18, 0, 0]} rotation={[0, 0, xOffset * 0.6]}>
-                <coneGeometry args={[0.02, 0.06, 8]} />
-                <meshStandardMaterial color={goldMaterial.color} roughness={goldMaterial.roughness} metalness={goldMaterial.metalness} />
-              </mesh>
-            ))}
-          </group>
-        </group>
-
-        {/* Left Arm (thin rounded cylinder-like plank) */}
-        <mesh ref={leftArmRef as any} position={[-0.45, 0.12, 0.02]} rotation={[0, 0, -0.45]} castShadow>
-          <cylinderGeometry args={[0.03, 0.03, 0.6, 12]} />
-          <meshStandardMaterial color={woodMaterial.color} roughness={woodMaterial.roughness} metalness={woodMaterial.metalness} />
-        </mesh>
-
-        {/* Right Arm */}
-        <mesh ref={rightArmRef as any} position={[0.45, 0.12, 0.02]} rotation={[0, 0, 0.45]} castShadow>
-          <cylinderGeometry args={[0.03, 0.03, 0.6, 12]} />
-          <meshStandardMaterial color={woodMaterial.color} roughness={woodMaterial.roughness} metalness={woodMaterial.metalness} />
-        </mesh>
-
-        {/* Small ornament plate in front (like brooch) */}
-        <mesh position={[0, 0.28, 0.14]}>
-          <circleGeometry args={[0.06, 32]} />
-          <meshStandardMaterial color="#c6862e" metalness={0.7} roughness={0.25} />
-        </mesh>
-
-        {/* Ground shadow (soft ellipse) */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.94, 0]} receiveShadow>
-          <planeGeometry args={[2.2, 1.0]} />
-          <shadowMaterial transparent opacity={0.3} />
-        </mesh>
-      </Center>
-    </group>
-  )
-}
-
-// ------------------------- Batik Pattern Background -------------------------
-function BatikPattern() {
-  return (
-    <div className="absolute inset-0 pointer-events-none opacity-6">
-      <svg width="100%" height="100%" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="batik-pattern-v2" width="160" height="160" patternUnits="userSpaceOnUse" patternTransform="rotate(18)">
-            <rect width="160" height="160" fill="rgba(250,245,240,0.02)" />
-            <path d="M20 80 C40 40, 120 40, 140 80 C120 120, 40 120, 20 80 Z" fill="rgba(124,74,46,0.03)"/>
-            <path d="M80 20 C60 40, 60 120, 80 140 C100 120, 100 40, 80 20 Z" fill="rgba(124,74,46,0.02)"/>
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#batik-pattern-v2)" />
-      </svg>
+// Loading components
+const ComponentLoader = ({ className = '' }: { className?: string }) => (
+  <div className={`animate-pulse ${className}`}>
+    <div className="bg-gray-200 rounded-lg h-8 mb-4"></div>
+    <div className="space-y-2">
+      <div className="bg-gray-200 rounded h-4"></div>
+      <div className="bg-gray-200 rounded h-4 w-3/4"></div>
     </div>
-  )
-}
+  </div>
+)
 
-// ------------------------- Fake/Example Statistics (tetap sama) -------------------------
-const indonesianLegalStats = {
-  totalCases2024: 4789234,
-  resolvedCases: 3892123,
-  pendingCases: 897111,
-  criminalCases: 1234567,
-  civilCases: 2345678,
-  administrativeCases: 456789,
-  commercialCases: 752300,
-  topCategories: [
-    { name: 'Pidana', percentage: 35, color: '#DC2626' },
-    { name: 'Perdata', percentage: 40, color: '#2563EB' },
-    { name: 'Tata Usaha Negara', percentage: 15, color: '#16A34A' },
-    { name: 'Niaga', percentage: 10, color: '#F59E0B' }
-  ],
-  monthlyTrend: [
-    { month: 'Jan', cases: 398234 },
-    { month: 'Feb', cases: 412345 },
-    { month: 'Mar', cases: 425678 },
-    { month: 'Apr', cases: 438901 },
-    { month: 'Mei', cases: 445234 },
-    { month: 'Jun', cases: 452567 }
-  ]
-}
-
-// ------------------------- Statistics3D component (tetap serupa) -------------------------
-function Statistics3D() {
-  const [selectedStat, setSelectedStat] = useState(0)
-
-  return (
-    <div className="bg-gradient-to-br from-amber-50 to-brown-50 rounded-2xl p-6 mb-8 relative overflow-hidden">
-      <BatikPattern />
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative z-10"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-brown-800">
-          Statistik Hukum Indonesia 2024
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {[
-            {
-              icon: Scale,
-              label: 'Total Kasus',
-              value: indonesianLegalStats.totalCases2024.toLocaleString('id-ID'),
-              color: 'from-blue-500 to-blue-600'
-            },
-            {
-              icon: Gavel,
-              label: 'Kasus Selesai',
-              value: indonesianLegalStats.resolvedCases.toLocaleString('id-ID'),
-              color: 'from-green-500 to-green-600'
-            },
-            {
-              icon: FileText,
-              label: 'Kasus Pending',
-              value: indonesianLegalStats.pendingCases.toLocaleString('id-ID'),
-              color: 'from-yellow-500 to-yellow-600'
-            },
-            {
-              icon: Users,
-              label: 'Pengguna Aktif',
-              value: '125,678',
-              color: 'from-purple-500 to-purple-600'
-            }
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ scale: 1.05, rotateY: 5 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setSelectedStat(index)}
-              className={`bg-gradient-to-br ${stat.color} p-6 rounded-xl shadow-lg cursor-pointer transform-gpu transition-all duration-300`}
-              style={{
-                transformStyle: 'preserve-3d',
-                transform: selectedStat === index ? 'rotateY(10deg)' : 'rotateY(0deg)'
-              }}
-            >
-              <stat.icon className="w-8 h-8 text-white mb-3" />
-              <p className="text-white/80 text-sm mb-1">{stat.label}</p>
-              <p className="text-2xl font-bold text-white">{stat.value}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="bg-white/80 backdrop-blur rounded-xl p-6 shadow-lg">
-          <h3 className="text-lg font-semibold mb-4 text-brown-800">
-            Distribusi Kasus per Kategori
-          </h3>
-          <div className="space-y-3">
-            {indonesianLegalStats.topCategories.map((category, index) => (
-              <motion.div
-                key={index}
-                initial={{ width: 0 }}
-                animate={{ width: `${category.percentage}%` }}
-                transition={{ delay: index * 0.1, duration: 0.8 }}
-                className="relative"
-              >
-                <div className="flex justify-between mb-1">
-                  <span className="text-sm font-medium">{category.name}</span>
-                  <span className="text-sm font-semibold">{category.percentage}%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                  <motion.div
-                    className="h-full rounded-full"
-                    style={{ backgroundColor: category.color }}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${category.percentage}%` }}
-                    transition={{ delay: index * 0.1, duration: 0.8 }}
-                  />
-                </div>
-              </motion.div>
-            ))}
+const ArticleLoader = () => (
+  <div className="space-y-6">
+    {[...Array(3)].map((_, i) => (
+      <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="flex flex-col md:flex-row">
+          <div className="md:w-80 md:flex-shrink-0">
+            <div className="h-48 md:h-full w-full bg-gray-200 animate-pulse"></div>
+          </div>
+          <div className="flex-1 p-6 md:p-8">
+            <div className="space-y-4">
+              <div className="bg-gray-200 rounded h-6 w-3/4 animate-pulse"></div>
+              <div className="space-y-2">
+                <div className="bg-gray-200 rounded h-4 animate-pulse"></div>
+                <div className="bg-gray-200 rounded h-4 w-5/6 animate-pulse"></div>
+              </div>
+            </div>
           </div>
         </div>
-      </motion.div>
+      </div>
+    ))}
+  </div>
+)
+
+// Lightweight Statistics Component with CSS animations
+function Statistics() {
+  const { stats: realTimeStats } = useRealTimeStats()
+  
+  const stats = [
+    { icon: FileText, label: 'Total Artikel', value: realTimeStats.totalArticles.toLocaleString(), color: 'from-blue-500 to-blue-600' },
+    { icon: TrendingUp, label: 'Total Views', value: realTimeStats.totalViews.toLocaleString(), color: 'from-green-500 to-green-600' },
+    { icon: Award, label: 'Total Likes', value: realTimeStats.totalLikes.toLocaleString(), color: 'from-red-500 to-red-600' },
+    { icon: BookOpen, label: 'Rata-rata Views', value: realTimeStats.averageViews.toLocaleString(), color: 'from-purple-500 to-purple-600' }
+  ]
+
+  return (
+    <div className="mb-12">
+      <div className="text-center mb-8 animate-fade-in">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Statistik Artikel</h2>
+        <p className="text-gray-600 max-w-2xl mx-auto">
+          Data terkini mengenai artikel hukum dan interaksi pengguna di platform kami
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+        {stats.map((stat, index) => (
+          <div
+            key={stat.label}
+            className="group animate-fade-in"
+            style={{ animationDelay: `${index * 100}ms` }}
+          >
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-3 sm:p-6 h-full border border-gray-100 hover:border-gray-200">
+              <div className="flex flex-col items-center text-center space-y-2 sm:space-y-4">
+                <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-lg sm:rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300`}>
+                  <stat.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+                </div>
+                <div className="space-y-1">
+                  <div className="text-xl sm:text-3xl font-bold text-gray-900">{stat.value}</div>
+                  <div className="text-xs sm:text-sm font-medium text-gray-600 leading-tight">{stat.label}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
 
-// ------------------------- Main Page Component -------------------------
+// Main Page Component
 export default function ArtikelPage() {
   const [filters, setFilters] = useState<FilterState>({
     category: null,
@@ -333,173 +103,167 @@ export default function ArtikelPage() {
   })
 
   const [searchQuery, setSearchQuery] = useState('')
-  const { scrollY } = useScroll()
-  const headerY = useTransform(scrollY, [0, 300], [0, -50])
-  const headerOpacity = useTransform(scrollY, [0, 300], [1, 0.8])
+  const [componentsLoaded, setComponentsLoaded] = useState(false)
+
+  // Load heavy components after initial render
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setComponentsLoaded(true)
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleFilterChange = (newFilters: FilterState) => {
     setFilters(newFilters)
-    console.log('Filters changed:', newFilters)
   }
 
-  // Pixel ratio safe for mobile devices
-  const pixelRatio = typeof window !== 'undefined' ? Math.min(2, window.devicePixelRatio || 1) : 1
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-brown-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Enhanced 3D Header */}
-        <motion.div
-          style={{ y: headerY, opacity: headerOpacity }}
-          className="mb-12 relative"
-        >
-          <div className="h-56 md:h-72 lg:h-80 rounded-2xl overflow-hidden bg-gradient-to-r from-brown-600 to-amber-600 relative">
-            <Canvas shadows camera={{ position: [0, 0, 3.6], fov: 40 }} gl={{ antialias: true }} dpr={pixelRatio}>
-              {/* Lighting */}
-              <hemisphereLight args={[0xffffff, 0x444444, 0.6]} />
-              <directionalLight
-                castShadow
-                intensity={0.9}
-                position={[4, 6, 3]}
-                shadow-mapSize-width={1024}
-                shadow-mapSize-height={1024}
-                shadow-bias={-0.0005}
-              />
-              <pointLight position={[-4, 2, -3]} intensity={0.25} />
-              {/* Wayang */}
-              <WayangScene />
-              {/* Soft controls - allow rotate by touch/drag, disable zoom for layout stability */}
-              <OrbitControls enableZoom={false} enablePan={false} minPolarAngle={Math.PI / 3} maxPolarAngle={Math.PI / 1.9} />
-            </Canvas>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-brown-50">
+      {/* Hero Header */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-brown-600 via-amber-600 to-red-600 opacity-90"></div>
+        <div className="absolute inset-0">
+          <div className="absolute top-10 left-10 opacity-10 animate-bounce">
+            <Scale className="h-24 w-24 text-white transform rotate-12" />
+          </div>
+          <div className="absolute top-20 right-16 opacity-10 animate-pulse" style={{ animationDelay: '1s' }}>
+            <Gavel className="h-20 w-20 text-white transform -rotate-12" />
+          </div>
+          <div className="absolute bottom-10 left-1/3 opacity-10 animate-bounce" style={{ animationDelay: '2s' }}>
+            <FileText className="h-28 w-28 text-white transform rotate-6" />
+          </div>
+          <div className="absolute bottom-16 right-1/4 opacity-10 animate-pulse" style={{ animationDelay: '3s' }}>
+            <Users className="h-22 w-22 text-white transform -rotate-6" />
+          </div>
+        </div>
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-4 py-16 md:py-24">
+          <div className="text-center text-white">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight animate-fade-in">
+              Artikel Hukum Indonesia
+            </h1>
+            <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '200ms' }}>
+              Temukan artikel hukum terbaru, referensi resmi, dan analisis perundang-undangan 
+              dengan gaya Nusantara yang mudah dipahami
+            </p>
+          </div>
+        </div>
+      </div>
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-
-            <div className="absolute bottom-0 left-0 p-6 md:p-8 text-white">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-2xl md:text-4xl font-bold mb-2"
-              >
-                Artikel Hukum Indonesia
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-                className="text-sm md:text-base text-white/90 max-w-xl"
-              >
-                Temukan artikel hukum terbaru, referensi resmi, dan analisis perundang-undangan dengan gaya Nusantara.
-              </motion.p>
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        {/* Search & Filter Section */}
+        <div className="mb-8 sm:mb-12 animate-fade-in" style={{ animationDelay: '300ms' }}>
+          <div className="bg-white/90 backdrop-blur-lg rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-8 border border-white/20">
+            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 items-center justify-between">
+              <div className="flex-1 w-full lg:max-w-2xl">
+                <div className="relative">
+                  <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 sm:h-6 sm:w-6" />
+                  <input
+                    type="text"
+                    placeholder="Cari artikel hukum..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-4 border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-300 text-sm sm:text-lg"
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </motion.div>
-
-        {/* Search & Filter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mb-8"
-        >
-          <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-6">
-            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-              <motion.div
-                whileFocus={{ scale: 1.02 }}
-                className="relative flex-1 max-w-md"
-              >
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                <input
-                  type="text"
-                  placeholder="Cari artikel hukum..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-300"
-                />
-              </motion.div>
-
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-brown-600 to-amber-600 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                <Filter className="h-5 w-5" />
-                <span className="font-medium">Filter Lanjutan</span>
-              </motion.button>
-            </div>
-          </div>
-        </motion.div>
+        </div>
 
         {/* Statistics Section */}
-        <Statistics3D />
+        <Statistics />
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-3">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <ArticleFilter
-                categories={[
-                  'Hukum Pidana',
-                  'Hukum Perdata',
-                  'Hukum Tata Negara',
-                  'Hukum Administrasi',
-                  'Hukum Dagang',
-                  'Hukum Adat'
-                ]}
-                authors={[
-                  'Prof. Dr. Jimly Asshiddiqie, S.H.',
-                  'Prof. Dr. Satjipto Rahardjo, S.H.',
-                  'Dr. Todung Mulya Lubis, S.H., LL.M.',
-                  'Tim Melek Hukum'
-                ]}
-                onFilterChange={handleFilterChange}
-              />
-            </motion.div>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+          {/* Articles Section */}
+          <div className="xl:col-span-8">
+            <div className="mb-8 animate-fade-in" style={{ animationDelay: '400ms' }}>
+              <Suspense fallback={<ComponentLoader />}>
+                {componentsLoaded && (
+                  <ArticleFilter
+                    categories={[
+                      'Hukum Pidana',
+                      'Hukum Perdata',
+                      'Hukum Tata Negara',
+                      'Hukum Administrasi',
+                      'Hukum Dagang',
+                      'Hukum Adat'
+                    ]}
+                    authors={[
+                      'Prof. Dr. Jimly Asshiddiqie, S.H.',
+                      'Prof. Dr. Satjipto Rahardjo, S.H.',
+                      'Dr. Todung Mulya Lubis, S.H., LL.M.',
+                      'Tim Melek Hukum'
+                    ]}
+                    onFilterChange={handleFilterChange}
+                  />
+                )}
+              </Suspense>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <ArticleList
-                limit={12}
-                showLoadMore={true}
-                searchQuery={searchQuery}
-                filters={filters}
-              />
-            </motion.div>
+            <div className="animate-fade-in" style={{ animationDelay: '500ms' }}>
+              <Suspense fallback={<ArticleLoader />}>
+                {componentsLoaded && (
+                  <ArticleList
+                    searchQuery={searchQuery}
+                    filters={filters}
+                    limit={10}
+                    showPagination={true}
+                  />
+                )}
+              </Suspense>
+            </div>
           </div>
 
-          <div className="lg:col-span-1">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-              className="sticky top-8 space-y-6"
-            >
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="bg-white/80 backdrop-blur rounded-xl shadow-lg border border-gray-100 p-6"
-              >
-                <ArticleStats />
-              </motion.div>
+          {/* Sidebar */}
+          <div className="xl:col-span-4">
+            <div className="sticky top-4 sm:top-8 space-y-6 sm:space-y-8 animate-fade-in" style={{ animationDelay: '600ms' }}>
+              {/* Article Stats Card */}
+              <div className="bg-white/90 backdrop-blur-lg rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6" />
+                    Statistik Artikel
+                  </h3>
+                </div>
+                <div className="p-4 sm:p-6">
+                  <Suspense fallback={<ComponentLoader />}>
+                    {componentsLoaded && <ArticleStats />}
+                  </Suspense>
+                </div>
+              </div>
 
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="bg-white/80 backdrop-blur rounded-xl shadow-lg border border-gray-100 p-6"
-              >
-                <PopularArticles limit={5} />
-              </motion.div>
+              {/* Popular Articles Card */}
+              <div className="bg-white/90 backdrop-blur-lg rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gradient-to-r from-green-500 to-green-600 p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                    <Award className="h-6 w-6" />
+                    Artikel Populer
+                  </h3>
+                </div>
+                <div className="p-6">
+                  <Suspense fallback={<ComponentLoader />}>
+                    {componentsLoaded && <PopularArticles limit={5} />}
+                  </Suspense>
+                </div>
+              </div>
 
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="bg-gradient-to-br from-amber-100 to-brown-100 rounded-xl shadow-lg border border-amber-200 p-6"
-              >
-                <ArticleNewsletter />
-              </motion.div>
-            </motion.div>
+              {/* Newsletter Card */}
+              <div className="bg-gradient-to-br from-amber-100 via-amber-50 to-brown-100 rounded-xl sm:rounded-2xl shadow-lg border border-amber-200 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="bg-gradient-to-r from-amber-500 to-brown-500 p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                    <Users className="h-5 w-5 sm:h-6 sm:w-6" />
+                    Newsletter
+                  </h3>
+                </div>
+                <div className="p-4 sm:p-6">
+                  <Suspense fallback={<ComponentLoader />}>
+                    {componentsLoaded && <ArticleNewsletter />}
+                  </Suspense>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

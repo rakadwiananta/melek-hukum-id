@@ -1,3 +1,5 @@
+'use client'
+
 import Script from 'next/script'
 
 interface ArticleSchemaProps {
@@ -7,47 +9,89 @@ interface ArticleSchemaProps {
     content: string
     author: string
     published_at: string
-    updated_at: string
+    updated_at?: string
     featured_image?: string
     keywords?: string[]
+    url?: string
   }
+  faqData?: Array<{
+    question: string
+    answer: string
+  }>
 }
 
-export default function ArticleSchema({ article }: ArticleSchemaProps) {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: article.title,
-    description: article.excerpt,
-    author: {
-      '@type': 'Person',
-      name: article.author,
+export default function ArticleSchema({ article, faqData }: ArticleSchemaProps) {
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : article.url || 'https://melekhukum.id'
+  
+  // Article Schema
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": currentUrl
     },
-    datePublished: article.published_at,
-    dateModified: article.updated_at,
-    image: article.featured_image,
-    keywords: article.keywords?.join(', '),
-    publisher: {
-      '@type': 'Organization',
-      name: 'Melek Hukum',
-      logo: {
-        '@type': 'ImageObject',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/timbangkan.jpg`,
-      },
+    "headline": article.title,
+    "description": article.excerpt,
+    "image": article.featured_image || "https://melekhukum.id/logo.png",
+    "author": {
+      "@type": "Person",
+      "name": article.author
     },
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': typeof window !== 'undefined' ? window.location.href : '',
+    "publisher": {
+      "@type": "Organization",
+      "name": "Melek Hukum ID",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://melekhukum.id/logo.png"
+      }
     },
+    "datePublished": article.published_at,
+    "dateModified": article.updated_at || article.published_at,
+    "keywords": article.keywords?.join(', ') || '',
+    "articleSection": "Hukum",
+    "wordCount": article.content.split(' ').length,
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": ['.article-title', '.article-excerpt', '.article-content']
+    }
   }
 
+  // FAQ Schema (if provided)
+  const faqSchema = faqData && faqData.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqData.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  } : null
+
   return (
-    <Script
-      id="article-schema"
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(schema),
-      }}
-    />
+    <>
+      {/* Article Schema */}
+      <Script
+        id="article-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleSchema)
+        }}
+      />
+      
+      {/* FAQ Schema (if available) */}
+      {faqSchema && (
+        <Script
+          id="faq-structured-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqSchema)
+          }}
+        />
+      )}
+    </>
   )
 }

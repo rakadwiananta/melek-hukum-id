@@ -1,15 +1,24 @@
 import { Metadata } from 'next'
 import { Car, FileText, Calendar, CheckCircle, AlertTriangle } from 'lucide-react'
+import ExistingArticleWrapper from '@/app/components/article/templates/ExistingArticleWrapper'
 
 export const metadata: Metadata = {
-  title: 'Balik Nama Kendaraan - Panduan Lengkap',
-  description:
-    'Prosedur lengkap balik nama BPKB dan STNK kendaraan bermotor: dokumen, cek fisik, biaya, dan estimasi waktu.',
+  title: 'Balik Nama Kendaraan - Panduan Lengkap 2024 | Melek Hukum ID',
+  description: 'Prosedur lengkap balik nama BPKB dan STNK kendaraan bermotor: dokumen, cek fisik, biaya, dan estimasi waktu. Panduan praktis 2024.',
+  keywords: ['balik nama kendaraan', 'BPKB', 'STNK', 'Samsat', 'cek fisik', 'prosedur balik nama'],
 }
 
 export default function BalikNamaKendaraanPage() {
   return (
-    <article className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <ExistingArticleWrapper
+      title="Balik Nama Kendaraan - Panduan Lengkap"
+      category="Panduan Praktis"
+      readTime="8 menit"
+      author="Tim Ahli Hukum Melek Hukum ID"
+      publishedAt="2024-12-15T10:00:00Z"
+      tags={['balik-nama', 'kendaraan', 'BPKB', 'STNK', 'Samsat', 'cek-fisik']}
+      summary="Panduan balik nama STNK dan BPKB: syarat dokumen, cek fisik, pembayaran, dan waktu pengurusan. Termasuk tips praktis dan estimasi biaya."
+    >
       <div className="relative overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 text-white">
         <div className="max-w-5xl mx-auto px-4 py-16">
           <div className="flex items-center gap-4 mb-6">
@@ -75,6 +84,6 @@ export default function BalikNamaKendaraanPage() {
           </div>
         </div>
       </div>
-    </article>
+    </ExistingArticleWrapper>
   )
 } 

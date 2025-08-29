@@ -457,10 +457,13 @@ export default function ProsedurPelaporanPage() {
 
           {/* Download Section */}
           <div className="mt-12 text-center space-y-4">
-            <button className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-xl hover:bg-primary-600 transition-all transform hover:scale-105 shadow-lg">
+            <Link 
+              href="/solusi/template/surat-pernyataan-kehilangan"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-xl hover:bg-primary-600 transition-all transform hover:scale-105 shadow-lg"
+            >
               <Download className="h-5 w-5" />
               Download Template Kronologi
-            </button>
+            </Link>
             <p className="text-sm text-gray-600">
               Template untuk membantu Anda menyusun kronologi kejadian dengan sistematis
             </p>

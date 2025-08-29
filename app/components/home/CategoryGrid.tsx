@@ -32,7 +32,7 @@ const categories = [
     title: 'Template Dokumen',
     description: 'Dokumen hukum siap pakai',
     icon: FileText,
-    href: '/solusi#templates',
+    href: '/solusi/template',
     color: 'from-green-500 to-green-600',
     bgPattern: 'batik-kawung',
     count: '156',
@@ -87,7 +87,7 @@ const categories = [
     title: 'Kasus & Putusan',
     description: 'Analisis kasus hukum populer',
     icon: Gavel,
-    href: '/regulasi/kasus',
+    href: 'https://putusan3.mahkamahagung.go.id',
     color: 'from-pink-500 to-pink-600',
     bgPattern: 'batik-sidomukti',
     count: '12,847',
@@ -98,7 +98,7 @@ const categories = [
     title: 'Komunitas',
     description: 'Diskusi dengan ahli hukum',
     icon: Users,
-    href: '/komunitas',
+    href: 'https://peradi.or.id',
     color: 'from-teal-500 to-teal-600',
     bgPattern: 'batik-gurda',
     count: '5,428',
@@ -228,104 +228,205 @@ const Card3D = ({ category, index }: { category: typeof categories[0], index: nu
       }}
       className="relative h-full"
     >
-      <Link href={category.href} className="group block h-full">
-        <motion.div 
-          className="relative h-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
-          style={{
-            transform: "translateZ(20px)"
-          }}
-        >
-          {/* Batik Pattern Background */}
-          <BatikPattern pattern={category.bgPattern} />
-          
-          {/* Gradient Overlay */}
-          <div 
-            className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} 
-          />
-          
-          {/* Wayang Shadow Effect */}
-          <motion.div
-            className="absolute -right-10 -bottom-10 w-32 h-32 opacity-5 group-hover:opacity-10 transition-opacity duration-500"
-            animate={{
-              rotate: [0, 5, 0],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "easeInOut"
+      {category.href.startsWith('http') ? (
+        <a href={category.href} target="_blank" rel="noopener noreferrer" className="group block h-full">
+          <motion.div 
+            className="relative h-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+            style={{
+              transform: "translateZ(20px)"
             }}
           >
-            <svg viewBox="0 0 100 100" className="w-full h-full">
-              <path
-                d="M50 10 Q70 30 70 50 Q70 70 50 90 Q30 70 30 50 Q30 30 50 10"
-                fill="currentColor"
-                className="text-gray-800"
-              />
-            </svg>
-          </motion.div>
-          
-          {/* Content Container */}
-          <div className="relative z-10 p-4 sm:p-6 h-full flex flex-col">
-            {/* Colored Header Bar with Icon + Title (ensures text is visible) */}
+            {/* Batik Pattern Background */}
+            <BatikPattern pattern={category.bgPattern} />
+            
+            {/* Gradient Overlay */}
+            <div 
+              className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} 
+            />
+            
+            {/* Wayang Shadow Effect */}
             <motion.div
-              className={`flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-gradient-to-br ${category.color} text-white mb-4 shadow-lg`}
-              whileHover={{ scale: 1.02 }}
-              style={{ transform: "translateZ(30px)" }}
+              className="absolute -right-10 -bottom-10 w-32 h-32 opacity-5 group-hover:opacity-10 transition-opacity duration-500"
+              animate={{
+                rotate: [0, 5, 0],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
             >
-              <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-              <span className="text-sm sm:text-base font-semibold leading-none">{category.title}</span>
-            </motion.div>
-            
-            {/* Title */}
-            <h3 className="font-bold text-base sm:text-lg mb-2 text-gray-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-gray-800 group-hover:to-gray-600 transition-all duration-300">
-              {category.title}
-            </h3>
-            
-            {/* Description */}
-            <p className="text-xs sm:text-sm text-gray-600 mb-4 flex-grow">
-              {category.description}
-            </p>
-            
-            {/* Statistics with Animation */}
-            <div className="space-y-2">
-              <motion.div 
-                className="flex items-baseline gap-2"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 + 0.3 }}
-              >
-                <span className={`text-xl sm:text-2xl font-bold bg-gradient-to-r ${category.color} bg-clip-text text-transparent`}>
-                  {category.count}
-                </span>
-                <span className="text-xs sm:text-sm text-gray-600">
-                  {category.label}
-                </span>
-              </motion.div>
-              
-              {/* Source Info */}
-              <motion.p 
-                className="text-[10px] sm:text-xs text-gray-400 italic"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: index * 0.1 + 0.5 }}
-              >
-                {category.source}
-              </motion.p>
-            </div>
-            
-            {/* Hover Arrow */}
-            <motion.div
-              className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              initial={{ x: -10 }}
-              whileHover={{ x: 0 }}
-            >
-              <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <path
+                  d="M50 10 Q70 30 70 50 Q70 70 50 90 Q30 70 30 50 Q30 30 50 10"
+                  fill="currentColor"
+                  className="text-gray-800"
+                />
               </svg>
             </motion.div>
-          </div>
-        </motion.div>
-      </Link>
+            
+            {/* Content Container */}
+            <div className="relative z-10 p-4 sm:p-6 h-full flex flex-col">
+              {/* Colored Header Bar with Icon + Title (ensures text is visible) */}
+              <motion.div
+                className={`flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-gradient-to-br ${category.color} text-white mb-4 shadow-lg`}
+                whileHover={{ scale: 1.02 }}
+                style={{ transform: "translateZ(30px)" }}
+              >
+                <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                <span className="text-sm sm:text-base font-semibold leading-none">{category.title}</span>
+              </motion.div>
+              
+              {/* Title */}
+              <h3 className="font-bold text-base sm:text-lg mb-2 text-gray-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-gray-800 group-hover:to-gray-600 transition-all duration-300">
+                {category.title}
+              </h3>
+              
+              {/* Description */}
+              <p className="text-xs sm:text-sm text-gray-600 mb-4 flex-grow">
+                {category.description}
+              </p>
+              
+              {/* Statistics with Animation */}
+              <div className="space-y-2">
+                <motion.div 
+                  className="flex items-baseline gap-2"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 + 0.3 }}
+                >
+                  <span className={`text-xl sm:text-2xl font-bold bg-gradient-to-r ${category.color} bg-clip-text text-transparent`}>
+                    {category.count}
+                  </span>
+                  <span className="text-xs sm:text-sm text-gray-600">
+                    {category.label}
+                  </span>
+                </motion.div>
+                
+                {/* Source Info */}
+                <motion.p 
+                  className="text-[10px] sm:text-xs text-gray-400 italic"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: index * 0.1 + 0.5 }}
+                >
+                  {category.source}
+                </motion.p>
+              </div>
+              
+              {/* Hover Arrow */}
+              <motion.div
+                className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                initial={{ x: -10 }}
+                whileHover={{ x: 0 }}
+              >
+                <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </motion.div>
+            </div>
+          </motion.div>
+        </a>
+      ) : (
+        <Link href={category.href} className="group block h-full">
+          <motion.div 
+            className="relative h-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+            style={{
+              transform: "translateZ(20px)"
+            }}
+          >
+            {/* Batik Pattern Background */}
+            <BatikPattern pattern={category.bgPattern} />
+            
+            {/* Gradient Overlay */}
+            <div 
+              className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} 
+            />
+            
+            {/* Wayang Shadow Effect */}
+            <motion.div
+              className="absolute -right-10 -bottom-10 w-32 h-32 opacity-5 group-hover:opacity-10 transition-opacity duration-500"
+              animate={{
+                rotate: [0, 5, 0],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <path
+                  d="M50 10 Q70 30 70 50 Q70 70 50 90 Q30 70 30 50 Q30 30 50 10"
+                  fill="currentColor"
+                  className="text-gray-800"
+                />
+              </svg>
+            </motion.div>
+            
+            {/* Content Container */}
+            <div className="relative z-10 p-4 sm:p-6 h-full flex flex-col">
+              {/* Colored Header Bar with Icon + Title (ensures text is visible) */}
+              <motion.div
+                className={`flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-gradient-to-br ${category.color} text-white mb-4 shadow-lg`}
+                whileHover={{ scale: 1.02 }}
+                style={{ transform: "translateZ(30px)" }}
+              >
+                <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                <span className="text-sm sm:text-base font-semibold leading-none">{category.title}</span>
+              </motion.div>
+              
+              {/* Title */}
+              <h3 className="font-bold text-base sm:text-lg mb-2 text-gray-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-gray-800 group-hover:to-gray-600 transition-all duration-300">
+                {category.title}
+              </h3>
+              
+              {/* Description */}
+              <p className="text-xs sm:text-sm text-gray-600 mb-4 flex-grow">
+                {category.description}
+              </p>
+              
+              {/* Statistics with Animation */}
+              <div className="space-y-2">
+                <motion.div 
+                  className="flex items-baseline gap-2"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 + 0.3 }}
+                >
+                  <span className={`text-xl sm:text-2xl font-bold bg-gradient-to-r ${category.color} bg-clip-text text-transparent`}>
+                    {category.count}
+                  </span>
+                  <span className="text-xs sm:text-sm text-gray-600">
+                    {category.label}
+                  </span>
+                </motion.div>
+                
+                {/* Source Info */}
+                <motion.p 
+                  className="text-[10px] sm:text-xs text-gray-400 italic"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: index * 0.1 + 0.5 }}
+                >
+                  {category.source}
+                </motion.p>
+              </div>
+              
+              {/* Hover Arrow */}
+              <motion.div
+                className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                initial={{ x: -10 }}
+                whileHover={{ x: 0 }}
+              >
+                <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </motion.div>
+            </div>
+          </motion.div>
+        </Link>
+      )}
     </motion.div>
   )
 }

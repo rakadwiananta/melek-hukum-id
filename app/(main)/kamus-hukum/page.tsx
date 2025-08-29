@@ -87,14 +87,27 @@ const categories = [
   { 
     id: 'perdata', 
     label: 'Hukum Perdata', 
-    href: '/kamus-hukum?category=perdata',
+    href: '/kamus-hukum/kategori/perdata',
     count: 743,
     icon: FileText,
     color: 'from-gradient-3-start to-gradient-3-end',
     gradient: 'from-green-600 via-emerald-600 to-teal-600',
     description: 'KUHPerdata & UU Perdata',
     bgPattern: 'pattern-waves',
-    subPages: []
+    subPages: [
+      {
+        title: 'Kategori Perdata',
+        href: '/kamus-hukum/kategori/perdata',
+        description: 'Overview lengkap hukum perdata',
+        icon: FileText
+      },
+      {
+        title: 'Istilah Perdata',
+        href: '/kamus-hukum/kategori/perdata/istilah',
+        description: '743 istilah hukum perdata',
+        icon: BookOpen
+      }
+    ]
   },
   { 
     id: 'tata-negara', 

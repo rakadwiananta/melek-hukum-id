@@ -2,18 +2,20 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import Image from 'next/image'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const navigation = [
-    { name: 'Beranda', href: '/' },
-    { name: 'Kamus Hukum', href: '/kamus-hukum' },
-    { name: 'Solusi', href: '/solusi' },
-    { name: 'Regulasi', href: '/regulasi' },
-    { name: 'Anti Korupsi', href: '/anti-korupsi' },
-    { name: 'Panduan', href: '/panduan' },
-  ]
+  { name: 'Beranda', href: '/' },
+  { name: 'Artikel', href: '/artikel' },
+  { name: 'Kamus Hukum', href: '/kamus-hukum' },
+  { name: 'Solusi', href: '/solusi' },
+  { name: 'Regulasi', href: '/regulasi' },
+  { name: 'Anti Korupsi', href: '/anti-korupsi' },
+  { name: 'Panduan', href: '/panduan' },
+]
 
   return (
     <header className="bg-white shadow-sm border-b relative z-50">
@@ -22,10 +24,13 @@ export default function Header() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
-              <img 
-                src="/timbangkan.jpg" 
+              <Image 
+                src="/logo-melek-hukum.svg" 
                 alt="Melek Hukum ID" 
+                width={32}
+                height={32}
                 className="h-8 w-auto mr-2"
+                priority
               />
               <span className="text-xl font-bold text-gray-900">Melek Hukum ID</span>
             </Link>
@@ -49,6 +54,7 @@ export default function Header() {
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 hover:text-gray-900 focus:outline-none focus:text-gray-900 relative z-10"
+              aria-label="Toggle mobile menu"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMenuOpen ? (

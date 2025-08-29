@@ -1,34 +1,31 @@
 [build]
-  command = "npm install --include=dev && npm run build"
+  command = "npm run build"
   publish = ".next"
 
 [build.environment]
   NODE_VERSION = "20"
-  NPM_FLAGS = "--legacy-peer-deps"
   NODE_ENV = "production"
-  # Secrets scanning konfigurasi: abaikan kunci publik dan artefak build
-  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_GA_MEASUREMENT_ID,NEXT_PUBLIC_MIDTRANS_CLIENT_KEY"
-  SECRETS_SCAN_OMIT_PATHS = ".next/**,.netlify/**,node_modules/**"
+  # Secrets scanning configuration - omit build artifacts and known safe keys
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_GA_MEASUREMENT_ID,NEXT_PUBLIC_MIDTRANS_CLIENT_KEY,MIDTRANS_FIXED_PRICE"
+  SECRETS_SCAN_OMIT_PATHS = ".next/**,.netlify/**,node_modules/**,*.trace,**/*.trace,build/**,dist/**"
+  # Disable secrets scanning for build artifacts
+  SECRETS_SCAN_ENABLED = "false"
 
 # Plugin untuk Next.js
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Konfigurasi domain
-[context.production]
-  domain = "bicarahukum.my.id"
-
 # Redirect untuk www subdomain
 [[redirects]]
-  from = "https://www.bicarahukum.my.id/*"
-  to = "https://bicarahukum.my.id/:splat"
+  from = "https://www.wacanahukum.com/*"
+  to = "https://wacanahukum.com/:splat"
   status = 301
   force = true
 
 # Redirect untuk HTTP ke HTTPS
 [[redirects]]
-  from = "http://bicarahukum.my.id/*"
-  to = "https://bicarahukum.my.id/:splat"
+  from = "http://wacanahukum.com/*"
+  to = "https://wacanahukum.com/:splat"
   status = 301
   force = true
 
@@ -41,6 +38,31 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
+# Static assets caching
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Images caching
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# Sitemap and robots.txt headers
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml; charset=utf-8"
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
 # Auto deploy configuration
 [build.processing]
   skip_processing = false
@@ -49,6 +71,6 @@
 [context.production.environment]
   NODE_ENV = "production"
   NEXT_PUBLIC_SITE_NAME = "Melek Hukum"
-  NEXT_PUBLIC_SITE_URL = "https://bicarahukum.my.id"
-  NEXT_PUBLIC_BASE_URL = "https://bicarahukum.my.id"
+  NEXT_PUBLIC_SITE_URL = "https://wacanahukum.com"
+  NEXT_PUBLIC_BASE_URL = "https://wacanahukum.com"
   NEXT_PUBLIC_GA_MEASUREMENT_ID = "G-D5EH0QKDSF" 

@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Filter, Calendar, Tag, User, TrendingUp, X } from 'lucide-react'
+import { Filter, Calendar, Tag, User, TrendingUp, X, ChevronDown } from 'lucide-react'
 import { cn } from '@/app/lib/utils'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface ArticleFilterProps {
   categories: string[]
@@ -49,15 +50,15 @@ export default function ArticleFilter({
     onFilterChange(newFilters)
   }
 
-  const resetFilters = () => {
-    const defaultFilters: FilterState = {
+  const clearFilters = () => {
+    const clearedFilters = {
       category: null,
       author: null,
-      sortBy: 'newest',
-      dateRange: 'all'
+      sortBy: 'newest' as const,
+      dateRange: 'all' as const
     }
-    setFilters(defaultFilters)
-    onFilterChange(defaultFilters)
+    setFilters(clearedFilters)
+    onFilterChange(clearedFilters)
   }
 
   const sortOptions = [
@@ -68,7 +69,7 @@ export default function ArticleFilter({
   ]
 
   const dateRangeOptions = [
-    { value: 'all', label: 'Semua' },
+    { value: 'all', label: 'Semua Waktu' },
     { value: 'today', label: 'Hari Ini' },
     { value: 'week', label: 'Minggu Ini' },
     { value: 'month', label: 'Bulan Ini' },
@@ -76,171 +77,255 @@ export default function ArticleFilter({
   ]
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={cn('mb-8', className)}>
       {/* Filter Toggle Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          "flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300",
-          "bg-white border-2 hover:shadow-lg transform hover:scale-105",
-          isOpen ? "border-red-600 shadow-lg" : "border-gray-300"
-        )}
-      >
-        <Filter className="h-5 w-5" />
-        <span>Filter</span>
-        {activeFiltersCount > 0 && (
-          <span className="ml-2 px-2 py-0.5 bg-red-600 text-white text-xs rounded-full">
-            {activeFiltersCount}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <h2 className="text-2xl font-bold text-gray-900">Filter & Sortir</h2>
+          {activeFiltersCount > 0 && (
+            <span className="inline-flex items-center px-3 py-1 text-sm font-medium text-amber-700 bg-amber-100 rounded-full">
+              {activeFiltersCount} filter aktif
+            </span>
+          )}
+        </div>
+        
+        <motion.button
+          onClick={() => setIsOpen(!isOpen)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+        >
+          <Filter className="h-5 w-5" />
+          <span className="font-medium">
+            {isOpen ? 'Sembunyikan Filter' : 'Tampilkan Filter'}
           </span>
-        )}
-      </button>
+          <ChevronDown className={cn(
+            'h-4 w-4 transition-transform duration-200',
+            isOpen ? 'rotate-180' : ''
+          )} />
+        </motion.button>
+      </div>
 
-      {/* Filter Panel */}
-      {isOpen && (
-        <div className="absolute top-full mt-4 right-0 w-full md:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 animate-fade-in-down">
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-100">
-            <h3 className="text-lg font-bold text-gray-900">Filter Artikel</h3>
-            <div className="flex items-center gap-2">
-              {activeFiltersCount > 0 && (
-                <button
-                  onClick={resetFilters}
-                  className="px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+      {/* Active Filters Summary */}
+      {activeFiltersCount > 0 && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          className="mb-6"
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm font-medium text-gray-600">Filter aktif:</span>
+            {filters.category && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded-full">
+                <Tag className="h-3 w-3" />
+                {filters.category}
+                <button 
+                  onClick={() => updateFilter('category', null)}
+                  className="ml-1 hover:bg-blue-200 rounded-full p-0.5"
                 >
-                  Reset
+                  <X className="h-3 w-3" />
                 </button>
-              )}
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Filter Content */}
-          <div className="p-6 space-y-6">
-            {/* Sort By */}
-            <div>
-              <label className="text-sm font-semibold text-gray-700 mb-3 block">
-                Urutkan
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                {sortOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => updateFilter('sortBy', option.value)}
-                    className={cn(
-                      "flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-300",
-                      filters.sortBy === option.value
-                        ? "bg-gradient-to-r from-red-600 to-amber-600 text-white shadow-lg"
-                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                    )}
-                  >
-                    <option.icon className="h-4 w-4" />
-                    <span>{option.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Date Range */}
-            <div>
-              <label className="text-sm font-semibold text-gray-700 mb-3 block">
-                Periode
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {dateRangeOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => updateFilter('dateRange', option.value)}
-                    className={cn(
-                      "px-4 py-2 rounded-lg font-medium transition-all duration-300",
-                      filters.dateRange === option.value
-                        ? "bg-red-600 text-white shadow-md"
-                        : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                    )}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Category */}
-            {categories.length > 0 && (
-              <div>
-                <label className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                  <Tag className="h-4 w-4" />
-                  Kategori
-                </label>
-                <select
-                  value={filters.category || ''}
-                  onChange={(e) => updateFilter('category', e.target.value || null)}
-                  className="w-full px-4 py-3 bg-gray-100 rounded-lg focus:ring-2 focus:ring-red-600 focus:bg-white transition-all"
-                >
-                  <option value="">Semua Kategori</option>
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              </span>
             )}
-
-            {/* Author */}
-            {authors.length > 0 && (
-              <div>
-                <label className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  Penulis
-                </label>
-                <select
-                  value={filters.author || ''}
-                  onChange={(e) => updateFilter('author', e.target.value || null)}
-                  className="w-full px-4 py-3 bg-gray-100 rounded-lg focus:ring-2 focus:ring-red-600 focus:bg-white transition-all"
+            {filters.author && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 text-sm bg-green-100 text-green-800 rounded-full">
+                <User className="h-3 w-3" />
+                {filters.author}
+                <button 
+                  onClick={() => updateFilter('author', null)}
+                  className="ml-1 hover:bg-green-200 rounded-full p-0.5"
                 >
-                  <option value="">Semua Penulis</option>
-                  {authors.map((author) => (
-                    <option key={author} value={author}>
-                      {author}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                  <X className="h-3 w-3" />
+                </button>
+              </span>
             )}
-          </div>
-
-          {/* Footer */}
-          <div className="p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl">
+            {filters.sortBy !== 'newest' && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 text-sm bg-purple-100 text-purple-800 rounded-full">
+                <TrendingUp className="h-3 w-3" />
+                {sortOptions.find(opt => opt.value === filters.sortBy)?.label}
+                <button 
+                  onClick={() => updateFilter('sortBy', 'newest')}
+                  className="ml-1 hover:bg-purple-200 rounded-full p-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </span>
+            )}
+            {filters.dateRange !== 'all' && (
+              <span className="inline-flex items-center gap-1 px-3 py-1 text-sm bg-orange-100 text-orange-800 rounded-full">
+                <Calendar className="h-3 w-3" />
+                {dateRangeOptions.find(opt => opt.value === filters.dateRange)?.label}
+                <button 
+                  onClick={() => updateFilter('dateRange', 'all')}
+                  className="ml-1 hover:bg-orange-200 rounded-full p-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </span>
+            )}
             <button
-              onClick={() => setIsOpen(false)}
-              className="w-full px-6 py-3 bg-gradient-to-r from-red-600 to-amber-600 text-white font-semibold rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-300"
+              onClick={clearFilters}
+              className="text-sm text-red-600 hover:text-red-700 font-medium"
             >
-              Terapkan Filter
+              Hapus Semua
             </button>
           </div>
-        </div>
+        </motion.div>
       )}
 
-      <style jsx>{`
-        @keyframes fade-in-down {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
+      {/* Filter Panel */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {/* Categories */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Tag className="h-5 w-5 text-blue-600" />
+                    <h3 className="font-semibold text-gray-900">Kategori</h3>
+                  </div>
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => updateFilter('category', null)}
+                      className={cn(
+                        'w-full text-left px-4 py-2.5 rounded-xl transition-all duration-200',
+                        !filters.category
+                          ? 'bg-blue-100 text-blue-900 font-medium'
+                          : 'hover:bg-gray-50 text-gray-700'
+                      )}
+                    >
+                      Semua Kategori
+                    </button>
+                    {categories.map((category) => (
+                      <button
+                        key={category}
+                        onClick={() => updateFilter('category', category)}
+                        className={cn(
+                          'w-full text-left px-4 py-2.5 rounded-xl transition-all duration-200',
+                          filters.category === category
+                            ? 'bg-blue-100 text-blue-900 font-medium'
+                            : 'hover:bg-gray-50 text-gray-700'
+                        )}
+                      >
+                        {category}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-        .animate-fade-in-down {
-          animation: fade-in-down 0.3s ease-out;
-        }
-      `}</style>
+                {/* Authors */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <User className="h-5 w-5 text-green-600" />
+                    <h3 className="font-semibold text-gray-900">Penulis</h3>
+                  </div>
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => updateFilter('author', null)}
+                      className={cn(
+                        'w-full text-left px-4 py-2.5 rounded-xl transition-all duration-200',
+                        !filters.author
+                          ? 'bg-green-100 text-green-900 font-medium'
+                          : 'hover:bg-gray-50 text-gray-700'
+                      )}
+                    >
+                      Semua Penulis
+                    </button>
+                    {authors.map((author) => (
+                      <button
+                        key={author}
+                        onClick={() => updateFilter('author', author)}
+                        className={cn(
+                          'w-full text-left px-4 py-2.5 rounded-xl transition-all duration-200 text-sm',
+                          filters.author === author
+                            ? 'bg-green-100 text-green-900 font-medium'
+                            : 'hover:bg-gray-50 text-gray-700'
+                        )}
+                      >
+                        {author}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Sort By */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-purple-600" />
+                    <h3 className="font-semibold text-gray-900">Urutkan</h3>
+                  </div>
+                  <div className="space-y-2">
+                    {sortOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => updateFilter('sortBy', option.value)}
+                        className={cn(
+                          'w-full flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-200',
+                          filters.sortBy === option.value
+                            ? 'bg-purple-100 text-purple-900 font-medium'
+                            : 'hover:bg-gray-50 text-gray-700'
+                        )}
+                      >
+                        <option.icon className="h-4 w-4" />
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Date Range */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5 text-orange-600" />
+                    <h3 className="font-semibold text-gray-900">Periode</h3>
+                  </div>
+                  <div className="space-y-2">
+                    {dateRangeOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => updateFilter('dateRange', option.value)}
+                        className={cn(
+                          'w-full text-left px-4 py-2.5 rounded-xl transition-all duration-200',
+                          filters.dateRange === option.value
+                            ? 'bg-orange-100 text-orange-900 font-medium'
+                            : 'hover:bg-gray-50 text-gray-700'
+                        )}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-between pt-8 mt-8 border-t border-gray-200">
+                <button
+                  onClick={clearFilters}
+                  className="flex items-center gap-2 px-6 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200"
+                >
+                  <X className="h-4 w-4" />
+                  Hapus Semua Filter
+                </button>
+                
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-medium"
+                >
+                  Terapkan Filter
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
