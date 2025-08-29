@@ -1,10 +1,1 @@
-# ads.txt file for wacanahukum.com
-# This file is required by Google AdSense for verification
-# Format: domain, publisher_id, relationship, certification_authority
-
-# Google AdSense
 google.com, pub-9240032692197811, DIRECT, f08c47fec0942fa0
-
-# AdSense Publisher ID: pub-9240032692197811
-# This authorizes Google AdSense to serve ads on wacanahukum.com
-# DIRECT relationship means we work directly with Google
