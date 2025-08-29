@@ -122,21 +122,15 @@ export default function RootLayout({
   }
 
   return (
-    <html lang="id" className={inter.variable}>
-      <head>
-        {/* Google AdSense removed - not available in this version */}
-        <Script
-          id="website-schema"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-        />
-      </head>
-      <body className={`${inter.className} antialiased`}>
-        <LayoutWrapper>
-          {children}
-        </LayoutWrapper>
-        <PerformanceWrapper />
-      </body>
-    </html>
+    <LayoutWrapper>
+      {/* Inject website schema from within the layout tree (no extra <head> tag) */}
+      <Script
+        id="website-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      {children}
+      <PerformanceWrapper />
+    </LayoutWrapper>
   )
 }
