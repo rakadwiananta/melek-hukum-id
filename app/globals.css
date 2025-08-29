@@ -26,6 +26,9 @@
   /* Optimize scroll behavior */
   html {
     scroll-behavior: smooth;
+    /* Prevent horizontal scroll from off-screen decorations */
+    overflow-x: hidden;
+    width: 100%;
   }
 
   /* Optimize focus styles */
@@ -104,6 +107,8 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Guard against accidental horizontal overflow on mobile */
+    overflow-x: hidden;
   }
 }
 
