@@ -82,6 +82,7 @@ export default function RootLayout({
   return (
     <html lang="id" className={inter.variable}>
       <head>
+        <meta name="google-adsense-account" content="ca-pub-9240032692197811" />
         {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
