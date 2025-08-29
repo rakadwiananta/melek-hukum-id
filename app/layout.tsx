@@ -25,12 +25,12 @@ export const metadata: Metadata = {
   authors: [{ name: 'Tim Melek Hukum' }],
   creator: 'Melek Hukum ID',
   publisher: 'Melek Hukum ID',
-  metadataBase: new URL('https://bicarahukum.my.id'),
+  metadataBase: new URL('https://wacanahukum.com'),
   
   openGraph: {
     type: 'website',
     locale: 'id_ID',
-    url: 'https://bicarahukum.my.id',
+    url: 'https://wacanahukum.com',
     siteName: 'Melek Hukum ID',
     title: 'Melek Hukum ID - Portal Hukum Indonesia',
     description: 'Portal hukum Indonesia terpercaya dengan informasi hukum terkini',
@@ -85,7 +85,8 @@ export default function RootLayout({
         {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="preconnect" href="https://bicarahukum.my.id" />
+        <link rel="preconnect" href="https://wacanahukum.com" />
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://supabase.co" />
         
         {/* DNS prefetch for better performance */}
@@ -204,6 +205,14 @@ export default function RootLayout({
             }
           `
         }} />
+        
+        {/* Google AdSense Script */}
+        <Script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9240032692197811"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         
         {/* Ezoic Standalone Scripts - non-blocking with better loading */}
         <Script id="ezoic-sa" src="//www.ezojs.com/ezoic/sa.min.js" strategy="lazyOnload" />
