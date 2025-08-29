@@ -51,7 +51,6 @@ export default function RootLayout({
   return (
     <html lang="id" className={inter.variable}>
       <head>
-<<<<<<< HEAD
         {isValidAdsenseClient && (
           <meta name="google-adsense-account" content={ADSENSE_CLIENT_ID as string} />
         )}
@@ -184,7 +183,7 @@ export default function RootLayout({
           <script 
             async 
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-            crossorigin="anonymous"
+            crossOrigin="anonymous"
           />
         )}
         
@@ -222,7 +221,7 @@ export default function RootLayout({
         `}</Script>
         
         {/* Performance monitoring */}
-        <PerformanceWrapper />
+        {/* <PerformanceWrapper /> */}
       </body>
     </html>
   )
