@@ -51,9 +51,7 @@ export default function RootLayout({
     <html lang="id" className={inter.variable}>
       <head>
         <GoogleAnalytics />
-        {/* Tambahkan meta tag verification manual */}
-        <meta name="google-site-verification" content="googlecdb930fb42e17478" />
-        <meta name="google-adsense-account" content="ca-pub-9240032692197811" />
+        {/* Meta tags akan di-inject otomatis dari metadata */}
       </head>
       <body className={`${inter.className} antialiased`}>
         <ToastProvider>
