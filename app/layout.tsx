@@ -173,12 +173,7 @@ export default function RootLayout({
           `
         }} />
         
-        {/* Google AdSense Script */}
-        <script 
-          async 
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9240032692197811"
-          crossOrigin="anonymous"
-        />
+
         
         {/* Ezoic Standalone Scripts - non-blocking with better loading */}
         <Script id="ezoic-sa" src="//www.ezojs.com/ezoic/sa.min.js" strategy="lazyOnload" />
