@@ -5,7 +5,7 @@ import './globals.css'
 import { GoogleAnalytics } from '@/app/components/analytics/GoogleAnalytics'
 import { Toaster } from '@/app/components/ui/Toaster'
 import { ToastProvider } from '@/app/components/ui/use-toast'
-import Script from 'next/script'
+import Script from 'next/script' // TAMBAHKAN IMPORT INI
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -13,18 +13,15 @@ const inter = Inter({
   variable: '--font-inter'
 })
 
-// Configuration from environment variables
-const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-9240032692197811'
-const GOOGLE_VERIFICATION = process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || 'cdb930fb42e17478'
-const ADSENSE_ENABLED = process.env.NEXT_PUBLIC_ADSENSE_ENABLED === 'true'
-const isDevelopment = process.env.NODE_ENV === 'development'
-const SHOULD_LOAD_ADS = ADSENSE_ENABLED && !isDevelopment
+// Google AdSense Configuration
+const ADSENSE_CLIENT_ID = 'ca-pub-9240032692197811' // ID AdSense Anda
+const GOOGLE_VERIFICATION = 'cdb930fb42e17478' // Verification code Anda
 
 export const metadata: Metadata = {
-  title: 'Wacana Hukum',
+  title: 'Wacana Hukum', // Ganti dengan nama situs yang benar
   description: 'Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia',
   verification: {
-    google: GOOGLE_VERIFICATION,
+    google: GOOGLE_VERIFICATION, // Tambahkan verifikasi Google
   },
   icons: {
     icon: [
@@ -41,7 +38,7 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   other: {
-    'google-adsense-account': ADSENSE_CLIENT_ID
+    'google-adsense-account': ADSENSE_CLIENT_ID // Meta tag AdSense
   }
 }
 
@@ -50,20 +47,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // Log untuk debugging
-  if (isDevelopment) {
-    console.log('AdSense Configuration:', {
-      clientId: ADSENSE_CLIENT_ID,
-      enabled: ADSENSE_ENABLED,
-      shouldLoad: SHOULD_LOAD_ADS,
-      environment: process.env.NODE_ENV
-    })
-  }
-
   return (
     <html lang="id" className={inter.variable}>
       <head>
         <GoogleAnalytics />
+        {/* Meta tag Google AdSense - akan di-inject otomatis dari metadata.other */}
       </head>
       <body className={`${inter.className} antialiased`}>
         <ToastProvider>
@@ -71,46 +59,34 @@ export default function RootLayout({
           <Toaster />
         </ToastProvider>
         
-        {/* Google AdSense Scripts - Only load in production */}
-        {SHOULD_LOAD_ADS && (
-          <>
-            {/* Main AdSense Script */}
-            <Script
-              id="google-adsense"
-              async
-              strategy="lazyOnload"
-              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-              crossOrigin="anonymous"
-              onError={(e) => {
-                console.error('AdSense script failed to load:', e)
-              }}
-              onLoad={() => {
-                console.log('AdSense script loaded successfully')
-              }}
-            />
-            
-            {/* Auto Ads Initialization */}
-            <Script
-              id="google-adsense-auto-ads"
-              strategy="lazyOnload"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  (adsbygoogle = window.adsbygoogle || []).push({
-                    google_ad_client: "${ADSENSE_CLIENT_ID}",
-                    enable_page_level_ads: true
-                  });
-                `
-              }}
-            />
-          </>
-        )}
+        {/* Google AdSense Script - IMPLEMENTASI YANG BENAR */}
+        <Script
+          id="google-adsense"
+          async
+          strategy="lazyOnload"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+          crossOrigin="anonymous"
+          onError={(e) => {
+            console.error('Script AdSense gagal dimuat:', e)
+          }}
+          onLoad={() => {
+            console.log('Script AdSense berhasil dimuat')
+          }}
+        />
         
-        {/* Development Mode Indicator */}
-        {isDevelopment && (
-          <div className="fixed bottom-4 right-4 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-2 rounded text-sm z-50">
-            Development Mode - AdSense Disabled
-          </div>
-        )}
+        {/* Auto Ads Initialization */}
+        <Script
+          id="google-adsense-init"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (adsbygoogle = window.adsbygoogle || []).push({
+                google_ad_client: "${ADSENSE_CLIENT_ID}",
+                enable_page_level_ads: true
+              });
+            `
+          }}
+        />
       </body>
     </html>
   )
