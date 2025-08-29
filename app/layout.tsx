@@ -13,7 +13,6 @@ const inter = Inter({
   variable: '--font-inter'
 })
 
-const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 export const metadata: Metadata = {
@@ -36,9 +35,9 @@ export const metadata: Metadata = {
     ]
   },
   manifest: '/manifest.json',
-  other: ADSENSE_CLIENT_ID ? {
-    'google-adsense-account': ADSENSE_CLIENT_ID
-  } : {}
+  other: {
+    'google-adsense-account': 'ca-pub-9240032692197811'
+  }
 }
 
 export default function RootLayout({
@@ -46,14 +45,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID
-  const isValidAdsenseClient = typeof ADSENSE_CLIENT_ID === 'string' && ADSENSE_CLIENT_ID.startsWith('ca-pub-')
   return (
     <html lang="id" className={inter.variable}>
       <head>
-        {isValidAdsenseClient && (
-          <meta name="google-adsense-account" content={ADSENSE_CLIENT_ID as string} />
-        )}
+        <meta name="google-adsense-account" content="ca-pub-9240032692197811" />
         {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -179,20 +174,11 @@ export default function RootLayout({
         }} />
         
         {/* Google AdSense Script */}
-        {isValidAdsenseClient && (
-          <>
-            <script 
-              async 
-              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9240032692197811"
-              crossOrigin="anonymous"
-            />
-            <script dangerouslySetInnerHTML={{
-              __html: `
-                (adsbygoogle = window.adsbygoogle || []).push({});
-              `
-            }} />
-          </>
-        )}
+        <script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9240032692197811"
+          crossOrigin="anonymous"
+        />
         
         {/* Ezoic Standalone Scripts - non-blocking with better loading */}
         <Script id="ezoic-sa" src="//www.ezojs.com/ezoic/sa.min.js" strategy="lazyOnload" />
