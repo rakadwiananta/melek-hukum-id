@@ -720,8 +720,8 @@ export default function IstilahPidanaComponent({
                     <AnimatedBatikPattern className="text-red-100" animate={false} />
                     
                     {/* Term Header dengan gradient Nusantara */}
-                    <div className="flex items-start justify-between relative z-10">
-                      <div className="flex-1 pr-4">
+                    <div className="flex items-start justify-between relative z-10 min-w-0">
+                      <div className="flex-1 pr-4 min-w-0">
                         <motion.h3 
                           className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2 flex-wrap"
                           whileHover={{ x: 5 }}
@@ -741,7 +741,7 @@ export default function IstilahPidanaComponent({
                           )}
                         </motion.h3>
                         {term.englishTerm && (
-                          <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                          <p className="text-sm text-gray-500 flex items-center gap-1 mt-1 break-words">
                             <Globe className="h-3 w-3" />
                             <span className="italic">{term.englishTerm}</span>
                           </p>
@@ -749,7 +749,7 @@ export default function IstilahPidanaComponent({
                       </div>
                       
                       {/* Action Buttons dengan 3D effect */}
-                      <div className="flex items-center gap-1 sm:gap-2">
+                      <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                         <motion.button
                           whileHover={{ scale: 1.1, rotate: 180 }}
                           whileTap={{ scale: 0.9 }}
