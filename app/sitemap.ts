@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://bicarahukum.my.id'
+  const baseUrl = 'https://wacanahukum.com'
   const currentDate = new Date().toISOString()
 
   return [
