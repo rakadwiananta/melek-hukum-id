@@ -9,6 +9,34 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   
+  // Redirects for domain migration
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'bicarahukum.my.id',
+          },
+        ],
+        destination: 'https://wacanahukum.com/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.bicarahukum.my.id',
+          },
+        ],
+        destination: 'https://wacanahukum.com/:path*',
+        permanent: true,
+      },
+    ]
+  },
+  
   // Enhanced image configuration for better performance
   images: {
     formats: ['image/webp', 'image/avif'],
@@ -24,7 +52,8 @@ const nextConfig = {
       'imgur.com',
       'i.imgur.com',
       'supabase.co',
-      'wacanahukum.com'
+      'wacanahukum.com',
+      'bicarahukum.my.id'
     ],
     // Add remote patterns for more flexible matching
     remotePatterns: [
@@ -49,6 +78,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'wacanahukum.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'bicarahukum.my.id',
         port: '',
         pathname: '/**',
       }

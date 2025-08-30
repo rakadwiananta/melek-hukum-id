@@ -1,0 +1,10 @@
+# Redirect from old domain to new domain
+# Redirect bicarahukum.my.id to wacanahukum.com
+https://bicarahukum.my.id/* https://wacanahukum.com/:splat 301!
+https://www.bicarahukum.my.id/* https://wacanahukum.com/:splat 301!
+
+# Redirect www.wacanahukum.com to wacanahukum.com
+https://www.wacanahukum.com/* https://wacanahukum.com/:splat 301!
+
+# Handle 404 errors
+/* /404.html 404
