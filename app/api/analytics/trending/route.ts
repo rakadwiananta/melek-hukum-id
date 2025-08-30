@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10')
     const category = searchParams.get('category')
 
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Mendapatkan artikel trending menggunakan function
-    const { data, error } = await supabase
+    const { data, error } = await supabaseServer
       .rpc('get_trending_articles', { 
         days_param: days, 
         limit_param: limit 

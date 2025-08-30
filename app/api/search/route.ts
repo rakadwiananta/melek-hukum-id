@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     }
     const { data, error, count } = await supabaseServer
       .from('articles')
-      .select('*', { count: 'exact' })
+      .select('*')
       .eq('status', 'published')
       .or(`title.ilike.%${query}%,content.ilike.%${query}%,excerpt.ilike.%${query}%`)
       .order('published_at', { ascending: false })

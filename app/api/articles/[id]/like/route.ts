@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase, supabaseAdmin } from '@/app/lib/supabase'
+import { supabaseServer, supabaseAdmin } from '@/app/lib/supabase-server'
 
 export async function POST(
   request: NextRequest,
@@ -124,7 +124,7 @@ export async function GET(
   try {
     const { id: articleId } = await params
     
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }

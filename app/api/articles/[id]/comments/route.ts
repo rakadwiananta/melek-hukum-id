@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase, supabaseAdmin } from '@/app/lib/supabase'
+import { supabaseServer, supabaseAdmin } from '@/app/lib/supabase-server'
 
 export async function POST(
   request: NextRequest,
@@ -112,7 +112,7 @@ export async function GET(
     const limit = parseInt(searchParams.get('limit') || '10')
     const offset = (page - 1) * limit
     
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -120,7 +120,7 @@ export async function GET(
     }
 
     // Get approved comments
-    const { data: comments, error: commentsError } = await supabase
+    const { data: comments, error: commentsError } = await supabaseServer
       .from('article_comments')
       .select('*')
       .eq('article_id', articleId)
@@ -131,7 +131,7 @@ export async function GET(
     if (commentsError) throw commentsError
 
     // Get total count
-    const { count, error: countError } = await supabase
+    const { count, error: countError } = await supabaseServer
       .from('article_comments')
       .select('*', { count: 'exact', head: true })
       .eq('article_id', articleId)
