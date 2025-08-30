@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
         success: !error,
         error: error?.message || null,
         sample_articles: data?.length || 0,
-        articles: data?.map(article => ({
+        articles: data?.map((article: any) => ({
           id: article.id,
           title: ((article.title as string)?.substring(0, 50) || '') + '...',
           view_count: (article.view_count as number) || 0,

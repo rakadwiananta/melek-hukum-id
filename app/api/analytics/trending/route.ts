@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
 
     // Menggabungkan data trending dengan data artikel
     const enrichedData = filteredData.map((trendItem: any) => {
-      const articleData = articlesData?.find(article => article.id === trendItem.article_id)
+      const articleData = articlesData?.find((article: any) => article.id === trendItem.article_id)
       return {
         ...trendItem,
         ...articleData,

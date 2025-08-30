@@ -23,10 +23,10 @@ export async function GET(request: NextRequest) {
       .from('article_stats')
       .select('view_count, actual_likes, approved_comments, total_bookmarks')
 
-    const totalViews = overviewStats?.reduce((sum, item) => sum + ((item.view_count as number) || 0), 0) || 0
-    const totalLikes = overviewStats?.reduce((sum, item) => sum + ((item.actual_likes as number) || 0), 0) || 0
-    const totalComments = overviewStats?.reduce((sum, item) => sum + ((item.approved_comments as number) || 0), 0) || 0
-    const totalBookmarks = overviewStats?.reduce((sum, item) => sum + ((item.total_bookmarks as number) || 0), 0) || 0
+    const totalViews = overviewStats?.reduce((sum: number, item: any) => sum + ((item.view_count as number) || 0), 0) || 0
+    const totalLikes = overviewStats?.reduce((sum: number, item: any) => sum + ((item.actual_likes as number) || 0), 0) || 0
+    const totalComments = overviewStats?.reduce((sum: number, item: any) => sum + ((item.approved_comments as number) || 0), 0) || 0
+    const totalBookmarks = overviewStats?.reduce((sum: number, item: any) => sum + ((item.total_bookmarks as number) || 0), 0) || 0
 
     // 2. Daily Activity untuk periode yang diminta
     let dailyQuery = supabaseServer
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
       .select('category, view_count, actual_likes, approved_comments, total_bookmarks')
       .not('category', 'is', null)
 
-    const categoryPerformance = categoryStats?.reduce((acc, item) => {
+    const categoryPerformance = categoryStats?.reduce((acc: any, item: any) => {
       const cat = (item.category as string) || 'Uncategorized'
       if (!acc[cat]) {
         acc[cat] = {
@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
       .from('user_interactions')
       .select('engagement_level')
 
-    const engagementDistribution = userEngagement?.reduce((acc, item) => {
+    const engagementDistribution = userEngagement?.reduce((acc: any, item: any) => {
       const level = (item.engagement_level as string) || 'Low'
       acc[level] = (acc[level] || 0) + 1
       return acc
@@ -116,10 +116,10 @@ export async function GET(request: NextRequest) {
       .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
 
     const moderationStats = {
-      pending: commentModerationStats?.filter(c => c.status === 'pending').length || 0,
-      approved: commentModerationStats?.filter(c => c.status === 'approved').length || 0,
-      rejected: commentModerationStats?.filter(c => c.status === 'rejected').length || 0,
-      spam: commentModerationStats?.filter(c => c.status === 'spam').length || 0
+      pending: commentModerationStats?.filter((c: any) => c.status === 'pending').length || 0,
+      approved: commentModerationStats?.filter((c: any) => c.status === 'approved').length || 0,
+      rejected: commentModerationStats?.filter((c: any) => c.status === 'rejected').length || 0,
+      spam: commentModerationStats?.filter((c: any) => c.status === 'spam').length || 0
     }
 
     // Compile response
