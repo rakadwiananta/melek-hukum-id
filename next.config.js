@@ -17,7 +17,7 @@ const nextConfig = {
         has: [
           {
             type: 'host',
-            value: 'bicarahukum.my.id',
+            value: 'wacanahukum.com',
           },
         ],
         destination: 'https://wacanahukum.com/:path*',
@@ -28,7 +28,7 @@ const nextConfig = {
         has: [
           {
             type: 'host',
-            value: 'www.bicarahukum.my.id',
+            value: 'www.wacanahukum.com',
           },
         ],
         destination: 'https://wacanahukum.com/:path*',
