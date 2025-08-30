@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 
 export async function GET(request: NextRequest) {
   try {
@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const period = searchParams.get('period') || '7' // days
     const category = searchParams.get('category')
 
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }

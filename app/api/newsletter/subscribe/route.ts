@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
                 'unknown'
 
     // Check if email already exists
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }

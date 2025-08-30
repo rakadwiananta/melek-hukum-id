@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 
 // Real article ID from the database
 const REAL_ARTICLE_ID = 'f47ac10b-58cc-4372-a567-0e02b2c3d479'
 
 export async function GET(request: NextRequest) {
-  if (!supabase) {
+  if (!supabaseServer) {
     return NextResponse.json({
       error: 'Supabase not configured'
     }, { status: 500 })
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // Test 1: Get article data
-    const { data: article, error: articleError } = await supabase
+    const { data: article, error: articleError } = await supabaseServer
       .from('articles')
       .select('id, title, view_count, like_count, comment_count, updated_at')
       .eq('id', REAL_ARTICLE_ID)
@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Test 2: Test increment_article_views RPC
-    const { data: incrementData, error: incrementError } = await supabase
+    const { data: incrementData, error: incrementError } = await supabaseServer
       .rpc('increment_article_views', {
         article_id_param: REAL_ARTICLE_ID,
         viewer_ip: `debug-test-${Date.now()}`,
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Test 3: Get updated article data
-    const { data: updatedArticle, error: updatedError } = await supabase
+    const { data: updatedArticle, error: updatedError } = await supabaseServer
       .from('articles')
       .select('id, title, view_count, like_count, comment_count, updated_at')
       .eq('id', REAL_ARTICLE_ID)
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Test 4: Test get_article_stats RPC
-    const { data: statsData, error: statsError } = await supabase
+    const { data: statsData, error: statsError } = await supabaseServer
       .rpc('get_article_stats', {
         article_id_param: REAL_ARTICLE_ID
       })
@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Test 5: Check article_views table
-    const { data: viewsData, error: viewsError } = await supabase
+    const { data: viewsData, error: viewsError } = await supabaseServer
       .from('article_views')
       .select('id, article_id, user_identifier, created_at')
       .eq('article_id', REAL_ARTICLE_ID)

@@ -1,4 +1,5 @@
-import { createClient } from '@supabase/supabase-js'
+// Client-side only Supabase client
+// Note: We're not importing createClient to avoid realtime library issues
 
 // Environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -15,24 +16,22 @@ if (!isSupabaseConfigured && process.env.NODE_ENV !== 'production') {
 
 // Create Supabase client - only on client side
 // Create Supabase client - only on client side
-let supabaseInstance: ReturnType<typeof createClient> | null = null
+let supabaseInstance: any = null
 
 export const getSupabase = () => {
   if (typeof window === 'undefined') return null
   
   if (!supabaseInstance && isSupabaseConfigured) {
-    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: true
-      },
-      realtime: {
-        params: {
-          eventsPerSecond: 10
+    // Dynamically import createClient only on client side
+    import('@supabase/supabase-js').then(({ createClient }) => {
+      supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true
         }
-      }
-    })
+      })
+    }).catch(console.error)
   }
   
   return supabaseInstance

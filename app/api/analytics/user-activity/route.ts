@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
                           'anonymous'
     const includeDetails = searchParams.get('details') === 'true'
 
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Mendapatkan aktivitas user menggunakan function
-    const { data, error } = await supabase
+    const { data, error } = await supabaseServer
       .rpc('get_user_activity', { user_id_param: userIdentifier })
 
     if (error) throw error
