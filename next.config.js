@@ -1,3 +1,6 @@
+// Load polyfills before anything else
+require('./polyfill')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -172,8 +175,10 @@ const nextConfig = {
       path: false,
     }
     
-    // Prevent secrets from being bundled
+                    // Prevent secrets from being bundled
     config.plugins = config.plugins || []
+    
+
     
     return config
   },
