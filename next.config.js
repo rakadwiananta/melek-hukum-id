@@ -1,5 +1,4 @@
-// Load polyfills before anything else
-require('./polyfill')
+// Polyfills loaded via NODE_OPTIONS in build script
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -57,23 +56,11 @@ const nextConfig = {
       'supabase.co',
       'wacanahukum.com'
     ],
-    // Add remote patterns for more flexible matching
+    // Simplified remote patterns to avoid webpack issues
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'i.ibb.co.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: 'i.ibb.co',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.supabase.co',
         port: '',
         pathname: '/**',
       },
@@ -83,16 +70,15 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
-
     ],
     // Unoptimized fallback for problematic images
     unoptimized: false,
   },
   
-  // Enhanced experimental optimizations
+  // Enhanced experimental optimizations - disabled to avoid webpack runtime issues
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
-    optimizeCss: true,
+    // optimizePackageImports: ['lucide-react', 'framer-motion'], // Disabled
+    // optimizeCss: true, // Disabled
   },
   
   // Turbopack configuration
@@ -113,16 +99,21 @@ const nextConfig = {
   
   // Enhanced webpack configuration for performance
   webpack: (config, { dev, isServer }) => {
-    // Exclude Supabase from server-side bundling to avoid realtime issues
+    // Exclude problematic libraries from server-side bundling
     if (isServer) {
       config.externals = config.externals || []
       config.externals.push('@supabase/realtime-js')
       config.externals.push('@supabase/supabase-js')
+      config.externals.push('framer-motion')
+      config.externals.push('midtrans-client')
     }
     
-    // Production optimizations
+    // Production optimizations - simplified to avoid webpack runtime issues
     if (!dev) {
       config.optimization.minimize = true
+      config.devtool = false
+      
+      // Simplified chunk splitting to avoid runtime issues
       config.optimization.splitChunks = {
         chunks: 'all',
         cacheGroups: {
@@ -131,31 +122,9 @@ const nextConfig = {
             name: 'vendors',
             chunks: 'all',
             priority: 10,
-            enforce: true,
-          },
-          common: {
-            name: 'common',
-            minChunks: 2,
-            chunks: 'all',
-            enforce: true,
-            priority: 5,
-          },
-          framer: {
-            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
-            name: 'framer-motion',
-            chunks: 'all',
-            priority: 20,
           },
         },
       }
-      config.devtool = false
-      
-      // Tree shaking optimizations
-      config.optimization.usedExports = true
-      config.optimization.sideEffects = false
-      
-      // Module concatenation
-      config.optimization.concatenateModules = true
     }
     
     // Module resolution optimizations

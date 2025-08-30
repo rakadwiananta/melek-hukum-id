@@ -1,11 +1,4 @@
-// Polyfill for 'self' global that doesn't interfere with webpack
+// Minimal polyfill for 'self' global
 if (typeof global !== 'undefined' && typeof global.self === 'undefined') {
-  // Use a getter to avoid polluting the global scope
-  Object.defineProperty(global, 'self', {
-    get: function() {
-      return global;
-    },
-    enumerable: false,
-    configurable: true,
-  });
+  global.self = global;
 }
