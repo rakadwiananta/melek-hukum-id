@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
     // Jika diminta detail, ambil data aktivitas lengkap
     if (includeDetails) {
       // Artikel yang di-like
-      const { data: likedArticles } = await supabase
+      const { data: likedArticles } = await supabaseServer
         .from('article_likes')
         .select(`
           article_id,
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
         .limit(10)
 
       // Komentar yang dibuat
-      const { data: userComments } = await supabase
+      const { data: userComments } = await supabaseServer
         .from('article_comments')
         .select(`
           id,
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
         .limit(10)
 
       // Artikel yang di-bookmark
-      const { data: bookmarkedArticles } = await supabase
+      const { data: bookmarkedArticles } = await supabaseServer
         .from('article_bookmarks')
         .select(`
           article_id,
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
         .limit(10)
 
       // Aktivitas harian (7 hari terakhir)
-      const { data: dailyActivity } = await supabase
+      const { data: dailyActivity } = await supabaseServer
         .from('daily_activity')
         .select('*')
         .gte('activity_date', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0])

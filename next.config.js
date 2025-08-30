@@ -110,6 +110,13 @@ const nextConfig = {
   
   // Enhanced webpack configuration for performance
   webpack: (config, { dev, isServer }) => {
+    // Exclude Supabase from server-side bundling to avoid realtime issues
+    if (isServer) {
+      config.externals = config.externals || []
+      config.externals.push('@supabase/realtime-js')
+      config.externals.push('@supabase/supabase-js')
+    }
+    
     // Production optimizations
     if (!dev) {
       config.optimization.minimize = true

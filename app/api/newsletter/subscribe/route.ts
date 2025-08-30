@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { data: existing } = await supabase
+    const { data: existing } = await supabaseServer
       .from('newsletter_subscribers')
       .select('id, status')
       .eq('email', email)
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         )
       } else {
         // Reactivate subscription
-        const { error } = await supabase
+        const { error } = await supabaseServer
           .from('newsletter_subscribers')
           .update({ 
             status: 'active',
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       }
     } else {
       // Insert new subscriber
-      const { error } = await supabase
+      const { error } = await supabaseServer
         .from('newsletter_subscribers')
         .insert({
           email,

@@ -13,8 +13,8 @@ export async function GET(request: NextRequest) {
 
   try {
     // Test 1: Supabase Configuration
-    results.supabase_configured = !!supabase
-    if (!supabase) {
+    results.supabase_configured = !!supabaseServer
+    if (!supabaseServer) {
       return NextResponse.json({
         ...results,
         error: 'Supabase not configured. Check environment variables.'
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 
     // Test 2: Connection Test
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseServer
         .from('articles')
         .select('count')
         .limit(1)
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
 
     // Test 3: Articles Table Test
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseServer
         .from('articles')
         .select('id, title, view_count, like_count')
         .limit(3)
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
       // Try to call a simple RPC function with a real article ID if available
       const testArticleId = results.articles_test?.articles?.[0]?.id || 'f47ac10b-58cc-4372-a567-0e02b2c3d479'
       
-      const { data, error } = await supabase
+      const { data, error } = await supabaseServer
         .rpc('get_article_stats', { article_id_param: testArticleId })
 
       results.rpc_functions_test = {
@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
       const testArticleId = results.articles_test.articles[0].id
       
       try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseServer
           .rpc('increment_article_views', {
             article_id_param: testArticleId,
             viewer_ip: 'debug-test',
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
   try {
     const { articleId, action } = await request.json()
 
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json({
         error: 'Supabase not configured'
       }, { status: 500 })
@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
 
     if (action === 'get_stats') {
       // Get current stats
-      const { data, error } = await supabase
+      const { data, error } = await supabaseServer
         .rpc('get_article_stats', { article_id_param: articleId })
 
       return NextResponse.json({
@@ -158,7 +158,7 @@ export async function POST(request: NextRequest) {
       })
     } else {
       // Increment view
-      const { data, error } = await supabase
+      const { data, error } = await supabaseServer
         .rpc('increment_article_views', {
           article_id_param: articleId,
           viewer_ip: 'debug-manual-test',

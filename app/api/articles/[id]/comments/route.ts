@@ -9,7 +9,7 @@ export async function POST(
     const { id: articleId } = await params
     const { content, author_name, author_email } = await request.json()
     
-    if (!supabase || !supabaseAdmin) {
+    if (!supabaseServer || !supabaseAdmin) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -38,7 +38,7 @@ export async function POST(
                           'anonymous'
 
     // Check for spam (same user commenting too frequently)
-    const { data: recentComments } = await supabase
+    const { data: recentComments } = await supabaseServer
       .from('article_comments')
       .select('created_at')
       .eq('user_identifier', userIdentifier)
@@ -53,7 +53,7 @@ export async function POST(
     }
 
     // Add comment
-    const { data: newComment, error: commentError } = await supabase
+    const { data: newComment, error: commentError } = await supabaseServer
       .from('article_comments')
       .insert({
         article_id: articleId,
@@ -70,7 +70,7 @@ export async function POST(
     if (commentError) throw commentError
 
     // Update article comment count
-    const { data: article } = await supabase
+    const { data: article } = await supabaseServer
       .from('articles')
       .select('comment_count')
       .eq('id', articleId)

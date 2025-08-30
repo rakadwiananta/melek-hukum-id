@@ -40,14 +40,8 @@ export const getSupabase = () => {
 export const supabase = getSupabase()
 
 // Create service role client for server-side operations (if needed)
-export const supabaseAdmin = isSupabaseConfigured && supabaseServiceRoleKey
-  ? createClient(supabaseUrl, supabaseServiceRoleKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false
-      }
-    })
-  : null
+// Note: This is not used in client-side code, use supabaseAdmin from supabase-server.ts instead
+export const supabaseAdmin = null
 
 export interface Article {
   id: string

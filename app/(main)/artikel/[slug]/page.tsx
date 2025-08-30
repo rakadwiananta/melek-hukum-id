@@ -145,7 +145,7 @@ export async function generateStaticParams() {
       .eq('status', 'published')
       .limit(100)
     
-    return data?.map((article) => ({
+    return data?.map((article: any) => ({
       slug: article.slug,
     })) || []
   }
