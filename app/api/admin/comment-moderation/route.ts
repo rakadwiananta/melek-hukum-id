@@ -55,10 +55,10 @@ export async function GET(request: NextRequest) {
       .select('status')
 
     const moderationStats = {
-      pending: stats?.filter(s => s.status === 'pending').length || 0,
-      approved: stats?.filter(s => s.status === 'approved').length || 0,
-      rejected: stats?.filter(s => s.status === 'rejected').length || 0,
-      spam: stats?.filter(s => s.status === 'spam').length || 0,
+      pending: stats?.filter((s: any) => s.status === 'pending').length || 0,
+      approved: stats?.filter((s: any) => s.status === 'approved').length || 0,
+      rejected: stats?.filter((s: any) => s.status === 'rejected').length || 0,
+      spam: stats?.filter((s: any) => s.status === 'spam').length || 0,
       total: stats?.length || 0
     }
 
