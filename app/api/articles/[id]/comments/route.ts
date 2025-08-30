@@ -76,7 +76,7 @@ export async function POST(
       .eq('id', articleId)
       .single()
 
-    const newCommentCount = (article?.comment_count || 0) + 1
+    const newCommentCount = ((article?.comment_count as number) || 0) + 1
 
     const { error: updateError } = await supabaseAdmin
       .from('articles')

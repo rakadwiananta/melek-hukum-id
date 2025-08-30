@@ -13,16 +13,32 @@ if (!isSupabaseConfigured && process.env.NODE_ENV !== 'production') {
   console.warn('Required variables: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY')
 }
 
-// Create Supabase client
-export const supabase = isSupabaseConfigured 
-  ? createClient(supabaseUrl, supabaseAnonKey, {
+// Create Supabase client - only on client side
+// Create Supabase client - only on client side
+let supabaseInstance: ReturnType<typeof createClient> | null = null
+
+export const getSupabase = () => {
+  if (typeof window === 'undefined') return null
+  
+  if (!supabaseInstance && isSupabaseConfigured) {
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: true
+      },
+      realtime: {
+        params: {
+          eventsPerSecond: 10
+        }
       }
     })
-  : null
+  }
+  
+  return supabaseInstance
+}
+
+export const supabase = getSupabase()
 
 // Create service role client for server-side operations (if needed)
 export const supabaseAdmin = isSupabaseConfigured && supabaseServiceRoleKey

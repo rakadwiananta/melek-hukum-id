@@ -60,7 +60,7 @@ export async function POST(
 
         if (fetchError) throw fetchError
 
-        const newViewCount = (currentArticle?.view_count || 0) + 1
+        const newViewCount = ((currentArticle?.view_count as number) || 0) + 1
         
         const { data: updateData, error: updateError } = await supabase
           .from('articles')
@@ -85,15 +85,15 @@ export async function POST(
 
       return NextResponse.json({
         success: true,
-        view_count: fallbackData?.new_view_count || 0,
-        message: fallbackData?.message || 'View count updated (simple method)'
+        view_count: (fallbackData as any)?.new_view_count || 0,
+        message: (fallbackData as any)?.message || 'View count updated (simple method)'
       })
     }
 
     return NextResponse.json({
       success: true,
-      view_count: data?.new_view_count || 0,
-      message: data?.message || 'View count updated successfully'
+      view_count: (data as any)?.new_view_count || 0,
+      message: (data as any)?.message || 'View count updated successfully'
     })
 
   } catch (error) {

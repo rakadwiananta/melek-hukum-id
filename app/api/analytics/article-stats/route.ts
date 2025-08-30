@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        data: data[0] || null
+        data: (data as any[])?.[0] || null
       })
     }
 

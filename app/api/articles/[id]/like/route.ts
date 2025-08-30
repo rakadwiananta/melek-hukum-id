@@ -55,7 +55,7 @@ export async function POST(
         .eq('id', articleId)
         .single()
 
-      const newLikeCount = (article?.like_count || 0) + 1
+      const newLikeCount = ((article?.like_count as number) || 0) + 1
 
       const { error: updateError } = await supabaseAdmin
         .from('articles')
@@ -87,7 +87,7 @@ export async function POST(
         .eq('id', articleId)
         .single()
 
-      const newLikeCount = Math.max(0, (article?.like_count || 0) - 1)
+      const newLikeCount = Math.max(0, ((article?.like_count as number) || 0) - 1)
 
       const { error: updateError } = await supabaseAdmin
         .from('articles')

@@ -77,9 +77,9 @@ export default function ArticleCompact({
         if (error) { console.error('Error fetching articles:', error); setArticles([]); return }
 
         if (data) {
-          setArticles(data.map(article => ({
+          setArticles((data as any[]).map(article => ({
             ...article,
-            is_trending: article.view_count > 5000
+            is_trending: (article.view_count as number) > 5000
           })))
         }
       } catch (error) {

@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     if (error) throw error
 
     // Filter berdasarkan kategori jika diperlukan
-    let filteredData = data || []
+    let filteredData = (data as any[]) || []
     if (category) {
       filteredData = filteredData.filter((item: any) => 
         item.category?.toLowerCase() === category.toLowerCase()
