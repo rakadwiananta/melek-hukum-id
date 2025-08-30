@@ -5,8 +5,9 @@ const nextConfig = {
   },
   trailingSlash: false,
   
-  // Static export configuration
-  output: 'export',
+  // Note: Do not set output: 'export' because the app uses API routes and server functions
+  // which require SSR/serverless. Keeping default output enables proper handling on
+  // platforms like Vercel/Netlify via their Next.js adapters.
   
   // Enhanced performance optimizations
   poweredByHeader: false,
