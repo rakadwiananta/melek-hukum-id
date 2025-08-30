@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    const { data: articlesData, error: articlesError } = await supabase
+    const { data: articlesData, error: articlesError } = await supabaseServer
       .from('articles')
       .select('id, slug, title, excerpt, featured_image, category, published_at, author')
       .in('id', articleIds)

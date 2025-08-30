@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  if (!supabase) {
+  if (!supabaseServer) {
     return NextResponse.json({
       error: 'Supabase not configured'
     }, { status: 500 })
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get initial view count
-    const { data: initialArticle } = await supabase
+    const { data: initialArticle } = await supabaseServer
       .from('articles')
       .select('view_count')
       .eq('id', REAL_ARTICLE_ID)
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
 
     // Perform multiple increments
     for (let i = 0; i < testCount; i++) {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseServer
         .rpc('increment_article_views_simple', {
           article_id_param: REAL_ARTICLE_ID,
           viewer_ip: `test-${Date.now()}-${i}`
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get final view count
-    const { data: finalArticle } = await supabase
+    const { data: finalArticle } = await supabaseServer
       .from('articles')
       .select('view_count')
       .eq('id', REAL_ARTICLE_ID)

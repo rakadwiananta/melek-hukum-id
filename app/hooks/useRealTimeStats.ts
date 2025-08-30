@@ -54,9 +54,9 @@ export function useRealTimeStats() {
 
       const articles = data || []
       const totalArticles = articles.length
-      const totalViews = articles.reduce((sum, article) => sum + (Number(article.view_count) || 0), 0)
-      const totalLikes = articles.reduce((sum, article) => sum + (Number(article.like_count) || 0), 0)
-      const uniqueAuthors = new Set(articles.map(article => article.author).filter(Boolean))
+      const totalViews = articles.reduce((sum: number, article: any) => sum + (Number(article.view_count) || 0), 0)
+      const totalLikes = articles.reduce((sum: number, article: any) => sum + (Number(article.like_count) || 0), 0)
+      const uniqueAuthors = new Set(articles.map((article: any) => article.author).filter(Boolean))
       const averageViews = totalArticles > 0 ? Math.round(totalViews / totalArticles) : 0
 
       setStats({
