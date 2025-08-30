@@ -5,6 +5,9 @@ const nextConfig = {
   },
   trailingSlash: false,
   
+  // Static export configuration
+  output: 'export',
+  
   // Enhanced performance optimizations
   poweredByHeader: false,
   reactStrictMode: true,
@@ -321,4 +324,4 @@ const nextConfig = {
   }),
 };
 
-module.exports = nextConfig; 
+module.exports = nextConfig;
