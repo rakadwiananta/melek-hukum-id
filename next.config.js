@@ -52,8 +52,7 @@ const nextConfig = {
       'imgur.com',
       'i.imgur.com',
       'supabase.co',
-      'wacanahukum.com',
-      'bicarahukum.my.id'
+      'wacanahukum.com'
     ],
     // Add remote patterns for more flexible matching
     remotePatterns: [
@@ -81,12 +80,7 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'bicarahukum.my.id',
-        port: '',
-        pathname: '/**',
-      }
+
     ],
     // Unoptimized fallback for problematic images
     unoptimized: false,
