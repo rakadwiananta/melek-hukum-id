@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 
 interface ImageOptimizationConfig {
   enableWebP: boolean
@@ -39,36 +39,11 @@ class AdvancedImageOptimizer {
   }
 
   private imageCache = new Map<string, OptimizedImageData>()
-  private compressionWorker: Worker | null = null
 
   constructor(config?: Partial<ImageOptimizationConfig>) {
     if (config) {
       this.config = { ...this.config, ...config }
     }
-    this.initializeWorker()
-  }
-
-  private initializeWorker() {
-    if (typeof window === 'undefined' || !window.Worker) return
-
-    // Create Web Worker for image processing
-    const workerScript = `
-      self.onmessage = function(e) {
-        const { imageData, config } = e.data
-        
-        // Simulate image compression
-        const compressedSize = Math.floor(imageData.size * (config.compressionLevel / 100))
-        
-        self.postMessage({
-          success: true,
-          compressedSize,
-          format: config.enableAVIF ? 'avif' : config.enableWebP ? 'webp' : 'jpeg'
-        })
-      }
-    `
-
-    const blob = new Blob([workerScript], { type: 'application/javascript' })
-    this.compressionWorker = new Worker(URL.createObjectURL(blob))
   }
 
   // Generate optimized image URLs with Next.js Image optimization
@@ -141,6 +116,8 @@ class AdvancedImageOptimizer {
   }
 
   private supportsFormat(format: string): boolean {
+    if (typeof window === 'undefined') return false
+    
     const canvas = document.createElement('canvas')
     canvas.width = 1
     canvas.height = 1
@@ -162,6 +139,8 @@ class AdvancedImageOptimizer {
       element.src = src
       return
     }
+
+    if (typeof window === 'undefined') return
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -211,42 +190,18 @@ class AdvancedImageOptimizer {
     })
   }
 
-  // Optimize image data
+  // Optimize image data (simplified without Web Worker)
   async optimizeImageData(imageData: ImageData): Promise<OptimizedImageData> {
-    return new Promise((resolve) => {
-      if (!this.compressionWorker) {
-        resolve({
-          src: '',
-          srcSet: '',
-          placeholder: '',
-          format: 'jpeg',
-          dimensions: { width: 0, height: 0 },
-          size: 0
-        })
-        return
-      }
-
-      this.compressionWorker.onmessage = (e) => {
-        const { compressedSize, format } = e.data
-        resolve({
-          src: '',
-          srcSet: '',
-          placeholder: '',
-          format,
-          dimensions: { width: imageData.width, height: imageData.height },
-          size: compressedSize
-        })
-      }
-
-      this.compressionWorker.postMessage({
-        imageData: {
-          width: imageData.width,
-          height: imageData.height,
-          size: imageData.data.length
-        },
-        config: this.config
-      })
-    })
+    const compressedSize = Math.floor(imageData.data.length * (this.config.compressionLevel / 100))
+    
+    return {
+      src: '',
+      srcSet: '',
+      placeholder: '',
+      format: this.getOptimalFormat(),
+      dimensions: { width: imageData.width, height: imageData.height },
+      size: compressedSize
+    }
   }
 
   // Generate responsive image component props
@@ -288,6 +243,8 @@ class AdvancedImageOptimizer {
 
   // Preload critical images
   preloadCriticalImages(images: string[]) {
+    if (typeof window === 'undefined') return
+    
     images.forEach(src => {
       const link = document.createElement('link')
       link.rel = 'preload'
@@ -327,16 +284,49 @@ class AdvancedImageOptimizer {
 
   // Cleanup
   destroy() {
-    if (this.compressionWorker) {
-      this.compressionWorker.terminate()
-      this.compressionWorker = null
-    }
     this.imageCache.clear()
   }
 }
 
-// Singleton instance
-export const advancedImageOptimizer = new AdvancedImageOptimizer()
+// Singleton instance - only create on client side
+let advancedImageOptimizerInstance: AdvancedImageOptimizer | null = null
+
+export const getAdvancedImageOptimizer = () => {
+  if (typeof window === 'undefined') {
+    // Return a dummy instance for SSR
+    return {
+      generateOptimizedUrl: (src: string) => src,
+      generateSrcSet: () => '',
+      generateBlurPlaceholder: () => '',
+      getOptimalFormat: () => 'jpeg' as const,
+      setupProgressiveLoading: () => {},
+      optimizeImageData: async () => ({
+        src: '',
+        srcSet: '',
+        placeholder: '',
+        format: 'jpeg',
+        dimensions: { width: 0, height: 0 },
+        size: 0
+      }),
+      generateImageProps: (src: string, alt: string) => ({ src, alt }),
+      preloadCriticalImages: () => {},
+      getMetrics: () => ({
+        cacheSize: 0,
+        optimizedImages: [],
+        averageCompressionRatio: 0,
+        supportedFormats: { avif: false, webp: false }
+      }),
+      destroy: () => {}
+    }
+  }
+  
+  if (!advancedImageOptimizerInstance) {
+    advancedImageOptimizerInstance = new AdvancedImageOptimizer()
+  }
+  return advancedImageOptimizerInstance
+}
+
+export const advancedImageOptimizer = getAdvancedImageOptimizer()
 
 // React hook for advanced image optimization
 export function useAdvancedImageOptimization() {
@@ -348,8 +338,12 @@ export function useAdvancedImageOptimization() {
   })
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return
+
     const interval = setInterval(() => {
-      setMetrics(advancedImageOptimizer.getMetrics())
+      const optimizer = getAdvancedImageOptimizer()
+      setMetrics(optimizer.getMetrics())
     }, 2000)
 
     return () => {
@@ -357,11 +351,13 @@ export function useAdvancedImageOptimization() {
     }
   }, [])
 
+  const optimizer = getAdvancedImageOptimizer()
+
   return {
     metrics,
-    generateImageProps: advancedImageOptimizer.generateImageProps.bind(advancedImageOptimizer),
-    preloadCriticalImages: advancedImageOptimizer.preloadCriticalImages.bind(advancedImageOptimizer),
-    optimizer: advancedImageOptimizer
+    generateImageProps: optimizer.generateImageProps.bind(optimizer),
+    preloadCriticalImages: optimizer.preloadCriticalImages.bind(optimizer),
+    optimizer
   }
 }
 

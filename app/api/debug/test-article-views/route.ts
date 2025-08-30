@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
         iteration: i + 1,
         success: !error,
         error: error?.message || null,
-        new_view_count: data?.new_view_count || null
+        new_view_count: (data as any)?.new_view_count || null
       })
 
       // Small delay between increments

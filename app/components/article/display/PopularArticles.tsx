@@ -48,7 +48,7 @@ export default function PopularArticles({ limit = 5 }: PopularArticlesProps) {
         }
 
         if (data) {
-          setArticles(data)
+          setArticles(data as any[])
         }
       } catch (error) {
         console.error('Error fetching popular articles:', error)

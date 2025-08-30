@@ -23,10 +23,10 @@ export async function GET(request: NextRequest) {
       .from('article_stats')
       .select('view_count, actual_likes, approved_comments, total_bookmarks')
 
-    const totalViews = overviewStats?.reduce((sum, item) => sum + (item.view_count || 0), 0) || 0
-    const totalLikes = overviewStats?.reduce((sum, item) => sum + (item.actual_likes || 0), 0) || 0
-    const totalComments = overviewStats?.reduce((sum, item) => sum + (item.approved_comments || 0), 0) || 0
-    const totalBookmarks = overviewStats?.reduce((sum, item) => sum + (item.total_bookmarks || 0), 0) || 0
+    const totalViews = overviewStats?.reduce((sum, item) => sum + ((item.view_count as number) || 0), 0) || 0
+    const totalLikes = overviewStats?.reduce((sum, item) => sum + ((item.actual_likes as number) || 0), 0) || 0
+    const totalComments = overviewStats?.reduce((sum, item) => sum + ((item.approved_comments as number) || 0), 0) || 0
+    const totalBookmarks = overviewStats?.reduce((sum, item) => sum + ((item.total_bookmarks as number) || 0), 0) || 0
 
     // 2. Daily Activity untuk periode yang diminta
     let dailyQuery = supabase
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
       .not('category', 'is', null)
 
     const categoryPerformance = categoryStats?.reduce((acc, item) => {
-      const cat = item.category || 'Uncategorized'
+      const cat = (item.category as string) || 'Uncategorized'
       if (!acc[cat]) {
         acc[cat] = {
           category: cat,
@@ -68,10 +68,10 @@ export async function GET(request: NextRequest) {
           article_count: 0
         }
       }
-      acc[cat].total_views += item.view_count || 0
-      acc[cat].total_likes += item.actual_likes || 0
-      acc[cat].total_comments += item.approved_comments || 0
-      acc[cat].total_bookmarks += item.total_bookmarks || 0
+      acc[cat].total_views += (item.view_count as number) || 0
+      acc[cat].total_likes += (item.actual_likes as number) || 0
+      acc[cat].total_comments += (item.approved_comments as number) || 0
+      acc[cat].total_bookmarks += (item.total_bookmarks as number) || 0
       acc[cat].article_count += 1
       return acc
     }, {} as Record<string, any>)
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
       .select('engagement_level')
 
     const engagementDistribution = userEngagement?.reduce((acc, item) => {
-      const level = item.engagement_level || 'Low'
+      const level = (item.engagement_level as string) || 'Low'
       acc[level] = (acc[level] || 0) + 1
       return acc
     }, {} as Record<string, number>)

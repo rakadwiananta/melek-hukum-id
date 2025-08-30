@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 
     if (error) throw error
 
-    const userActivity = data[0] || {
+    const userActivity = (data as any[])?.[0] || {
       user_identifier: userIdentifier,
       total_likes: 0,
       total_comments: 0,

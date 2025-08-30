@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
             status: 'active',
             subscribed_at: new Date().toISOString()
           })
-          .eq('id', existing.id)
+          .eq('id', existing.id as string)
 
         if (error) throw error
       }

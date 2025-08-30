@@ -63,7 +63,7 @@ export default function ArticleFeatured({
         }
 
         if (data) {
-          setArticles(data)
+          setArticles(data as any[])
         }
       } catch (error) {
         console.error('Error fetching featured articles:', error)

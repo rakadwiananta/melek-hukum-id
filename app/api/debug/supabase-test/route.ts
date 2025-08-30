@@ -52,9 +52,9 @@ export async function GET(request: NextRequest) {
         sample_articles: data?.length || 0,
         articles: data?.map(article => ({
           id: article.id,
-          title: article.title?.substring(0, 50) + '...',
-          view_count: article.view_count || 0,
-          like_count: article.like_count || 0
+          title: ((article.title as string)?.substring(0, 50) || '') + '...',
+          view_count: (article.view_count as number) || 0,
+          like_count: (article.like_count as number) || 0
         })) || []
       }
     } catch (err) {

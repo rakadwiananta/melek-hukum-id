@@ -76,7 +76,7 @@ export default function ArticleHero({
           console.error('Error fetching featured article:', featuredError)
           setFeaturedArticle(null)
         } else if (featuredData) {
-          setFeaturedArticle(featuredData)
+          setFeaturedArticle(featuredData as any)
         }
 
         const { data: trendingData, error: trendingError } = await supabase
@@ -89,7 +89,7 @@ export default function ArticleHero({
           console.error('Error fetching trending articles:', trendingError)
           setTrendingArticles([])
         } else if (trendingData) {
-          setTrendingArticles(trendingData)
+          setTrendingArticles(trendingData as any[])
         }
       } catch (error) {
         console.error('Error fetching hero content:', error)

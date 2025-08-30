@@ -52,7 +52,7 @@ export default function CategoryArticles({
         if (error) { console.error('Error fetching category articles:', error); setArticles([]); return }
 
         if (data) {
-          setArticles(data)
+          setArticles(data as any[])
         }
       } catch (error) {
         console.error('Error fetching category articles:', error)

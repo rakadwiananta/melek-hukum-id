@@ -143,7 +143,7 @@ export async function getArticleBySlug(slug: string): Promise<DbArticle | null> 
     return null
   }
 
-  return (data as DbArticle) || null
+  return (data as unknown as DbArticle) || null
 }
 
 export async function getRelatedArticles(
@@ -167,7 +167,7 @@ export async function getRelatedArticles(
     return []
   }
 
-  return data as DbArticle[]
+  return data as unknown as DbArticle[]
 }
 
 export interface CategorizedArticles {

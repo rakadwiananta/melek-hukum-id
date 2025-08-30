@@ -57,7 +57,7 @@ export default function ArticleTimeline({
         if (error) { console.error('Error fetching articles:', error); setArticles([]); return }
 
         if (data) {
-          setArticles(data)
+          setArticles(data as any[])
         }
       } catch (error) {
         console.error('Error fetching articles:', error)

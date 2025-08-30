@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -24,13 +24,13 @@ export async function GET(request: NextRequest) {
                 'unknown'
 
     // Perform full-text search
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
       )
     }
-    const { data, error, count } = await supabase
+    const { data, error, count } = await supabaseServer
       .from('articles')
       .select('*', { count: 'exact' })
       .eq('status', 'published')
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
     if (error) throw error
 
     // Log search query
-    await supabase
+    await supabaseServer
       .from('search_queries')
       .insert({
         query,
