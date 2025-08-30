@@ -18,8 +18,16 @@ const ADSENSE_CLIENT_ID = 'ca-pub-9240032692197811'
 const GOOGLE_VERIFICATION = 'googlecdb930fb42e17478'
 
 export const metadata: Metadata = {
-  title: 'Wacana Hukum',
-  description: 'Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia',
+  title: {
+    template: '%s | Wacana Hukum',
+    default: 'Wacana Hukum - Portal Hukum Indonesia Terpercaya'
+  },
+  description: 'Portal hukum Indonesia terpercaya dengan artikel, regulasi, dan solusi hukum terkini. Akses informasi hukum yang akurat dan mudah dipahami.',
+  keywords: 'hukum indonesia, artikel hukum, regulasi, konsultasi hukum, portal hukum',
+  authors: [{ name: 'Tim Wacana Hukum' }],
+  creator: 'Wacana Hukum',
+  publisher: 'Wacana Hukum',
+  metadataBase: new URL('https://wacanahukum.com'),
   verification: {
     google: GOOGLE_VERIFICATION,
   },
