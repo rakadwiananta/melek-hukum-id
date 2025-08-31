@@ -15,11 +15,13 @@ if (!isSupabaseConfigured && process.env.NODE_ENV !== 'production') {
 }
 
 // Create Supabase client - only on client side
-// Create Supabase client - only on client side
 let supabaseInstance: any = null
 
 export const getSupabase = () => {
-  if (typeof window === 'undefined') return null
+  // Only create client on client side
+  if (typeof window === 'undefined') {
+    return null
+  }
   
   if (!supabaseInstance && isSupabaseConfigured) {
     // Dynamically import createClient only on client side
@@ -29,6 +31,12 @@ export const getSupabase = () => {
           autoRefreshToken: true,
           persistSession: true,
           detectSessionInUrl: true
+        },
+        realtime: {
+          // Disable realtime to avoid SSR issues
+          params: {
+            eventsPerSecond: 0
+          }
         }
       })
     }).catch(console.error)
