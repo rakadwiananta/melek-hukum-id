@@ -9,6 +9,45 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   
+  // Cache busting and headers configuration
+  generateBuildId: async () => {
+    // Generate unique build ID for cache busting
+    return `build-${Date.now()}`
+  },
+  
+  // Headers for cache control
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/api/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+        ],
+      },
+    ]
+  },
+  
   // Enhanced image configuration for better performance
   images: {
     formats: ['image/webp', 'image/avif'],
