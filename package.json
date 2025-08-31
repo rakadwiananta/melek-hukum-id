@@ -27,6 +27,7 @@
     "performance:test": "npm run build && npm run start & sleep 10 && npm run performance:audit && pkill -f 'next start'",
     "clean": "rm -rf .next out dist",
     "clear-cache": "node scripts/clear-cache.js",
+    "fix-mime-types": "node scripts/fix-mime-types.js",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
