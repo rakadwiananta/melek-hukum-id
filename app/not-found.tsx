@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import ClientOnly from '@/app/components/ui/ClientOnly'
 
 // Force dynamic rendering to avoid SSR issues
 export const dynamic = 'force-dynamic'
@@ -14,8 +15,19 @@ export default function NotFound() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-brown-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full text-center">
+    <ClientOnly fallback={
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-brown-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center">
+          <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <AlertCircle className="h-12 w-12 text-red-500" />
+          </div>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-brown-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center">
         <div className="mb-8">
           <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <AlertCircle className="h-12 w-12 text-red-500" />
@@ -58,5 +70,6 @@ export default function NotFound() {
         </div>
       </div>
     </div>
+    </ClientOnly>
   )
 }

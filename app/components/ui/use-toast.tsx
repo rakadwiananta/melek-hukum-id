@@ -39,24 +39,23 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useToast() {
-  const [isMounted, setIsMounted] = useState(false)
+  // Always return a safe implementation to avoid SSR issues
+  const [toasts, setToasts] = useState<Toast[]>([])
   
-  useEffect(() => {
-    setIsMounted(true)
+  const toast = useCallback((newToast: Omit<Toast, 'id'>) => {
+    if (typeof window !== 'undefined') {
+      const id = Math.random().toString(36).substr(2, 9)
+      setToasts((prev) => [...prev, { ...newToast, id }])
+    }
+  }, [])
+
+  const dismiss = useCallback((id: string) => {
+    if (typeof window !== 'undefined') {
+      setToasts((prev) => prev.filter((toast) => toast.id !== id))
+    }
   }, [])
   
-  const context = useContext(ToastContext)
-  
-  if (!isMounted || !context) {
-    // Return a fallback implementation for SSR or when context is not available
-    return {
-      toasts: [],
-      toast: () => {},
-      dismiss: () => {},
-    }
-  }
-  
-  return context
+  return { toasts, toast, dismiss }
 }
 
 // Export toast function for convenience

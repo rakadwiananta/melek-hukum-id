@@ -8,7 +8,12 @@ const nextConfig = {
   trailingSlash: false,
   
   // Force dynamic rendering to avoid SSR context issues
-  output: 'standalone',
+  // output: 'export', // Disabled due to API routes
+  
+  // Disable static optimization completely
+  generateBuildId: async () => {
+    return 'dynamic-build'
+  },
   
   // Enhanced performance optimizations
   poweredByHeader: false,
@@ -82,8 +87,6 @@ const nextConfig = {
   experimental: {
     // optimizePackageImports: ['lucide-react', 'framer-motion'], // Disabled
     // optimizeCss: true, // Disabled
-    staticGenerationMaxConcurrency: 1,
-    staticGenerationMinPagesPerWorker: 1,
   },
   
   // Disable SSR for problematic packages
@@ -115,6 +118,14 @@ const nextConfig = {
       config.externals.push('framer-motion')
       config.externals.push('midtrans-client')
     }
+    
+    // Disable static generation for problematic pages
+    config.plugins = config.plugins || []
+    config.plugins.push(
+      new (require('webpack')).DefinePlugin({
+        'process.env.NEXT_STATIC_GENERATION': JSON.stringify('false'),
+      })
+    )
     
     // Production optimizations - disabled to avoid webpack runtime issues
     if (!dev) {
