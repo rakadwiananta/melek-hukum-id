@@ -98,32 +98,8 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-  ],
-  // Optimize for production
-  future: {
-    hoverOnlyWhenSupported: true,
-  },
-  // Disable unused features for better performance
-  corePlugins: {
-    preflight: true,
-    container: false, // Use custom container
-    accessibility: false, // Disable if not needed
-  },
-  // Optimize variants
-  variants: {
-    extend: {
-      opacity: ['disabled'],
-      cursor: ['disabled'],
-      backgroundColor: ['active', 'disabled'],
-      textColor: ['active', 'disabled'],
-      borderColor: ['active', 'disabled'],
-      scale: ['active', 'group-hover'],
-      rotate: ['active', 'group-hover'],
-      translate: ['active', 'group-hover'],
-    },
-  },
+  plugins: [],
 }
 
 export default config
+<!-- Update: Hello to Goodbye -->

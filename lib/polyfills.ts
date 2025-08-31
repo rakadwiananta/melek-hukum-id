@@ -21,4 +21,6 @@ if (typeof global !== 'undefined') {
   (global as any).self = global;
 }
 
-export {};
+export {}
+
+// Update: Hello to Goodbye

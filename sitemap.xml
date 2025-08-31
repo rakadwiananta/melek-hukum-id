@@ -100,25 +100,25 @@
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/kamus-hukum/konsultasi-hukum</loc>
+  <loc>https://wacanahukum.com/kamus-hukum/notaris</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/kamus-hukum/pengacara</loc>
+  <loc>https://wacanahukum.com/kamus-hukum/hakim</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/kamus-hukum/paralegal</loc>
+  <loc>https://wacanahukum.com/kamus-hukum/jaksa</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/kamus-hukum/legal-aid</loc>
+  <loc>https://wacanahukum.com/kamus-hukum/polisi</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
@@ -126,185 +126,173 @@
 
 <!-- Panduan Section -->
 <url>
-  <loc>https://wacanahukum.com/panduan/cara-mencari-pengacara</loc>
+  <loc>https://wacanahukum.com/panduan/jual-beli-tanah</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
+  <priority>0.85</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/panduan/biaya-jasa-pengacara</loc>
+  <loc>https://wacanahukum.com/panduan/prosedur-pelaporan</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
+  <priority>0.85</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/panduan/prosedur-konsultasi-hukum</loc>
+  <loc>https://wacanahukum.com/panduan/cerai-gugat-cerai-talak</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
+  <priority>0.85</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/panduan/bantuan-hukum-gratis</loc>
+  <loc>https://wacanahukum.com/panduan/balik-nama-kendaraan</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/panduan/hak-dan-kewajiban-klien</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/panduan/memilih-pengacara-yang-tepat</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/panduan/persiapan-konsultasi-hukum</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/panduan/dokumen-yang-diperlukan</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/panduan/etika-profesi-advokat</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/panduan/kode-etik-pengacara</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
+  <priority>0.85</priority>
 </url>
 
 <!-- Solusi Section -->
 <url>
-  <loc>https://wacanahukum.com/solusi/masalah-keluarga</loc>
+  <loc>https://wacanahukum.com/solusi/surat-perjanjian-kerja</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.85</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/solusi/surat-kuasa</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.85</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/solusi/surat-perjanjian-jual-beli</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.85</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/solusi/surat-perjanjian-sewa-menyewa</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.85</priority>
+</url>
+
+<!-- Tools Section -->
+<url>
+  <loc>https://wacanahukum.com/tools/kalkulator-denda</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/solusi/sengketa-bisnis</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/solusi/masalah-properti</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/solusi/kasus-pidana</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/solusi/sengketa-perdata</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/solusi/masalah-ketenagakerjaan</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/solusi/hukum-kontrak</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/solusi/perlindungan-konsumen</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/solusi/hukum-waris</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/solusi/perceraian</loc>
+  <loc>https://wacanahukum.com/tools/kuis-korupsi</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 
+<!-- Static Pages -->
+<url>
+  <loc>https://wacanahukum.com/tentang</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/kontak</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/kerjasama</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/tim</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/privacy</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/terms</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/disclaimer</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/cookies</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.50</priority>
+</url>
+
+<!-- Article Pages -->
+<url>
+  <loc>https://wacanahukum.com/artikel/cara-mengurus-perceraian-2024</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.75</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/artikel/cara-mendirikan-pt-2024</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.75</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/artikel/hak-asuh-anak-setelah-cerai</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.75</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/artikel/umkm-naik-kelas-pt-perorangan</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.75</priority>
+</url>
+<url>
+  <loc>https://wacanahukum.com/artikel/cara-mengajukan-gugatan-cerai-tanpa-pengacara</loc>
+  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.75</priority>
+</url>
+
 <!-- Regulasi Section -->
 <url>
-  <loc>https://wacanahukum.com/regulasi/undang-undang-terbaru</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/regulasi/peraturan-pemerintah</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/regulasi/keputusan-mahkamah-agung</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/regulasi/yurisprudensi</loc>
+  <loc>https://wacanahukum.com/regulasi/uu-ite</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/regulasi/perda-terbaru</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/regulasi/kuhp-terbaru</loc>
+  <loc>https://wacanahukum.com/regulasi/uu-perkawinan</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/regulasi/kuhap</loc>
+  <loc>https://wacanahukum.com/regulasi/uu-pidana</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/regulasi/kuh-perdata</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/regulasi/undang-undang-advokat</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/regulasi/peraturan-bantuan-hukum</loc>
+  <loc>https://wacanahukum.com/regulasi/uu-perdata</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
@@ -312,122 +300,43 @@
 
 <!-- Anti-Korupsi Section -->
 <url>
-  <loc>https://wacanahukum.com/anti-korupsi/kpk</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/anti-korupsi/tipikor</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/anti-korupsi/whistleblower</loc>
+  <loc>https://wacanahukum.com/anti-korupsi/cara-melapor</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/anti-korupsi/gratifikasi</loc>
+  <loc>https://wacanahukum.com/anti-korupsi/hak-pelapor</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/anti-korupsi/pencegahan-korupsi</loc>
+  <loc>https://wacanahukum.com/anti-korupsi/perlindungan-pelapor</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/anti-korupsi/pemberantasan-korupsi</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/anti-korupsi/undang-undang-tipikor</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/anti-korupsi/pengadilan-tipikor</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/anti-korupsi/jaksa-penuntut-umum</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/anti-korupsi/asset-recovery</loc>
+  <loc>https://wacanahukum.com/anti-korupsi/komisi-pemberantasan-korupsi</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
 </url>
 
-<!-- Artikel Section -->
+<!-- Payment Pages -->
 <url>
-  <loc>https://wacanahukum.com/artikel/hukum-pidana</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/artikel/hukum-perdata</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/artikel/hukum-administrasi</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/artikel/hukum-bisnis</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/artikel/hukum-keluarga</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.70</priority>
-</url>
-
-<!-- Additional utility pages -->
-<url>
-  <loc>https://wacanahukum.com/tentang</loc>
+  <loc>https://wacanahukum.com/payment-success</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
   <changefreq>monthly</changefreq>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/kontak</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>monthly</changefreq>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://wacanahukum.com/kebijakan-privasi</loc>
-  <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>yearly</changefreq>
   <priority>0.30</priority>
 </url>
 <url>
-  <loc>https://wacanahukum.com/syarat-ketentuan</loc>
+  <loc>https://wacanahukum.com/payment-error</loc>
   <lastmod>2025-08-29T10:00:00+00:00</lastmod>
-  <changefreq>yearly</changefreq>
+  <changefreq>monthly</changefreq>
   <priority>0.30</priority>
 </url>
 
 </urlset>
+<!-- Update: Hello to Goodbye -->

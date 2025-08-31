@@ -1,35 +1,31 @@
 // types/kamus.ts
-export interface Term {
-    id: number
-    term: string
-    category: string
-    definition: string
-    example?: string
-    legalBasis: string
-    relatedTerms?: string[]
-    trending?: boolean
-    englishTerm?: string
-    additionalNotes?: string
-  }
-  
-  export interface Category {
-    id: string
-    name: string
-    count: number
-  }
-  
-  export interface TermsMetadata {
-    total: number
-    lastUpdated: string
-    sources: string[]
-    categories: Category[]
-  }
-  
-  export interface TermsDatabase {
-    metadata: TermsMetadata
-    terms: Term[]
-    getTermsByLetter: (letter: string) => Term[]
-    getRandomTerm: () => Term
-    getTotalByCategory: () => { [key: string]: number }
-  }
+export interface KamusTerm {
+  id: string
+  term: string
+  definition: string
+  category: string
+  examples?: string[]
+  related_terms?: string[]
+  created_at: string
+  updated_at: string
+}
+
+export interface KamusCategory {
+  id: string
+  name: string
+  description: string
+  slug: string
+  term_count: number
+  created_at: string
+  updated_at: string
+}
+
+export interface KamusSearchResult {
+  term: string
+  definition: string
+  category: string
+  relevance_score: number
+}
+
+// Update: Hello to Goodbye
   

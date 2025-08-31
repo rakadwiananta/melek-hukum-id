@@ -71,4 +71,46 @@ export interface SolutionItem {
     | 'Somasi' 
     | 'Panduan' 
     | 'Konsultasi'
+
+export interface SolusiTemplate {
+  id: string
+  title: string
+  description: string
+  category: string
+  content: string
+  variables: TemplateVariable[]
+  created_at: string
+  updated_at: string
+}
+
+export interface TemplateVariable {
+  name: string
+  label: string
+  type: 'text' | 'textarea' | 'select' | 'number' | 'date'
+  required: boolean
+  options?: string[]
+  placeholder?: string
+  default_value?: string
+}
+
+export interface SolusiCategory {
+  id: string
+  name: string
+  description: string
+  slug: string
+  template_count: number
+  created_at: string
+  updated_at: string
+}
+
+export interface GeneratedDocument {
+  id: string
+  template_id: string
+  variables: Record<string, string>
+  content: string
+  created_at: string
+  user_id?: string
+}
+
+// Update: Hello to Goodbye
   
