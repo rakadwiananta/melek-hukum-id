@@ -26,17 +26,17 @@ export const viewport: Viewport = {
 function getMetadataBase(): URL {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
   
-  // If no environment variable is set, use Netlify subdomain
+  // If no environment variable is set, use wacanahukum.com
   if (!siteUrl) {
-    return new URL('https://melek-hukum-id.netlify.app')
+    return new URL('https://wacanahukum.com')
   }
   
   // Validate the URL
   try {
     return new URL(siteUrl)
   } catch (error) {
-    console.warn('Invalid NEXT_PUBLIC_SITE_URL:', siteUrl, 'Using Netlify subdomain')
-    return new URL('https://melek-hukum-id.netlify.app')
+    console.warn('Invalid NEXT_PUBLIC_SITE_URL:', siteUrl, 'Using wacanahukum.com')
+    return new URL('https://wacanahukum.com')
   }
 }
 

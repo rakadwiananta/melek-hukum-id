@@ -61,8 +61,8 @@ NEXT_PUBLIC_MIDTRANS_CLIENT_KEY=your_midtrans_client_key
 MIDTRANS_FIXED_PRICE=10000
 MIDTRANS_ALLOWED_PAYMENT_TYPES=qris,gopay,bank_transfer
 MIDTRANS_DEFAULT_PAYMENT_TYPE=qris
-MIDTRANS_FINISH_URL=https://yourdomain.com/payment-success
-MIDTRANS_ERROR_URL=https://yourdomain.com/payment-error
+MIDTRANS_FINISH_URL=https://wacanahukum.com/payment-success
+MIDTRANS_ERROR_URL=https://wacanahukum.com/payment-error
 ```
 
 ## 🚀 Getting Started
@@ -112,8 +112,8 @@ npm run dev
 
 3. **Konfigurasi URL Redirect:**
    - Di **Settings** → **Snap Preferences** → **Payment Channels**
-   - Set **Finish Redirect URL** ke: `https://yourdomain.com/payment-success`
-   - Set **Error Payment URL** ke: `https://yourdomain.com/payment-error`
+   - Set **Finish Redirect URL** ke: `https://wacanahukum.com/payment-success`
+   - Set **Error Payment URL** ke: `https://wacanahukum.com/payment-error`
    - **PENTING:** Jangan gunakan IP address atau localhost
 
 3. **Environment Variables:**
@@ -125,8 +125,8 @@ npm run dev
    MIDTRANS_DEFAULT_PAYMENT_TYPE=qris
    
    # URL redirect (wajib domain valid, bukan IP/localhost)
-   MIDTRANS_FINISH_URL=https://yourdomain.com/payment-success
-   MIDTRANS_ERROR_URL=https://yourdomain.com/payment-error
+   MIDTRANS_FINISH_URL=https://wacanahukum.com/payment-success
+   MIDTRANS_ERROR_URL=https://wacanahukum.com/payment-error
    ```
 
 ### Testing Payment
