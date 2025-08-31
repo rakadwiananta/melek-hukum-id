@@ -31,12 +31,6 @@ export const getSupabase = () => {
           autoRefreshToken: true,
           persistSession: true,
           detectSessionInUrl: true
-        },
-        realtime: {
-          // Disable realtime to avoid SSR issues
-          params: {
-            eventsPerSecond: 0
-          }
         }
       })
     }).catch(console.error)

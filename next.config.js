@@ -140,36 +140,7 @@ const nextConfig = {
       path: false,
     }
     
-    // Fix for 'self is not defined' error in Supabase/WebSocket
-    config.plugins = config.plugins || []
-    
-    // Define self globally
-    config.plugins.push(
-      new (require('webpack').DefinePlugin)({
-        'typeof self': JSON.stringify('object'),
-        'self': 'globalThis',
-        'global.self': 'globalThis'
-      })
-    )
-    
-    // Provide self as a global variable
-    config.plugins.push(
-      new (require('webpack').ProvidePlugin)({
-        self: 'globalThis'
-      })
-    )
-    
-    // Fallback for self
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      self: false
-    }
-    
-    // Load polyfill before Supabase
-    // config.resolve.alias = {
-    //   ...config.resolve.alias,
-    //   '@supabase/supabase-js': require.resolve('./lib/supabase-polyfill.js')
-    // }
+
     
     // Prevent secrets from being bundled
     config.plugins = config.plugins || []

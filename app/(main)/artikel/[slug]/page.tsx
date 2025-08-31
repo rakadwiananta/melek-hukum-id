@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
-import { supabase } from '@/app/lib/supabase'
+// import { supabase } from '@/app/lib/supabase'
 import { articleRedirectMap } from './route-handler'
 import ArticleSchema from '@/app/components/seo/ArticleSchema'
 import ArticleContent from '@/app/components/article/display/ArticleContent'
@@ -62,94 +62,20 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params
   
-  let article: Article | null = null
-  
-  // Coba ambil dari Supabase terlebih dahulu
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('articles')
-      .select('*')
-      .eq('slug', slug)
-      .eq('status', 'published')
-      .single()
-    
-    if (!error && data) {
-      article = data as unknown as Article
-    }
-  }
-  
-  // Jika tidak ada data, biarkan metadata minimal non-index
-
-  if (!article) {
-    return {
-      title: 'Artikel Tidak Ditemukan - Melek Hukum ID',
-      description: 'Artikel yang Anda cari tidak ditemukan.',
-      robots: {
-        index: false,
-        follow: false,
-      },
-    }
-  }
-
-  const publishedTime = new Date(article.published_at).toISOString()
-  const modifiedTime = new Date(article.updated_at || article.published_at).toISOString()
-
+  // Return minimal metadata for now
   return {
-    title: article.seo_title || `${article.title} - Melek Hukum ID`,
-    description: article.seo_description || article.excerpt,
-    keywords: article.keywords?.join(', ') || article.tags?.join(', ') || '',
-    authors: [{ name: article.author }],
-    openGraph: {
-      title: article.title,
-      description: article.excerpt,
-      type: 'article',
-      publishedTime,
-      modifiedTime,
-      authors: [article.author],
-      images: [
-        {
-          url: article.featured_image,
-          width: 1200,
-          height: 630,
-          alt: article.title,
-        }
-      ],
-      locale: 'id_ID',
-      siteName: 'Melek Hukum ID',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: article.title,
-      description: article.excerpt,
-      images: [article.featured_image],
-      creator: '@melekhukumid',
-    },
-    alternates: {
-      canonical: `https://wacanahukum.com/artikel/${slug}`,
-    },
+    title: 'Artikel - Wacana Hukum',
+    description: 'Portal hukum Indonesia terpercaya dengan artikel, regulasi, dan solusi hukum terkini.',
     robots: {
       index: true,
       follow: true,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
     },
   }
 }
 
 // Generate static params untuk ISR
 export async function generateStaticParams() {
-  if (supabase) {
-    const { data } = await supabase
-      .from('articles')
-      .select('slug')
-      .eq('status', 'published')
-      .limit(100)
-    
-    return data?.map((article: any) => ({
-      slug: article.slug,
-    })) || []
-  }
-  
+  // Return empty array for now
   return []
 }
 
@@ -169,49 +95,65 @@ export default async function ArticlePage({
   let article: Article | null = null
   
   // Coba ambil dari Supabase terlebih dahulu
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('articles')
-      .select(`
-        *,
-        comments(count)
-      `)
-      .eq('slug', slug)
-      .eq('status', 'published')
-      .single()
+  // if (supabase) {
+  //   const { data, error } = await supabase
+  //     .from('articles')
+  //     .select(`
+  //       *,
+  //       comments(count)
+  //     `)
+  //     .eq('slug', slug)
+  //     .eq('status', 'published')
+  //     .single()
     
-    if (!error && data) {
-      article = data as unknown as Article
+  //   if (!error && data) {
+  //     article = data as unknown as Article
       
-      // Update view count
-      await supabase
-        .from('articles')
-        .update({ view_count: ((data.view_count as number) || 0) + 1 })
-        .eq('id', data.id as string)
-    }
-  }
+  //     // Update view count
+  //     await supabase
+  //       .from('articles')
+  //       .update({ view_count: ((data.view_count as number) || 0) + 1 })
+  //       .eq('id', data.id as string)
+  //   }
+  // }
   
-  // Jika tidak ada data, 404
-
+  // Jika tidak ada data, gunakan data dummy untuk sementara
   if (!article) {
-    notFound()
+    article = {
+      id: 'dummy',
+      slug: slug,
+      title: 'Artikel Hukum',
+      excerpt: 'Artikel hukum yang sedang dalam pengembangan.',
+      content: '<h2>Artikel Hukum</h2><p>Artikel ini sedang dalam pengembangan.</p>',
+      featured_image: '/timbangkan.jpg',
+      author: 'Tim Wacana Hukum',
+      category: 'Hukum',
+      tags: ['hukum'],
+      published_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      reading_time: 2,
+      view_count: 0,
+      like_count: 0,
+      comment_count: 0,
+      status: 'published'
+    } as Article
   }
 
   // Get related articles
   let relatedArticles: Article[] = []
-  if (supabase) {
-    const { data } = await supabase
-      .from('articles')
-      .select('*')
-      .eq('category', article.category)
-      .neq('id', article.id)
-      .eq('status', 'published')
-      .limit(3)
+  // if (supabase) {
+  //   const { data } = await supabase
+  //     .from('articles')
+  //     .select('*')
+  //     .eq('category', article.category)
+  //     .neq('id', article.id)
+  //     .eq('status', 'published')
+  //     .limit(3)
     
-    if (data) {
-      relatedArticles = data as unknown as Article[]
-    }
-  }
+  //   if (data) {
+  //     relatedArticles = data as unknown as Article[]
+  //   }
+  // }
 
   // Extract FAQ data from content if available
   const extractFAQData = (content: string) => {
