@@ -22,18 +22,23 @@ export default function CacheControl({ showButton = true, autoRefresh = false }:
 
   // Check domain status
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return
+
     const currentDomain = window.location.hostname
     const storedDomain = localStorage.getItem('site_domain') || ''
     
     setDomainStatus({
       current: currentDomain,
       stored: storedDomain,
-      needsRefresh: storedDomain && storedDomain !== currentDomain
+      needsRefresh: Boolean(storedDomain && storedDomain !== currentDomain)
     })
   }, [])
 
   // Auto refresh on mobile
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    
     if (autoRefresh && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
       const interval = setInterval(() => {
         checkForUpdates()
@@ -46,7 +51,7 @@ export default function CacheControl({ showButton = true, autoRefresh = false }:
   const checkForUpdates = async () => {
     try {
       // Check if service worker is available
-      if ('serviceWorker' in navigator) {
+      if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
         const registration = await navigator.serviceWorker.getRegistration()
         if (registration) {
           registration.update()
@@ -58,6 +63,8 @@ export default function CacheControl({ showButton = true, autoRefresh = false }:
   }
 
   const clearCache = async () => {
+    if (typeof window === 'undefined') return
+    
     setIsRefreshing(true)
     
     try {
@@ -90,6 +97,8 @@ export default function CacheControl({ showButton = true, autoRefresh = false }:
   }
 
   const forceRefresh = () => {
+    if (typeof window === 'undefined') return
+    
     setIsRefreshing(true)
     
     // Add timestamp to force reload
@@ -101,6 +110,8 @@ export default function CacheControl({ showButton = true, autoRefresh = false }:
   }
 
   const verifyDomain = () => {
+    if (typeof window === 'undefined') return
+    
     const currentDomain = window.location.hostname
     localStorage.setItem('site_domain', currentDomain)
     setDomainStatus({
@@ -111,6 +122,8 @@ export default function CacheControl({ showButton = true, autoRefresh = false }:
   }
 
   const testAllResources = async () => {
+    if (typeof window === 'undefined') return
+    
     const resources = [
       '/api/search',
       '/manifest.json',
@@ -205,6 +218,8 @@ export function useCacheControl() {
   }, [])
 
   const clearCache = async () => {
+    if (typeof window === 'undefined') return
+    
     if ('caches' in window) {
       const cacheNames = await caches.keys()
       await Promise.all(
