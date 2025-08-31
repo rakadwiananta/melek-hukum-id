@@ -1,4 +1,8 @@
-// Minimal polyfill for 'self' global
+// Minimal polyfill for 'self' global - only set if not already defined
 if (typeof global !== 'undefined' && typeof global.self === 'undefined') {
-  global.self = global;
+  try {
+    global.self = global;
+  } catch (e) {
+    // Ignore errors
+  }
 }

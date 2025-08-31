@@ -1,6 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+
+// Force dynamic rendering to avoid SSR issues
+export const dynamic = 'force-dynamic'
 import { AlertCircle, Home, ArrowLeft } from 'lucide-react'
 
 export default function NotFound() {

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { createContext, useContext, useState, useCallback } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 
 interface Toast {
   id: string
@@ -39,10 +39,23 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useToast() {
+  const [isMounted, setIsMounted] = useState(false)
+  
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+  
   const context = useContext(ToastContext)
-  if (!context) {
-    throw new Error('useToast must be used within a ToastProvider')
+  
+  if (!isMounted || !context) {
+    // Return a fallback implementation for SSR or when context is not available
+    return {
+      toasts: [],
+      toast: () => {},
+      dismiss: () => {},
+    }
   }
+  
   return context
 }
 

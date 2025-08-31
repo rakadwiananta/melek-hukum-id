@@ -7,6 +7,9 @@ const nextConfig = {
   },
   trailingSlash: false,
   
+  // Force dynamic rendering to avoid SSR context issues
+  output: 'standalone',
+  
   // Enhanced performance optimizations
   poweredByHeader: false,
   reactStrictMode: true,
@@ -79,7 +82,12 @@ const nextConfig = {
   experimental: {
     // optimizePackageImports: ['lucide-react', 'framer-motion'], // Disabled
     // optimizeCss: true, // Disabled
+    staticGenerationMaxConcurrency: 1,
+    staticGenerationMinPagesPerWorker: 1,
   },
+  
+  // Disable SSR for problematic packages
+  serverExternalPackages: ['framer-motion'],
   
   // Turbopack configuration
   turbopack: {
@@ -108,23 +116,12 @@ const nextConfig = {
       config.externals.push('midtrans-client')
     }
     
-    // Production optimizations - simplified to avoid webpack runtime issues
+    // Production optimizations - disabled to avoid webpack runtime issues
     if (!dev) {
-      config.optimization.minimize = true
+      // Disable all optimizations that might cause runtime issues
+      config.optimization.minimize = false
       config.devtool = false
-      
-      // Simplified chunk splitting to avoid runtime issues
-      config.optimization.splitChunks = {
-        chunks: 'all',
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all',
-            priority: 10,
-          },
-        },
-      }
+      config.optimization.splitChunks = false
     }
     
     // Module resolution optimizations

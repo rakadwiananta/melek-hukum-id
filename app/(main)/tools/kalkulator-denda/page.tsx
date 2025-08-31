@@ -1,6 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
+// Force dynamic rendering to avoid SSR issues
+export const dynamic = 'force-dynamic'
 import PageHeader from '@/app/components/ui/PageHeader'
 import { formatNumber, shareUrl } from '@/app/lib/utils'
 import { Calculator, AlertCircle, TrendingUp, Scale, Gavel, Car, Bike, Shield, AlertTriangle, Info, ChevronDown, MapPin, Clock, Users } from 'lucide-react'

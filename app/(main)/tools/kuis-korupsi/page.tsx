@@ -1,6 +1,9 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+
+// Force dynamic rendering to avoid SSR issues
+export const dynamic = 'force-dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import PageHeader from '@/app/components/ui/PageHeader'
 import QuizQuestion from '@/app/components/tools/QuizQuestion'

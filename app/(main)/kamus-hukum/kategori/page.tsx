@@ -1,6 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
+
+// Force dynamic rendering to avoid SSR issues
+export const dynamic = 'force-dynamic'
 import { motion } from 'framer-motion'
 import { 
   BookOpen, Scale, FileText, Shield, Users,
