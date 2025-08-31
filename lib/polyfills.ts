@@ -1,76 +1,24 @@
 // Global polyfills for browser-only APIs in SSR
-// Fix for 'self is not defined' error
-if (typeof globalThis !== 'undefined') {
-  if (typeof (globalThis as any).self === 'undefined') {
+// Fix for 'self is not defined' error in Supabase/WebSocket
+
+// Simple and direct polyfill for 'self'
+if (typeof self === 'undefined') {
+  if (typeof globalThis !== 'undefined') {
     (globalThis as any).self = globalThis;
-  }
-  // Also set self directly on globalThis
-  (globalThis as any).self = globalThis;
-  if (typeof (globalThis as any).window === 'undefined') {
-    (globalThis as any).window = globalThis;
-  }
-  if (typeof (globalThis as any).document === 'undefined') {
-    (globalThis as any).document = {
-      createElement: () => ({}),
-      getElementsByTagName: () => [],
-      head: { appendChild: () => {} },
-      body: { appendChild: () => {} }
-    };
-  }
-  if (typeof (globalThis as any).navigator === 'undefined') {
-    (globalThis as any).navigator = {
-      userAgent: 'Node.js'
-    };
-  }
-  if (typeof (globalThis as any).location === 'undefined') {
-    (globalThis as any).location = {
-      href: 'https://wacanahukum.com',
-      origin: 'https://wacanahukum.com',
-      protocol: 'https:',
-      host: 'wacanahukum.com',
-      hostname: 'wacanahukum.com',
-      pathname: '/',
-      search: '',
-      hash: ''
-    };
+  } else if (typeof global !== 'undefined') {
+    (global as any).self = global;
+  } else if (typeof window !== 'undefined') {
+    (window as any).self = window;
   }
 }
 
-// Node.js environment
+// Ensure self is available in all contexts
+if (typeof globalThis !== 'undefined') {
+  (globalThis as any).self = globalThis;
+}
+
 if (typeof global !== 'undefined') {
-  if (typeof (global as any).self === 'undefined') {
-    (global as any).self = global;
-  }
-  // Also set self directly on global
   (global as any).self = global;
-  if (typeof (global as any).window === 'undefined') {
-    (global as any).window = global;
-  }
-  if (typeof (global as any).document === 'undefined') {
-    (global as any).document = {
-      createElement: () => ({}),
-      getElementsByTagName: () => [],
-      head: { appendChild: () => {} },
-      body: { appendChild: () => {} }
-    };
-  }
-  if (typeof (global as any).navigator === 'undefined') {
-    (global as any).navigator = {
-      userAgent: 'Node.js'
-    };
-  }
-  if (typeof (global as any).location === 'undefined') {
-    (global as any).location = {
-      href: 'https://wacanahukum.com',
-      origin: 'https://wacanahukum.com',
-      protocol: 'https:',
-      host: 'wacanahukum.com',
-      hostname: 'wacanahukum.com',
-      pathname: '/',
-      search: '',
-      hash: ''
-    };
-  }
 }
 
 export {};

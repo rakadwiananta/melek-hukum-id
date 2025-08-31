@@ -140,6 +140,16 @@ const nextConfig = {
       path: false,
     }
     
+    // Fix for 'self is not defined' error in Supabase/WebSocket
+    config.plugins = config.plugins || []
+    config.plugins.push(
+      new (require('webpack').DefinePlugin)({
+        'typeof self': JSON.stringify('object'),
+        'self': 'globalThis',
+        'global.self': 'globalThis'
+      })
+    )
+    
     // Prevent secrets from being bundled
     config.plugins = config.plugins || []
     

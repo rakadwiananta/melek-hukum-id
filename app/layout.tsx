@@ -2,6 +2,15 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+// Polyfill for 'self is not defined' error
+if (typeof self === 'undefined') {
+  if (typeof globalThis !== 'undefined') {
+    (globalThis as any).self = globalThis;
+  } else if (typeof global !== 'undefined') {
+    (global as any).self = global;
+  }
+}
+
 import '../lib/polyfills'
 import { GoogleAnalytics } from '@/app/components/analytics/GoogleAnalytics'
 import { Toaster } from '@/app/components/ui/Toaster'
