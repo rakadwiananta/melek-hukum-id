@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function SpectacularHero() {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -44,9 +45,6 @@ export default function SpectacularHero() {
                 <span className="block">Pahami Hukum</span>
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-rose-600">
                   Indonesia
-                </span>
-                <span className="block text-3xl sm:text-4xl lg:text-5xl xl:text-6xl text-gray-700 mt-2">
-                  dengan Mudah
                 </span>
               </h1>
 

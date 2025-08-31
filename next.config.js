@@ -24,7 +24,7 @@ const nextConfig = {
       'imgur.com',
       'i.imgur.com',
       'supabase.co',
-      'canahukum.com'
+      'wacanahukum.com'
     ],
     // Add remote patterns for more flexible matching
     remotePatterns: [
@@ -48,7 +48,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'canahukum.com',
+        hostname: 'wacanahukum.com',
         port: '',
         pathname: '/**',
       }
