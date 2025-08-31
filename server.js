@@ -1,6 +1,14 @@
 // Minimal Next.js custom server for Plesk/cPanel Node.js hosting
 // Uses PORT provided by the hosting panel, falls back to 3000
 
+// Fix 'self is not defined' error for SSR
+if (typeof global.self === 'undefined') {
+  global.self = global;
+}
+if (typeof global.window === 'undefined') {
+  global.window = global;
+}
+
 const { createServer } = require('http');
 const { parse } = require('url');
 const next = require('next');

@@ -13,34 +13,6 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   
-  // Redirects for domain migration
-  async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'wacanahukum.com',
-          },
-        ],
-        destination: 'https://wacanahukum.com/:path*',
-        permanent: true,
-      },
-      {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'www.wacanahukum.com',
-          },
-        ],
-        destination: 'https://wacanahukum.com/:path*',
-        permanent: true,
-      },
-    ]
-  },
-  
   // Enhanced image configuration for better performance
   images: {
     formats: ['image/webp', 'image/avif'],
@@ -83,8 +55,7 @@ const nextConfig = {
         hostname: 'wacanahukum.com',
         port: '',
         pathname: '/**',
-      },
-
+      }
     ],
     // Unoptimized fallback for problematic images
     unoptimized: false,
@@ -114,13 +85,6 @@ const nextConfig = {
   
   // Enhanced webpack configuration for performance
   webpack: (config, { dev, isServer }) => {
-    // Exclude Supabase from server-side bundling to avoid realtime issues
-    if (isServer) {
-      config.externals = config.externals || []
-      config.externals.push('@supabase/realtime-js')
-      config.externals.push('@supabase/supabase-js')
-    }
-    
     // Production optimizations
     if (!dev) {
       config.optimization.minimize = true
