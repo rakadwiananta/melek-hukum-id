@@ -2,4 +2,12 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/bicarahu/public_html/
-    - /bin/cp -R * $DEPLOYPATH
+    - /bin/cp -R .next $DEPLOYPATH
+    - /bin/cp -R public $DEPLOYPATH
+    - /bin/cp -R package.json $DEPLOYPATH
+    - /bin/cp -R package-lock.json $DEPLOYPATH
+    - /bin/cp -R next.config.js $DEPLOYPATH
+    - /bin/cp -R .env.production $DEPLOYPATH
+    - /bin/cp -R .htaccess $DEPLOYPATH
+    - cd $DEPLOYPATH && npm install --production
+    - cd $DEPLOYPATH && npm run start
