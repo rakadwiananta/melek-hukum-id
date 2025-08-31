@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase, supabaseAdmin } from '@/app/lib/supabase'
+import { supabaseServer, supabaseAdmin } from '@/app/lib/supabase-server'
 
 export async function POST(
   request: NextRequest,
@@ -9,7 +9,7 @@ export async function POST(
     const { id: articleId } = await params
     const { content, author_name, author_email } = await request.json()
     
-    if (!supabase || !supabaseAdmin) {
+    if (!supabaseServer || !supabaseAdmin) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -38,7 +38,7 @@ export async function POST(
                           'anonymous'
 
     // Check for spam (same user commenting too frequently)
-    const { data: recentComments } = await supabase
+    const { data: recentComments } = await supabaseServer
       .from('article_comments')
       .select('created_at')
       .eq('user_identifier', userIdentifier)
@@ -53,7 +53,7 @@ export async function POST(
     }
 
     // Add comment
-    const { data: newComment, error: commentError } = await supabase
+    const { data: newComment, error: commentError } = await supabaseServer
       .from('article_comments')
       .insert({
         article_id: articleId,
@@ -70,13 +70,13 @@ export async function POST(
     if (commentError) throw commentError
 
     // Update article comment count
-    const { data: article } = await supabase
+    const { data: article } = await supabaseServer
       .from('articles')
       .select('comment_count')
       .eq('id', articleId)
       .single()
 
-    const newCommentCount = (article?.comment_count || 0) + 1
+    const newCommentCount = ((article?.comment_count as number) || 0) + 1
 
     const { error: updateError } = await supabaseAdmin
       .from('articles')
@@ -112,7 +112,7 @@ export async function GET(
     const limit = parseInt(searchParams.get('limit') || '10')
     const offset = (page - 1) * limit
     
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -120,7 +120,7 @@ export async function GET(
     }
 
     // Get approved comments
-    const { data: comments, error: commentsError } = await supabase
+    const { data: comments, error: commentsError } = await supabaseServer
       .from('article_comments')
       .select('*')
       .eq('article_id', articleId)
@@ -131,7 +131,7 @@ export async function GET(
     if (commentsError) throw commentsError
 
     // Get total count
-    const { count, error: countError } = await supabase
+    const { count, error: countError } = await supabaseServer
       .from('article_comments')
       .select('*', { count: 'exact', head: true })
       .eq('article_id', articleId)

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
                           'anonymous'
     const includeDetails = searchParams.get('details') === 'true'
 
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -18,12 +18,12 @@ export async function GET(request: NextRequest) {
     }
 
     // Mendapatkan aktivitas user menggunakan function
-    const { data, error } = await supabase
+    const { data, error } = await supabaseServer
       .rpc('get_user_activity', { user_id_param: userIdentifier })
 
     if (error) throw error
 
-    const userActivity = data[0] || {
+    const userActivity = (data as any[])?.[0] || {
       user_identifier: userIdentifier,
       total_likes: 0,
       total_comments: 0,
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
     // Jika diminta detail, ambil data aktivitas lengkap
     if (includeDetails) {
       // Artikel yang di-like
-      const { data: likedArticles } = await supabase
+      const { data: likedArticles } = await supabaseServer
         .from('article_likes')
         .select(`
           article_id,
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
         .limit(10)
 
       // Komentar yang dibuat
-      const { data: userComments } = await supabase
+      const { data: userComments } = await supabaseServer
         .from('article_comments')
         .select(`
           id,
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
         .limit(10)
 
       // Artikel yang di-bookmark
-      const { data: bookmarkedArticles } = await supabase
+      const { data: bookmarkedArticles } = await supabaseServer
         .from('article_bookmarks')
         .select(`
           article_id,
@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
         .limit(10)
 
       // Aktivitas harian (7 hari terakhir)
-      const { data: dailyActivity } = await supabase
+      const { data: dailyActivity } = await supabaseServer
         .from('daily_activity')
         .select('*')
         .gte('activity_date', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0])

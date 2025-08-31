@@ -1,4 +1,5 @@
-import { createClient } from '@supabase/supabase-js'
+// Client-side only Supabase client
+// Note: We're not importing createClient to avoid realtime library issues
 
 // Environment variables
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -13,26 +14,34 @@ if (!isSupabaseConfigured && process.env.NODE_ENV !== 'production') {
   console.warn('Required variables: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY')
 }
 
-// Create Supabase client
-export const supabase = isSupabaseConfigured 
-  ? createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        autoRefreshToken: true,
-        persistSession: true,
-        detectSessionInUrl: true
-      }
-    })
-  : null
+// Create Supabase client - only on client side
+// Create Supabase client - only on client side
+let supabaseInstance: any = null
+
+export const getSupabase = () => {
+  if (typeof window === 'undefined') return null
+  
+  if (!supabaseInstance && isSupabaseConfigured) {
+    // Dynamically import createClient only on client side
+    import('@supabase/supabase-js').then(({ createClient }) => {
+      supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true
+        }
+      })
+    }).catch(console.error)
+  }
+  
+  return supabaseInstance
+}
+
+export const supabase = getSupabase()
 
 // Create service role client for server-side operations (if needed)
-export const supabaseAdmin = isSupabaseConfigured && supabaseServiceRoleKey
-  ? createClient(supabaseUrl, supabaseServiceRoleKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false
-      }
-    })
-  : null
+// Note: This is not used in client-side code, use supabaseAdmin from supabase-server.ts instead
+export const supabaseAdmin = null
 
 export interface Article {
   id: string

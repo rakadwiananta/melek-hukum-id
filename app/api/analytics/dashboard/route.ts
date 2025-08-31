@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 
 export async function GET(request: NextRequest) {
   try {
@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const period = searchParams.get('period') || '7' // days
     const category = searchParams.get('category')
 
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -19,17 +19,17 @@ export async function GET(request: NextRequest) {
       .toISOString().split('T')[0]
 
     // 1. Overview Statistics
-    const { data: overviewStats } = await supabase
+    const { data: overviewStats } = await supabaseServer
       .from('article_stats')
       .select('view_count, actual_likes, approved_comments, total_bookmarks')
 
-    const totalViews = overviewStats?.reduce((sum, item) => sum + (item.view_count || 0), 0) || 0
-    const totalLikes = overviewStats?.reduce((sum, item) => sum + (item.actual_likes || 0), 0) || 0
-    const totalComments = overviewStats?.reduce((sum, item) => sum + (item.approved_comments || 0), 0) || 0
-    const totalBookmarks = overviewStats?.reduce((sum, item) => sum + (item.total_bookmarks || 0), 0) || 0
+    const totalViews = overviewStats?.reduce((sum: number, item: any) => sum + ((item.view_count as number) || 0), 0) || 0
+    const totalLikes = overviewStats?.reduce((sum: number, item: any) => sum + ((item.actual_likes as number) || 0), 0) || 0
+    const totalComments = overviewStats?.reduce((sum: number, item: any) => sum + ((item.approved_comments as number) || 0), 0) || 0
+    const totalBookmarks = overviewStats?.reduce((sum: number, item: any) => sum + ((item.total_bookmarks as number) || 0), 0) || 0
 
     // 2. Daily Activity untuk periode yang diminta
-    let dailyQuery = supabase
+    let dailyQuery = supabaseServer
       .from('daily_activity')
       .select('*')
       .gte('activity_date', startDate)
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     const { data: dailyActivity } = await dailyQuery
 
     // 3. Top Articles
-    let topArticlesQuery = supabase
+    let topArticlesQuery = supabaseServer
       .from('article_stats')
       .select('id, slug, title, category, view_count, actual_likes, approved_comments, popularity_score')
       .order('popularity_score', { ascending: false })
@@ -51,13 +51,13 @@ export async function GET(request: NextRequest) {
     const { data: topArticles } = await topArticlesQuery
 
     // 4. Category Performance
-    const { data: categoryStats } = await supabase
+    const { data: categoryStats } = await supabaseServer
       .from('article_stats')
       .select('category, view_count, actual_likes, approved_comments, total_bookmarks')
       .not('category', 'is', null)
 
-    const categoryPerformance = categoryStats?.reduce((acc, item) => {
-      const cat = item.category || 'Uncategorized'
+    const categoryPerformance = categoryStats?.reduce((acc: any, item: any) => {
+      const cat = (item.category as string) || 'Uncategorized'
       if (!acc[cat]) {
         acc[cat] = {
           category: cat,
@@ -68,10 +68,10 @@ export async function GET(request: NextRequest) {
           article_count: 0
         }
       }
-      acc[cat].total_views += item.view_count || 0
-      acc[cat].total_likes += item.actual_likes || 0
-      acc[cat].total_comments += item.approved_comments || 0
-      acc[cat].total_bookmarks += item.total_bookmarks || 0
+      acc[cat].total_views += (item.view_count as number) || 0
+      acc[cat].total_likes += (item.actual_likes as number) || 0
+      acc[cat].total_comments += (item.approved_comments as number) || 0
+      acc[cat].total_bookmarks += (item.total_bookmarks as number) || 0
       acc[cat].article_count += 1
       return acc
     }, {} as Record<string, any>)
@@ -79,25 +79,25 @@ export async function GET(request: NextRequest) {
     const categoryArray = Object.values(categoryPerformance || {})
 
     // 5. User Engagement Levels
-    const { data: userEngagement } = await supabase
+    const { data: userEngagement } = await supabaseServer
       .from('user_interactions')
       .select('engagement_level')
 
-    const engagementDistribution = userEngagement?.reduce((acc, item) => {
-      const level = item.engagement_level || 'Low'
+    const engagementDistribution = userEngagement?.reduce((acc: any, item: any) => {
+      const level = (item.engagement_level as string) || 'Low'
       acc[level] = (acc[level] || 0) + 1
       return acc
     }, {} as Record<string, number>)
 
     // 6. Recent Activity (untuk real-time feel)
-    const { data: recentLikes } = await supabase
+    const { data: recentLikes } = await supabaseServer
       .from('article_likes')
       .select('created_at, article_id, articles!inner(title)')
       .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
       .order('created_at', { ascending: false })
       .limit(5)
 
-    const { data: recentComments } = await supabase
+    const { data: recentComments } = await supabaseServer
       .from('article_comments')
       .select('created_at, article_id, author_name, articles!inner(title)')
       .eq('status', 'approved')
@@ -106,20 +106,20 @@ export async function GET(request: NextRequest) {
       .limit(5)
 
     // 7. Trending Articles (menggunakan function)
-    const { data: trendingArticles } = await supabase
+    const { data: trendingArticles } = await supabaseServer
       .rpc('get_trending_articles', { days_param: periodDays, limit_param: 5 })
 
     // 8. Comment Moderation Stats
-    const { data: commentModerationStats } = await supabase
+    const { data: commentModerationStats } = await supabaseServer
       .from('article_comments')
       .select('status, created_at')
       .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
 
     const moderationStats = {
-      pending: commentModerationStats?.filter(c => c.status === 'pending').length || 0,
-      approved: commentModerationStats?.filter(c => c.status === 'approved').length || 0,
-      rejected: commentModerationStats?.filter(c => c.status === 'rejected').length || 0,
-      spam: commentModerationStats?.filter(c => c.status === 'spam').length || 0
+      pending: commentModerationStats?.filter((c: any) => c.status === 'pending').length || 0,
+      approved: commentModerationStats?.filter((c: any) => c.status === 'approved').length || 0,
+      rejected: commentModerationStats?.filter((c: any) => c.status === 'rejected').length || 0,
+      spam: commentModerationStats?.filter((c: any) => c.status === 'spam').length || 0
     }
 
     // Compile response

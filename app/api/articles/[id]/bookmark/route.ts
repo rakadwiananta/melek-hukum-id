@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 
 export async function POST(
   request: NextRequest,
@@ -9,7 +9,7 @@ export async function POST(
     const { id: articleId } = await params
     const { action } = await request.json()
     
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -23,7 +23,7 @@ export async function POST(
 
     if (action === 'save') {
       // Check if user already bookmarked this article
-      const { data: existingBookmark } = await supabase
+      const { data: existingBookmark } = await supabaseServer
         .from('article_bookmarks')
         .select('id')
         .eq('article_id', articleId)
@@ -38,7 +38,7 @@ export async function POST(
       }
 
       // Add bookmark
-      const { error: bookmarkError } = await supabase
+      const { error: bookmarkError } = await supabaseServer
         .from('article_bookmarks')
         .insert({
           article_id: articleId,
@@ -55,7 +55,7 @@ export async function POST(
 
     } else if (action === 'unsave') {
       // Remove bookmark
-      const { error: removeError } = await supabase
+      const { error: removeError } = await supabaseServer
         .from('article_bookmarks')
         .delete()
         .eq('article_id', articleId)
@@ -90,7 +90,7 @@ export async function GET(
   try {
     const { id: articleId } = await params
     
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -103,7 +103,7 @@ export async function GET(
                           'anonymous'
 
     // Check if user has bookmarked this article
-    const { data: bookmark } = await supabase
+    const { data: bookmark } = await supabaseServer
       .from('article_bookmarks')
       .select('id')
       .eq('article_id', articleId)

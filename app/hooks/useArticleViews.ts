@@ -105,7 +105,7 @@ export function useArticleViews({
           table: 'articles',
           filter: `id=eq.${articleId}`
         }, 
-        (payload) => {
+        (payload: any) => {
           console.log('Real-time update received:', payload)
           if (payload.new) {
             setViewData(prev => {
@@ -121,7 +121,7 @@ export function useArticleViews({
           }
         }
       )
-      .subscribe((status) => {
+      .subscribe((status: any) => {
         console.log('Subscription status:', status)
       })
 
@@ -208,7 +208,7 @@ export function useArticleListViews(articleIds: string[]) {
           schema: 'public', 
           table: 'articles'
         }, 
-        (payload) => {
+        (payload: any) => {
           if (payload.new && articleIds.includes(payload.new.id)) {
             setViewsData(prev => ({
               ...prev,

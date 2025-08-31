@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10')
     const category = searchParams.get('category')
 
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Mendapatkan artikel trending menggunakan function
-    const { data, error } = await supabase
+    const { data, error } = await supabaseServer
       .rpc('get_trending_articles', { 
         days_param: days, 
         limit_param: limit 
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     if (error) throw error
 
     // Filter berdasarkan kategori jika diperlukan
-    let filteredData = data || []
+    let filteredData = (data as any[]) || []
     if (category) {
       filteredData = filteredData.filter((item: any) => 
         item.category?.toLowerCase() === category.toLowerCase()
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    const { data: articlesData, error: articlesError } = await supabase
+    const { data: articlesData, error: articlesError } = await supabaseServer
       .from('articles')
       .select('id, slug, title, excerpt, featured_image, category, published_at, author')
       .in('id', articleIds)
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
 
     // Menggabungkan data trending dengan data artikel
     const enrichedData = filteredData.map((trendItem: any) => {
-      const articleData = articlesData?.find(article => article.id === trendItem.article_id)
+      const articleData = articlesData?.find((article: any) => article.id === trendItem.article_id)
       return {
         ...trendItem,
         ...articleData,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase, supabaseAdmin } from '@/app/lib/supabase'
+import { supabaseServer, supabaseAdmin } from '@/app/lib/supabase-server'
 
 export async function POST(
   request: NextRequest,
@@ -9,7 +9,7 @@ export async function POST(
     const { id: articleId } = await params
     const { action } = await request.json()
     
-    if (!supabase || !supabaseAdmin) {
+    if (!supabaseServer || !supabaseAdmin) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -23,7 +23,7 @@ export async function POST(
 
     if (action === 'like') {
       // Check if user already liked this article
-      const { data: existingLike } = await supabase
+      const { data: existingLike } = await supabaseServer
         .from('article_likes')
         .select('id')
         .eq('article_id', articleId)
@@ -38,7 +38,7 @@ export async function POST(
       }
 
       // Add like
-      const { error: likeError } = await supabase
+      const { error: likeError } = await supabaseServer
         .from('article_likes')
         .insert({
           article_id: articleId,
@@ -49,13 +49,13 @@ export async function POST(
       if (likeError) throw likeError
 
       // Update article like count
-      const { data: article } = await supabase
+      const { data: article } = await supabaseServer
         .from('articles')
         .select('like_count')
         .eq('id', articleId)
         .single()
 
-      const newLikeCount = (article?.like_count || 0) + 1
+      const newLikeCount = ((article?.like_count as number) || 0) + 1
 
       const { error: updateError } = await supabaseAdmin
         .from('articles')
@@ -72,7 +72,7 @@ export async function POST(
 
     } else if (action === 'unlike') {
       // Remove like
-      const { error: unlikeError } = await supabase
+      const { error: unlikeError } = await supabaseServer
         .from('article_likes')
         .delete()
         .eq('article_id', articleId)
@@ -81,13 +81,13 @@ export async function POST(
       if (unlikeError) throw unlikeError
 
       // Update article like count
-      const { data: article } = await supabase
+      const { data: article } = await supabaseServer
         .from('articles')
         .select('like_count')
         .eq('id', articleId)
         .single()
 
-      const newLikeCount = Math.max(0, (article?.like_count || 0) - 1)
+      const newLikeCount = Math.max(0, ((article?.like_count as number) || 0) - 1)
 
       const { error: updateError } = await supabaseAdmin
         .from('articles')
@@ -124,7 +124,7 @@ export async function GET(
   try {
     const { id: articleId } = await params
     
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -137,7 +137,7 @@ export async function GET(
                           'anonymous'
 
     // Check if user has liked this article
-    const { data: like } = await supabase
+    const { data: like } = await supabaseServer
       .from('article_likes')
       .select('id')
       .eq('article_id', articleId)
@@ -145,7 +145,7 @@ export async function GET(
       .single()
 
     // Get article like count
-    const { data: article } = await supabase
+    const { data: article } = await supabaseServer
       .from('articles')
       .select('like_count')
       .eq('id', articleId)

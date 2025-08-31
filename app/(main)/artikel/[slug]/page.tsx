@@ -74,7 +74,7 @@ export async function generateMetadata({
       .single()
     
     if (!error && data) {
-      article = data
+      article = data as unknown as Article
     }
   }
   
@@ -145,7 +145,7 @@ export async function generateStaticParams() {
       .eq('status', 'published')
       .limit(100)
     
-    return data?.map((article) => ({
+    return data?.map((article: any) => ({
       slug: article.slug,
     })) || []
   }
@@ -181,13 +181,13 @@ export default async function ArticlePage({
       .single()
     
     if (!error && data) {
-      article = data
+      article = data as unknown as Article
       
       // Update view count
       await supabase
         .from('articles')
-        .update({ view_count: (data.view_count || 0) + 1 })
-        .eq('id', data.id)
+        .update({ view_count: ((data.view_count as number) || 0) + 1 })
+        .eq('id', data.id as string)
     }
   }
   
@@ -209,7 +209,7 @@ export default async function ArticlePage({
       .limit(3)
     
     if (data) {
-      relatedArticles = data
+      relatedArticles = data as unknown as Article[]
     }
   }
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 import { z } from 'zod'
 
 export const dynamic = 'force-dynamic'
@@ -20,14 +20,14 @@ export async function POST(request: NextRequest) {
                 'unknown'
 
     // Check if email already exists
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
       )
     }
 
-    const { data: existing } = await supabase
+    const { data: existing } = await supabaseServer
       .from('newsletter_subscribers')
       .select('id, status')
       .eq('email', email)
@@ -41,19 +41,19 @@ export async function POST(request: NextRequest) {
         )
       } else {
         // Reactivate subscription
-        const { error } = await supabase
+        const { error } = await supabaseServer
           .from('newsletter_subscribers')
           .update({ 
             status: 'active',
             subscribed_at: new Date().toISOString()
           })
-          .eq('id', existing.id)
+          .eq('id', existing.id as string)
 
         if (error) throw error
       }
     } else {
       // Insert new subscriber
-      const { error } = await supabase
+      const { error } = await supabaseServer
         .from('newsletter_subscribers')
         .insert({
           email,

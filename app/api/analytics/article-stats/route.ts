@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10')
     const sortBy = searchParams.get('sort') || 'popularity_score'
 
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -18,19 +18,19 @@ export async function GET(request: NextRequest) {
 
     // Jika ada article ID spesifik
     if (articleId) {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseServer
         .rpc('get_article_engagement', { article_id_param: articleId })
 
       if (error) throw error
 
       return NextResponse.json({
         success: true,
-        data: data[0] || null
+        data: (data as any[])?.[0] || null
       })
     }
 
     // Query untuk multiple articles
-    let query = supabase
+    let query = supabaseServer
       .from('article_stats')
       .select('*')
 

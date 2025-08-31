@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase, supabaseAdmin } from '@/app/lib/supabase'
+import { supabaseServer, supabaseAdmin } from '@/app/lib/supabase-server'
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status') || 'pending'
     const priority = searchParams.get('priority') // high, medium, low
 
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Menggunakan view comment_moderation_queue
-    let query = supabase
+    let query = supabaseServer
       .from('comment_moderation_queue')
       .select('*')
 
@@ -50,15 +50,15 @@ export async function GET(request: NextRequest) {
     if (error) throw error
 
     // Mendapatkan statistik moderasi
-    const { data: stats } = await supabase
+    const { data: stats } = await supabaseServer
       .from('article_comments')
       .select('status')
 
     const moderationStats = {
-      pending: stats?.filter(s => s.status === 'pending').length || 0,
-      approved: stats?.filter(s => s.status === 'approved').length || 0,
-      rejected: stats?.filter(s => s.status === 'rejected').length || 0,
-      spam: stats?.filter(s => s.status === 'spam').length || 0,
+      pending: stats?.filter((s: any) => s.status === 'pending').length || 0,
+      approved: stats?.filter((s: any) => s.status === 'approved').length || 0,
+      rejected: stats?.filter((s: any) => s.status === 'rejected').length || 0,
+      spam: stats?.filter((s: any) => s.status === 'spam').length || 0,
       total: stats?.length || 0
     }
 

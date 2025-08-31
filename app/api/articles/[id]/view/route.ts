@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { supabaseServer } from '@/app/lib/supabase-server'
 
 export async function POST(
   request: NextRequest,
@@ -15,7 +15,7 @@ export async function POST(
       )
     }
 
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -31,7 +31,7 @@ export async function POST(
     const now = new Date().toISOString()
 
     // Increment view count using Supabase RPC function
-    const { data, error } = await supabase
+    const { data, error } = await supabaseServer
       .rpc('increment_article_views', {
         article_id_param: id,
         viewer_ip: clientIP,
@@ -42,7 +42,7 @@ export async function POST(
       console.error('Error incrementing view (RPC):', error)
       
       // Fallback: Try simple increment without duplicate check
-      const { data: fallbackData, error: fallbackError } = await supabase
+      const { data: fallbackData, error: fallbackError } = await supabaseServer
         .rpc('increment_article_views_simple', {
           article_id_param: id,
           viewer_ip: clientIP
@@ -52,7 +52,7 @@ export async function POST(
         console.error('Error with simple increment:', fallbackError)
         
         // Final fallback: Direct database update
-        const { data: currentArticle, error: fetchError } = await supabase
+        const { data: currentArticle, error: fetchError } = await supabaseServer
           .from('articles')
           .select('view_count')
           .eq('id', id)
@@ -60,9 +60,9 @@ export async function POST(
 
         if (fetchError) throw fetchError
 
-        const newViewCount = (currentArticle?.view_count || 0) + 1
+        const newViewCount = ((currentArticle?.view_count as number) || 0) + 1
         
-        const { data: updateData, error: updateError } = await supabase
+        const { data: updateData, error: updateError } = await supabaseServer
           .from('articles')
           .update({ 
             view_count: newViewCount,
@@ -85,15 +85,15 @@ export async function POST(
 
       return NextResponse.json({
         success: true,
-        view_count: fallbackData?.new_view_count || 0,
-        message: fallbackData?.message || 'View count updated (simple method)'
+        view_count: (fallbackData as any)?.new_view_count || 0,
+        message: (fallbackData as any)?.message || 'View count updated (simple method)'
       })
     }
 
     return NextResponse.json({
       success: true,
-      view_count: data?.new_view_count || 0,
-      message: data?.message || 'View count updated successfully'
+      view_count: (data as any)?.new_view_count || 0,
+      message: (data as any)?.message || 'View count updated successfully'
     })
 
   } catch (error) {
@@ -122,7 +122,7 @@ export async function GET(
       )
     }
 
-    if (!supabase) {
+    if (!supabaseServer) {
       return NextResponse.json(
         { error: 'Database not configured' },
         { status: 500 }
@@ -130,7 +130,7 @@ export async function GET(
     }
 
     // Get current view count
-    const { data, error } = await supabase
+    const { data, error } = await supabaseServer
       .from('articles')
       .select('id, view_count, like_count, title')
       .eq('id', id)
