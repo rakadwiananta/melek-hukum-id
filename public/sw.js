@@ -1,4 +1,4 @@
-const CACHE_NAME = 'melek-hukum-v1';
+const CACHE_NAME = 'melek-hukum-v2';
 const urlsToCache = [
   '/',
   '/static/css/main.css',
@@ -23,12 +23,12 @@ self.addEventListener('fetch', (event) => {
       .then((response) => {
         // Return cached version or fetch from network
         if (response) {
-          // Check if cache is stale (older than 1 hour)
+          // Check if cache is stale (older than 30 minutes)
           const cacheTime = new Date(response.headers.get('date')).getTime();
           const now = new Date().getTime();
-          const oneHour = 60 * 60 * 1000;
+          const thirtyMinutes = 30 * 60 * 1000;
           
-          if (now - cacheTime < oneHour) {
+          if (now - cacheTime < thirtyMinutes) {
             return response;
           }
         }
@@ -84,4 +84,26 @@ self.addEventListener('message', (event) => {
       );
     });
   }
+  
+  if (event.data && event.data.type === 'FORCE_REFRESH') {
+    // Force refresh all pages
+    self.registration.update();
+    self.skipWaiting();
+  }
 });
+
+// Background sync for offline functionality
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'background-sync') {
+    event.waitUntil(doBackgroundSync());
+  }
+});
+
+async function doBackgroundSync() {
+  try {
+    // Perform background sync tasks
+    console.log('Background sync completed');
+  } catch (error) {
+    console.error('Background sync failed:', error);
+  }
+}

@@ -10,6 +10,27 @@ interface CacheControlProps {
 export default function CacheControl({ showButton = true, autoRefresh = false }: CacheControlProps) {
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date())
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [domainStatus, setDomainStatus] = useState<{
+    current: string
+    stored: string
+    needsRefresh: boolean
+  }>({
+    current: '',
+    stored: '',
+    needsRefresh: false
+  })
+
+  // Check domain status
+  useEffect(() => {
+    const currentDomain = window.location.hostname
+    const storedDomain = localStorage.getItem('site_domain') || ''
+    
+    setDomainStatus({
+      current: currentDomain,
+      stored: storedDomain,
+      needsRefresh: storedDomain && storedDomain !== currentDomain
+    })
+  }, [])
 
   // Auto refresh on mobile
   useEffect(() => {
@@ -79,29 +100,91 @@ export default function CacheControl({ showButton = true, autoRefresh = false }:
     window.location.href = currentUrl.toString()
   }
 
+  const verifyDomain = () => {
+    const currentDomain = window.location.hostname
+    localStorage.setItem('site_domain', currentDomain)
+    setDomainStatus({
+      current: currentDomain,
+      stored: currentDomain,
+      needsRefresh: false
+    })
+  }
+
+  const testAllResources = async () => {
+    const resources = [
+      '/api/search',
+      '/manifest.json',
+      '/robots.txt',
+      '/sitemap.xml'
+    ]
+
+    const results = await Promise.allSettled(
+      resources.map(async (resource) => {
+        const response = await fetch(resource)
+        return {
+          resource,
+          status: response.status,
+          ok: response.ok
+        }
+      })
+    )
+
+    console.log('Resource test results:', results)
+    return results
+  }
+
   return (
     <div className="cache-control">
       {showButton && (
-        <div className="flex gap-2 mb-4">
-          <button
-            onClick={clearCache}
-            disabled={isRefreshing}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isRefreshing ? 'Memperbarui...' : 'Bersihkan Cache'}
-          </button>
-          
-          <button
-            onClick={forceRefresh}
-            disabled={isRefreshing}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isRefreshing ? 'Memperbarui...' : 'Refresh Halaman'}
-          </button>
+        <div className="space-y-4">
+          {/* Domain Status */}
+          <div className="p-4 bg-gray-50 rounded-lg">
+            <h3 className="font-semibold text-gray-900 mb-2">Domain Status</h3>
+            <div className="space-y-2 text-sm">
+              <div>Current Domain: <span className="font-mono text-blue-600">{domainStatus.current}</span></div>
+              <div>Stored Domain: <span className="font-mono text-gray-600">{domainStatus.stored || 'None'}</span></div>
+              {domainStatus.needsRefresh && (
+                <div className="text-red-600 font-medium">⚠️ Domain changed, cache refresh recommended</div>
+              )}
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={clearCache}
+              disabled={isRefreshing}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isRefreshing ? 'Memperbarui...' : 'Bersihkan Cache'}
+            </button>
+            
+            <button
+              onClick={forceRefresh}
+              disabled={isRefreshing}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isRefreshing ? 'Memperbarui...' : 'Refresh Halaman'}
+            </button>
+
+            <button
+              onClick={verifyDomain}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700"
+            >
+              Verifikasi Domain
+            </button>
+
+            <button
+              onClick={testAllResources}
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700"
+            >
+              Test Resources
+            </button>
+          </div>
         </div>
       )}
       
-      <div className="text-xs text-gray-500">
+      <div className="text-xs text-gray-500 mt-4">
         Terakhir diperbarui: {lastUpdate.toLocaleString('id-ID')}
       </div>
     </div>

@@ -25,6 +25,18 @@ const nextConfig = {
             key: 'Cache-Control',
             value: 'public, max-age=0, must-revalidate',
           },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
         ],
       },
       {
@@ -42,6 +54,15 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'no-cache, no-store, must-revalidate',
+          },
+        ],
+      },
+      {
+        source: '/images/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
           },
         ],
       },
@@ -63,7 +84,8 @@ const nextConfig = {
       'imgur.com',
       'i.imgur.com',
       'supabase.co',
-      'wacanahukum.com'
+      'wacanahukum.com',
+      'canahukum.com'
     ],
     // Add remote patterns for more flexible matching
     remotePatterns: [
@@ -88,6 +110,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'wacanahukum.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'canahukum.com',
         port: '',
         pathname: '/**',
       }

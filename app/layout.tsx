@@ -126,6 +126,15 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        
+        {/* Security Headers */}
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+        <meta httpEquiv="X-Frame-Options" content="DENY" />
+        <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
+        <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+        
+        {/* Mixed Content Protection */}
+        <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
       </head>
       <body className={`${inter.className} antialiased`}>
         <FontLoader>
@@ -181,6 +190,27 @@ export default function RootLayout({
               
               // Add force refresh to window object
               window.forceRefresh = forceRefresh;
+              
+              // Clear cache on domain change
+              const currentDomain = window.location.hostname;
+              const storedDomain = localStorage.getItem('site_domain');
+              
+              if (storedDomain && storedDomain !== currentDomain) {
+                // Domain changed, clear all cache
+                if ('caches' in window) {
+                  caches.keys().then(function(names) {
+                    for (let name of names) {
+                      caches.delete(name);
+                    }
+                  });
+                }
+                localStorage.clear();
+                sessionStorage.clear();
+                localStorage.setItem('site_domain', currentDomain);
+                window.location.reload();
+              } else if (!storedDomain) {
+                localStorage.setItem('site_domain', currentDomain);
+              }
             `,
           }}
         />
@@ -210,6 +240,19 @@ export default function RootLayout({
                   }
                 });
               }
+              
+              // Mixed content protection
+              if (window.location.protocol === 'https:') {
+                const images = document.querySelectorAll('img[src^="http:"]');
+                images.forEach(img => {
+                  img.src = img.src.replace('http:', 'https:');
+                });
+                
+                const links = document.querySelectorAll('a[href^="http:"]');
+                links.forEach(link => {
+                  link.href = link.href.replace('http:', 'https:');
+                });
+              }
             `,
           }}
         />
@@ -218,7 +261,7 @@ export default function RootLayout({
           id="google-adsense"
           async
           strategy="afterInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9240032692197811"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
           crossOrigin="anonymous"
         />
       </body>
