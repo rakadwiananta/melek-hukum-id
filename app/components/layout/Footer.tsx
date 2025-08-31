@@ -185,11 +185,11 @@ export default function Footer() {
             <Link href="/" className="flex items-center gap-2 mb-4">
               <Image
                 src="/timbangkan.jpg"
-                alt="Melek Hukum ID"
+                alt="Wacana Hukum"
                 width={32}
                 height={32}
               />
-              <span className="font-bold">Melek Hukum ID</span>
+              <span className="font-bold">Wacana Hukum</span>
             </Link>
             <p className="text-sm text-gray-600">
               Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia
@@ -220,7 +220,7 @@ export default function Footer() {
         <div className="pt-8 border-t">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-600 text-center md:text-left">
-              © {new Date().getFullYear()} Melek Hukum ID. Hak cipta dilindungi.
+              © {new Date().getFullYear()} Wacana Hukum. Hak cipta dilindungi.
             </p>
             
             {/* Social Media Links */}

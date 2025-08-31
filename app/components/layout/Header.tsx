@@ -26,13 +26,13 @@ export default function Header() {
             <Link href="/" className="flex items-center">
               <Image 
                 src="/logo-melek-hukum.svg" 
-                alt="Melek Hukum ID" 
+                alt="Wacana Hukum" 
                 width={32}
                 height={32}
                 className="h-8 w-auto mr-2"
                 priority
               />
-              <span className="text-xl font-bold text-gray-900">Melek Hukum ID</span>
+              <span className="text-xl font-bold text-gray-900">Wacana Hukum</span>
             </Link>
           </div>
 

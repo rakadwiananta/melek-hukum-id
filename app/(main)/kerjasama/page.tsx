@@ -39,7 +39,7 @@ export default function KerjasamaPage() {
                 <li>Akses ke modul edukasi dan template siap pakai.</li>
               </ul>
               <div className="mt-4">
-                <a href="mailto:partnership@melekhukum.id" className="inline-block px-5 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">Kirim Proposal</a>
+                <a href="mailto:partnership@wacanahukum.com" className="inline-block px-5 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">Kirim Proposal</a>
               </div>
             </div>
           </div>

@@ -43,14 +43,14 @@ function getMetadataBase(): URL {
 export const metadata: Metadata = {
   metadataBase: getMetadataBase(),
   title: {
-    default: 'Melek Hukum ID - Platform Edukasi Hukum Indonesia',
-    template: '%s | Melek Hukum ID'
+    default: 'Wacana Hukum - Portal Hukum Indonesia Terpercaya',
+    template: '%s | Wacana Hukum'
   },
-  description: 'Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia. Pelajari hukum dengan mudah, praktis, dan gratis.',
-  keywords: ['hukum indonesia', 'anti korupsi', 'UU ITE', 'panduan hukum', 'cara melapor korupsi', 'edukasi hukum'],
-  authors: [{ name: 'Melek Hukum ID Team' }],
-  creator: 'Melek Hukum ID',
-  publisher: 'Melek Hukum ID',
+  description: 'Portal hukum Indonesia terpercaya dengan artikel, regulasi, dan solusi hukum terkini. Akses informasi hukum yang akurat dan mudah dipahami.',
+  keywords: ['hukum indonesia', 'artikel hukum', 'regulasi', 'konsultasi hukum', 'portal hukum'],
+  authors: [{ name: 'Tim Wacana Hukum' }],
+  creator: 'Wacana Hukum',
+  publisher: 'Wacana Hukum',
   formatDetection: {
     email: false,
     address: false,
@@ -82,21 +82,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'id_ID',
     url: '/',
-    siteName: 'Melek Hukum ID',
-    title: 'Melek Hukum ID - Platform Edukasi Hukum Indonesia',
-    description: 'Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia',
+    siteName: 'Wacana Hukum',
+    title: 'Wacana Hukum - Portal Hukum Indonesia Terpercaya',
+    description: 'Portal hukum Indonesia terpercaya dengan artikel, regulasi, dan solusi hukum terkini',
     images: [{
       url: '/og-image.jpg',
       width: 1200,
       height: 630,
-      alt: 'Melek Hukum ID',
+      alt: 'Wacana Hukum',
     }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Melek Hukum ID',
-    description: 'Platform edukasi hukum dan anti-korupsi',
-    creator: '@melekhukumid',
+    title: 'Wacana Hukum',
+    description: 'Portal hukum Indonesia terpercaya',
+    creator: '@wacanahukum',
     images: ['/twitter-image.jpg'],
   },
   alternates: {
@@ -116,8 +116,8 @@ export default function RootLayout({
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'MelekHukum',
-    alternateName: ['Melek Hukum', 'Melek Hukum ID'],
+    name: 'WacanaHukum',
+          alternateName: ['Wacana Hukum', 'Wacana Hukum Indonesia'],
     url: siteUrl,
   }
 

@@ -87,12 +87,12 @@ export default function KontakPage() {
                 <p className="text-gray-700 mb-2">
                   Email: 
                   <motion.a 
-                    href="mailto:support@melekhukum.id" 
+                    href="mailto:support@wacanahukum.com" 
                     className="font-medium text-gray-700 hover:text-primary underline decoration-dotted underline-offset-4 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:rounded-md ml-2"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    support@melekhukum.id
+                    support@wacanahukum.com
                   </motion.a>
                 </p>
               </div>
