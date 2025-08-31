@@ -1,11 +1,9 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { toast } from '@/app/components/ui/use-toast'
-import { X } from 'lucide-react'
-import NewsletterForm from '@/app/components/ui/NewsletterForm'
-import { Mail, Shield, Bell, Zap } from 'lucide-react'
+import { Mail, Shield, Bell, Zap, CheckCircle } from 'lucide-react'
 
 const benefits = [
   {
@@ -23,253 +21,182 @@ const benefits = [
 ]
 
 export default function Newsletter() {
-  const [isPaying, setIsPaying] = useState(false)
-  const [qrisString, setQrisString] = useState<string | null>(null)
-  const [orderId, setOrderId] = useState<string | null>(null)
-  const [paymentType, setPaymentType] = useState<'qris' | 'snap'>('qris')
+  const [email, setEmail] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubscribed, setIsSubscribed] = useState(false)
 
-  // Muat script Snap otomatis saat user memilih opsi Snap
-  useEffect(() => {
-    if (paymentType !== 'snap') return
-    if (typeof window === 'undefined') return
-    if ((window as any).snap) return
-
-    const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY
-    const script = document.createElement('script')
-    script.src = `https://${process.env.MIDTRANS_IS_PRODUCTION === 'true' ? 'app.midtrans.com' : 'app.sandbox.midtrans.com'}/snap/snap.js`
-    if (clientKey) script.setAttribute('data-client-key', clientKey)
-    document.body.appendChild(script)
-    return () => {
-      script.parentNode && script.parentNode.removeChild(script)
-    }
-  }, [paymentType])
-
-  const handlePayPremium = async () => {
-    try {
-      setIsPaying(true)
-
-      if (paymentType === 'snap') {
-        const res = await fetch('/api/payments/snap', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            // jangan kirim email kosong; biarkan server melakukan sanitasi tambahan
-            customer_details: { first_name: 'Pengguna' },
-          })
-        })
-        if (!res.ok) throw new Error('Gagal membuat transaksi (Snap)')
-        const json = await res.json()
-        setOrderId(json?.order_id || null)
-
-        const token = json?.token
-        if (token && (window as any).snap) {
-          ;(window as any).snap.pay(token, {
-            onSuccess: function () {
-              window.location.href = '/payment-success'
-            },
-            onPending: function () {
-              // biarkan pengguna menyelesaikan nanti
-            },
-            onError: function () {
-              window.location.href = '/payment-error'
-            },
-            onClose: function () {
-              // modal ditutup tanpa membayar
-            },
-          })
-          return
-        }
-
-        // Fallback jika token tidak tersedia
-        if (json?.redirect_url) {
-          window.open(json.redirect_url, '_blank')
-          return
-        }
-
-        toast({ title: 'Order dibuat', description: 'Silakan selesaikan pembayaran.' })
-        return
-      }
-
-      // Core API (QRIS)
-      const res = await fetch('/api/payments/charge', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          payment_type: 'qris',
-          // gross_amount diabaikan di server (harga dikunci 49.000)
-          customer_details: { first_name: 'Pengguna' },
-        })
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!email || !email.includes('@')) {
+      toast({
+        title: 'Email tidak valid',
+        description: 'Masukkan alamat email yang valid',
+        variant: 'destructive'
       })
-      if (!res.ok) throw new Error('Gagal membuat transaksi')
-      const json = await res.json()
-      setOrderId(json?.order_id || null)
+      return
+    }
 
-      const qr = json?.charge?.qr_string || null
-      const actions = json?.charge?.actions || []
+    try {
+      setIsSubmitting(true)
+      
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
 
-      if (qr) {
-        setQrisString(qr)
-        toast({ title: 'Order dibuat', description: 'Silakan scan QRIS untuk menyelesaikan pembayaran.' })
-      } else if (actions && actions[0]?.url) {
-        window.open(actions[0].url, '_blank')
+      if (response.ok) {
+        setIsSubscribed(true)
+        setEmail('')
+        toast({
+          title: 'Berhasil berlangganan!',
+          description: 'Anda akan menerima update terbaru dari kami',
+        })
       } else {
-        toast({ title: 'Order dibuat', description: 'Silakan selesaikan pembayaran di halaman Midtrans.' })
+        const error = await response.json()
+        throw new Error(error.message || 'Gagal berlangganan')
       }
-    } catch (e: any) {
-      toast({ title: 'Gagal membuat pembayaran', description: String(e?.message || e), variant: 'destructive' })
+    } catch (error) {
+      console.error('Newsletter subscription error:', error)
+      toast({
+        title: 'Gagal berlangganan',
+        description: 'Silakan coba lagi nanti',
+        variant: 'destructive'
+      })
     } finally {
-      setIsPaying(false)
+      setIsSubmitting(false)
     }
   }
 
-  return (
-    <section id="newsletterform" className="py-12 md:py-20 bg-primary text-white relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl" />
-      </div>
+  if (isSubscribed) {
+    return (
+      <section className="py-16 bg-gray-900">
+        <div className="container-padding mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="text-center"
+          >
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
+              <CheckCircle className="w-8 h-8 text-green-600" />
+            </div>
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+              Terima Kasih!
+            </h2>
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+              Anda telah berhasil berlangganan newsletter kami. Kami akan mengirimkan update terbaru seputar hukum dan anti-korupsi ke email Anda.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+    )
+  }
 
-      <div className="container-padding mx-auto max-w-7xl relative">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
+  return (
+    <section className="py-16 bg-gray-900">
+      <div className="container-padding mx-auto max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Content */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                <Mail className="h-6 w-6" />
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold">
-                Newsletter Melek Hukum
-              </h2>
-            </div>
-
-            <p className="text-lg text-white/90 mb-8">
-              Dapatkan update mingguan tentang perkembangan hukum, 
-              tips anti-korupsi, dan panduan praktis langsung di inbox Anda.
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+              Dapatkan Update Hukum Terbaru
+            </h2>
+            <p className="text-lg text-gray-300 mb-8">
+              Berlangganan newsletter kami untuk mendapatkan informasi terbaru seputar hukum, regulasi, dan tips anti-korupsi langsung ke email Anda.
             </p>
 
             {/* Benefits */}
-            <div className="space-y-3 mb-8">
-              {benefits.map((benefit, index) => {
-                const Icon = benefit.icon
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                    className="flex items-center gap-3"
-                  >
-                    <Icon className="h-5 w-5 text-white/70" />
-                    <span className="text-white/90">{benefit.text}</span>
-                  </motion.div>
-                )
-              })}
+            <div className="space-y-4 mb-8">
+              {benefits.map((benefit, index) => (
+                <motion.div
+                  key={benefit.text}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="flex items-center space-x-3"
+                >
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <benefit.icon className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-gray-300">{benefit.text}</span>
+                </motion.div>
+              ))}
             </div>
 
-            {/* Trust Indicators */}
-            <div className="flex items-center gap-6">
-              <div>
-                <p className="text-2xl font-bold">5,000+</p>
-                <p className="text-sm text-white/70">Subscriber aktif</p>
-              </div>
-              <div className="w-px h-12 bg-white/20" />
-              <div>
-                <p className="text-2xl font-bold">100%</p>
-                <p className="text-sm text-white/70">Gratis selamanya</p>
-              </div>
-            </div>
+            {/* Privacy Note */}
+            <p className="text-sm text-gray-400">
+              Kami menghargai privasi Anda. Email Anda tidak akan dibagikan kepada pihak ketiga.
+            </p>
           </motion.div>
 
-          {/* Right Content - Form */}
+          {/* Newsletter Form */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20"
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="bg-white rounded-2xl p-8 shadow-xl"
           >
-            <h3 className="text-xl font-semibold mb-2">
-              Bergabung Sekarang
-            </h3>
-            <p className="text-white/80 mb-6">
-              Tidak ada spam, hanya konten berkualitas.
-            </p>
-            
-            <NewsletterForm />
-
-            {/* Premium Template CTA */}
-            <div className="mt-8 p-4 rounded-xl bg-white/5 border border-white/10">
-              <div className="flex items-center justify-between gap-4 flex-wrap">
-                <div>
-                  <p className="text-sm uppercase tracking-wide text-white/70">Premium Template Download</p>
-                  <p className="text-xs text-white/70">Akses download template resmi, bebas iklan, update berkala.</p>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm line-through text-white/60">Rp100.000</div>
-                  <div className="text-2xl font-bold">Rp49.000</div>
-                </div>
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-4">
+                <Mail className="w-6 h-6 text-blue-600" />
               </div>
-              {/* Payment type selector */}
-              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                <select
-                  value={paymentType}
-                  onChange={(e) => setPaymentType(e.target.value as 'qris' | 'snap')}
-                  className="w-full px-3 py-2 rounded-lg bg-white/90 text-black"
-                >
-                  <option value="qris">QRIS (disarankan)</option>
-                  <option value="snap">Snap (Semua metode)</option>
-                </select>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handlePayPremium}
-                  disabled={isPaying}
-                  className="w-full px-4 py-3 rounded-lg bg-white text-primary font-semibold disabled:opacity-60"
-                >
-                  {isPaying ? 'Memproses...' : 'Bayar Rp49.000'}
-                </motion.button>
-              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Berlangganan Newsletter
+              </h3>
+              <p className="text-gray-600">
+                Gratis dan tanpa spam
+              </p>
             </div>
 
-            <div className="mt-6 flex items-start gap-2">
-              <Shield className="h-4 w-4 text-white/60 mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-white/60">
-                Data Anda aman. Kami tidak akan membagikan informasi pribadi Anda 
-                kepada pihak ketiga tanpa persetujuan.
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  Alamat Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Masukkan email Anda"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {isSubmitting ? 'Memproses...' : 'Berlangganan Sekarang'}
+              </button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-xs text-gray-500">
+                Dengan berlangganan, Anda menyetujui{' '}
+                <a href="/terms" className="text-blue-600 hover:underline">
+                  Syarat & Ketentuan
+                </a>{' '}
+                dan{' '}
+                <a href="/privacy" className="text-blue-600 hover:underline">
+                  Kebijakan Privasi
+                </a>{' '}
+                kami.
               </p>
             </div>
           </motion.div>
         </div>
       </div>
-
-      {/* QRIS Modal */}
-      {qrisString && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 text-center relative">
-            <button
-              onClick={() => setQrisString(null)}
-              className="absolute right-3 top-3 text-gray-500 hover:text-gray-700"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <h4 className="text-lg font-semibold mb-1">Scan QRIS untuk Membayar</h4>
-            {orderId && <p className="text-xs text-gray-500 mb-4">Order ID: {orderId}</p>}
-            <div className="flex justify-center">
-              <img
-                alt="QRIS"
-                className="w-64 h-64"
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(qrisString)}`}
-              />
-            </div>
-            <p className="text-xs text-gray-500 mt-4">Setelah pembayaran berhasil, halaman akan menerima notifikasi dari Midtrans.</p>
-          </div>
-        </div>
-      )}
     </section>
   )
 }

@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { Suspense, useState, useEffect } from 'react'
 
-// Dynamic imports for home page components with more aggressive lazy loading
+// Dynamic imports for home page components with optimized loading
 const SpectacularHero = dynamic(() => import('@/app/components/home/SpectacularHero'), {
   ssr: true,
   loading: () => <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white animate-pulse" />,
@@ -14,24 +14,24 @@ const CategoryGrid = dynamic(() => import('@/app/components/home/CategoryGrid'),
   loading: () => <div className="py-16 bg-white animate-pulse" />,
 })
 
-// Lazy load non-critical components with longer delays
+// Optimized lazy loading with shorter delays
 const ArticleShowcase = dynamic(() => import('@/app/components/home/ArticleShowcase'), {
-  ssr: false,
+  ssr: true,
   loading: () => <div className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50 animate-pulse" />,
 })
 
 const ArticleCarousel = dynamic(() => import('@/app/components/home/ArticleCarousel'), {
-  ssr: false,
+  ssr: true,
   loading: () => <div className="py-16 bg-white animate-pulse" />,
 })
 
 const ArticleMasonry = dynamic(() => import('@/app/components/home/ArticleMasonry'), {
-  ssr: false,
+  ssr: true,
   loading: () => <div className="py-16 bg-gray-50 animate-pulse" />,
 })
 
 const Newsletter = dynamic(() => import('@/app/components/home/Newsletter'), {
-  ssr: false,
+  ssr: true,
   loading: () => <div className="py-16 bg-gray-900 animate-pulse" />,
 })
 
@@ -45,17 +45,34 @@ const MobileAd = dynamic(() => import('@/app/components/ads/AdPlacements').then(
   loading: () => null,
 })
 
-// Lazy loading wrapper component
+// Optimized lazy loading wrapper component
 function LazyComponent({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const [shouldLoad, setShouldLoad] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => setShouldLoad(true), delay)
-    return () => clearTimeout(timer)
+    // Use intersection observer for better performance
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const timer = setTimeout(() => setShouldLoad(true), delay)
+            return () => clearTimeout(timer)
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+
+    const element = document.createElement('div')
+    observer.observe(element)
+
+    return () => {
+      observer.disconnect()
+    }
   }, [delay])
 
   if (!shouldLoad) {
-    return null
+    return <div className="py-16 bg-gray-50 animate-pulse" />
   }
 
   return <>{children}</>
@@ -70,29 +87,21 @@ export default function HomePageWrapper() {
       <MobileAd className="mt-8" />
       <CategoryGrid />
       
-      {/* Non-critical components - lazy load with delays */}
+      {/* Non-critical components - optimized loading */}
       <Suspense fallback={<div className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50 animate-pulse" />}>
-        <LazyComponent delay={1000}>
-          <ArticleShowcase />
-        </LazyComponent>
+        <ArticleShowcase />
       </Suspense>
       
       <Suspense fallback={<div className="py-16 bg-white animate-pulse" />}>
-        <LazyComponent delay={2000}>
-          <ArticleCarousel />
-        </LazyComponent>
+        <ArticleCarousel />
       </Suspense>
       
       <Suspense fallback={<div className="py-16 bg-gray-50 animate-pulse" />}>
-        <LazyComponent delay={3000}>
-          <ArticleMasonry />
-        </LazyComponent>
+        <ArticleMasonry />
       </Suspense>
       
       <Suspense fallback={<div className="py-16 bg-gray-900 animate-pulse" />}>
-        <LazyComponent delay={4000}>
-          <Newsletter />
-        </LazyComponent>
+        <Newsletter />
       </Suspense>
     </>
   )
