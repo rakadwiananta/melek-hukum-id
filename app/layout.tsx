@@ -5,12 +5,16 @@ import './globals.css'
 import { GoogleAnalytics } from '@/app/components/analytics/GoogleAnalytics'
 import { Toaster } from '@/app/components/ui/Toaster'
 import { ToastProvider } from '@/app/components/ui/use-toast'
+import FontLoader from '@/app/components/performance/FontLoader'
 import Script from 'next/script'
 
 const inter = Inter({ 
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter'
+  variable: '--font-inter',
+  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+  preload: true,
+  adjustFontFallback: true
 })
 
 // Google AdSense Configuration
@@ -50,14 +54,22 @@ export default function RootLayout({
   return (
     <html lang="id" className={inter.variable}>
       <head>
+        {/* DNS prefetch for critical resources */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
         <GoogleAnalytics />
         {/* Meta tags akan di-inject otomatis dari metadata */}
       </head>
       <body className={`${inter.className} antialiased`}>
-        <ToastProvider>
-          {children}
-          <Toaster />
-        </ToastProvider>
+        <FontLoader>
+          <ToastProvider>
+            {children}
+            <Toaster />
+          </ToastProvider>
+        </FontLoader>
         
         <Script
           id="google-adsense"

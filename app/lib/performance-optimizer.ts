@@ -58,7 +58,7 @@ class PerformanceOptimizer {
     this.applyImageOptimization()
     this.applyJavaScriptOptimization()
     this.applyFontOptimization()
-    this.setupResourceHints()
+    this.setupResourceOptimization()
   }
 
   private initializeWebVitals() {
@@ -294,14 +294,15 @@ class PerformanceOptimizer {
     document.head.appendChild(style)
   }
 
-  private setupResourceHints() {
-    if (!this.config.enableResourceHints) return
-
+  private setupResourceOptimization() {
     // DNS prefetch for external domains
     const externalDomains = [
       'fonts.googleapis.com',
       'fonts.gstatic.com',
-      'cdn.jsdelivr.net'
+      'cdn.jsdelivr.net',
+      'pagead2.googlesyndication.com',
+      'googleads.g.doubleclick.net',
+      'tpc.googlesyndication.com'
     ]
 
     externalDomains.forEach(domain => {
@@ -313,7 +314,8 @@ class PerformanceOptimizer {
 
     // Preconnect to critical external resources
     const criticalDomains = [
-      'fonts.gstatic.com'
+      'fonts.gstatic.com',
+      'fonts.googleapis.com'
     ]
 
     criticalDomains.forEach(domain => {
@@ -323,6 +325,30 @@ class PerformanceOptimizer {
       link.crossOrigin = 'anonymous'
       document.head.appendChild(link)
     })
+    
+    // Font loading optimization
+    this.optimizeFontLoading()
+  }
+  
+  private optimizeFontLoading() {
+    // Check if fonts are already loaded
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        document.documentElement.classList.add('fonts-loaded')
+        document.documentElement.classList.remove('fonts-loading')
+      })
+    }
+    
+    // Fallback for browsers that don't support Font Loading API
+    if (!document.fonts) {
+      setTimeout(() => {
+        document.documentElement.classList.add('fonts-loaded')
+        document.documentElement.classList.remove('fonts-loading')
+      }, 3000) // 3 second fallback
+    }
+    
+    // Add loading class initially
+    document.documentElement.classList.add('fonts-loading')
   }
 
   // Public methods for performance monitoring

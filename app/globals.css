@@ -71,6 +71,11 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    
+    /* Font variables with comprehensive fallbacks */
+    --font-inter: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-sans: var(--font-inter);
+    --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
   }
 
   .dark {
@@ -109,6 +114,59 @@
     @apply bg-background text-foreground;
     /* Guard against accidental horizontal overflow on mobile */
     overflow-x: hidden;
+    /* Ensure font family is applied consistently */
+    font-family: var(--font-sans);
+  }
+  
+  /* Ensure all text elements use the correct font */
+  h1, h2, h3, h4, h5, h6, p, span, div, a, button, input, textarea, select {
+    font-family: var(--font-sans);
+  }
+  
+  /* Font loading optimization */
+  .font-loading {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  .font-loaded {
+    font-family: var(--font-inter);
+  }
+  
+  /* Font loading states */
+  .fonts-loading {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  .fonts-loaded {
+    font-family: var(--font-inter);
+  }
+  
+  .fonts-error {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  /* Smooth font transitions */
+  * {
+    transition: font-family 0.3s ease-in-out;
+  }
+  
+  /* Ensure critical elements maintain styling during font loading */
+  .font-loader {
+    min-height: 100vh;
+  }
+  
+  /* Prevent layout shift during font loading */
+  body {
+    font-display: swap;
+  }
+  
+  /* Optimize font rendering for different states */
+  .fonts-loading * {
+    font-synthesis: none;
+  }
+  
+  .fonts-loaded * {
+    font-synthesis: weight style;
   }
 }
 

@@ -26,6 +26,7 @@
     "performance:budget": "cross-env BUNDLE_ANALYZER=true next build",
     "performance:test": "npm run build && npm run start & sleep 10 && npm run performance:audit && pkill -f 'next start'",
     "clean": "rm -rf .next out dist",
+    "clear-cache": "node scripts/clear-cache.js",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
