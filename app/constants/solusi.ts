@@ -1,8 +1,8 @@
 import { FileText, Shield, Handshake, FileSignature, Send, AlertTriangle, BookOpen, Users } from 'lucide-react'
-import type { SolusiCategory } from '@/types/solusi'
+import type { SolusiCategoryType } from '@/types/solusi'
 
 // Category configuration
-export const CATEGORY_CONFIG: Record<SolusiCategory, { 
+export const CATEGORY_CONFIG: Record<SolusiCategoryType, { 
   icon: React.ElementType
   color: string
   bgGradient: string

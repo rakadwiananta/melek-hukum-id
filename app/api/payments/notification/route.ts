@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Dapatkan status transaksi terbaru dari Midtrans (opsional)
-    const status = await midtransCore.transaction.status(order_id)
+    const status = await midtransCore.status({ order_id })
 
     // TODO: Update status pesanan di database Anda di sini
 

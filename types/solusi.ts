@@ -62,7 +62,7 @@ export interface SolutionItem {
     tingkatPenyelesaian: number
   }
   
-  export type SolusiCategory = 
+  export type SolusiCategoryType = 
     | 'Semua' 
     | 'Pernyataan' 
     | 'Kuasa' 

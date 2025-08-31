@@ -102,4 +102,3 @@ const config: Config = {
 }
 
 export default config
-<!-- Update: Hello to Goodbye -->

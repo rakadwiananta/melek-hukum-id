@@ -10,7 +10,7 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ orderI
     const { orderId } = await context.params
     if (!orderId) return NextResponse.json({ error: 'orderId tidak ditemukan' }, { status: 400 })
 
-    const status = await midtransCore.transaction.status(orderId)
+    const status = await midtransCore.status({ order_id: orderId })
     return NextResponse.json({ status })
   } catch (error: any) {
     console.error('[Midtrans] status error', error)
