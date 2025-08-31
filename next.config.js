@@ -15,7 +15,7 @@ const nextConfig = {
     return `build-${Date.now()}`
   },
   
-  // Headers for cache control
+  // Headers for cache control and security
   async headers() {
     return [
       {
@@ -36,6 +36,14 @@ const nextConfig = {
           {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
           },
         ],
       },

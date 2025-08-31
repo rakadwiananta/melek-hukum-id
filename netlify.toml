@@ -3,8 +3,8 @@
   publish = ".next"
 
 [build.environment]
-  NODE_VERSION = "20"
-  NODE_ENV = "production"
+  NODE_VERSION = "18"
+  NPM_VERSION = "9"
   # Secrets scanning configuration - omit build artifacts and known safe keys
   SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_GA_MEASUREMENT_ID,NEXT_PUBLIC_MIDTRANS_CLIENT_KEY,MIDTRANS_FIXED_PRICE"
   SECRETS_SCAN_OMIT_PATHS = ".next/**,.netlify/**,node_modules/**,*.trace,**/*.trace,build/**,dist/**"
@@ -15,21 +15,26 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Redirect untuk www subdomain
-[[redirects]]
-  from = "https://www.wacanahukum.com/*"
-  to = "https://wacanahukum.com/:splat"
-  status = 301
-  force = true
-
-# Redirect untuk HTTP ke HTTPS
+# Force HTTPS redirects
 [[redirects]]
   from = "http://wacanahukum.com/*"
   to = "https://wacanahukum.com/:splat"
   status = 301
   force = true
 
-# Headers untuk keamanan
+[[redirects]]
+  from = "http://www.wacanahukum.com/*"
+  to = "https://wacanahukum.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.wacanahukum.com/*"
+  to = "https://wacanahukum.com/:splat"
+  status = 301
+  force = true
+
+# Security headers
 [[headers]]
   for = "/*"
   [headers.values]
@@ -37,18 +42,40 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
 
-# Static assets caching
+# Cache headers for static assets
 [[headers]]
   for = "/_next/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Images caching
 [[headers]]
   for = "/images/*"
   [headers.values]
-    Cache-Control = "public, max-age=86400"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/favicon.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# No cache for HTML files
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
+
+# API routes no cache
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
 
 # Sitemap and robots.txt headers
 [[headers]]
@@ -72,5 +99,25 @@
   NODE_ENV = "production"
   NEXT_PUBLIC_SITE_NAME = "Melek Hukum"
   NEXT_PUBLIC_SITE_URL = "https://wacanahukum.com"
-NEXT_PUBLIC_BASE_URL = "https://wacanahukum.com"
-  NEXT_PUBLIC_GA_MEASUREMENT_ID = "G-D5EH0QKDSF" 
+  NEXT_PUBLIC_BASE_URL = "https://wacanahukum.com"
+  NEXT_PUBLIC_GA_MEASUREMENT_ID = "G-D5EH0QKDSF"
+  NEXT_PUBLIC_FORCE_HTTPS = "true"
+  NEXT_PUBLIC_SECURE_COOKIES = "true"
+
+[context.deploy-preview.environment]
+  NODE_ENV = "production"
+  NEXT_PUBLIC_SITE_NAME = "Melek Hukum"
+  NEXT_PUBLIC_SITE_URL = "https://wacanahukum.com"
+  NEXT_PUBLIC_BASE_URL = "https://wacanahukum.com"
+  NEXT_PUBLIC_GA_MEASUREMENT_ID = "G-D5EH0QKDSF"
+  NEXT_PUBLIC_FORCE_HTTPS = "true"
+  NEXT_PUBLIC_SECURE_COOKIES = "true"
+
+[context.branch-deploy.environment]
+  NODE_ENV = "production"
+  NEXT_PUBLIC_SITE_NAME = "Melek Hukum"
+  NEXT_PUBLIC_SITE_URL = "https://wacanahukum.com"
+  NEXT_PUBLIC_BASE_URL = "https://wacanahukum.com"
+  NEXT_PUBLIC_GA_MEASUREMENT_ID = "G-D5EH0QKDSF"
+  NEXT_PUBLIC_FORCE_HTTPS = "true"
+  NEXT_PUBLIC_SECURE_COOKIES = "true" 

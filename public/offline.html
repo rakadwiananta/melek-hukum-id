@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Melek Hukum ID</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        
+        .offline-container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 2rem;
+        }
+        
+        .offline-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #6c757d;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        p {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        
+        .retry-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-right: 1rem;
+        }
+        
+        .retry-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .home-btn {
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 2px solid #e9ecef;
+            padding: 10px 28px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .home-btn:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        @media (max-width: 600px) {
+            .offline-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .retry-btn, .home-btn {
+                display: block;
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">
+            📡
+        </div>
+        
+        <h1>Anda Sedang Offline</h1>
+        
+        <p>
+            Maaf, koneksi internet Anda terputus atau website sedang tidak tersedia. 
+            Beberapa konten mungkin masih dapat diakses dari cache.
+        </p>
+        
+        <button class="retry-btn" onclick="retryConnection()">
+            Coba Lagi
+        </button>
+        
+        <a href="/" class="home-btn">
+            Beranda
+        </a>
+        
+        <div class="status" id="status">
+            Mencoba menghubungkan kembali...
+        </div>
+    </div>
+
+    <script>
+        let retryCount = 0;
+        const maxRetries = 5;
+        
+        function retryConnection() {
+            retryCount++;
+            const statusEl = document.getElementById('status');
+            
+            if (retryCount > maxRetries) {
+                statusEl.innerHTML = 'Tidak dapat terhubung. Silakan cek koneksi internet Anda.';
+                statusEl.style.color = '#dc3545';
+                return;
+            }
+            
+            statusEl.innerHTML = `Mencoba menghubungkan... (${retryCount}/${maxRetries})`;
+            
+            // Check if we're back online
+            if (navigator.onLine) {
+                statusEl.innerHTML = 'Terhubung kembali! Memuat ulang halaman...';
+                statusEl.style.color = '#28a745';
+                
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    retryConnection();
+                }, 2000);
+            }
+        }
+        
+        // Listen for online/offline events
+        window.addEventListener('online', () => {
+            const statusEl = document.getElementById('status');
+            statusEl.innerHTML = 'Terhubung kembali! Memuat ulang halaman...';
+            statusEl.style.color = '#28a745';
+            
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        });
+        
+        window.addEventListener('offline', () => {
+            const statusEl = document.getElementById('status');
+            statusEl.innerHTML = 'Koneksi terputus. Silakan cek internet Anda.';
+            statusEl.style.color = '#dc3545';
+        });
+        
+        // Auto retry on page load
+        setTimeout(() => {
+            retryConnection();
+        }, 1000);
+        
+        // Check if we have cached content
+        if ('caches' in window) {
+            caches.keys().then(cacheNames => {
+                if (cacheNames.length > 0) {
+                    const statusEl = document.getElementById('status');
+                    statusEl.innerHTML += '<br>Konten offline tersedia dari cache.';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

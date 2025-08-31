@@ -29,6 +29,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://wacanahukum.com'),
   title: {
     default: 'Melek Hukum ID - Platform Edukasi Hukum Indonesia',
     template: '%s | Melek Hukum ID'
@@ -68,12 +69,12 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'id_ID',
-    url: '/',
+    url: 'https://wacanahukum.com',
     siteName: 'Melek Hukum ID',
     title: 'Melek Hukum ID - Platform Edukasi Hukum Indonesia',
     description: 'Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia',
     images: [{
-      url: '/og-image.jpg',
+      url: 'https://wacanahukum.com/og-image.jpg',
       width: 1200,
       height: 630,
       alt: 'Melek Hukum ID',
@@ -84,12 +85,12 @@ export const metadata: Metadata = {
     title: 'Melek Hukum ID',
     description: 'Platform edukasi hukum dan anti-korupsi',
     creator: '@melekhukumid',
-    images: ['/twitter-image.jpg'],
+    images: ['https://wacanahukum.com/twitter-image.jpg'],
   },
   alternates: {
-    canonical: '/',
+    canonical: 'https://wacanahukum.com',
     types: {
-      'application/rss+xml': '/feed.xml',
+      'application/rss+xml': 'https://wacanahukum.com/feed.xml',
     },
   },
   verification: {
@@ -135,6 +136,9 @@ export default function RootLayout({
         
         {/* Mixed Content Protection */}
         <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+        
+        {/* HTTPS Security */}
+        <meta httpEquiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload" />
       </head>
       <body className={`${inter.className} antialiased`}>
         <FontLoader>
@@ -211,6 +215,11 @@ export default function RootLayout({
               } else if (!storedDomain) {
                 localStorage.setItem('site_domain', currentDomain);
               }
+              
+              // Force HTTPS redirect
+              if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost') {
+                window.location.href = window.location.href.replace('http:', 'https:');
+              }
             `,
           }}
         />
@@ -251,6 +260,11 @@ export default function RootLayout({
                 const links = document.querySelectorAll('a[href^="http:"]');
                 links.forEach(link => {
                   link.href = link.href.replace('http:', 'https:');
+                });
+                
+                const scripts = document.querySelectorAll('script[src^="http:"]');
+                scripts.forEach(script => {
+                  script.src = script.src.replace('http:', 'https:');
                 });
               }
             `,

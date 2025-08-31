@@ -1,45 +1,83 @@
 {
-  "name": "Melek Hukum ID",
+  "name": "Melek Hukum ID - Platform Edukasi Hukum Indonesia",
   "short_name": "Melek Hukum",
-  "description": "Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia",
-  "start_url": "/",
+  "description": "Platform edukasi hukum dan anti-korupsi untuk masyarakat Indonesia. Pelajari hukum dengan mudah, praktis, dan gratis.",
+  "start_url": "https://wacanahukum.com/",
+  "scope": "https://wacanahukum.com/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#dc2626",
   "orientation": "portrait-primary",
-  "scope": "/",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "lang": "id",
+  "dir": "ltr",
   "version": "1.0.0",
   "categories": ["education", "productivity", "utilities"],
   "icons": [
     {
-      "src": "/android-chrome-192x192.png",
+      "src": "https://wacanahukum.com/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://wacanahukum.com/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://wacanahukum.com/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://wacanahukum.com/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/android-chrome-512x512.png",
+      "src": "https://wacanahukum.com/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    },
-    {
-      "src": "/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png"
     }
   ],
   "shortcuts": [
     {
       "name": "Kamus Hukum",
       "short_name": "Kamus",
-      "description": "Akses kamus hukum",
-      "url": "/kamus-hukum",
+      "description": "Pelajari istilah hukum",
+      "url": "https://wacanahukum.com/kamus-hukum",
       "icons": [
         {
-          "src": "/android-chrome-192x192.png",
-          "sizes": "192x192"
+          "src": "https://wacanahukum.com/favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    },
+    {
+      "name": "Panduan Hukum",
+      "short_name": "Panduan",
+      "description": "Panduan praktis hukum",
+      "url": "https://wacanahukum.com/panduan",
+      "icons": [
+        {
+          "src": "https://wacanahukum.com/favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    },
+    {
+      "name": "Solusi Hukum",
+      "short_name": "Solusi",
+      "description": "Solusi masalah hukum",
+      "url": "https://wacanahukum.com/solusi",
+      "icons": [
+        {
+          "src": "https://wacanahukum.com/favicon-32x32.png",
+          "sizes": "32x32"
         }
       ]
     },
@@ -47,18 +85,71 @@
       "name": "Anti Korupsi",
       "short_name": "Anti Korupsi",
       "description": "Informasi anti korupsi",
-      "url": "/anti-korupsi",
+      "url": "https://wacanahukum.com/anti-korupsi",
       "icons": [
         {
-          "src": "/android-chrome-192x192.png",
-          "sizes": "192x192"
+          "src": "https://wacanahukum.com/favicon-32x32.png",
+          "sizes": "32x32"
         }
       ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://wacanahukum.com/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Halaman Utama - Desktop"
+    },
+    {
+      "src": "https://wacanahukum.com/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Halaman Utama - Mobile"
     }
   ],
   "prefer_related_applications": false,
   "related_applications": [],
   "edge_side_panel": {
     "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "handle_links": "preferred",
+  "capture_links": "existing-client-navigate",
+  "protocol_handlers": [
+    {
+      "protocol": "web+melekhukum",
+      "url": "https://wacanahukum.com/?url=%s"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "https://wacanahukum.com/upload",
+      "accept": {
+        "text/plain": [".txt"],
+        "application/pdf": [".pdf"],
+        "image/*": [".jpg", ".jpeg", ".png", ".gif"]
+      }
+    }
+  ],
+  "share_target": {
+    "action": "https://wacanahukum.com/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "files",
+          "accept": ["image/*", "text/plain", "application/pdf"]
+        }
+      ]
+    }
   }
 } 
