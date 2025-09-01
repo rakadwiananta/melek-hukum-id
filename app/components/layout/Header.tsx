@@ -25,41 +25,15 @@ export default function Header() {
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
               <div className="flex items-center">
-                {/* Logo Icon */}
-                <div className="relative mr-3">
-                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style={{stopColor: '#dc2626', stopOpacity: 1}} />
-                        <stop offset="100%" style={{stopColor: '#92400e', stopOpacity: 1}} />
-                      </linearGradient>
-                    </defs>
-                    
-                    {/* Law scale symbol */}
-                    <g transform="translate(2, 2)">
-                      {/* Scale base */}
-                      <rect x="11" y="22.5" width="3" height="4" fill="url(#logoGrad)" rx="1.5"/>
-                      
-                      {/* Scale pole */}
-                      <rect x="12" y="7.5" width="1" height="17.5" fill="url(#logoGrad)"/>
-                      
-                      {/* Scale beam */}
-                      <rect x="5" y="7.5" width="14" height="1" fill="url(#logoGrad)" rx="0.5"/>
-                      
-                      {/* Left pan */}
-                      <path d="M4 8.5 L9 8.5 L8 12.5 L5 12.5 Z" fill="url(#logoGrad)" opacity="0.8"/>
-                      <path d="M3 8.5 L10 8.5" stroke="url(#logoGrad)" strokeWidth="0.5" fill="none"/>
-                      
-                      {/* Right pan */}
-                      <path d="M15 8.5 L20 8.5 L19 12.5 L16 12.5 Z" fill="url(#logoGrad)" opacity="0.8"/>
-                      <path d="M14 8.5 L21 8.5" stroke="url(#logoGrad)" strokeWidth="0.5" fill="none"/>
-                      
-                      {/* Chains */}
-                      <path d="M7 8.5 L7 9.5" stroke="url(#logoGrad)" strokeWidth="0.5"/>
-                      <path d="M17 8.5 L17 9.5" stroke="url(#logoGrad)" strokeWidth="0.5"/>
-                    </g>
-                  </svg>
-                </div>
+                {/* Logo Image */}
+                <Image 
+                  src="/timbangkan.jpg" 
+                  alt="Melek Hukum ID" 
+                  width={32}
+                  height={32}
+                  className="h-8 w-auto mr-3"
+                  priority
+                />
                 
                 {/* Text Logo */}
                 <div className="flex flex-col">
