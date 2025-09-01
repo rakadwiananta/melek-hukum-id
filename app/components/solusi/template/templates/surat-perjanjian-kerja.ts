@@ -19,7 +19,7 @@ PT. MELEK HUKUM INDONESIA
 PT. MELEK HUKUM INDONESIA
 Jl. Sudirman No. 123, Jakarta Pusat 12190
 Telp: (021) 1234-5678 | Fax: (021) 1234-5679 
-Email: info@melekhukum.id | Website: www.melekhukum.id
+Email: info@wacanahukum.com | Website: www.wacanahukum.com
 
 _____________________________________________________________________________
 

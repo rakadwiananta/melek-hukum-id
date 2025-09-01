@@ -1,4 +1,4 @@
-const CACHE_NAME = 'melek-hukum-v3';
+const CACHE_NAME = 'wacana-hukum-v3';
 const STATIC_CACHE = 'static-v3';
 const DYNAMIC_CACHE = 'dynamic-v3';
 

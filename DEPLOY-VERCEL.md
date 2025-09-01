@@ -18,7 +18,7 @@
 1. Buka [vercel.com](https://vercel.com)
 2. Login dengan GitHub
 3. Klik **"New Project"**
-4. Pilih repository `melek-hukum-id`
+4. Pilih repository `wacana-hukum`
 5. Vercel akan otomatis mendeteksi Next.js
 6. Klik **"Deploy"**
 

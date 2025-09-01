@@ -20,30 +20,30 @@ export default function KontakPage() {
       label: 'Rata-rata respons email', 
       value: '< 24 jam', 
       sourceLabel: 'SLA Internal 2024', 
-      sourceUrl: 'https://melekhukum.id/sla/2024',
+      sourceUrl: 'https://wacanahukum.com/sla/2024',
       ariaDescription: 'Waktu rata-rata untuk merespons email dari pengguna'
     },
     { 
       label: 'Tingkat kepuasan layanan', 
       value: '4.8/5.0', 
       sourceLabel: 'Survey Pengguna Q4 2024', 
-      sourceUrl: 'https://melekhukum.id/survey/q4-2024',
+      sourceUrl: 'https://wacanahukum.com/survey/q4-2024',
       ariaDescription: 'Rating kepuasan pengguna terhadap layanan customer service'
     },
     { 
       label: 'Pertanyaan terjawab', 
       value: '15,000+', 
       sourceLabel: 'Customer Service Report 2024', 
-      sourceUrl: 'https://melekhukum.id/laporan/cs-2024',
+      sourceUrl: 'https://wacanahukum.com/laporan/cs-2024',
       ariaDescription: 'Total pertanyaan yang telah dijawab sepanjang tahun 2024'
     }
   ]
 
   const socialMedia = [
-    { name: 'Facebook', handle: '@melekhukumid', icon: '📘', color: 'from-blue-500 to-blue-600' },
-    { name: 'Instagram', handle: '@melekhukumid', icon: '📷', color: 'from-pink-500 to-purple-600' },
-    { name: 'Twitter/X', handle: '@melekhukumid', icon: '🐦', color: 'from-sky-400 to-sky-600' },
-    { name: 'YouTube', handle: '@melekhukumid', icon: '📺', color: 'from-red-500 to-red-600' },
+    { name: 'Facebook', handle: '@wacanahukum', icon: '📘', color: 'from-blue-500 to-blue-600' },
+    { name: 'Instagram', handle: '@wacanahukum', icon: '📷', color: 'from-pink-500 to-purple-600' },
+    { name: 'Twitter/X', handle: '@wacanahukum', icon: '🐦', color: 'from-sky-400 to-sky-600' },
+    { name: 'YouTube', handle: '@wacanahukum', icon: '📺', color: 'from-red-500 to-red-600' },
   ]
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -87,12 +87,12 @@ export default function KontakPage() {
                 <p className="text-gray-700 mb-2">
                   Email: 
                   <motion.a 
-                    href="mailto:support@melekhukum.id" 
+                    href="mailto:support@wacanahukum.com" 
                     className="font-medium text-gray-700 hover:text-primary underline decoration-dotted underline-offset-4 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:rounded-md ml-2"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    support@melekhukum.id
+                    support@wacanahukum.com
                   </motion.a>
                 </p>
               </div>

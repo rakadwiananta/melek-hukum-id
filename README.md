@@ -5,7 +5,7 @@ Platform edukasi hukum digital yang membantu masyarakat Indonesia memahami hukum
 ## 🚀 Quick Deploy
 
 ### Vercel (Recommended)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/rakadwiananta/melek-hukum-id)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/rakadwiananta/wacana-hukum)
 
 1. Klik tombol di atas atau kunjungi [vercel.com](https://vercel.com)
 2. Import repository dari GitHub
@@ -15,8 +15,8 @@ Platform edukasi hukum digital yang membantu masyarakat Indonesia memahami hukum
 ### Manual Setup
 ```bash
 # Clone repository
-git clone https://github.com/rakadwiananta/melek-hukum-id.git
-cd melek-hukum-id
+git clone https://github.com/rakadwiananta/wacana-hukum.git
+cd wacana-hukum
 
 # Install dependencies
 npm install
@@ -51,7 +51,7 @@ npm run build
 ## 📁 Project Structure
 
 ```
-melek-hukum-id/
+wacana-hukum/
 ├── app/                    # Next.js App Router
 │   ├── (main)/            # Main layout pages
 │   ├── api/               # API routes
@@ -120,9 +120,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📞 Contact
 
-- **Website**: [melek-hukum.id](https://melek-hukum.id)
-- **Email**: info@melek-hukum.id
-- **GitHub**: [@rakadwiananta](https://github.com/rakadwiananta)
+- **Website**: [wacanahukum.com](https://wacanahukum.com)
+- **Email**: info@wacanahukum.com
+- **GitHub**: [@wacanahukum](https://github.com/wacanahukum)
 
 ## 🙏 Acknowledgments
 

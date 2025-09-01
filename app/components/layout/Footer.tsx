@@ -226,7 +226,7 @@ export default function Footer() {
             {/* Social Media Links */}
             <div className="flex gap-4">
               <a
-                href="https://facebook.com/melekhukumid"
+                href="https://facebook.com/wacanahukum"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="touch-target rounded-lg hover:bg-gray-200 transition-colors"
@@ -237,7 +237,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://twitter.com/melekhukumid"
+                href="https://twitter.com/wacanahukum"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="touch-target rounded-lg hover:bg-gray-200 transition-colors"
@@ -248,7 +248,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://instagram.com/melekhukumid"
+                href="https://instagram.com/wacanahukum"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="touch-target rounded-lg hover:bg-gray-200 transition-colors"
@@ -259,7 +259,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://youtube.com/@melekhukumid"
+                href="https://youtube.com/@wacanahukum"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="touch-target rounded-lg hover:bg-gray-200 transition-colors"

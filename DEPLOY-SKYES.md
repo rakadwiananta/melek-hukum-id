@@ -58,7 +58,7 @@ npm run start
 
 # Atau gunakan PM2 untuk production
 npm install -g pm2
-pm2 start npm --name "melek-hukum" -- start
+pm2 start npm --name "wacana-hukum" -- start
 pm2 save
 pm2 startup
 ```
@@ -85,7 +85,7 @@ deployment:
     - /bin/cp -R .env.production $DEPLOYPATH
     - /bin/cp -R .htaccess $DEPLOYPATH
     - cd $DEPLOYPATH && npm install --production
-    - cd $DEPLOYPATH && pm2 restart melek-hukum
+    - cd $DEPLOYPATH && pm2 restart wacana-hukum
 ```
 
 ## 🛠️ Troubleshooting
@@ -126,10 +126,10 @@ npm install --production
 pm2 status
 
 # Logs
-pm2 logs melek-hukum
+pm2 logs wacana-hukum
 
 # Restart
-pm2 restart melek-hukum
+pm2 restart wacana-hukum
 
 # Monitor resources
 pm2 monit

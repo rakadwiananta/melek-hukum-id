@@ -122,10 +122,10 @@ export async function generateMetadata({
       title: article.title,
       description: article.excerpt,
       images: [article.featured_image],
-      creator: '@melekhukumid',
+      creator: '@wacanahukum',
     },
     alternates: {
-      canonical: `https://melekhukum.id/artikel/${slug}`,
+      canonical: `https://wacanahukum.com/artikel/${slug}`,
     },
     robots: {
       index: true,
@@ -239,7 +239,7 @@ export default async function ArticlePage({
           updated_at: article.updated_at || article.published_at,
           featured_image: article.featured_image,
           keywords: article.keywords,
-          url: `https://melekhukum.id/artikel/${slug}`
+          url: `https://wacanahukum.com/artikel/${slug}`
         }}
         faqData={faqData}
       />
@@ -362,7 +362,7 @@ export default async function ArticlePage({
                 <div className="p-6 md:p-8 border-t border-gray-100">
                   <div className="flex flex-wrap gap-4">
                     <a
-                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${article.title} - ${article.excerpt}`)}&url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || 'https://melekhukum.id'}/artikel/${slug}`)}`}
+                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${article.title} - ${article.excerpt}`)}&url=${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL || 'https://wacanahukum.com'}/artikel/${slug}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
@@ -370,7 +370,7 @@ export default async function ArticlePage({
                       Share on Twitter
                     </a>
                     <a
-                      href={`https://wa.me/?text=${encodeURIComponent(`${article.title} - ${article.excerpt} ${(process.env.NEXT_PUBLIC_SITE_URL || 'https://melekhukum.id')}/artikel/${slug}`)}`}
+                      href={`https://wa.me/?text=${encodeURIComponent(`${article.title} - ${article.excerpt} ${(process.env.NEXT_PUBLIC_SITE_URL || 'https://wacanahukum.com')}/artikel/${slug}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"

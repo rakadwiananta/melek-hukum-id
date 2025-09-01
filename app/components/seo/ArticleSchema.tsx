@@ -21,7 +21,7 @@ interface ArticleSchemaProps {
 }
 
 export default function ArticleSchema({ article, faqData }: ArticleSchemaProps) {
-  const currentUrl = typeof window !== 'undefined' ? window.location.href : article.url || 'https://melekhukum.id'
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : article.url || 'https://wacanahukum.com'
   
   // Article Schema
   const articleSchema = {
@@ -33,7 +33,7 @@ export default function ArticleSchema({ article, faqData }: ArticleSchemaProps) 
     },
     "headline": article.title,
     "description": article.excerpt,
-    "image": article.featured_image || "https://melekhukum.id/logo.png",
+            "image": article.featured_image || "https://wacanahukum.com/logo.png",
     "author": {
       "@type": "Person",
       "name": article.author
@@ -43,7 +43,7 @@ export default function ArticleSchema({ article, faqData }: ArticleSchemaProps) 
       "name": "Melek Hukum ID",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://melekhukum.id/logo.png"
+        "url": "https://wacanahukum.com/logo.png"
       }
     },
     "datePublished": article.published_at,

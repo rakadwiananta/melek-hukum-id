@@ -38,7 +38,7 @@ export function formatTemplateForWord(
     `\\pard\\qc\\f0\\fs32\\b PT. MELEK HUKUM INDONESIA\\b0\\par`,
     `\\pard\\qc\\f0\\fs22\\i [LOGO PERUSAHAAN]\\i0\\par`,
     `\\pard\\qc\\f0\\fs24 Jl. Sudirman No. 123, Jakarta Pusat 12190\\par`,
-    `\\pard\\qc\\f0\\fs20\\i Telp: (021) 1234-5678 | Fax: (021) 1234-5679 | Email: info@melekhukum.id | Website: www.melekhukum.id\\i0\\par`,
+    `\\pard\\qc\\f0\\fs20\\i Telp: (021) 1234-5678 | Fax: (021) 1234-5679 | Email: info@wacanahukum.com | Website: www.wacanahukum.com\\i0\\par`,
     `\\pard\\qc\\f0\\fs24 _____________________________________________________________________________\\par`
   )
 

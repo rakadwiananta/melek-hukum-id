@@ -84,7 +84,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Melek Hukum ID',
     description: 'Platform edukasi hukum dan anti-korupsi',
-    creator: '@melekhukumid',
+    creator: '@wacanahukum',
     images: ['https://wacanahukum.com/twitter-image.jpg'],
   },
   alternates: {

@@ -16,28 +16,28 @@ export default function TimPage() {
       label: 'Artikel ditinjau tiap bulan', 
       value: '45+', 
       sourceLabel: 'Internal Quality Assurance Report 2024', 
-      sourceUrl: 'https://melekhukum.id/laporan/qa-2024',
+      sourceUrl: 'https://wacanahukum.com/laporan/qa-2024',
       ariaDescription: 'Jumlah artikel yang ditinjau untuk akurasi setiap bulan'
     },
     { 
       label: 'Akurasi konten hukum', 
       value: '98.5%', 
       sourceLabel: 'Audit Eksternal PWC 2024', 
-      sourceUrl: 'https://melekhukum.id/audit/pwc-2024',
+      sourceUrl: 'https://wacanahukum.com/audit/pwc-2024',
       ariaDescription: 'Tingkat akurasi konten berdasarkan audit eksternal'
     },
     { 
       label: 'Waktu respon pertanyaan', 
       value: '< 24 jam', 
       sourceLabel: 'Customer Service Report Q4 2024', 
-      sourceUrl: 'https://melekhukum.id/laporan/cs-q4-2024',
+      sourceUrl: 'https://wacanahukum.com/laporan/cs-q4-2024',
       ariaDescription: 'Rata-rata waktu respon untuk pertanyaan pengguna'
     },
     { 
       label: 'Tim ahli hukum tersertifikasi', 
       value: '15 orang', 
       sourceLabel: 'HR Database 2024', 
-      sourceUrl: 'https://melekhukum.id/tim/sertifikasi',
+      sourceUrl: 'https://wacanahukum.com/tim/sertifikasi',
       ariaDescription: 'Jumlah anggota tim dengan sertifikasi hukum aktif'
     }
   ]

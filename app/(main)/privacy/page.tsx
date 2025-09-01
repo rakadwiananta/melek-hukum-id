@@ -328,8 +328,8 @@ export default function PrivacyPage() {
           <div className="bg-gray-100 rounded-lg p-4">
             <p className="text-sm text-gray-700">
               Untuk menggunakan hak-hak Anda, silakan hubungi kami di{' '}
-              <a href="mailto:privacy@melekhukum.id" className="text-primary hover:underline">
-                privacy@melekhukum.id
+                      <a href="mailto:privacy@wacanahukum.com" className="text-primary hover:underline">
+          privacy@wacanahukum.com
               </a>
             </p>
           </div>
@@ -414,7 +414,7 @@ export default function PrivacyPage() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <a
-                    href="mailto:privacy@melekhukum.id"
+                    href="mailto:privacy@wacanahukum.com"
                     className="inline-flex items-center justify-center px-5 py-3 bg-white text-primary rounded-lg hover:bg-gray-100 transition-colors"
                   >
                     Hubungi Tim Privasi

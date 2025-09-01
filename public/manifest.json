@@ -122,7 +122,7 @@
   "capture_links": "existing-client-navigate",
   "protocol_handlers": [
     {
-      "protocol": "web+melekhukum",
+      "protocol": "web+wacanahukum",
       "url": "https://wacanahukum.com/?url=%s"
     }
   ],
