@@ -28,12 +28,12 @@ export const metadata: Metadata = {
   authors: [{ name: 'Tim Melek Hukum' }],
   creator: 'Melek Hukum ID',
   publisher: 'Melek Hukum ID',
-  metadataBase: new URL('https://bicarahukum.my.id'),
+  metadataBase: new URL('https://wacanahukum.com'),
   
   openGraph: {
     type: 'website',
     locale: 'id_ID',
-    url: 'https://bicarahukum.my.id',
+    url: 'https://wacanahukum.com',
     siteName: 'Melek Hukum ID',
     title: 'Melek Hukum ID - Portal Hukum Indonesia',
     description: 'Portal hukum Indonesia terpercaya dengan informasi hukum terkini',
