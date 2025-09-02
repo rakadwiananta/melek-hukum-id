@@ -1,7 +1,27 @@
 'use client';
 
 import React from 'react';
-import IstilahTataNegaraComponent from '@/app/components/kamus/istilah/IstilahTataNegaraComponent';
+import dynamic from 'next/dynamic';
+const IstilahTataNegaraComponent = dynamic(
+  () => import('@/app/components/kamus/istilah/IstilahTataNegaraComponent'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        <div className="animate-pulse space-y-4">
+          <div className="h-6 bg-gray-200 rounded w-2/3" />
+          <div className="h-4 bg-gray-200 rounded w-1/2" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="h-24 bg-gray-100 rounded" />
+            <div className="h-24 bg-gray-100 rounded" />
+            <div className="h-24 bg-gray-100 rounded" />
+            <div className="h-24 bg-gray-100 rounded" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+);
 import { motion } from 'framer-motion';
 import { 
   BookOpen, 
