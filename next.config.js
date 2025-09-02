@@ -16,6 +16,8 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
     minimumCacheTTL: 86400,
     dangerouslyAllowSVG: true,
+    // Note: This CSP here only applies to image requests handled by Next Image.
+    // We will set a full site-wide CSP via headers() below.
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     // Add external domains for image optimization
     domains: [
@@ -111,6 +113,25 @@ const nextConfig = {
   // Basic headers
   async headers() {
     return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self' https://wacanahukum.com", 
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.ezojs.com", 
+              "connect-src 'self' https://wacanahukum.com https://*.supabase.co https://www.google-analytics.com https://www.googletagmanager.com https://www.ezojs.com",
+              "img-src 'self' data: blob: https://wacanahukum.com https://*.supabase.co https://i.imgur.com https://imgur.com https://i.ibb.co https://i.ibb.co.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' data: https://fonts.gstatic.com",
+              "frame-src 'self' https://www.googletagmanager.com https://www.youtube.com",
+              "worker-src 'self' blob:",
+              "media-src 'self' blob:",
+            ].join('; ')
+          }
+        ]
+      },
       {
         source: '/_next/static/(.*)',
         headers: [
