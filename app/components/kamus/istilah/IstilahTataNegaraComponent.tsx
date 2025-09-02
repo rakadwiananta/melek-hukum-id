@@ -444,6 +444,8 @@ const IstilahTataNegaraComponent: React.FC = () => {
   const [sortBy, setSortBy] = useState('alphabetical');
   const [showStats, setShowStats] = useState(true);
   const [showMobileFilter, setShowMobileFilter] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 12;
 
   const categories = [
     { id: 'all', name: 'Semua Kategori', icon: BookOpen },
@@ -472,6 +474,17 @@ const IstilahTataNegaraComponent: React.FC = () => {
     
     return terms;
   }, [searchQuery, selectedCategory, sortBy]);
+
+  // Reset pagination on criteria change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, sortBy]);
+
+  const totalItems = filteredTerms.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedTerms = filteredTerms.slice(startIndex, endIndex);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-4 md:py-6">
@@ -583,7 +596,7 @@ const IstilahTataNegaraComponent: React.FC = () => {
       {/* Terms List */}
       <div className="grid gap-3 md:gap-6">
         {filteredTerms.length > 0 ? (
-          filteredTerms.map((term, index) => (
+          paginatedTerms.map((term, index) => (
             <TermCard key={term.id} term={term} index={index} />
           ))
         ) : (
@@ -602,6 +615,56 @@ const IstilahTataNegaraComponent: React.FC = () => {
           </motion.div>
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {filteredTerms.length > 0 && (
+        <div className="mt-4 md:mt-6 flex items-center justify-center gap-2 md:gap-3">
+          <button
+            aria-label="Halaman sebelumnya"
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm border transition-colors ${currentPage === 1 ? 'text-gray-400 border-gray-200 cursor-not-allowed' : 'text-gray-700 border-gray-300 hover:bg-gray-50'}`}
+          >
+            Sebelumnya
+          </button>
+
+          {/* Page numbers (compact) */}
+          <div className="flex items-center gap-1 md:gap-2">
+            {Array.from({ length: totalPages }).slice(0, 7).map((_, i) => {
+              const page = i + 1;
+              return (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`px-2.5 py-1.5 md:px-3 md:py-2 rounded-lg text-xs md:text-sm border transition-colors ${currentPage === page ? 'bg-blue-600 text-white border-blue-600' : 'text-gray-700 border-gray-300 hover:bg-gray-50'}`}
+                >
+                  {page}
+                </button>
+              );
+            })}
+            {totalPages > 7 && (
+              <span className="text-xs md:text-sm text-gray-500 px-1">…</span>
+            )}
+            {totalPages > 7 && (
+              <button
+                onClick={() => setCurrentPage(totalPages)}
+                className={`px-2.5 py-1.5 md:px-3 md:py-2 rounded-lg text-xs md:text-sm border transition-colors ${currentPage === totalPages ? 'bg-blue-600 text-white border-blue-600' : 'text-gray-700 border-gray-300 hover:bg-gray-50'}`}
+              >
+                {totalPages}
+              </button>
+            )}
+          </div>
+
+          <button
+            aria-label="Halaman berikutnya"
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm border transition-colors ${currentPage === totalPages ? 'text-gray-400 border-gray-200 cursor-not-allowed' : 'text-gray-700 border-gray-300 hover:bg-gray-50'}`}
+          >
+            Berikutnya
+          </button>
+        </div>
+      )}
 
       {/* Export Options - Mobile Optimized */}
       <motion.div
