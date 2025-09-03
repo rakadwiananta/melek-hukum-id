@@ -162,19 +162,14 @@ export default function GugatanSederhanaTemplatesPage() {
                 </span>
               </div>
               
-              <button 
-                onClick={() => {
-                  // Simulate download
-                  const link = document.createElement('a')
-                  link.href = `data:text/plain;charset=utf-8,${encodeURIComponent(`Template ${template.title}\n\nIni adalah template ${template.title} yang bisa disesuaikan dengan kebutuhan Anda.\n\nUntuk template lengkap, silakan hubungi kami atau gunakan layanan konsultasi hukum.`)}`
-                  link.download = `${template.id}.txt`
-                  link.click()
-                }}
+              <a 
+                href={`data:text/plain;charset=utf-8,${encodeURIComponent(`Template ${template.title}\n\nIni adalah template ${template.title} yang bisa disesuaikan dengan kebutuhan Anda.\n\nUntuk template lengkap, silakan hubungi kami atau gunakan layanan konsultasi hukum.`)}`}
+                download={`${template.id}.txt`}
                 className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold py-3 px-4 rounded-xl hover:from-green-700 hover:to-green-800 transition-all flex items-center justify-center gap-2"
               >
                 <Download className="h-4 w-4" />
                 Download Gratis
-              </button>
+              </a>
             </div>
           ))}
         </div>
