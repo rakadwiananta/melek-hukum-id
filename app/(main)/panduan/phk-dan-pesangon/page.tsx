@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { Briefcase, FileText, CheckCircle, AlertTriangle } from 'lucide-react'
+import { Briefcase, FileText, CheckCircle, AlertTriangle, Clock, Users, Shield, Scale, Award, DollarSign, Info } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'PHK dan Hak Pesangon - Panduan Praktis',
@@ -72,4 +72,4 @@ export default function PHKPage() {
       </div>
     </article>
   )
-} 
+}
