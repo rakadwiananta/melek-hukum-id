@@ -1,11 +1,8 @@
-import { Metadata } from 'next'
+'use client'
+
 import { Scale, FileText, Calendar, Gavel, AlertCircle, Info, Download, ArrowRight, CheckCircle, TrendingUp, Users, Clock } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: 'Gugatan Sederhana - Panduan Lengkap Small Claims Court Indonesia 2024',
-  description:
-    'Panduan lengkap mengajukan gugatan sederhana (small claims court) sesuai Perma No. 4 Tahun 2019. Syarat, prosedur, dan biaya gugatan sederhana di Indonesia.',
-}
+
 
 export default function GugatanSederhanaPage() {
   return (
@@ -92,7 +89,7 @@ export default function GugatanSederhanaPage() {
             <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-1">Max 25 Hari</p>
             <p className="text-xs sm:text-sm text-gray-600">Sejak pendaftaran</p>
             <div className="mt-3 pt-3 border-t border-gray-100">
-              <p className="text-xs text-gray-500">⚡ 73% selesai < 20 hari</p>
+              <p className="text-xs text-gray-500">⚡ 73% selesai &lt; 20 hari</p>
             </div>
           </div>
           

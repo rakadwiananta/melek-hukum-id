@@ -1,12 +1,9 @@
-import { Metadata } from 'next'
+'use client'
+
 import { Car, FileText, Calendar, CheckCircle, AlertTriangle, TrendingUp, MapPin, Clock, CreditCard, Users } from 'lucide-react'
 import ExistingArticleWrapper from '@/app/components/article/templates/ExistingArticleWrapper'
 
-export const metadata: Metadata = {
-  title: 'Balik Nama Kendaraan - Panduan Lengkap 2024 | Melek Hukum ID',
-  description: 'Prosedur lengkap balik nama BPKB dan STNK kendaraan bermotor: dokumen, cek fisik, biaya, dan estimasi waktu. Panduan praktis 2024.',
-  keywords: ['balik nama kendaraan', 'BPKB', 'STNK', 'Samsat', 'cek fisik', 'prosedur balik nama'],
-}
+
 
 export default function BalikNamaKendaraanPage() {
   return (
@@ -258,28 +255,28 @@ export default function BalikNamaKendaraanPage() {
               </thead>
               <tbody>
                 <tr className="border-b border-blue-100">
-                  <td className="py-2 px-2 sm:px-4">Motor < 250cc</td>
+                  <td className="py-2 px-2 sm:px-4">Motor &lt; 250cc</td>
                   <td className="text-right py-2 px-2 sm:px-4">Rp 225.000</td>
                   <td className="text-right py-2 px-2 sm:px-4">Rp 100.000</td>
                   <td className="text-right py-2 px-2 sm:px-4">Rp 35.000</td>
                   <td className="text-right py-2 px-2 sm:px-4 font-bold">Rp 375.000</td>
                 </tr>
                 <tr className="border-b border-blue-100">
-                  <td className="py-2 px-2 sm:px-4">Motor > 250cc</td>
+                  <td className="py-2 px-2 sm:px-4">Motor &gt; 250cc</td>
                   <td className="text-right py-2 px-2 sm:px-4">Rp 325.000</td>
                   <td className="text-right py-2 px-2 sm:px-4">Rp 150.000</td>
                   <td className="text-right py-2 px-2 sm:px-4">Rp 35.000</td>
                   <td className="text-right py-2 px-2 sm:px-4 font-bold">Rp 525.000</td>
                 </tr>
                 <tr className="border-b border-blue-100">
-                  <td className="py-2 px-2 sm:px-4">Mobil < 1500cc</td>
+                  <td className="py-2 px-2 sm:px-4">Mobil &lt; 1500cc</td>
                   <td className="text-right py-2 px-2 sm:px-4">Rp 575.000</td>
                   <td className="text-right py-2 px-2 sm:px-4">Rp 350.000</td>
                   <td className="text-right py-2 px-2 sm:px-4">Rp 143.000</td>
                   <td className="text-right py-2 px-2 sm:px-4 font-bold">Rp 1.075.000</td>
                 </tr>
                 <tr className="border-b border-blue-100">
-                  <td className="py-2 px-2 sm:px-4">Mobil > 1500cc</td>
+                  <td className="py-2 px-2 sm:px-4">Mobil &gt; 1500cc</td>
                   <td className="text-right py-2 px-2 sm:px-4">Rp 875.000</td>
                   <td className="text-right py-2 px-2 sm:px-4">Rp 550.000</td>
                   <td className="text-right py-2 px-2 sm:px-4">Rp 143.000</td>

@@ -388,7 +388,7 @@ export default function ProsedurPerceraianPage() {
                 <li>• Mut'ah (pemberian suami)</li>
                 <li>• Nafkah madhiyah (hutang nafkah)</li>
                 <li>• 50% harta gono-gini</li>
-                <li>• Hak asuh anak (umumnya < 12 tahun)</li>
+                <li>• Hak asuh anak (umumnya &lt; 12 tahun)</li>
               </ul>
             </div>
             
