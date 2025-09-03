@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { Briefcase, Calculator, FileText, CheckCircle, AlertTriangle } from 'lucide-react'
+import { Briefcase, FileText, CheckCircle, AlertTriangle } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'PHK dan Hak Pesangon - Panduan Praktis',
