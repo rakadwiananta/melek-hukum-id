@@ -519,7 +519,7 @@ export default function PHKPage() {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link 
-              href="/template/surat-keberatan-phk"
+              href="/template/somasi-lengkap"
               className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold rounded-2xl hover:shadow-xl transform hover:scale-105 transition-all"
             >
               <Download className="h-5 w-5" />

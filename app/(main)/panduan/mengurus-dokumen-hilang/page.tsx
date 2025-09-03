@@ -296,7 +296,7 @@ export default function MengurusDokumenHilangPage() {
           {/* Download Checklist */}
           <div className="mt-8 text-center">
             <Link 
-              href="/solusi/template/surat-pernyataan-kehilangan"
+              href="/template/somasi-lengkap"
               className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-xl hover:bg-primary-600 transition-all transform hover:scale-105 shadow-lg"
             >
               <Download className="h-5 w-5" />

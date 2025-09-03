@@ -385,13 +385,19 @@ export default function SomasiPage() {
               <Copy className="h-5 w-5" />
               Salin Template
             </button>
-            <Link 
-              href="/template/somasi"
+            <button 
+              onClick={() => {
+                // Simulate download
+                const link = document.createElement('a')
+                link.href = `data:text/plain;charset=utf-8,${encodeURIComponent(`Template Somasi\n\nSURAT SOMASI\n\nNomor: _________________\nLampiran: -\nPerihal: Somasi\n\nKepada Yth.\n[NAMA PENERIMA]\n[ALAMAT PENERIMA]\n\nDengan hormat,\n\nYang bertanda tangan di bawah ini:\nNama: _________________\nAlamat: _________________\nNo. KTP: _________________\nNo. HP: _________________\n\nDengan ini menyampaikan somasi kepada Saudara/i:\n\nFAKTA:\n1. _________________\n2. _________________\n3. _________________\n\nDASAR HUKUM:\n_________________\n\nTUNTUTAN:\n1. _________________\n2. _________________\n3. _________________\n\nBATAS WAKTU:\n_________________\n\nDemikian somasi ini disampaikan, atas perhatian dan kerjasamanya kami ucapkan terima kasih.\n\n[Kota], [Tanggal]\n\nYang Menyampaikan,\n\n\n\n\n[NAMA LENGKAP]\n\nUntuk template lengkap, silakan hubungi kami atau gunakan layanan konsultasi hukum.`)}`
+                link.download = 'template-somasi.txt'
+                link.click()
+              }}
               className="inline-flex items-center gap-2 px-6 py-3 bg-white text-purple-600 font-semibold rounded-xl border-2 border-purple-600 hover:bg-purple-50 transition-all"
             >
               <Download className="h-5 w-5" />
               Download Semua Template
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -623,13 +629,15 @@ export default function SomasiPage() {
               <Download className="h-5 w-5" />
               Download Template Gratis
             </Link>
-            <Link 
-              href="/konsultasi/somasi"
+            <a 
+              href="https://peradi.or.id"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-white text-violet-600 font-semibold rounded-2xl border-2 border-violet-600 hover:bg-violet-50 transition-all"
             >
               <Users className="h-5 w-5" />
-              Konsultasi Pembuatan Somasi
-            </Link>
+              Konsultasi dengan PERADI
+            </a>
           </div>
         </div>
 

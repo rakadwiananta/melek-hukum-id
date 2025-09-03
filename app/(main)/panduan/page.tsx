@@ -317,7 +317,7 @@ export default function PanduanPage() {
               <h4 className="font-semibold text-gray-900 mb-2">Konsultasi Online</h4>
               <p className="text-sm text-gray-600 mb-3">Tanya jawab langsung dengan konsultan hukum berpengalaman</p>
               <a href="https://peradi.or.id" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-medium text-sm hover:underline">
-                Mulai Konsultasi →
+                Konsultasi dengan PERADI →
               </a>
             </div>
             <div className="bg-white rounded-xl p-5 border border-blue-100">

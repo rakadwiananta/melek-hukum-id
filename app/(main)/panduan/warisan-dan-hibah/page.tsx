@@ -517,19 +517,21 @@ export default function WarisanHibahPage() {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link 
-              href="/template/waris-hibah"
+              href="/template/somasi-lengkap"
               className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-2xl hover:shadow-xl transform hover:scale-105 transition-all"
             >
               <Download className="h-5 w-5" />
               Download Panduan & Template
             </Link>
-            <Link 
-              href="/konsultasi/waris"
+            <a 
+              href="https://www.ini.or.id"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-white text-purple-600 font-semibold rounded-2xl border-2 border-purple-600 hover:bg-purple-50 transition-all"
             >
               <Briefcase className="h-5 w-5" />
-              Konsultasi Notaris/PPAT
-            </Link>
+              Konsultasi Notaris
+            </a>
           </div>
         </div>
       </div>

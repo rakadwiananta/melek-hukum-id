@@ -1,6 +1,7 @@
 'use client'
 
 import { Scale, FileText, Calendar, Gavel, AlertCircle, Info, Download, ArrowRight, CheckCircle, TrendingUp, Users, Clock } from 'lucide-react'
+import Link from 'next/link'
 
 
 
@@ -322,10 +323,13 @@ export default function GugatanSederhanaPage() {
 
         {/* Download Section */}
         <div className="mt-8 sm:mt-10 text-center">
-          <button className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold rounded-2xl hover:shadow-lg transform hover:scale-105 transition-all wayang-shadow text-sm sm:text-base">
+          <Link 
+            href="/template/gugatan-sederhana"
+            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-red-600 to-orange-600 text-white font-semibold rounded-2xl hover:shadow-lg transform hover:scale-105 transition-all wayang-shadow text-sm sm:text-base"
+          >
             <Download className="h-5 w-5" />
             Download Template Gugatan Sederhana
-          </button>
+          </Link>
           <p className="text-xs text-gray-600 mt-3">Format sesuai standar Pengadilan Negeri Indonesia</p>
         </div>
       </div>

@@ -488,19 +488,21 @@ export default function ProsedurPerceraianPage() {
           <p className="text-gray-700 mb-6">Download template surat gugatan cerai dan panduan lengkap pengisian</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link 
-              href="/template/gugatan-cerai"
+              href="/template/gugatan-sederhana"
               className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-rose-600 to-pink-600 text-white font-semibold rounded-2xl hover:shadow-xl transform hover:scale-105 transition-all"
             >
               <Download className="h-5 w-5" />
               Download Template Gugatan
             </Link>
-            <Link 
-              href="/konsultasi"
+            <a 
+              href="https://peradi.or.id"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-white text-rose-600 font-semibold rounded-2xl border-2 border-rose-600 hover:bg-rose-50 transition-all"
             >
               <Users className="h-5 w-5" />
-              Konsultasi Gratis
-            </Link>
+              Konsultasi dengan PERADI
+            </a>
           </div>
         </div>
       </div>

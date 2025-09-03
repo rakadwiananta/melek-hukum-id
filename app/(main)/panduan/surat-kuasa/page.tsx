@@ -416,7 +416,7 @@ export default function SuratKuasaPage() {
               Salin Template
             </button>
             <Link 
-              href="/template/surat-kuasa"
+              href="/template/surat-kuasa-lengkap"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white text-orange-600 font-semibold rounded-xl border-2 border-orange-600 hover:bg-orange-50 transition-all"
             >
               <Download className="h-5 w-5" />
@@ -569,13 +569,15 @@ export default function SuratKuasaPage() {
               <Download className="h-5 w-5" />
               Download Semua Template
             </Link>
-            <Link 
-              href="/konsultasi/notaris"
+            <a 
+              href="https://www.ini.or.id"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-white text-orange-600 font-semibold rounded-2xl border-2 border-orange-600 hover:bg-orange-50 transition-all"
             >
               <Briefcase className="h-5 w-5" />
               Konsultasi Notaris
-            </Link>
+            </a>
           </div>
         </div>
       </div>
