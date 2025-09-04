@@ -49,6 +49,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/tools`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/template`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
       url: `${baseUrl}/disclaimer`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
@@ -69,104 +81,200 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/kamus-hukum/perbedaan-tersangka-terdakwa`,
+      url: `${baseUrl}/kamus-hukum/kuhp`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/kamus-hukum/proses-peradilan-pidana`,
+      url: `${baseUrl}/kamus-hukum/kategori`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/kamus-hukum/hukum-acara-pidana`,
+      url: `${baseUrl}/kamus-hukum/kategori/perdata`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/kamus-hukum/kategori/pidana`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/kamus-hukum/kategori/tata-negara`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/kamus-hukum/kategori/anti-korupsi`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/kamus-hukum/kategori/bisnis`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+
+    // Panduan Section
+    {
+      url: `${baseUrl}/panduan/warisan-dan-hibah`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/kamus-hukum/sistem-peradilan-pidana`,
+      url: `${baseUrl}/panduan/balik-nama-kendaraan`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/kamus-hukum/bantuan-hukum`,
+      url: `${baseUrl}/panduan/cerai-gugat-cerai-talak`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/kamus-hukum/advokat`,
+      url: `${baseUrl}/panduan/gugatan-sederhana`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/kamus-hukum/konsultasi-hukum`,
+      url: `${baseUrl}/panduan/jual-beli-tanah`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/kamus-hukum/pengacara`,
+      url: `${baseUrl}/panduan/mengurus-dokumen-hilang`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/kamus-hukum/paralegal`,
+      url: `${baseUrl}/panduan/phk-dan-pesangon`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/kamus-hukum/legal-aid`,
+      url: `${baseUrl}/panduan/prosedur-pelaporan`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/panduan/somasi-dan-teguran`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/panduan/surat-kuasa`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
 
-    // Panduan Section - Only existing guides
-
-    // Solusi Section - Only existing content
-
-    // Regulasi Section - Only existing content
-
-    // Anti-Korupsi Section - Only existing content
-
-    // Artikel Section (dynamic content pages)
+    // Solusi Section
     {
-      url: `${baseUrl}/artikel/hukum-pidana`,
+      url: `${baseUrl}/solusi/template`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+
+    // Regulasi Section
+    {
+      url: `${baseUrl}/regulasi/kasus`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+
+    // Anti-Korupsi Section
+    {
+      url: `${baseUrl}/anti-korupsi`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+
+    // Artikel Section
+    {
+      url: `${baseUrl}/artikel/cara-mendirikan-pt-2024`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/artikel/hukum-perdata`,
+      url: `${baseUrl}/artikel/cara-mengurus-perceraian-2024`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/artikel/hukum-administrasi`,
+      url: `${baseUrl}/artikel/laporan-kpk`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.7,
     },
+
+    // Tools Section
     {
-      url: `${baseUrl}/artikel/hukum-bisnis`,
+      url: `${baseUrl}/tools/kuis-korupsi`,
       lastModified: currentDate,
-      changeFrequency: 'weekly',
+      changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/artikel/hukum-keluarga`,
+      url: `${baseUrl}/tools/kalkulator-denda`,
       lastModified: currentDate,
-      changeFrequency: 'weekly',
+      changeFrequency: 'monthly',
       priority: 0.7,
+    },
+
+    // Template Section
+    {
+      url: `${baseUrl}/template/gugatan-sederhana`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/template/somasi-lengkap`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/template/surat-kuasa-lengkap`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+
+    // Payment Pages
+    {
+      url: `${baseUrl}/payment-success`,
+      lastModified: currentDate,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/payment-error`,
+      lastModified: currentDate,
+      changeFrequency: 'yearly',
+      priority: 0.3,
     },
 
     // Additional utility pages
@@ -183,13 +291,43 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/kebijakan-privasi`,
+      url: `${baseUrl}/contact`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/tim`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/kerjasama`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/komunitas`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/privacy`,
       lastModified: currentDate,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
-      url: `${baseUrl}/syarat-ketentuan`,
+      url: `${baseUrl}/terms`,
+      lastModified: currentDate,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/cookies`,
       lastModified: currentDate,
       changeFrequency: 'yearly',
       priority: 0.3,
